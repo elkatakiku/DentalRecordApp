@@ -13,6 +13,13 @@ public class LoginDataSource {
 
         try {
             // TODO: handle loggedInUser authentication
+
+            // Log in user
+//             firebaseAuth.signInWithEmailAndPassword(security.getEmail(), security.getPassword())
+
+            // Get user info
+
+            // Set user info into LoggedInUser
             LoggedInUser fakeUser =
                     new LoggedInUser(
                             java.util.UUID.randomUUID().toString(),
