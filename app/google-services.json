@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "296074642693",
+    "project_id": "dental-record-app",
+    "storage_bucket": "dental-record-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:296074642693:android:80095e057a74ecf0a7a36c",
+        "android_client_info": {
+          "package_name": "com.bsit_three_c.dentalrecordapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "296074642693-gmro2matdgrjstj35s2nv9np95obevkc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdplQWtkHCOfQMjNesNAk-T9jvnth_kI0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "296074642693-gmro2matdgrjstj35s2nv9np95obevkc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

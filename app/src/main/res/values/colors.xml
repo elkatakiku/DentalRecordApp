@@ -7,6 +7,16 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Color Pallete -->
+    <color name="baby_blue">#E4F4F3</color>
+    <color name="aquamarine">#A1DBF1</color>
+    <color name="tiffany_blue">#71D5E4</color>
+    <color name="blue_green">#00B6BC</color>
+
+    <!-- Login -->
     <color name="login_font">#13bbc1</color>
-    <color name="login_button_tint">#63d0d4</color>
+    <color name="login_button_tint">#00B6BC</color>
+    <color name="text_color">#17130c</color>
+    <color name="label_color">#9F8F8F</color>
 </resources>

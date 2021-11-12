@@ -1,5 +1,7 @@
 package com.bsit_three_c.dentalrecordapp.data;
 
+import android.util.Log;
+
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 
 /**
@@ -7,9 +9,9 @@ import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
  * maintains an in-memory cache of login status and user credentials information.
  */
 public class LoginRepository {
+    private static final String TAG = "LoginRepository";
 
     private static volatile LoginRepository instance;
-
     private LoginDataSource dataSource;
 
     // If user credentials will be cached in local storage, it is recommended it be encrypted
@@ -29,6 +31,7 @@ public class LoginRepository {
     }
 
     public boolean isLoggedIn() {
+        if (user != null) Log.d(TAG, "isLoggedIn: user is " + user.toString());
         return user != null;
     }
 
@@ -46,7 +49,9 @@ public class LoginRepository {
     public Result<LoggedInUser> login(String username, String password) {
         // handle login
         Result<LoggedInUser> result = dataSource.login(username, password);
+        Log.d(TAG, "login: login from repository");
         if (result instanceof Result.Success) {
+            Log.d(TAG, "login from repository: result is success");
             setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
         }
         return result;

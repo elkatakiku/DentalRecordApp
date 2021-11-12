@@ -3,9 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.1" />
-        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout-w936dp/activity_login.xml" value="0.1" />
-        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_login.xml" value="0.12962962962962962" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout-h616dp/activity_login.xml" value="0.209375" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout-hdpi/activity_login.xml" value="0.18" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout-mdpi/activity_login.xml" value="0.8375" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout-sw300dp/activity_login.xml" value="0.209375" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.2" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout-w936dp/activity_login.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout-xxxhdpi/activity_login.xml" value="0.209375" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_sample.xml" value="0.13958333333333334" />
       </map>
     </option>
   </component>

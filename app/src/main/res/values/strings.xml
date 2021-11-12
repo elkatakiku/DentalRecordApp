@@ -3,7 +3,7 @@
     <!-- Strings related to btnLogin -->
 
     <string name="system">ELL DENTAL RECORD SYSTEM</string>
-    <string name="systemName">Dental Record System</string>
+    <string name="systemName">App Name</string>
 
     <!-- Login Strings -->
     <string name="logo_content_desc">ELL Logo</string>
