@@ -1,5 +1,6 @@
 package com.bsit_three_c.dentalrecordapp.ui.login;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -8,15 +9,15 @@ import android.util.Log;
 import android.util.Patterns;
 
 import com.bsit_three_c.dentalrecordapp.data.LoginRepository;
-import com.bsit_three_c.dentalrecordapp.data.Result;
-import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginViewModel extends ViewModel {
     private static final String TAG = "LoginViewModel";
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isLoggedIn = new MutableLiveData<>();
     private LoginRepository loginRepository;
 
     LoginViewModel(LoginRepository loginRepository) {
@@ -31,17 +32,23 @@ public class LoginViewModel extends ViewModel {
         return loginResult;
     }
 
+    LiveData<Boolean> getIsLoggedIn() {
+        return isLoggedIn;
+    }
+
     public void login(String username, String password) {
         // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(username, password);
-        Log.d(TAG, "login: login from viewModel");
-
-        if (result instanceof Result.Success) {
-            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
-        } else {
-            loginResult.setValue(new LoginResult(R.string.login_failed));
-        }
+        // Firebase login listener
+        loginRepository
+                .login(username, password)
+                .addOnSuccessListener(authResult -> {
+                    Log.d(TAG, "loginUser: logged in success");
+                    loginResult.setValue(new LoginResult(new LoggedInUserView(loginRepository.loginSuccess(authResult).getDisplayName())));
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "loginUser: logged in error");
+                    loginResult.setValue(new LoginResult(R.string.login_failed));
+                });
     }
 
     public void loginDataChanged(String username, String password) {
@@ -74,4 +81,13 @@ public class LoginViewModel extends ViewModel {
     public boolean isUserLoggedIn() {
         return loginRepository.isLoggedIn();
     }
+
+    public void setIsLoggedIn(boolean bool) {
+        isLoggedIn.setValue(bool);
+    }
+
+    public FirebaseAuth authStateChanged() {
+        return loginRepository.getDataSource();
+    }
+
 }

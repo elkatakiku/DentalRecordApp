@@ -25,7 +25,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        tools:ignore="TextContrastCheck" />
+        tools:ignore="TextContrastCheck"
+        tools:text="App Name" />
 
     <TextView
         android:id="@+id/usernameLabel"
@@ -92,6 +93,7 @@
         app:layout_constraintEnd_toEndOf="@+id/username"
         app:layout_constraintStart_toStartOf="@+id/username"
         app:layout_constraintTop_toBottomOf="@+id/passwordLabel"
+
         tools:ignore="SpeakableTextPresentCheck" />
 
     <Button

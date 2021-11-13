@@ -1,14 +1,17 @@
 package com.bsit_three_c.dentalrecordapp.data;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.internal.api.FirebaseNoSignedInUserException;
@@ -23,10 +26,14 @@ public class LoginDataSource {
 
     private static final String TAG = "LoginDataSource";
     
-    private final FirebaseAuth firebaseAuth;
+    private final FirebaseAuth mFirebaseAuth;
+    private MutableLiveData<Result<LoggedInUser>> resultMutableLiveData = new MutableLiveData<>();
 
     public LoginDataSource() {
-        this.firebaseAuth = FirebaseAuth.getInstance();
+        this.mFirebaseAuth = FirebaseAuth.getInstance();
+
+        Log.d(TAG, "LoginDataSource: firebaseAuth initialized");
+        Log.d(TAG, "LoginDataSource: firebaseAuth: " + mFirebaseAuth.toString());
 
         // Register account
 //        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
@@ -42,56 +49,22 @@ public class LoginDataSource {
 //        });
     }
 
-    public Result<LoggedInUser> login(String username, String password) {
+    public FirebaseAuth getmFirebaseAuth() {
+        return mFirebaseAuth;
+    }
 
-        try {
-            // TODO: handle loggedInUser authentication
-
-            // Log in user
-//             firebaseAuth.signInWithEmailAndPassword(security.getEmail(), security.getPassword())
-            Log.d(TAG, "login: onComplete listener initialized");
-            OnCompleteListener<AuthResult> onCompleteListener = task -> {
-                Log.d(TAG, "login: onComplete listener called");
-                if (!task.isSuccessful()) {
-                    Log.d(TAG, "login: task is not successful");
-                    Objects.requireNonNull(task.getException()).printStackTrace();
-                }
-            };
-
-            Log.d(TAG, "login: logging in");
-            firebaseAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener(onCompleteListener);
-
-            // Checks if user successfully logged in
-            if (firebaseAuth.getCurrentUser() != null) {
-
-                // Get user info
-                String uid = firebaseAuth.getCurrentUser().getUid();
-                String displayName = "Eli Lamzon";
-                String email = firebaseAuth.getCurrentUser().getEmail();
-
-                // Set user info into LoggedInUser
-                Log.d(TAG, "login: task is successful");
-//              Generate Random ID: java.util.UUID.randomUUID().toString()
-                LoggedInUser fakeUser = new LoggedInUser(uid, displayName);
-
-                // Return result success
-                return new Result.Success<>(fakeUser);
-
-            }
-
-            // Throw exception if logged in failed
-            else throw new FirebaseNoSignedInUserException("User not logged in.");
-
-        } catch (Exception e) {
-            Log.d(TAG, "login: try block error");
-            e.printStackTrace();
-            return new Result.Error(new IOException("Error logging in", e));
-        }
+    public Task<AuthResult> login(String username, String password) {
+        return mFirebaseAuth.signInWithEmailAndPassword(username, password);
     }
 
     public void logout() {
         // TODO: revoke authentication
         // Logout the current user
-        firebaseAuth.signOut();
+        mFirebaseAuth.signOut();
+        Log.d(TAG, "logout: User is still logged in: " + (mFirebaseAuth.getCurrentUser() == null));
+    }
+
+    public boolean isLoggedIn() {
+        return mFirebaseAuth.getCurrentUser() != null;
     }
 }

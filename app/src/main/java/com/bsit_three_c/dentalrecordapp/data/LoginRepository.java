@@ -3,6 +3,10 @@ package com.bsit_three_c.dentalrecordapp.data;
 import android.util.Log;
 
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -12,7 +16,7 @@ public class LoginRepository {
     private static final String TAG = "LoginRepository";
 
     private static volatile LoginRepository instance;
-    private LoginDataSource dataSource;
+    private final LoginDataSource dataSource;
 
     // If user credentials will be cached in local storage, it is recommended it be encrypted
     // @see https://developer.android.com/training/articles/keystore
@@ -30,9 +34,13 @@ public class LoginRepository {
         return instance;
     }
 
+    public FirebaseAuth getDataSource() {
+        return dataSource.getmFirebaseAuth();
+    }
+
     public boolean isLoggedIn() {
-        if (user != null) Log.d(TAG, "isLoggedIn: user is " + user.toString());
-        return user != null;
+//        if (user != null) Log.d(TAG, "isLoggedIn: user is " + user.toString());
+        return user != null && dataSource.isLoggedIn();
     }
 
     public void logout() {
@@ -46,14 +54,26 @@ public class LoginRepository {
         // @see https://developer.android.com/training/articles/keystore
     }
 
-    public Result<LoggedInUser> login(String username, String password) {
-        // handle login
-        Result<LoggedInUser> result = dataSource.login(username, password);
-        Log.d(TAG, "login: login from repository");
-        if (result instanceof Result.Success) {
-            Log.d(TAG, "login from repository: result is success");
-            setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
-        }
-        return result;
+    public Task<AuthResult> login(String username, String password) {
+        return dataSource.login(username, password);
+    }
+
+    private LoggedInUser createLoggedInUser(String uid, String displayName) {
+        return new LoggedInUser(uid, displayName);
+    }
+
+    public LoggedInUser loginSuccess(AuthResult authResult) {
+        FirebaseUser loggedUser = authResult.getUser();
+
+        assert loggedUser != null;
+        String uid = loggedUser.getUid();
+        String name = loggedUser.getDisplayName();
+        String email = loggedUser.getEmail();
+
+        // Change display name when login database is set
+        LoggedInUser newUser = createLoggedInUser(uid, "Eli Lamzon");
+        setLoggedInUser(newUser);
+
+        return newUser;
     }
 }

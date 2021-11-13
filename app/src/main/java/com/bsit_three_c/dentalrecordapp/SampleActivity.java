@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import com.bsit_three_c.dentalrecordapp.databinding.ActivitySampleBinding;
 import com.bsit_three_c.dentalrecordapp.ui.login.LoginActivity;
@@ -29,6 +28,10 @@ public class SampleActivity extends AppCompatActivity {
             viewModel.logout();
             startActivity(new Intent(SampleActivity.this, LoginActivity.class));
             finish();
+        });
+
+        binding.btnNext.setOnClickListener(v -> {
+            startActivity(new Intent(SampleActivity.this, MainActivity.class));
         });
     }
 }
