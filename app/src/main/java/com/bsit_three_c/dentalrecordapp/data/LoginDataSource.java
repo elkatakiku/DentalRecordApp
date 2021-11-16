@@ -78,7 +78,8 @@ public class LoginDataSource {
     public boolean isLoggedin() {
         return true;
     }
-    
+
+    // Remove when account registration created
     public void addLoggedInUser(LoggedInUser loggedInUser) {
         Log.d(TAG, "addLoggedInUser: adding userId to database");
         databaseReference.child(loggedInUser.getUserId()).setValue(loggedInUser);

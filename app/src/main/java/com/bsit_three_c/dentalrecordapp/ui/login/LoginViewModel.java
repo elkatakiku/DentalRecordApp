@@ -5,19 +5,24 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Patterns;
 
 import com.bsit_three_c.dentalrecordapp.data.LoginRepository;
 import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.io.IOException;
 
 public class LoginViewModel extends ViewModel {
     private static final String TAG = "LoginViewModel";
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-    private MutableLiveData<Boolean> isLoggedIn = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isConnectedToInternet = new MutableLiveData<>();
     private LoginRepository loginRepository;
 
     LoginViewModel(LoginRepository loginRepository) {
@@ -32,32 +37,19 @@ public class LoginViewModel extends ViewModel {
         return loginResult;
     }
 
-    LiveData<Boolean> getIsLoggedIn() {
-        return isLoggedIn;
+    public MutableLiveData<Boolean> getIsConnectedToInternet() {
+        return isConnectedToInternet;
     }
 
     public void login(String username, String password) {
         // can be launched in a separate asynchronous job
-        // Firebase login listener
-        loginRepository
-                .login(username, password)
-                .addOnSuccessListener(authResult -> {
-                    Log.d(TAG, "loginUser: logged in success");
-
-                    // Initialize LoggedInUserView in repository
-                    // LoggedInUserView isn't public
-                    LoggedInUserView loggedInUser = createLoggedInUserView(loginRepository.loginSuccess(authResult).getDisplayName());
-                    loginResult.setValue(new LoginResult(loggedInUser));
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "loginUser: logged in error");
-                    loginResult.setValue(new LoginResult(R.string.login_failed));
-                });
+        // Launched in asych
+        new LoginUser().doInBackground(username, password);
     }
 
     // Get user details to be displayed in the UI
-    private LoggedInUserView createLoggedInUserView(String displayName) {
-        return new LoggedInUserView(displayName);
+    private LoggedInUserView createLoggedInUserView(LoggedInUser loggedInUser) {
+        return new LoggedInUserView(loggedInUser.getDisplayName());
     }
 
     public void loginDataChanged(String username, String password) {
@@ -91,12 +83,58 @@ public class LoginViewModel extends ViewModel {
         return loginRepository.isLoggedIn();
     }
 
-    public void setIsLoggedIn(boolean bool) {
-        isLoggedIn.setValue(bool);
-    }
-
     public FirebaseAuth authStateChanged() {
         return loginRepository.getDataSource();
+    }
+
+//    public boolean isNetworkAvailable(Context context) {
+//        ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+//        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+//    }
+//
+//    public boolean isInternetAvailable() {
+//        try {
+//            InetAddress address = InetAddress.getByName("www.google.com");
+//            return !address.equals("");
+//        } catch (UnknownHostException e) {
+//            // Log error
+//        }
+//        return false;
+//    }
+
+    public boolean isOnline() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            Log.d(TAG, "isOnline: exitValue:" + exitValue);
+            return (exitValue == 0);
+        }
+        catch (IOException | InterruptedException e)          { e.printStackTrace(); }
+
+        return false;
+    }
+
+    private class LoginUser extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... strings) {
+            // Firebase login listener
+            loginRepository
+                    .login(strings[0], strings[1])
+                    .addOnSuccessListener(authResult -> {
+                        Log.d(TAG, "loginUser: logged in success");
+
+                        // Initialize LoggedInUserView in repository
+                        // LoggedInUserView isn't public
+                        LoggedInUserView loggedInUserView = createLoggedInUserView(loginRepository.loginSuccess(authResult));
+                        loginResult.setValue(new LoginResult(loggedInUserView));
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "loginUser: logged in error");
+                        loginResult.setValue(new LoginResult(R.string.login_failed));
+                    });
+            return null;
+        }
     }
 
 }

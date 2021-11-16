@@ -2,8 +2,10 @@ package com.bsit_three_c.dentalrecordapp.ui.login;
 
 import android.app.Activity;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -37,9 +39,6 @@ public class LoginActivity extends AppCompatActivity {
     private final String SP_KEY = "Login";
     private final String SP_USERNAME = "Username";
     private final String SP_PASSWORD = "Password";
-
-    // Get device id
-//    private String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,6 +116,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
+                loadingProgressBar.setVisibility(View.VISIBLE);
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
             }
@@ -127,22 +127,28 @@ public class LoginActivity extends AppCompatActivity {
             loadingProgressBar.setVisibility(View.VISIBLE);
             loginViewModel.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
         });
-
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        // Check if user already logged in
-//        if (loginViewModel.isUserLoggedIn()) {
-//            Log.i(TAG, "onCreate: user is logged in. Redirecting to home.");
-//            startActivity(intent);
-//            finish();
-//        }
+        // Checks if connected to internet
+        if (!loginViewModel.isOnline()) {
+            Log.d(TAG, "onStart: showing alert dialog");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Networ Error");
+            builder.setMessage("Not connected to the internet. Exiting application");
+            builder.setNeutralButton("Ok", (dialog, which) -> {
+                // Exits application
+                Log.d(TAG, "onStart: Exiting application");
+                Toast.makeText(getApplicationContext(), "Exiting application", Toast.LENGTH_LONG).show();
+                finish();
+            });
+            builder.create().show();
+        }
 
-
+        // Checks if user already logged in before
         HashMap<String, String> savedUser = getuserInfo();
         if (savedUser != null) {
             Log.d(TAG, "onStart: Logging user info");
