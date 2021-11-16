@@ -25,7 +25,9 @@ import android.widget.Toast;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.SampleActivity;
+import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityLoginBinding;
+import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 
 import java.util.HashMap;
 
@@ -81,9 +83,13 @@ public class LoginActivity extends AppCompatActivity {
             }
             if (loginResult.getSuccess() != null) {
                 Log.i(TAG, "onCreate: login result is success");
+
                 Log.i(TAG, "onCreate: Saving user info");
-                if (getuserInfo() == null) saveUserInfo(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                if (LocalStorage.getLoggedInUser(this) == null)
+                    LocalStorage.saveLoggedInUser(this, loginViewModel.getLoggedInUser());
+//                if (getuserInfo() == null) saveUserInfo(usernameEditText.getText().toString(), passwordEditText.getText().toString());
                 Log.d(TAG, "onCreate: Starting sample activity");
+
                 updateUiWithUser(loginResult.getSuccess());
                 startActivity(intent);
                 finish();
@@ -143,49 +149,19 @@ public class LoginActivity extends AppCompatActivity {
                 // Exits application
                 Log.d(TAG, "onStart: Exiting application");
                 Toast.makeText(getApplicationContext(), "Exiting application", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
                 finish();
             });
             builder.create().show();
         }
 
-        // Checks if user already logged in before
-        HashMap<String, String> savedUser = getuserInfo();
-        if (savedUser != null) {
-            Log.d(TAG, "onStart: Logging user info");
-            loginViewModel.login(savedUser.get(SP_USERNAME), savedUser.get(SP_PASSWORD));
+        // Checks if user has logged in before
+        LoggedInUser loggedInUser = LocalStorage.getLoggedInUser(this);
+        if (loggedInUser != null) {
+            Log.d(TAG, "onStart: user already logged in");
+            loginViewModel.setLoggedInUser(loggedInUser);
         }
 
-    }
-
-    private void saveUserInfo(String username, String password) {
-        Log.d(TAG, "saveUserInfo: Saving user info");
-        SharedPreferences userInfo = getSharedPreferences(SP_KEY, MODE_PRIVATE);
-        SharedPreferences.Editor editor = userInfo.edit();
-        editor.putString(SP_USERNAME, username);
-        editor.putString(SP_PASSWORD, password);
-        editor.apply();
-        Log.d(TAG, "saveUserInfo: Done saving user info");
-    }
-
-    private HashMap<String, String> getuserInfo () {
-        Log.d(TAG, "getuserInfo: Getting user info");
-        SharedPreferences userInfo = getSharedPreferences(SP_KEY, MODE_PRIVATE);
-        String username = userInfo.getString(SP_USERNAME, null);
-        String password = userInfo.getString(SP_PASSWORD, null);
-
-        Log.d(TAG, "getuserInfo: username: " + username + "\npassword: " + password);
-
-        if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
-            Log.d(TAG, "getuserInfo: No User Info Saved");
-            return null;
-        }
-
-        HashMap<String, String> savedInfo = new HashMap<>();
-        savedInfo.put(SP_USERNAME, username);
-        savedInfo.put(SP_PASSWORD, password);
-
-        Log.d(TAG, "getuserInfo: Returning user info");
-        return savedInfo;
     }
 
     private void updateUiWithUser(LoggedInUserView model) {

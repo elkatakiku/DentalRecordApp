@@ -13,6 +13,7 @@ import android.util.Patterns;
 import com.bsit_three_c.dentalrecordapp.data.LoginRepository;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
+import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
@@ -24,6 +25,7 @@ public class LoginViewModel extends ViewModel {
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private MutableLiveData<Boolean> isConnectedToInternet = new MutableLiveData<>();
     private LoginRepository loginRepository;
+    private LoggedInUser loggedInUser;
 
     LoginViewModel(LoginRepository loginRepository) {
         this.loginRepository = loginRepository;
@@ -39,6 +41,15 @@ public class LoginViewModel extends ViewModel {
 
     public MutableLiveData<Boolean> getIsConnectedToInternet() {
         return isConnectedToInternet;
+    }
+
+    public LoggedInUser getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    public void setLoggedInUser(LoggedInUser loggedInUser) {
+        this.loggedInUser = loggedInUser;
+        loginResult.setValue(new LoginResult(createLoggedInUserView(loggedInUser)));
     }
 
     public void login(String username, String password) {
@@ -83,25 +94,6 @@ public class LoginViewModel extends ViewModel {
         return loginRepository.isLoggedIn();
     }
 
-    public FirebaseAuth authStateChanged() {
-        return loginRepository.getDataSource();
-    }
-
-//    public boolean isNetworkAvailable(Context context) {
-//        ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
-//        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
-//    }
-//
-//    public boolean isInternetAvailable() {
-//        try {
-//            InetAddress address = InetAddress.getByName("www.google.com");
-//            return !address.equals("");
-//        } catch (UnknownHostException e) {
-//            // Log error
-//        }
-//        return false;
-//    }
-
     public boolean isOnline() {
         Runtime runtime = Runtime.getRuntime();
         try {
@@ -126,7 +118,9 @@ public class LoginViewModel extends ViewModel {
 
                         // Initialize LoggedInUserView in repository
                         // LoggedInUserView isn't public
-                        LoggedInUserView loggedInUserView = createLoggedInUserView(loginRepository.loginSuccess(authResult));
+                        loggedInUser = loginRepository.loginSuccess(authResult);
+
+                        LoggedInUserView loggedInUserView = createLoggedInUserView(loggedInUser);
                         loginResult.setValue(new LoginResult(loggedInUserView));
                     })
                     .addOnFailureListener(e -> {

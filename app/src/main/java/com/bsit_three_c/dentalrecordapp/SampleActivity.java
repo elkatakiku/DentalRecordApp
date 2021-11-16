@@ -11,6 +11,7 @@ import android.util.Log;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivitySampleBinding;
 import com.bsit_three_c.dentalrecordapp.ui.login.LoginActivity;
 import com.bsit_three_c.dentalrecordapp.ui.login.LoginViewModelFactory;
+import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 
 public class SampleActivity extends AppCompatActivity {
 
@@ -34,7 +35,7 @@ public class SampleActivity extends AppCompatActivity {
 
         binding.btnLogout.setOnClickListener(v -> {
             Log.d(TAG, "onCreate: Clearing saved user info");
-            clearSavedUser();
+            LocalStorage.clearSavedUser(this);
 
             viewModel.logout();
             startActivity(new Intent(SampleActivity.this, LoginActivity.class));
