@@ -81,7 +81,7 @@ public class LoginDataSource {
     
     public void addLoggedInUser(LoggedInUser loggedInUser) {
         Log.d(TAG, "addLoggedInUser: adding userId to database");
-        databaseReference.child(loggedInUser.getUserId()).setValue(loggedInUser.getDisplayName());
+        databaseReference.child(loggedInUser.getUserId()).setValue(loggedInUser);
         Log.d(TAG, "addLoggedInUser: done adding user to database");
     }
 }

@@ -46,8 +46,8 @@ public class LoginViewModel extends ViewModel {
 
                     // Initialize LoggedInUserView in repository
                     // LoggedInUserView isn't public
-                    LoggedInUserView loggedInUserView = createLoggedInUserView(loginRepository.loginSuccess(authResult).getDisplayName());
-                    loginResult.setValue(new LoginResult(loggedInUserView));
+                    LoggedInUserView loggedInUser = createLoggedInUserView(loginRepository.loginSuccess(authResult).getDisplayName());
+                    loginResult.setValue(new LoginResult(loggedInUser));
                 })
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "loginUser: logged in error");

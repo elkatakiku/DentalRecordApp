@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
             if (loginResult.getSuccess() != null) {
                 Log.i(TAG, "onCreate: login result is success");
                 Log.i(TAG, "onCreate: Saving user info");
-                saveUserInfo(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                if (getuserInfo() == null) saveUserInfo(usernameEditText.getText().toString(), passwordEditText.getText().toString());
                 Log.d(TAG, "onCreate: Starting sample activity");
                 updateUiWithUser(loginResult.getSuccess());
                 startActivity(intent);
@@ -142,6 +142,7 @@ public class LoginActivity extends AppCompatActivity {
 //            finish();
 //        }
 
+
         HashMap<String, String> savedUser = getuserInfo();
         if (savedUser != null) {
             Log.d(TAG, "onStart: Logging user info");
@@ -166,7 +167,9 @@ public class LoginActivity extends AppCompatActivity {
         String username = userInfo.getString(SP_USERNAME, null);
         String password = userInfo.getString(SP_PASSWORD, null);
 
-        if (username == null || password == null) {
+        Log.d(TAG, "getuserInfo: username: " + username + "\npassword: " + password);
+
+        if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
             Log.d(TAG, "getuserInfo: No User Info Saved");
             return null;
         }
