@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.StringRes;
@@ -28,8 +29,7 @@ import com.bsit_three_c.dentalrecordapp.SampleActivity;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityLoginBinding;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
-
-import java.util.HashMap;
+import com.google.android.material.snackbar.Snackbar;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
@@ -38,9 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding binding;
     private Intent intent;
 
-    private final String SP_KEY = "Login";
-    private final String SP_USERNAME = "Username";
-    private final String SP_PASSWORD = "Password";
+    private boolean isOnline;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,34 +69,35 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         loginViewModel.getLoginResult().observe(this, loginResult -> {
-            if (loginResult == null) {
-                Log.e(TAG, "onCreate: login result is null");
-                return;
-            }
+            isOnline = loginViewModel.isOnline();
 
             loadingProgressBar.setVisibility(View.GONE);
-            if (loginResult.getError() != null) {
+            if (!isOnline) {
+                showSnackbarInternetError();
+                return;
+            } else if (loginResult == null) {
+                Log.e(TAG, "onCreate: login result is null");
+                return;
+            } else if (loginResult.getError() != null) {
                 Log.e(TAG, "onCreate: login result is error");
                 showLoginFailed(loginResult.getError());
-            }
-            if (loginResult.getSuccess() != null) {
+            } else if (loginResult.getSuccess() != null) {
                 Log.i(TAG, "onCreate: login result is success");
 
                 Log.i(TAG, "onCreate: Saving user info");
+                // Checks if logged in user is already saved
                 if (LocalStorage.getLoggedInUser(this) == null)
                     LocalStorage.saveLoggedInUser(this, loginViewModel.getLoggedInUser());
-//                if (getuserInfo() == null) saveUserInfo(usernameEditText.getText().toString(), passwordEditText.getText().toString());
                 Log.d(TAG, "onCreate: Starting sample activity");
 
                 updateUiWithUser(loginResult.getSuccess());
+
+                // Redirect user to main activity
                 startActivity(intent);
                 finish();
             }
-            setResult(Activity.RESULT_OK);
 
-            //Complete and destroy login activity once successful
-//            startActivity(intent);
-//            finish();
+            setResult(Activity.RESULT_OK);
         });
 
         TextWatcher afterTextChangedListener = new TextWatcher() {
@@ -139,21 +138,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        // Checks if connected to internet
-        if (!loginViewModel.isOnline()) {
-            Log.d(TAG, "onStart: showing alert dialog");
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Networ Error");
-            builder.setMessage("Not connected to the internet. Exiting application");
-            builder.setNeutralButton("Ok", (dialog, which) -> {
-                // Exits application
-                Log.d(TAG, "onStart: Exiting application");
-                Toast.makeText(getApplicationContext(), "Exiting application", Toast.LENGTH_LONG).show();
-                dialog.dismiss();
-                finish();
-            });
-            builder.create().show();
-        }
+        isOnline = loginViewModel.isOnline();
+
+        // Show snackbar if offline
+        if (!loginViewModel.isOnline()) showSnackbarInternetError();
 
         // Checks if user has logged in before
         LoggedInUser loggedInUser = LocalStorage.getLoggedInUser(this);
@@ -161,7 +149,12 @@ public class LoginActivity extends AppCompatActivity {
             Log.d(TAG, "onStart: user already logged in");
             loginViewModel.setLoggedInUser(loggedInUser);
         }
+    }
 
+    private void showSnackbarInternetError() {
+        Snackbar.make(binding.getRoot(), "Connect to a network.", Snackbar.LENGTH_LONG)
+                .setBackgroundTint(Color.WHITE)
+                .show();
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
