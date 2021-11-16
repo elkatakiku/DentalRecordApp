@@ -14,6 +14,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.internal.api.FirebaseNoSignedInUserException;
 
 import java.io.IOException;
@@ -27,10 +29,15 @@ public class LoginDataSource {
     private static final String TAG = "LoginDataSource";
     
     private final FirebaseAuth mFirebaseAuth;
-    private MutableLiveData<Result<LoggedInUser>> resultMutableLiveData = new MutableLiveData<>();
+    private final FirebaseDatabase database;
+    private final DatabaseReference databaseReference;
+
+    private final static String FIREBASE_URL = "https://dental-record-app-default-rtdb.asia-southeast1.firebasedatabase.app";
 
     public LoginDataSource() {
         this.mFirebaseAuth = FirebaseAuth.getInstance();
+        this.database = FirebaseDatabase.getInstance(FIREBASE_URL);
+        this.databaseReference = database.getReference("users");
 
         Log.d(TAG, "LoginDataSource: firebaseAuth initialized");
         Log.d(TAG, "LoginDataSource: firebaseAuth: " + mFirebaseAuth.toString());
@@ -66,5 +73,15 @@ public class LoginDataSource {
 
     public boolean isLoggedIn() {
         return mFirebaseAuth.getCurrentUser() != null;
+    }
+
+    public boolean isLoggedin() {
+        return true;
+    }
+    
+    public void addLoggedInUser(LoggedInUser loggedInUser) {
+        Log.d(TAG, "addLoggedInUser: adding userId to database");
+        databaseReference.child(loggedInUser.getUserId()).setValue(loggedInUser.getDisplayName());
+        Log.d(TAG, "addLoggedInUser: done adding user to database");
     }
 }

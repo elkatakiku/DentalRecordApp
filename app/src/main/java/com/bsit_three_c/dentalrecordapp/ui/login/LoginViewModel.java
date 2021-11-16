@@ -43,12 +43,21 @@ public class LoginViewModel extends ViewModel {
                 .login(username, password)
                 .addOnSuccessListener(authResult -> {
                     Log.d(TAG, "loginUser: logged in success");
-                    loginResult.setValue(new LoginResult(new LoggedInUserView(loginRepository.loginSuccess(authResult).getDisplayName())));
+
+                    // Initialize LoggedInUserView in repository
+                    // LoggedInUserView isn't public
+                    LoggedInUserView loggedInUserView = createLoggedInUserView(loginRepository.loginSuccess(authResult).getDisplayName());
+                    loginResult.setValue(new LoginResult(loggedInUserView));
                 })
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "loginUser: logged in error");
                     loginResult.setValue(new LoginResult(R.string.login_failed));
                 });
+    }
+
+    // Get user details to be displayed in the UI
+    private LoggedInUserView createLoggedInUserView(String displayName) {
+        return new LoggedInUserView(displayName);
     }
 
     public void loginDataChanged(String username, String password) {

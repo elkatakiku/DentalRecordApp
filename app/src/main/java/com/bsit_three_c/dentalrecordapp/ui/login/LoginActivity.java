@@ -5,6 +5,7 @@ import android.app.Activity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.StringRes;
@@ -24,12 +25,21 @@ import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.SampleActivity;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityLoginBinding;
 
+import java.util.HashMap;
+
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
 
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
     private Intent intent;
+
+    private final String SP_KEY = "Login";
+    private final String SP_USERNAME = "Username";
+    private final String SP_PASSWORD = "Password";
+
+    // Get device id
+//    private String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +82,9 @@ public class LoginActivity extends AppCompatActivity {
             }
             if (loginResult.getSuccess() != null) {
                 Log.i(TAG, "onCreate: login result is success");
+                Log.i(TAG, "onCreate: Saving user info");
+                saveUserInfo(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                Log.d(TAG, "onCreate: Starting sample activity");
                 updateUiWithUser(loginResult.getSuccess());
                 startActivity(intent);
                 finish();
@@ -123,11 +136,47 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
 
         // Check if user already logged in
-        if (loginViewModel.isUserLoggedIn()) {
-            Log.i(TAG, "onCreate: user is logged in. Redirecting to home.");
-            startActivity(intent);
-            finish();
+//        if (loginViewModel.isUserLoggedIn()) {
+//            Log.i(TAG, "onCreate: user is logged in. Redirecting to home.");
+//            startActivity(intent);
+//            finish();
+//        }
+
+        HashMap<String, String> savedUser = getuserInfo();
+        if (savedUser != null) {
+            Log.d(TAG, "onStart: Logging user info");
+            loginViewModel.login(savedUser.get(SP_USERNAME), savedUser.get(SP_PASSWORD));
         }
+
+    }
+
+    private void saveUserInfo(String username, String password) {
+        Log.d(TAG, "saveUserInfo: Saving user info");
+        SharedPreferences userInfo = getSharedPreferences(SP_KEY, MODE_PRIVATE);
+        SharedPreferences.Editor editor = userInfo.edit();
+        editor.putString(SP_USERNAME, username);
+        editor.putString(SP_PASSWORD, password);
+        editor.apply();
+        Log.d(TAG, "saveUserInfo: Done saving user info");
+    }
+
+    private HashMap<String, String> getuserInfo () {
+        Log.d(TAG, "getuserInfo: Getting user info");
+        SharedPreferences userInfo = getSharedPreferences(SP_KEY, MODE_PRIVATE);
+        String username = userInfo.getString(SP_USERNAME, null);
+        String password = userInfo.getString(SP_PASSWORD, null);
+
+        if (username == null || password == null) {
+            Log.d(TAG, "getuserInfo: No User Info Saved");
+            return null;
+        }
+
+        HashMap<String, String> savedInfo = new HashMap<>();
+        savedInfo.put(SP_USERNAME, username);
+        savedInfo.put(SP_PASSWORD, password);
+
+        Log.d(TAG, "getuserInfo: Returning user info");
+        return savedInfo;
     }
 
     private void updateUiWithUser(LoggedInUserView model) {

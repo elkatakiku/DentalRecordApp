@@ -7,7 +7,6 @@ public class LoggedInUser {
 
     private String userId;
     private String displayName;
-    private String email;
 
     public LoggedInUser(String userId, String displayName) {
         this.userId = userId;
@@ -22,7 +21,4 @@ public class LoggedInUser {
         return displayName;
     }
 
-    public String getEmail() {
-        return email;
-    }
 }

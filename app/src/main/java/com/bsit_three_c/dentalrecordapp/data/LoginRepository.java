@@ -1,5 +1,6 @@
 package com.bsit_three_c.dentalrecordapp.data;
 
+import android.provider.Settings;
 import android.util.Log;
 
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
@@ -71,9 +72,12 @@ public class LoginRepository {
         String email = loggedUser.getEmail();
 
         // Change display name when login database is set
-        LoggedInUser newUser = createLoggedInUser(uid, "Eli Lamzon");
+        LoggedInUser newUser = createLoggedInUser(uid, email);
         setLoggedInUser(newUser);
+        dataSource.addLoggedInUser(newUser);
 
         return newUser;
     }
+
+
 }
