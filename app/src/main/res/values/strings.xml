@@ -19,8 +19,8 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">User Display Name</string>
+    <string name="nav_header_subtitle">user_email@email.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
@@ -28,4 +28,31 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_logout">Logout</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_add_patient">AddPatientActivity</string>
+
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <!-- Constants -->
+    <string name="FIREBASE_URL">https://dental-record-app-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+    <string name="USERS">users</string>
+    <string name="PATIENTS">patients</string>
+    <string name="UID">uid</string>
+    <string name="FIRSTNAME">firstname</string>
+    <string name="MIDDLE_NAME">middlename</string>
+    <string name="LASTNAME">lastname</string>
+    <string name="EMAIL">email</string>
+    <string name="PHONE_NUMBER">phoneNumber</string>
+    <string name="ADDRESS">address</string>
+    <string name="AGE">age</string>
+    <string name="BALANCE">balance</string>
 </resources>

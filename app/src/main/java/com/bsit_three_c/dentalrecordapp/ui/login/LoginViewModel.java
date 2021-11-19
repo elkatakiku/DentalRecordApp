@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Patterns;
@@ -13,8 +12,6 @@ import android.util.Patterns;
 import com.bsit_three_c.dentalrecordapp.data.LoginRepository;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
-import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
 
@@ -23,7 +20,6 @@ public class LoginViewModel extends ViewModel {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-    private MutableLiveData<Boolean> isConnectedToInternet = new MutableLiveData<>();
     private LoginRepository loginRepository;
     private LoggedInUser loggedInUser;
 
@@ -37,10 +33,6 @@ public class LoginViewModel extends ViewModel {
 
     LiveData<LoginResult> getLoginResult() {
         return loginResult;
-    }
-
-    public MutableLiveData<Boolean> getIsConnectedToInternet() {
-        return isConnectedToInternet;
     }
 
     public LoggedInUser getLoggedInUser() {

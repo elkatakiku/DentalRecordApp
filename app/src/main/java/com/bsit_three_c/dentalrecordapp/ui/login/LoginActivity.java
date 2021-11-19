@@ -2,12 +2,9 @@ package com.bsit_three_c.dentalrecordapp.ui.login;
 
 import android.app.Activity;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -24,8 +21,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bsit_three_c.dentalrecordapp.MainActivity;
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.SampleActivity;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityLoginBinding;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
@@ -53,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.btnLogin;
         final ProgressBar loadingProgressBar = binding.loading;
-        intent = new Intent(LoginActivity.this, SampleActivity.class);
+        intent = new Intent(LoginActivity.this, MainActivity.class);
 
         loginViewModel.getLoginFormState().observe(this, loginFormState -> {
             if (loginFormState == null) {
@@ -72,8 +69,10 @@ public class LoginActivity extends AppCompatActivity {
             isOnline = loginViewModel.isOnline();
 
             loadingProgressBar.setVisibility(View.GONE);
-            if (!isOnline) {
-                showSnackbarInternetError();
+            if (LocalStorage.getLoggedInUser(this) != null) {
+                redirectToHome();
+            } else if (!isOnline) {
+                showSnackBarInternetError();
                 return;
             } else if (loginResult == null) {
                 Log.e(TAG, "onCreate: login result is null");
@@ -82,19 +81,8 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e(TAG, "onCreate: login result is error");
                 showLoginFailed(loginResult.getError());
             } else if (loginResult.getSuccess() != null) {
-                Log.i(TAG, "onCreate: login result is success");
-
-                Log.i(TAG, "onCreate: Saving user info");
-                // Checks if logged in user is already saved
-                if (LocalStorage.getLoggedInUser(this) == null)
-                    LocalStorage.saveLoggedInUser(this, loginViewModel.getLoggedInUser());
-                Log.d(TAG, "onCreate: Starting sample activity");
-
                 updateUiWithUser(loginResult.getSuccess());
-
-                // Redirect user to main activity
-                startActivity(intent);
-                finish();
+                redirectToHome();
             }
 
             setResult(Activity.RESULT_OK);
@@ -140,8 +128,8 @@ public class LoginActivity extends AppCompatActivity {
 
         isOnline = loginViewModel.isOnline();
 
-        // Show snackbar if offline
-        if (!loginViewModel.isOnline()) showSnackbarInternetError();
+        // Show snack bar if offline
+        if (!loginViewModel.isOnline()) showSnackBarInternetError();
 
         // Checks if user has logged in before
         LoggedInUser loggedInUser = LocalStorage.getLoggedInUser(this);
@@ -151,10 +139,28 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void showSnackbarInternetError() {
+    private void showSnackBarInternetError() {
         Snackbar.make(binding.getRoot(), "Connect to a network.", Snackbar.LENGTH_LONG)
                 .setBackgroundTint(Color.WHITE)
                 .show();
+    }
+
+    private void redirectToHome() {
+        Log.i(TAG, "redirectToHome: login result is success");
+
+        Log.i(TAG, "redirectToHome: Saving user info");
+        // Checks if logged in user is already saved
+        if (LocalStorage.getLoggedInUser(this) == null)
+            LocalStorage.saveLoggedInUser(this, loginViewModel.getLoggedInUser());
+        Log.d(TAG, "redirectToHome: Starting sample activity");
+
+        // Passing loggedInUser object
+        Log.d(TAG, "redirectToHome: passing loggedInUser object");
+        intent.putExtra(LocalStorage.LOGGED_IN_USER_KEY, loginViewModel.getLoggedInUser());
+
+        // Redirect user to main activity
+        startActivity(intent);
+        finish();
     }
 
     private void updateUiWithUser(LoggedInUserView model) {

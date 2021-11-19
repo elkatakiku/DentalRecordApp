@@ -59,8 +59,8 @@ public class LoginRepository {
         return dataSource.login(username, password);
     }
 
-    private LoggedInUser createLoggedInUser(String uid, String displayName) {
-        return new LoggedInUser(uid, displayName);
+    private LoggedInUser createLoggedInUser(String uid, String displayName, String email) {
+        return new LoggedInUser(uid, displayName, email);
     }
 
     public LoggedInUser loginSuccess(AuthResult authResult) {
@@ -72,9 +72,11 @@ public class LoginRepository {
         String email = loggedUser.getEmail();
 
         // Change display name when login database is set
-        LoggedInUser newUser = createLoggedInUser(uid, email);
+        LoggedInUser newUser = createLoggedInUser(uid, "Eli Lamzon", email);
         setLoggedInUser(newUser);
-        dataSource.addLoggedInUser(newUser);
+//        dataSource.addLoggedInUser(newUser);
+
+//        dataSource.createNewAccount();
 
         return newUser;
     }

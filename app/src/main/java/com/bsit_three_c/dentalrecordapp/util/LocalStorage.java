@@ -12,7 +12,7 @@ import com.google.gson.Gson;
 public class LocalStorage {
     private static final String TAG = "LocalStorage";
     private static final String SP_KEY = "LoggedInUser Object";
-    private static final String LOGGED_IN_USER_KEY = "LoggedInUser";
+    public static final String LOGGED_IN_USER_KEY = "LoggedInUser";
 
     public static void saveLoggedInUser(Context context, LoggedInUser loggedInUser) {
         String jsonLoggedInUser = new Gson().toJson(loggedInUser);

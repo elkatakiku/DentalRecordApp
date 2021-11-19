@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.annotation.NonNull;
 
-import com.bsit_three_c.dentalrecordapp.SampleViewModel;
+import com.bsit_three_c.dentalrecordapp.MainViewModel;
 import com.bsit_three_c.dentalrecordapp.data.LoginDataSource;
 import com.bsit_three_c.dentalrecordapp.data.LoginRepository;
 
@@ -22,8 +22,8 @@ public class LoginViewModelFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(LoginViewModel.class)) {
             return (T) new LoginViewModel(LoginRepository.getInstance(loginDataSource));
-        } else if (modelClass.isAssignableFrom(SampleViewModel.class)){
-            return (T) new SampleViewModel(LoginRepository.getInstance(loginDataSource));
+        } else if (modelClass.isAssignableFrom(MainViewModel.class)){
+            return (T) new MainViewModel(LoginRepository.getInstance(loginDataSource));
         } else {
             throw new IllegalArgumentException("Unknown ViewModel class");
         }
