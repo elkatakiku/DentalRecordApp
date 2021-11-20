@@ -1,16 +1,8 @@
 package com.bsit_three_c.dentalrecordapp.ui.login;
 
 import android.app.Activity;
-
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -21,12 +13,15 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.bsit_three_c.dentalrecordapp.MainActivity;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityLoginBinding;
-import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
-import com.google.android.material.snackbar.Snackbar;
+import com.bsit_three_c.dentalrecordapp.util.Util;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
@@ -43,6 +38,11 @@ public class LoginActivity extends AppCompatActivity {
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        isOnline = Util.isOnline();
+
+        // Show snack bar if offline
+        if (!Util.isOnline()) Util.showSnackBarInternetError(binding.getRoot());
 
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory()).get(LoginViewModel.class);
 
@@ -66,13 +66,13 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         loginViewModel.getLoginResult().observe(this, loginResult -> {
-            isOnline = loginViewModel.isOnline();
+            isOnline = Util.isOnline();
 
             loadingProgressBar.setVisibility(View.GONE);
-            if (LocalStorage.getLoggedInUser(this) != null) {
+            if (Util.getLoggedInUser(this) != null) {
                 redirectToHome();
             } else if (!isOnline) {
-                showSnackBarInternetError();
+                Util.showSnackBarInternetError(binding.getRoot());
                 return;
             } else if (loginResult == null) {
                 Log.e(TAG, "onCreate: login result is null");
@@ -126,37 +126,28 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        isOnline = loginViewModel.isOnline();
-
-        // Show snack bar if offline
-        if (!loginViewModel.isOnline()) showSnackBarInternetError();
-
         // Checks if user has logged in before
-        LoggedInUser loggedInUser = LocalStorage.getLoggedInUser(this);
+        LoggedInUser loggedInUser = Util.getLoggedInUser(this);
         if (loggedInUser != null) {
             Log.d(TAG, "onStart: user already logged in");
             loginViewModel.setLoggedInUser(loggedInUser);
         }
     }
 
-    private void showSnackBarInternetError() {
-        Snackbar.make(binding.getRoot(), "Connect to a network.", Snackbar.LENGTH_LONG)
-                .setBackgroundTint(Color.WHITE)
-                .show();
-    }
+
 
     private void redirectToHome() {
         Log.i(TAG, "redirectToHome: login result is success");
 
         Log.i(TAG, "redirectToHome: Saving user info");
         // Checks if logged in user is already saved
-        if (LocalStorage.getLoggedInUser(this) == null)
-            LocalStorage.saveLoggedInUser(this, loginViewModel.getLoggedInUser());
+        if (Util.getLoggedInUser(this) == null)
+            Util.saveLoggedInUser(this, loginViewModel.getLoggedInUser());
         Log.d(TAG, "redirectToHome: Starting sample activity");
 
         // Passing loggedInUser object
         Log.d(TAG, "redirectToHome: passing loggedInUser object");
-        intent.putExtra(LocalStorage.LOGGED_IN_USER_KEY, loginViewModel.getLoggedInUser());
+        intent.putExtra(Util.LOGGED_IN_USER_KEY, loginViewModel.getLoggedInUser());
 
         // Redirect user to main activity
         startActivity(intent);

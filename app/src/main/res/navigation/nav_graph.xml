@@ -3,26 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/BasicInfoFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.add_patient.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        android:id="@+id/BasicInfoFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.add_patient.BsicInfoFragment"
+        android:label="@string/basic_info_fragment_label"
+        tools:layout="@layout/fragment_basic_info">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            app:destination="@id/TeethFragment" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.add_patient.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        android:id="@+id/TeethFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.add_patient.TeethFragment"
+        android:label="@string/teeth_fragment_label"
+        tools:layout="@layout/fragment_teeth">
 
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_SecondFragment_to_PaymentFragment"
+            app:destination="@id/PaymentFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/PaymentFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.add_patient.PaymentFragment"
+        android:label="PaymentFragment"
+        tools:layout="@layout/fragment_payment">
+
+
     </fragment>
 </navigation>

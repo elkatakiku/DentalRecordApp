@@ -2,64 +2,48 @@ package com.bsit_three_c.dentalrecordapp.data.model;
 
 import androidx.annotation.NonNull;
 
-public class Patient {
+import com.bsit_three_c.dentalrecordapp.data.model.interfaces.Person;
 
-    private final String uid;
-    private String firstname;
-    private String lastname;
-    private String middlename;
-    private String email;
-    private String phoneNumber;
+public class Patient extends Person {
+
     private String address;
     private int age;
     private double balance;
 
-    public Patient(String firstname, String lastname, String email, String phoneNumber, String uid) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.uid = uid;
+    public Patient() { }
+
+    public Patient(String uid, String firstname, String lastname, String middlename, String phoneNumber, String address, int age) {
+        super(uid, firstname, lastname, middlename, phoneNumber);
+        this.address = address;
+        this.age = age;
     }
 
-    public Patient(String firstname, String lastname, String email, String phoneNumber) {
-        this(firstname, lastname, email, phoneNumber, null);
+//    public Patient() {
+//
+//    }
+
+    public String getAddress() {
+        return address;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public int getAge() {
+        return age;
     }
 
-    public String getLastname() {
-        return lastname;
+    public void setAge(int age) {
+        this.age = age;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public double getBalance() {
+        return balance;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getUid() {
-        return uid;
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     @NonNull
@@ -67,7 +51,6 @@ public class Patient {
     public String toString() {
         return "firstname: " + firstname + '\n' +
                 "lastname: " + lastname + '\n' +
-                "email: " + email + '\n' +
                 "phoneNumber: " + phoneNumber + '\n' +
                 "uid: " + uid;
     }

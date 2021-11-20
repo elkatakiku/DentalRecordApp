@@ -3,7 +3,7 @@
     <!-- Strings related to btnLogin -->
 
     <string name="system">ELL DENTAL RECORD SYSTEM</string>
-    <string name="systemName">App Name</string>
+    <string name="systemName">Dental Record</string>
 
     <!-- Login Strings -->
     <string name="logo_content_desc">ELL Logo</string>
@@ -26,18 +26,19 @@
 
     <!-- Nav Menu -->
     <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_add_patient">Add Patient</string>
+    <string name="menu_search_patient">Search</string>
     <string name="menu_logout">Logout</string>
     <string name="menu_help">Help</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_add_patient">AddPatientActivity</string>
 
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="basic_info_fragment_label">Basic Info Fragment</string>
+    <string name="teeth_fragment_label">TeethFragment</string>
+    <string name="payment_fragment_label">Payment Fragment</string>
     <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="add">Add Patient</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
@@ -55,4 +56,18 @@
     <string name="ADDRESS">address</string>
     <string name="AGE">age</string>
     <string name="BALANCE">balance</string>
+
+    <!-- Spinner Civil Status Options -->
+    <string-array name="civil_status_array">
+        <item>Single</item>
+        <item>Married</item>
+        <item>Separated</item>
+        <item>Divorced</item>
+        <item>Widowed</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Hpme -->
+    <string name="error_network">Connect to a network.</string>
 </resources>

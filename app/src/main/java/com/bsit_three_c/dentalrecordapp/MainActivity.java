@@ -9,25 +9,21 @@ import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
-import com.bsit_three_c.dentalrecordapp.data.model.Patient;
-import com.bsit_three_c.dentalrecordapp.ui.login.LoginActivity;
-import com.bsit_three_c.dentalrecordapp.ui.login.LoginViewModelFactory;
-import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
-
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
 
+import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityMainBinding;
-
-import java.util.ArrayList;
+import com.bsit_three_c.dentalrecordapp.ui.add_patient.AddPatientActivity;
+import com.bsit_three_c.dentalrecordapp.ui.login.LoginActivity;
+import com.bsit_three_c.dentalrecordapp.ui.login.LoginViewModelFactory;
+import com.bsit_three_c.dentalrecordapp.util.Util;
+import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,10 +47,10 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.appBarMain.toolbar);
         binding.appBarMain.fabAddPatients.setOnClickListener(view -> {
-            Snackbar.make(view, "Show add patient/user ui.", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null)
-                    .show();
-            savePatients();
+//            Snackbar.make(view, "Show add patient/user ui.", Snackbar.LENGTH_LONG)
+//                    .setAction("Action", null)
+//                    .show();
+            startActivity(new Intent(MainActivity.this, AddPatientActivity.class));
         });
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
@@ -78,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        loggedInUser = (LoggedInUser) getIntent().getSerializableExtra(LocalStorage.LOGGED_IN_USER_KEY);
+        loggedInUser = (LoggedInUser) getIntent().getSerializableExtra(Util.LOGGED_IN_USER_KEY);
         if (loggedInUser == null) {
             Log.d(TAG, "onStart: getIntent is null");
         } else Log.d(TAG, "onStart: getIntent isn't null");
@@ -126,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void logout() {
         Log.d(TAG, "onNavigationItemSelected: Clearing saved user info");
-        LocalStorage.clearSavedUser(this);
+        Util.clearSavedUser(this);
 
         Log.d(TAG, "onNavigationItemSelected: logout in view model called");
         mainViewModel.logout();
@@ -136,42 +132,5 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "onNavigationItemSelected: killing activity");
         finish();
-    }
-
-    // Test code
-    private void savePatients() {
-        final ArrayList<String> firstname = new ArrayList<>(5);
-        firstname.add("Eli");
-        firstname.add("Jeng");
-        firstname.add("Eper");
-        firstname.add("Bana");
-        firstname.add("Gale");
-
-        final ArrayList<String> lastname = new ArrayList<>(5);
-        lastname.add("Lamzon");
-        lastname.add("Albaciete");
-        lastname.add("Adaza");
-        lastname.add("Magno");
-        lastname.add("Fernandez");
-
-        final ArrayList<String> email = new ArrayList<>(5);
-        email.add("email1@email.com");
-        email.add("email2@email.com");
-        email.add("email3@email.com");
-        email.add("email4@email.com");
-        email.add("email5@email.com");
-
-        final ArrayList<String> number = new ArrayList<>(5);
-        number.add("09123548697");
-        number.add("09123548766");
-        number.add("09482346159");
-        number.add("09187456321");
-        number.add("09483625189");
-
-        for (int i = 0; i < 5; i++) {
-            Log.d(TAG, "savePatients: Loooping arraylist " + i);
-            Patient patient = new Patient(firstname.get(i), lastname.get(i),email.get(i), number.get(i));
-            mainViewModel.addPatient(patient);
-        }
     }
 }

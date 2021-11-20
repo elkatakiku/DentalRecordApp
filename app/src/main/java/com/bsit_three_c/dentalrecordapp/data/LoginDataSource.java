@@ -5,8 +5,6 @@ import android.util.Log;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
@@ -55,7 +53,7 @@ public class LoginDataSource {
         // TODO: revoke authentication
         // Logout the current user
         mFirebaseAuth.signOut();
-        Log.d(TAG, "logout: User is still logged in: " + (mFirebaseAuth.getCurrentUser() == null));
+        Log.d(TAG, "logout: Person is still logged in: " + (mFirebaseAuth.getCurrentUser() == null));
     }
 
     public boolean isLoggedIn() {

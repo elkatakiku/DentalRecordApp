@@ -4,14 +4,13 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.bsit_three_c.dentalrecordapp.data.adapter.ItemAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.Map;
 
 public class AddPatientDataSource {
 
@@ -41,7 +40,7 @@ public class AddPatientDataSource {
         Log.d(TAG, "addPatient: exiting addpatient method");
     }
 
-    public void getPatients() {
+    public void getPatients(ItemAdapter adapter) {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -56,5 +55,13 @@ public class AddPatientDataSource {
 
             }
         });
+    }
+
+    public void setValueListener(ValueEventListener listener) {
+        databaseReference.addValueEventListener(listener);
+    }
+
+    public void removeValueEventListener(ValueEventListener listener) {
+        databaseReference.removeEventListener(listener);
     }
 }

@@ -86,18 +86,7 @@ public class LoginViewModel extends ViewModel {
         return loginRepository.isLoggedIn();
     }
 
-    public boolean isOnline() {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int     exitValue = ipProcess.waitFor();
-            Log.d(TAG, "isOnline: exitValue:" + exitValue);
-            return (exitValue == 0);
-        }
-        catch (IOException | InterruptedException e)          { e.printStackTrace(); }
 
-        return false;
-    }
 
     private class LoginUser extends AsyncTask<String, Void, Void> {
         @Override

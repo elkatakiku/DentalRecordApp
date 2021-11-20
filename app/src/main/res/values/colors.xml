@@ -19,4 +19,8 @@
     <color name="login_button_tint">#00B6BC</color>
     <color name="text_color">#17130c</color>
     <color name="label_color">#9F8F8F</color>
+    
+    <!-- Try Pallete -->
+    <color name="primary">#009688</color>
+    <color name="accent">#18FFFF</color>
 </resources>

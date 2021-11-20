@@ -15,7 +15,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@color/primary"
             app:popupTheme="@style/Theme.DentalRecordApp.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -29,6 +29,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
+        app:backgroundTint="@color/accent"
         app:srcCompat="@drawable/add_icon_final" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
