@@ -4,21 +4,15 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.util.Log;
-import android.view.View;
 
-import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
-import java.io.IOException;
-
-public class Util {
-    private static final String TAG = "Util";
-    private static final String SP_KEY = "LoggedInUser Object";
+public class LocalStorage {
     public static final String LOGGED_IN_USER_KEY = "LoggedInUser";
+    private static final String TAG = "LocalStorage";
+    private static final String SP_KEY = "LoggedInUser Object";
 
     public static void saveLoggedInUser(Context context, LoggedInUser loggedInUser) {
         String jsonLoggedInUser = new Gson().toJson(loggedInUser);
@@ -53,25 +47,5 @@ public class Util {
         Log.i(TAG, "clearSavedUser: Start clearing user info");
         saveLoggedInUser(context, null);
         Log.i(TAG, "clearSavedUser: Done clearing user info");
-    }
-
-    public static boolean isOnline() {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int     exitValue = ipProcess.waitFor();
-            Log.d(TAG, "isOnline: exitValue:" + exitValue);
-            return (exitValue == 0);
-        }
-        catch (IOException | InterruptedException e)          { e.printStackTrace(); }
-
-        return false;
-    }
-
-    public static void showSnackBarInternetError(View view) {
-        Snackbar.make(view, R.string.error_network, Snackbar.LENGTH_LONG)
-                .setBackgroundTint(Color.WHITE)
-                .setTextColor(Color.BLACK)
-                .show();
     }
 }

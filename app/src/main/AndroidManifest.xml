@@ -13,6 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DentalRecordApp">
         <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".ui.search.SearchActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.add_patient.AddPatientActivity"
             android:exported="false"
             android:label="@string/title_activity_add_patient"

@@ -8,8 +8,8 @@ import java.io.Serializable;
 public class LoggedInUser implements Serializable {
 
     private final String userId;
-    private String displayName;
-    private String email;
+    private final String displayName;
+    private final String email;
 
     public LoggedInUser(String userId, String displayName, String email) {
         this.userId = userId;

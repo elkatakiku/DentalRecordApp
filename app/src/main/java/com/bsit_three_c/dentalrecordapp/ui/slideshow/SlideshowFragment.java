@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentSlideshowBinding;
 
 public class SlideshowFragment extends Fragment {

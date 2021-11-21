@@ -1,26 +1,23 @@
 package com.bsit_three_c.dentalrecordapp.ui.login;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
 import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Patterns;
 
-import com.bsit_three_c.dentalrecordapp.data.LoginRepository;
-import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
-import java.io.IOException;
+import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.data.login.LoginRepository;
+import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 
 public class LoginViewModel extends ViewModel {
     private static final String TAG = "LoginViewModel";
 
-    private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
-    private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-    private LoginRepository loginRepository;
+    private final MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
+    private final MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
+    private final LoginRepository loginRepository;
     private LoggedInUser loggedInUser;
 
     LoginViewModel(LoginRepository loginRepository) {
@@ -85,7 +82,6 @@ public class LoginViewModel extends ViewModel {
     public boolean isUserLoggedIn() {
         return loginRepository.isLoggedIn();
     }
-
 
 
     private class LoginUser extends AsyncTask<String, Void, Void> {

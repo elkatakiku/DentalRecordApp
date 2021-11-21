@@ -2,25 +2,19 @@ package com.bsit_three_c.dentalrecordapp.data.model;
 
 import androidx.annotation.NonNull;
 
-import com.bsit_three_c.dentalrecordapp.data.model.interfaces.Person;
-
 public class Patient extends Person {
 
     private String address;
     private int age;
     private double balance;
 
-    public Patient() { }
+    public Patient() {}
 
     public Patient(String uid, String firstname, String lastname, String middlename, String phoneNumber, String address, int age) {
         super(uid, firstname, lastname, middlename, phoneNumber);
         this.address = address;
         this.age = age;
     }
-
-//    public Patient() {
-//
-//    }
 
     public String getAddress() {
         return address;

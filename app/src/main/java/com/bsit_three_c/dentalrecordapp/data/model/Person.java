@@ -1,4 +1,4 @@
-package com.bsit_three_c.dentalrecordapp.data.model.interfaces;
+package com.bsit_three_c.dentalrecordapp.data.model;
 
 public class Person {
 
@@ -8,7 +8,8 @@ public class Person {
     protected String middlename;
     protected String phoneNumber;
 
-    public Person() {}
+    public Person() {
+    }
 
     public Person(String uid, String firstname, String lastname, String middlename, String phoneNumber) {
         this.uid = uid;

@@ -1,7 +1,5 @@
 package com.bsit_three_c.dentalrecordapp.data.model;
 
-import com.bsit_three_c.dentalrecordapp.data.model.interfaces.Person;
-
 public class Account extends Person {
 
     private String email;

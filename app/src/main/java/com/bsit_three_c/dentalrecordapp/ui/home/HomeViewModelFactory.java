@@ -4,19 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bsit_three_c.dentalrecordapp.data.add_patient.AddPatientDataSource;
-import com.bsit_three_c.dentalrecordapp.data.add_patient.AddPatientRepository;
+import com.bsit_three_c.dentalrecordapp.data.patient.PatientDataSource;
+import com.bsit_three_c.dentalrecordapp.data.patient.PatientRepository;
 
 class HomeViewModelFactory implements ViewModelProvider.Factory {
 
-    private final AddPatientDataSource dataSource = new AddPatientDataSource();
+    private final PatientDataSource dataSource = new PatientDataSource();
 
     @NonNull
     @Override
 
     public <T extends ViewModel> T create(@NonNull Class<T> aClass) {
         if (aClass.isAssignableFrom(HomeViewModel.class)) {
-            return (T) new HomeViewModel(AddPatientRepository.getInstance(dataSource));
+            return (T) new HomeViewModel(PatientRepository.getInstance(dataSource));
         } else {
             throw new IllegalArgumentException("Unknown ViewModel class");
         }

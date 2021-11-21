@@ -1,4 +1,4 @@
-package com.bsit_three_c.dentalrecordapp.data.add_patient;
+package com.bsit_three_c.dentalrecordapp.data.patient;
 
 import android.util.Log;
 
@@ -8,31 +8,31 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.bsit_three_c.dentalrecordapp.data.adapter.ItemAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
-import com.bsit_three_c.dentalrecordapp.data.model.interfaces.Person;
+import com.bsit_three_c.dentalrecordapp.data.model.Person;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class AddPatientRepository {
+public class PatientRepository {
 
-    private static final String TAG = AddPatientRepository.class.getSimpleName();
+    private static final String TAG = PatientRepository.class.getSimpleName();
 
-    private static volatile AddPatientRepository instance;
-    private final AddPatientDataSource dataSource;
+    private static volatile PatientRepository instance;
+    private final PatientDataSource dataSource;
     private ValueEventListener valueEventListener;
     private ArrayList<Person> personArrayList;
     private boolean isPatientsLoaded = false;
-    private MutableLiveData<Boolean> isGettingPatientsDone= new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isGettingPatientsDone = new MutableLiveData<>();
 
-    private AddPatientRepository(AddPatientDataSource dataSource) {
+    private PatientRepository(PatientDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public static AddPatientRepository getInstance(AddPatientDataSource dataSource) {
+    public static PatientRepository getInstance(PatientDataSource dataSource) {
         if (instance == null) {
-            instance = new AddPatientRepository(dataSource);
+            instance = new PatientRepository(dataSource);
         }
         return instance;
     }
@@ -45,8 +45,7 @@ public class AddPatientRepository {
                 if (!isDuplicate(patient)) {
                     this.personArrayList.add(patient);
                     Log.d(TAG, "getPatients: Added new patient to array list");
-                }
-                else Log.d(TAG, "getPatients: Patient already in array list");
+                } else Log.d(TAG, "getPatients: Patient already in array list");
             }
         }
 
@@ -60,8 +59,11 @@ public class AddPatientRepository {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 isGettingPatientsDone.setValue(false);
                 Log.d(TAG, "setAdapterChange: is getting patient done: " + isGettingPatientsDone.getValue());
+//                itemAdapter.getItemCount();
                 itemAdapter.setItems(getPatients(snapshot));
                 itemAdapter.notifyDataSetChanged();
+//                itemAdapter.notifyItemRangeChanged();
+
                 isGettingPatientsDone.setValue(true);
                 Log.d(TAG, "setAdapterChange: is getting patient done: " + isGettingPatientsDone.getValue());
             }
@@ -73,12 +75,20 @@ public class AddPatientRepository {
         };
 
         Log.d(TAG, "setAdapterChange: event listener: " + valueEventListener);
-        Log.d(TAG, "setAdapterChange: database ref: " + dataSource.getDatabaseReference());
-        dataSource.getDatabaseReference().addValueEventListener(valueEventListener);
+        dataSource.setValueListener(valueEventListener);
+    }
+
+    public void updatePatient() {
+        // TODO: Update Patients here
+        // Use notifyItemRangeChanged or notifyItemChanged
+    }
+
+    public void removePatient() {
+        // TODO: Remove Patients here
     }
 
     public void removeValueEventListener() {
-        dataSource.getDatabaseReference().removeEventListener(valueEventListener);
+        dataSource.removeValueEventListener(valueEventListener);
     }
 
     private boolean isDuplicate(Patient patient) {
@@ -89,7 +99,7 @@ public class AddPatientRepository {
         return personArrayList;
     }
 
-    public boolean isPatientsLoaded() {
+    public boolean getIsPatientsLoaded() {
         return isPatientsLoaded;
     }
 

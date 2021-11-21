@@ -1,12 +1,8 @@
-package com.bsit_three_c.dentalrecordapp.data;
-
-import android.provider.Settings;
-import android.util.Log;
+package com.bsit_three_c.dentalrecordapp.data.login;
 
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 /**
@@ -33,10 +29,6 @@ public class LoginRepository {
             instance = new LoginRepository(dataSource);
         }
         return instance;
-    }
-
-    public FirebaseAuth getDataSource() {
-        return dataSource.getmFirebaseAuth();
     }
 
     public boolean isLoggedIn() {
@@ -74,9 +66,6 @@ public class LoginRepository {
         // Change display name when login database is set
         LoggedInUser newUser = createLoggedInUser(uid, "Eli Lamzon", email);
         setLoggedInUser(newUser);
-//        dataSource.addLoggedInUser(newUser);
-
-//        dataSource.createNewAccount();
 
         return newUser;
     }

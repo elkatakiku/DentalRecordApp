@@ -21,7 +21,8 @@ import com.bsit_three_c.dentalrecordapp.MainActivity;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityLoginBinding;
-import com.bsit_three_c.dentalrecordapp.util.Util;
+import com.bsit_three_c.dentalrecordapp.util.Internet;
+import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
@@ -39,10 +40,14 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        isOnline = Util.isOnline();
+//        isOnline = Internet.isOnline();
 
         // Show snack bar if offline
-        if (!Util.isOnline()) Util.showSnackBarInternetError(binding.getRoot());
+        Internet.getIsOnline().observe(this, aBoolean -> {
+            if (!aBoolean) Internet.showSnackBarInternetError(binding.getRoot());
+            isOnline = aBoolean;
+        });
+//        if (!Internet.isOnline()) Internet.showSnackBarInternetError(binding.getRoot());
 
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory()).get(LoginViewModel.class);
 
@@ -66,13 +71,14 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         loginViewModel.getLoginResult().observe(this, loginResult -> {
-            isOnline = Util.isOnline();
+            isOnline = Internet.isOnline();
+//            new Internet().execute();
 
             loadingProgressBar.setVisibility(View.GONE);
-            if (Util.getLoggedInUser(this) != null) {
+            if (LocalStorage.getLoggedInUser(this) != null) {
                 redirectToHome();
             } else if (!isOnline) {
-                Util.showSnackBarInternetError(binding.getRoot());
+                Internet.showSnackBarInternetError(binding.getRoot());
                 return;
             } else if (loginResult == null) {
                 Log.e(TAG, "onCreate: login result is null");
@@ -126,8 +132,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        // Check internet connection in background
+        new Internet().execute();
+
         // Checks if user has logged in before
-        LoggedInUser loggedInUser = Util.getLoggedInUser(this);
+        LoggedInUser loggedInUser = LocalStorage.getLoggedInUser(this);
         if (loggedInUser != null) {
             Log.d(TAG, "onStart: user already logged in");
             loginViewModel.setLoggedInUser(loggedInUser);
@@ -135,19 +144,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
     private void redirectToHome() {
         Log.i(TAG, "redirectToHome: login result is success");
 
         Log.i(TAG, "redirectToHome: Saving user info");
         // Checks if logged in user is already saved
-        if (Util.getLoggedInUser(this) == null)
-            Util.saveLoggedInUser(this, loginViewModel.getLoggedInUser());
+        if (LocalStorage.getLoggedInUser(this) == null)
+            LocalStorage.saveLoggedInUser(this, loginViewModel.getLoggedInUser());
         Log.d(TAG, "redirectToHome: Starting sample activity");
 
         // Passing loggedInUser object
         Log.d(TAG, "redirectToHome: passing loggedInUser object");
-        intent.putExtra(Util.LOGGED_IN_USER_KEY, loginViewModel.getLoggedInUser());
+        intent.putExtra(LocalStorage.LOGGED_IN_USER_KEY, loginViewModel.getLoggedInUser());
 
         // Redirect user to main activity
         startActivity(intent);

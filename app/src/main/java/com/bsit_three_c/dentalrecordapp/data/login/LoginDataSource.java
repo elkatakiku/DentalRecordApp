@@ -1,4 +1,4 @@
-package com.bsit_three_c.dentalrecordapp.data;
+package com.bsit_three_c.dentalrecordapp.data.login;
 
 import android.util.Log;
 
@@ -12,20 +12,11 @@ import com.google.firebase.auth.FirebaseAuth;
 public class LoginDataSource {
 
     private static final String TAG = "LoginDataSource";
-    
-    private final FirebaseAuth mFirebaseAuth;
-//    private final FirebaseDatabase database;
-//    private final DatabaseReference databaseReference;
 
-//    private final static String FIREBASE_URL = "https://dental-record-app-default-rtdb.asia-southeast1.firebasedatabase.app";
+    private final FirebaseAuth mFirebaseAuth;
 
     public LoginDataSource() {
         this.mFirebaseAuth = FirebaseAuth.getInstance();
-//        this.database = FirebaseDatabase.getInstance(FIREBASE_URL);
-//        this.databaseReference = database.getReference("users");
-
-//        Log.d(TAG, "LoginDataSource: firebaseAuth initialized");
-//        Log.d(TAG, "LoginDataSource: firebaseAuth: " + mFirebaseAuth.toString());
 
         // Register account
 //        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
@@ -41,7 +32,7 @@ public class LoginDataSource {
 //        });
     }
 
-    public FirebaseAuth getmFirebaseAuth() {
+    public FirebaseAuth getMFirebaseAuth() {
         return mFirebaseAuth;
     }
 
@@ -58,10 +49,6 @@ public class LoginDataSource {
 
     public boolean isLoggedIn() {
         return mFirebaseAuth.getCurrentUser() != null;
-    }
-
-    public boolean isLoggedin() {
-        return true;
     }
 
     // Remove when account registration created

@@ -6,18 +6,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bsit_three_c.dentalrecordapp.data.adapter.ItemAdapter;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentHomeBinding;
-import com.bsit_three_c.dentalrecordapp.util.Util;
+import com.bsit_three_c.dentalrecordapp.util.Internet;
 
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
@@ -25,7 +23,6 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
     private ItemAdapter adapter;
-    private boolean isOnline;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(this, new HomeViewModelFactory()).get(HomeViewModel.class);
@@ -33,44 +30,36 @@ public class HomeFragment extends Fragment {
 
         Log.d(TAG, "onCreateView: start");
 
-        homeViewModel.runTestInternet();
-        homeViewModel.getIsOnline().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    Log.d(TAG, "onChanged: isOnline value changed to true");
-                    showRecyclerView();
-                    if (homeViewModel.isRecordEmpty() && !homeViewModel.isPatientsLoaded()) {
-                        Log.d(TAG, "onChanged: getting patients");
-                        new LoadPatients().execute();
-                    }
-                    else {
-                        Log.d(TAG, "onChanged: refreshing");
-                        homeViewModel.refresh(adapter);
-                    }
+        homeViewModel.runInternetTest();
+        Internet.getIsOnline().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                Log.d(TAG, "onChanged: isOnline value changed to true");
+                showRecyclerView();
+                if (homeViewModel.isRecordEmpty() && !homeViewModel.isPatientsLoaded()) {
+                    Log.d(TAG, "onChanged: getting patients");
+                    new LoadPatients().execute();
                 } else {
-                    Log.d(TAG, "onChanged: isOnline value changed to false");
-                    if (homeViewModel.isRecordEmpty()) {
-                        Log.d(TAG, "onChanged: empty records");
-                        showError();
-                    }
-                    Util.showSnackBarInternetError(binding.getRoot());
+                    Log.d(TAG, "onChanged: refreshing");
+                    homeViewModel.refresh(adapter);
                 }
+            } else {
+                Log.d(TAG, "onChanged: isOnline value changed to false");
+                if (homeViewModel.isRecordEmpty()) {
+                    Log.d(TAG, "onChanged: empty records");
+                    showError();
+                }
+                Internet.showSnackBarInternetError(binding.getRoot());
             }
         });
 
-        homeViewModel.getIsPatientsGettingDone().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                Log.d(TAG, "onChanged: aBoolean: " + aBoolean);
-                if (!aBoolean) {
-                    Log.d(TAG, "onChanged: turning progress bar on");
-                    binding.progressBar.setVisibility(View.VISIBLE);
-                }
-                else {
-                    Log.d(TAG, "onChanged: turning progress bar off");
-                    binding.progressBar.setVisibility(View.GONE);
-                }
+        homeViewModel.getIsPatientsGettingDone().observe(getViewLifecycleOwner(), aBoolean -> {
+            Log.d(TAG, "onChanged: aBoolean: " + aBoolean);
+            if (!aBoolean) {
+                Log.d(TAG, "onChanged: turning progress bar on");
+                binding.progressBar.setVisibility(View.VISIBLE);
+            } else {
+                Log.d(TAG, "onChanged: turning progress bar off");
+                binding.progressBar.setVisibility(View.GONE);
             }
         });
 
@@ -98,9 +87,8 @@ public class HomeFragment extends Fragment {
 
 
         binding.swipeRefreshLayout.setOnRefreshListener(() -> {
-            Toast.makeText(getActivity(), "onRefresh called", Toast.LENGTH_SHORT).show();
-//            refresh();
-            homeViewModel.runTestInternet();
+//            Toast.makeText(getActivity(), "onRefresh called", Toast.LENGTH_SHORT).show();
+            homeViewModel.runInternetTest();
             binding.swipeRefreshLayout.setRefreshing(false);
         });
     }
@@ -110,29 +98,8 @@ public class HomeFragment extends Fragment {
         super.onDestroyView();
 
         binding = null;
-        if (isOnline) homeViewModel.removeEventListener();
-    }
-
-    private void refresh() {
-        if (!Util.isOnline() && homeViewModel.isRecordEmpty()) {
-            Log.d(TAG, "refresh: Records are empty");
-            showError();
-            Util.showSnackBarInternetError(binding.getRoot());
-        }
-        else if (!Util.isOnline() && !homeViewModel.isRecordEmpty()) {
-            Log.d(TAG, "refresh: not online and records are not empty");
-            Util.showSnackBarInternetError(binding.getRoot());
-        }
-        else if (Util.isOnline() && homeViewModel.isRecordEmpty()) {
-            Log.d(TAG, "refresh: is online and record is empty");
-            new LoadPatients().execute();
-            showRecyclerView();
-        }
-        else {
-            Log.d(TAG, "refresh: online and records have values");
-            showRecyclerView();
-            homeViewModel.refresh(adapter);
-        }
+        if (Internet.getIsOnline().getValue() != null && Internet.getIsOnline().getValue())
+            homeViewModel.removeEventListener();
     }
 
     public void showRecyclerView() {
@@ -158,13 +125,12 @@ public class HomeFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... voids) {
             Log.d(TAG, "doInBackground: Checking if online");
-            if (Util.isOnline()) {
-                Log.d(TAG, "doInBackground: isOnline: " + Util.isOnline());
+            if (Internet.isOnline()) {
+                Log.d(TAG, "doInBackground: isOnline: " + Internet.isOnline());
                 homeViewModel.getRepository().setAdapterChange(adapter);
             }
             Log.d(TAG, "doInBackground: Exiting async");
             return null;
         }
     }
-
 }

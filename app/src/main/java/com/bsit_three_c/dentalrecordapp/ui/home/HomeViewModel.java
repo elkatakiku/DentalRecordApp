@@ -1,6 +1,5 @@
 package com.bsit_three_c.dentalrecordapp.ui.home;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -8,41 +7,28 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.bsit_three_c.dentalrecordapp.data.adapter.ItemAdapter;
-import com.bsit_three_c.dentalrecordapp.data.add_patient.AddPatientRepository;
-import com.bsit_three_c.dentalrecordapp.data.model.interfaces.Person;
-import com.bsit_three_c.dentalrecordapp.util.Util;
+import com.bsit_three_c.dentalrecordapp.data.patient.PatientRepository;
+import com.bsit_three_c.dentalrecordapp.data.model.Person;
+import com.bsit_three_c.dentalrecordapp.util.Internet;
 
 import java.util.ArrayList;
 
 public class HomeViewModel extends ViewModel {
     private static final String TAG = HomeViewModel.class.getSimpleName();
 
-    private MutableLiveData<ArrayList<Person>> mPatientList = new MutableLiveData<>();
-    private AddPatientRepository repository;
-    private MutableLiveData<Boolean> isOnline = new MutableLiveData<>();
+    private final MutableLiveData<ArrayList<Person>> mPatientList = new MutableLiveData<>();
+    private final PatientRepository repository;
 
-    HomeViewModel(AddPatientRepository repository) {
+    HomeViewModel(PatientRepository repository) {
         this.repository = repository;
     }
 
-    public LiveData<ArrayList<Person>> getmPatientList() {
-        return mPatientList;
-    }
-
-    public void getPatients(ItemAdapter itemAdapter) {
-        repository.setAdapterChange(itemAdapter);
-    }
-
-    public AddPatientRepository getRepository() {
+    public PatientRepository getRepository() {
         return repository;
     }
 
-    public LiveData<Boolean> getIsOnline() {
-        return isOnline;
-    }
-
     public boolean isPatientsLoaded() {
-        return repository.isPatientsLoaded();
+        return repository.getIsPatientsLoaded();
     }
 
     public void removeEventListener() {
@@ -53,7 +39,7 @@ public class HomeViewModel extends ViewModel {
         adapter.notifyDataSetChanged();
     }
 
-    public void initializePatients(ItemAdapter adapter){
+    public void initializePatients(ItemAdapter adapter) {
         Log.d(TAG, "initializePatients: getting arraylist: " + repository.getPersonArrayList());
         mPatientList.setValue(repository.getPersonArrayList());
         adapter.setItems(mPatientList.getValue());
@@ -63,7 +49,7 @@ public class HomeViewModel extends ViewModel {
         return repository.getPersonArrayList() == null || repository.getPersonArrayList().isEmpty();
     }
 
-    public void runTestInternet() {
+    public void runInternetTest() {
         new Internet().execute();
     }
 
@@ -71,16 +57,4 @@ public class HomeViewModel extends ViewModel {
         return repository.getIsGettingPatientsDone();
     }
 
-    private class Internet extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            isOnline.setValue(aBoolean);
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            return Util.isOnline();
-        }
-    }
 }

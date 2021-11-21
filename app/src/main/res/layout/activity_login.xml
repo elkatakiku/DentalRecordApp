@@ -31,14 +31,13 @@
         android:text="@string/systemName"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
-        android:textSize="34sp"
+        android:textSize="35sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        tools:ignore="TextContrastCheck"
-        tools:text="App Name" />
+        tools:ignore="TextContrastCheck" />
 
     <TextView
         android:id="@+id/usernameLabel"
