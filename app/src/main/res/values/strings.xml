@@ -104,8 +104,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <!-- Hpme -->
+    <!-- Home -->
     <string name="error_network">Connect to a network.</string>
+    <string name="error_network_home">Looks like you are offline!</string>
 
     <!-- Patient Item -->
     <string name="content_desc">patientLetter</string>
@@ -126,4 +127,10 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <!-- Add Patient -->
+    <string name="invalid_input">Invalid</string>
+    <string name="invalid_empty_input">Please fill up the field.</string>
+    <string name="invalid_contains_number">This field cannot contain number/s.</string>
+    <string name="invalid_contains_letter">This field cannot contain letter/s.</string>
 </resources>

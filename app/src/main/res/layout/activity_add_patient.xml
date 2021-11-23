@@ -15,7 +15,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/blue_green"
+            android:background="@drawable/side_nav_bar"
+            app:navigationIcon="@android:drawable/arrow_down_float"
             app:popupTheme="@style/Theme.DentalRecordApp.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>

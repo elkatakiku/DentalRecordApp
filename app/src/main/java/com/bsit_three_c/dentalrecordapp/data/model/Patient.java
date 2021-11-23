@@ -5,15 +5,26 @@ import androidx.annotation.NonNull;
 public class Patient extends Person {
 
     private String address;
+    private String civilStatus;
     private int age;
     private double balance;
+    private String occupation;
 
     public Patient() {}
 
-    public Patient(String uid, String firstname, String lastname, String middlename, String phoneNumber, String address, int age) {
-        super(uid, firstname, lastname, middlename, phoneNumber);
+    public Patient(String uid, String firstname, String lastname, String middleInitial, String phoneNumber, String address, int age, double balance) {
+        super(uid, firstname, lastname, middleInitial, phoneNumber);
         this.address = address;
         this.age = age;
+        this.balance = balance;
+    }
+
+    public Patient(String firstname, String lastname, String middleInitial, String address, String phoneNumber, String civilStatus, int age, String occupation) {
+        super(firstname, lastname, middleInitial, phoneNumber);
+        this.address = address;
+        this.civilStatus = civilStatus;
+        this.age = age;
+        this.occupation = occupation;
     }
 
     public String getAddress() {
@@ -38,6 +49,22 @@ public class Patient extends Person {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public String getCivilStatus() {
+        return civilStatus;
+    }
+
+    public void setCivilStatus(String civilStatus) {
+        this.civilStatus = civilStatus;
+    }
+
+    public String getOccupation() {
+        return occupation;
+    }
+
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
     }
 
     @NonNull

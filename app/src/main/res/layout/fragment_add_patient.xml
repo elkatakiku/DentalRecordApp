@@ -47,14 +47,14 @@
             app:layout_constraintGuide_percent="0.2" />
 
         <Button
-            android:id="@+id/button_first"
+            android:id="@+id/btnAddPatient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/blue_green"
-            android:text="@string/next"
+            android:text="@string/add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -71,16 +71,18 @@
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:inputType="textPersonName"
+            android:labelFor="@id/labelFirstname"
             android:minHeight="48dp"
-            app:layout_constraintEnd_toStartOf="@+id/eTxtMiddleName"
+            app:layout_constraintEnd_toStartOf="@+id/eTxtMiddleInitial"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/labelFirstname" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/labelFirstname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:labelFor="@id/eTxtFirstname"
             android:text="Firstname"
             app:layout_constraintStart_toStartOf="@+id/eTxtFirstname"
             app:layout_constraintTop_toTopOf="@+id/guideline5" />
@@ -96,10 +98,10 @@
             android:minHeight="48dp"
             app:layout_constraintEnd_toStartOf="@+id/eTxtAge"
             app:layout_constraintStart_toStartOf="@+id/eTxtFirstname"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintTop_toBottomOf="@+id/labelLastname" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/labelLastname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -121,11 +123,12 @@
             app:layout_constraintStart_toStartOf="@+id/guideline4" />
 
         <EditText
-            android:id="@+id/eTxtMiddleName"
+            android:id="@+id/eTxtMiddleInitial"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:ems="10"
+            android:hint="Optional"
             android:inputType="textPersonName"
             android:minHeight="48dp"
             app:layout_constraintBaseline_toBaselineOf="@+id/eTxtFirstname"
@@ -133,20 +136,21 @@
             app:layout_constraintStart_toStartOf="@+id/guideline4" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/labelAge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Age"
-            app:layout_constraintBaseline_toBaselineOf="@+id/textView2"
+            app:layout_constraintBaseline_toBaselineOf="@+id/labelLastname"
             app:layout_constraintStart_toStartOf="@+id/eTxtAge" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/labelMiddle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:labelFor="@id/eTxtMiddleInitial"
             android:text="Middle Initial"
-            app:layout_constraintBaseline_toBaselineOf="@+id/textView"
-            app:layout_constraintStart_toStartOf="@+id/eTxtMiddleName" />
+            app:layout_constraintBaseline_toBaselineOf="@+id/labelFirstname"
+            app:layout_constraintStart_toStartOf="@+id/eTxtMiddleInitial" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline4"
@@ -168,10 +172,10 @@
             android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+            app:layout_constraintTop_toBottomOf="@+id/labelAddress" />
 
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/labelAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -191,10 +195,32 @@
             android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView8" />
+            app:layout_constraintTop_toBottomOf="@+id/labelTelephone" />
+
+        <EditText
+            android:id="@+id/eTxtOccupation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:hint="Optional"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toStartOf="@+id/guideline4"
+            app:layout_constraintStart_toStartOf="@+id/labelOccupation"
+            app:layout_constraintTop_toBottomOf="@+id/labelOccupation" />
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/labelOccupation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Occupation"
+            app:layout_constraintStart_toStartOf="@+id/eTxtPhoneNumber"
+            app:layout_constraintTop_toBottomOf="@+id/eTxtPhoneNumber" />
+
+        <TextView
+            android:id="@+id/labelTelephone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -203,7 +229,7 @@
             app:layout_constraintTop_toBottomOf="@+id/eTxtAddress" />
 
         <TextView
-            android:id="@+id/textView9"
+            android:id="@+id/labelCivilStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -215,15 +241,14 @@
             android:id="@+id/spnrCivilStatus"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:entries="@array/civil_status_array"
             android:minHeight="48dp"
             android:spinnerMode="dropdown"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView9" />
+            app:layout_constraintStart_toStartOf="@+id/guideline4"
+            app:layout_constraintTop_toBottomOf="@+id/labelCivilStatus" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline6"

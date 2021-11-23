@@ -21,6 +21,6 @@
     <color name="label_color">#9F8F8F</color>
     
     <!-- Try Pallete -->
-    <color name="primary">#009688</color>
-    <color name="accent">#18FFFF</color>
+    <color name="primary">#009BA3</color>
+    <color name="accent">#84e4e3</color>
 </resources>

@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/BasicInfoFragment"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.add_patient.BasicInfoFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.add_patient.AddPatientFragment"
         android:label="@string/basic_info_fragment_label"
-        tools:layout="@layout/fragment_basic_info">
+        tools:layout="@layout/fragment_add_patient">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"

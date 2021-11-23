@@ -19,7 +19,7 @@ public class HomeViewModel extends ViewModel {
     private final MutableLiveData<ArrayList<Person>> mPatientList = new MutableLiveData<>();
     private final PatientRepository repository;
 
-    HomeViewModel(PatientRepository repository) {
+    public HomeViewModel(PatientRepository repository) {
         this.repository = repository;
     }
 

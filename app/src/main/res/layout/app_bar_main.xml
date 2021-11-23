@@ -30,6 +30,7 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
         android:contentDescription="@string/TODO"
+        android:visibility="gone"
         app:backgroundTint="@color/accent"
         app:srcCompat="@drawable/add_icon_final" />
 

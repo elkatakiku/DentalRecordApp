@@ -19,6 +19,13 @@ public class Person {
         this.phoneNumber = phoneNumber;
     }
 
+    public Person(String firstname, String lastname, String middlename, String phoneNumber) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.middlename = middlename;
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getUid() {
         return uid;
     }

@@ -1,5 +1,6 @@
 package com.bsit_three_c.dentalrecordapp.ui.home;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +15,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bsit_three_c.dentalrecordapp.data.adapter.ItemAdapter;
+import com.bsit_three_c.dentalrecordapp.data.view_model_factory.PatientViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentHomeBinding;
+import com.bsit_three_c.dentalrecordapp.ui.add_patient.AddPatientActivity;
 import com.bsit_three_c.dentalrecordapp.util.Internet;
 
 public class HomeFragment extends Fragment {
@@ -25,12 +28,12 @@ public class HomeFragment extends Fragment {
     private ItemAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel = new ViewModelProvider(this, new HomeViewModelFactory()).get(HomeViewModel.class);
+        homeViewModel = new ViewModelProvider(this, new PatientViewModelFactory()).get(HomeViewModel.class);
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
         Log.d(TAG, "onCreateView: start");
 
-        homeViewModel.runInternetTest();
+//        homeViewModel.runInternetTest();
         Internet.getIsOnline().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 Log.d(TAG, "onChanged: isOnline value changed to true");
@@ -89,7 +92,12 @@ public class HomeFragment extends Fragment {
         binding.swipeRefreshLayout.setOnRefreshListener(() -> {
 //            Toast.makeText(getActivity(), "onRefresh called", Toast.LENGTH_SHORT).show();
             homeViewModel.runInternetTest();
+            homeViewModel.getRepository().getPatients(adapter);
             binding.swipeRefreshLayout.setRefreshing(false);
+        });
+
+        binding.fabAddPatients.setOnClickListener(v -> {
+            startActivity(new Intent(getActivity(), AddPatientActivity.class));
         });
     }
 
@@ -105,12 +113,14 @@ public class HomeFragment extends Fragment {
     public void showRecyclerView() {
         Log.d(TAG, "showRecyclerView: showing recyclerview");
         binding.errorMsg.setVisibility(View.GONE);
+        binding.iconWarning.setVisibility(View.GONE);
         binding.recyclerView.setVisibility(View.VISIBLE);
     }
 
     private void showError() {
         Log.d(TAG, "showError: showing error");
         binding.recyclerView.setVisibility(View.GONE);
+        binding.iconWarning.setVisibility(View.VISIBLE);
         binding.errorMsg.setVisibility(View.VISIBLE);
     }
 
@@ -127,7 +137,7 @@ public class HomeFragment extends Fragment {
             Log.d(TAG, "doInBackground: Checking if online");
             if (Internet.isOnline()) {
                 Log.d(TAG, "doInBackground: isOnline: " + Internet.isOnline());
-                homeViewModel.getRepository().setAdapterChange(adapter);
+                homeViewModel.getRepository().getPatients(adapter);
             }
             Log.d(TAG, "doInBackground: Exiting async");
             return null;

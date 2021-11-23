@@ -40,14 +40,11 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-//        isOnline = Internet.isOnline();
-
         // Show snack bar if offline
         Internet.getIsOnline().observe(this, aBoolean -> {
             if (!aBoolean) Internet.showSnackBarInternetError(binding.getRoot());
             isOnline = aBoolean;
         });
-//        if (!Internet.isOnline()) Internet.showSnackBarInternetError(binding.getRoot());
 
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory()).get(LoginViewModel.class);
 

@@ -19,7 +19,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityMainBinding;
-import com.bsit_three_c.dentalrecordapp.ui.add_patient.AddPatientActivity;
 import com.bsit_three_c.dentalrecordapp.ui.login.LoginActivity;
 import com.bsit_three_c.dentalrecordapp.ui.login.LoginViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.ui.search.SearchActivity;
@@ -47,9 +46,9 @@ public class MainActivity extends AppCompatActivity {
         mainViewModel = new ViewModelProvider(this, new LoginViewModelFactory()).get(MainViewModel.class);
 
         setSupportActionBar(binding.appBarMain.toolbar);
-        binding.appBarMain.fabAddPatients.setOnClickListener(view -> {
-            startActivity(new Intent(MainActivity.this, AddPatientActivity.class));
-        });
+//        binding.appBarMain.fabAddPatients.setOnClickListener(view -> {
+//            startActivity(new Intent(MainActivity.this, AddPatientActivity.class));
+//        });
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
 
