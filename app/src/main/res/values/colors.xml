@@ -23,4 +23,11 @@
     <!-- Try Pallete -->
     <color name="primary">#009BA3</color>
     <color name="accent">#84e4e3</color>
+
+    <!-- Patient Info -->
+    <color name="header">#1B7D7F</color>
+    <color name="label">#01B5BB</color>
+    <color name="data">#295859</color>
+    <color name="button_patient_info">#40C4FF</color>
+
 </resources>

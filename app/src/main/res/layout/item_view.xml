@@ -7,6 +7,7 @@
     android:layout_marginStart="16dp"
     android:layout_marginTop="16dp"
     android:layout_marginEnd="16dp"
+    android:clickable="true"
     android:orientation="horizontal"
     app:cardCornerRadius="10dp"
     app:cardElevation="3dp">
@@ -42,7 +43,7 @@
                 android:id="@+id/txtViewName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/text_color"
+                android:textColor="@color/data"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 tools:text="Display Name" />
@@ -51,6 +52,7 @@
                 android:id="@+id/txtView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/label"
                 android:textSize="12sp"
                 tools:text="Address" />
 
@@ -58,6 +60,7 @@
                 android:id="@+id/txtView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/label"
                 android:textSize="12sp"
                 tools:text="Telephone" />
 
@@ -66,6 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/ellipces"
+                android:textColor="@color/label"
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>

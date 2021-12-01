@@ -45,7 +45,8 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="@string/error_network"
+                android:text="@string/error_network_home"
+                android:textColor="@color/design_default_color_error"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -91,9 +92,11 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/TODO"
-        app:backgroundTint="@color/accent"
+        app:backgroundTint="@color/tiffany_blue"
+        app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/add_icon_final" />
+        app:srcCompat="@drawable/add_icon_final"
+        app:tint="@color/baby_blue" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

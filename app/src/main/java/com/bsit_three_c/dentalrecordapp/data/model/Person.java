@@ -5,29 +5,33 @@ public class Person {
     protected String uid;
     protected String firstname;
     protected String lastname;
-    protected String middlename;
+    protected String middleInitial;
     protected String phoneNumber;
 
     public Person() {
     }
 
-    public Person(String uid, String firstname, String lastname, String middlename, String phoneNumber) {
+    public Person(String uid, String firstname, String lastname, String middleInitial, String phoneNumber) {
         this.uid = uid;
         this.firstname = firstname;
         this.lastname = lastname;
-        this.middlename = middlename;
+        this.middleInitial = middleInitial;
         this.phoneNumber = phoneNumber;
     }
 
-    public Person(String firstname, String lastname, String middlename, String phoneNumber) {
+    public Person(String firstname, String lastname, String middleInitial, String phoneNumber) {
         this.firstname = firstname;
         this.lastname = lastname;
-        this.middlename = middlename;
+        this.middleInitial = middleInitial;
         this.phoneNumber = phoneNumber;
     }
 
     public String getUid() {
         return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getFirstname() {
@@ -46,12 +50,12 @@ public class Person {
         this.lastname = lastname;
     }
 
-    public String getMiddlename() {
-        return middlename;
+    public String getMiddleInitial() {
+        return middleInitial;
     }
 
-    public void setMiddlename(String middlename) {
-        this.middlename = middlename;
+    public void setMiddleInitial(String middleInitial) {
+        this.middleInitial = middleInitial;
     }
 
     public String getPhoneNumber() {
@@ -60,5 +64,16 @@ public class Person {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "uid='" + uid + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", middlename='" + middleInitial + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
     }
 }

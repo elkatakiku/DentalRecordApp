@@ -13,9 +13,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bsit_three_c.dentalrecordapp.data.form_state.FormState;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.PatientViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentAddPatientBinding;
 
@@ -35,8 +37,9 @@ public class AddPatientFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         basicViewModel = new ViewModelProvider(this, new PatientViewModelFactory()).get(AddPatientViewModel.class);
+
+        binding.btnAddPatient.setEnabled(false);
 
         binding.btnAddPatient.setOnClickListener(view1 -> {
             String firstname = binding.eTxtFirstname.getText().toString();
@@ -51,6 +54,15 @@ public class AddPatientFragment extends Fragment {
 
             basicViewModel.addPatient(firstname, lastname, middieInitial, address,
                     phoneNumber, civilStatus, age, occupation);
+
+            FragmentActivity activity = getActivity();
+            if (activity != null) {
+                String activityName = activity.getClass().getSimpleName();
+                if (activityName.equals("AddPatientActivity")) activity.finish();
+                else if (activityName.equals("MainActivity")) getActivity().onBackPressed();
+            }
+
+
         });
 
 //                NavHostFragment.findNavController(AddPatientFragment.this)
@@ -67,7 +79,7 @@ public class AddPatientFragment extends Fragment {
         binding.eTxtMiddleInitial.addTextChangedListener(new CustomTextWatcher(binding.labelMiddle));
         binding.eTxtAge.addTextChangedListener(new CustomTextWatcher(binding.labelAge));
         binding.eTxtAddress.addTextChangedListener(new CustomTextWatcher(binding.labelAddress));
-        binding.eTxtPhoneNumber.addTextChangedListener(new CustomTextWatcher(binding.eTxtPhoneNumber));
+        binding.eTxtPhoneNumber.addTextChangedListener(new CustomTextWatcher(binding.labelTelephone));
         binding.eTxtOccupation.addTextChangedListener(new CustomTextWatcher(binding.labelOccupation));
 
         Resources resources = getResources();
@@ -89,14 +101,18 @@ public class AddPatientFragment extends Fragment {
 //            }
 //        });
 
+        basicViewModel.getAddPatientFormState().observe(getViewLifecycleOwner(), new Observer<FormState>() {
+            @Override
+            public void onChanged(FormState formState) {
+                Log.d(TAG, "onChanged: addpatientformstate: " + (formState != null));
+                if (formState == null) return;
+
+                Log.d(TAG, "onChanged: setting button enabled: " + formState.isDataValid());
+                binding.btnAddPatient.setEnabled(formState.isDataValid());
+            }
+        });
 
 
-
-    }
-
-    private void setTextObservers() {
-
-//        basicViewModel.getmFirstname().observe(getViewLifecycleOwner(), new CustomObserver(binding.eTxtFirstname, getResources()));
     }
 
     @Override
@@ -131,7 +147,7 @@ public class AddPatientFragment extends Fragment {
         }
     }
 
-    private static class CustomObserver implements Observer<AddPatientFormState> {
+    private static class CustomObserver implements Observer<FormState> {
 
         final Resources res;
         final EditText editText;
@@ -142,11 +158,11 @@ public class AddPatientFragment extends Fragment {
         }
 
         @Override
-        public void onChanged(AddPatientFormState addPatientFormState) {
-            if (addPatientFormState == null) return;
+        public void onChanged(FormState formState) {
+            if (formState == null) return;
 
-            if (addPatientFormState.getMsgError() != null)
-                editText.setError(res.getString(addPatientFormState.getMsgError()));
+            if (formState.getMsgError() != null)
+                editText.setError(res.getString(formState.getMsgError()));
         }
     }
 }

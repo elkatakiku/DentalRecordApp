@@ -8,8 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.data.model.Person;
 
-public class ItemViewHolder extends RecyclerView.ViewHolder {
+public class ItemViewHolder extends RecyclerView.ViewHolder{
 
     final TextView name;
     final TextView text2;
@@ -25,5 +26,9 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         this.text3 = itemView.findViewById(R.id.txtView3);
         this.text4 = itemView.findViewById(R.id.txtView4);
         this.imageView = itemView.findViewById(R.id.imgViewPicture);
+    }
+    
+    public interface ItemOnClickListener {
+        void onItemClick(Person person);
     }
 }

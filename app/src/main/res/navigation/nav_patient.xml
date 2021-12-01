@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_patient"
+    app:startDestination="@id/PatientInfoFragment">
+
+    <fragment
+        android:id="@+id/PatientInfoFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.patient_info.PatientInfoFragment"
+        android:label="@string/patient_info_label"
+        tools:layout="@layout/fragment_patient_info">
+
+        <action
+            android:id="@+id/action_First2Fragment_to_SecondFragment"
+            app:destination="@id/OperationFragment" />
+        <argument
+            android:name="itemPatient"
+            app:argType="com.bsit_three_c.dentalrecordapp.data.model.Patient" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/OperationFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.patient_info.OperationFragment"
+        android:label="@string/second_fragment_label"
+        tools:layout="@layout/fragment_add_operation">
+        <argument
+            android:name="itemPatient"
+            app:argType="com.bsit_three_c.dentalrecordapp.data.model.Patient" />
+    </fragment>
+</navigation>

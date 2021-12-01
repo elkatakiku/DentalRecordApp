@@ -21,15 +21,13 @@ public class PatientRepository {
 
     private static final String TAG = PatientRepository.class.getSimpleName();
 
-//    private static final String TAG = "PatientDataSource";
-
     private final FirebaseDatabase database;
     private final DatabaseReference databaseReference;
     private static final String FIREBASE_URL = "https://dental-record-app-default-rtdb.asia-southeast1.firebasedatabase.app";
     private static final String USERS_REFERENCE = "patients";
 
     private static volatile PatientRepository instance;
-//    private final PatientDataSource dataSource;
+
     private ValueEventListener valueEventListener;
     private ArrayList<Person> personArrayList;
     private boolean isPatientsLoaded = false;
@@ -49,16 +47,20 @@ public class PatientRepository {
         return instance;
     }
 
-    public ArrayList<Person> getPatients(DataSnapshot dataSnapshot) {
+    private ArrayList<Person> getPatients(DataSnapshot dataSnapshot) {
 //        if (dataSnapshot != null && this.personArrayList == null) {
+        Log.d(TAG, "getPatients: push key: " + databaseReference.push().getKey());
         if (dataSnapshot != null) {
             this.personArrayList = new ArrayList<>();
             for (DataSnapshot data : dataSnapshot.getChildren()) {
                 Patient patient = data.getValue(Patient.class);
-                if (!isDuplicate(patient)) {
+                if (patient != null && !isDuplicate(patient)) {
+                    patient.setUid(data.getKey());
+//                    patient.setDentalHistoryUID();
                     this.personArrayList.add(patient);
                     Log.d(TAG, "getPatients: Added new patient to array list");
-                } else Log.d(TAG, "getPatients: Patient already in array list");
+                }
+                else Log.d(TAG, "getPatients: Patient already in array list");
             }
         }
 
@@ -94,9 +96,17 @@ public class PatientRepository {
         databaseReference.addValueEventListener(valueEventListener);
     }
 
-    public void addPatients(Patient patient) {
+    public boolean addPatients(Patient patient) {
 //        dataSource.addPatient(patient);
-        databaseReference.push().setValue(patient);
+        String keyUID = databaseReference.push().getKey();
+        if (keyUID != null) {
+            patient.setUid(keyUID);
+            patient.setDentalHistoryUID(databaseReference.push().getKey());
+            Log.d(TAG, "addPatients: patient: " + patient);
+            databaseReference.child(keyUID).setValue(patient);
+            return true;
+        }
+        return false;
     }
 
     public void updatePatient() {
@@ -121,11 +131,11 @@ public class PatientRepository {
         return personArrayList;
     }
 
-    public boolean getIsPatientsLoaded() {
+    public boolean isPatientsLoaded() {
         return isPatientsLoaded;
     }
 
-    public LiveData<Boolean> getIsGettingPatientsDone() {
+    public LiveData<Boolean> isGettingPatientsDone() {
         return isGettingPatientsDone;
     }
 }

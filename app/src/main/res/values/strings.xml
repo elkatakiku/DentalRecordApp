@@ -58,6 +58,8 @@
     <string name="AGE">age</string>
     <string name="BALANCE">balance</string>
     <string name="TODO">TODO</string>
+    <string name="PATIENT">Patient</string>
+    <string name="PATIENT_UID">patient_uid</string>
 
     <!-- Spinner Civil Status Options -->
     <string-array name="civil_status_array">
@@ -107,6 +109,7 @@
     <!-- Home -->
     <string name="error_network">Connect to a network.</string>
     <string name="error_network_home">Looks like you are offline!</string>
+    <string name="last_update">Last Updated </string>
 
     <!-- Patient Item -->
     <string name="content_desc">patientLetter</string>
@@ -133,4 +136,24 @@
     <string name="invalid_empty_input">Please fill up the field.</string>
     <string name="invalid_contains_number">This field cannot contain number/s.</string>
     <string name="invalid_contains_letter">This field cannot contain letter/s.</string>
+    <string name="title_activity_patient">PatientActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="patient_info_label">Patient Info</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="previous">Previous</string>
+    <string name="collapsing_toolbar_background">Collapsing Toolbar Background</string>
+    
+    <!-- Patient Info -->
+    <string name="patient_basic_info">Basic Info</string>
+    <string name="Firstname">Firstname</string>
+    <string name="Lastname">Lastname</string>
+    <string name="MiddleInitial">Middle Initial</string>
+    <string name="Age">Age</string>
+    <string name="Address">Address</string>
+    <string name="TelephoneNumber">Telephone Number</string>
+    <string name="Occupation">Occupation</string>
+    <string name="CivilStatus">Civil Status</string>
+
+    <string name="add_dental_operation">New Operation</string>
+    <string name="fully_paid">Fully Paid</string>
 </resources>

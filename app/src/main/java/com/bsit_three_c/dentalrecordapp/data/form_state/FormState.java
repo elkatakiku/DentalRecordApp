@@ -1,18 +1,20 @@
-package com.bsit_three_c.dentalrecordapp.ui.add_patient;
+package com.bsit_three_c.dentalrecordapp.data.form_state;
 
-class AddPatientFormState {
+public class FormState {
 
     private Integer msgError;
     private boolean isDataValid;
 
-    private AddPatientFormState() {
+    private FormState() {
     }
 
-    public AddPatientFormState(Integer msgError) {
+    public FormState(Integer msgError) {
         this.msgError = msgError;
+        this.isDataValid = false;
     }
 
-    public AddPatientFormState(boolean isValid) {
+    public FormState(boolean isValid) {
+        this.msgError = null;
         this.isDataValid = isValid;
     }
 

@@ -14,6 +14,9 @@
             android:icon="@drawable/add_icon_final"
             android:title="@string/menu_add_patient" />
         <item
+            android:icon="@drawable/logo_tooth"
+            android:title="Dental Chart" />
+        <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_search_black_24dp"
             android:title="@string/menu_search" />

@@ -28,7 +28,7 @@ public class HomeViewModel extends ViewModel {
     }
 
     public boolean isPatientsLoaded() {
-        return repository.getIsPatientsLoaded();
+        return repository.isPatientsLoaded();
     }
 
     public void removeEventListener() {
@@ -54,7 +54,7 @@ public class HomeViewModel extends ViewModel {
     }
 
     public LiveData<Boolean> getIsPatientsGettingDone() {
-        return repository.getIsGettingPatientsDone();
+        return repository.isGettingPatientsDone();
     }
 
 }

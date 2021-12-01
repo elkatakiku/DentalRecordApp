@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         mainViewModel = new ViewModelProvider(this, new LoginViewModelFactory()).get(MainViewModel.class);
 
         setSupportActionBar(binding.appBarMain.toolbar);
+
 //        binding.appBarMain.fabAddPatients.setOnClickListener(view -> {
 //            startActivity(new Intent(MainActivity.this, AddPatientActivity.class));
 //        });

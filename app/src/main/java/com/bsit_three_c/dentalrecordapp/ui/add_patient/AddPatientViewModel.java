@@ -2,26 +2,29 @@ package com.bsit_three_c.dentalrecordapp.ui.add_patient;
 
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.data.form_state.FormState;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.patient.PatientRepository;
+import com.bsit_three_c.dentalrecordapp.util.Checker;
 
 public class AddPatientViewModel extends ViewModel {
     private static final String TAG = AddPatientViewModel.class.getSimpleName();
 
     private final PatientRepository repository;
-    private final MutableLiveData<AddPatientFormState> addPatientFormState = new MutableLiveData<>();
-    private final MutableLiveData<AddPatientFormState> mFirstname = new MutableLiveData<>();
-    private final MutableLiveData<AddPatientFormState> mlastname = new MutableLiveData<>();
-    private final MutableLiveData<AddPatientFormState> mMiddleInitial = new MutableLiveData<>();
-    private final MutableLiveData<AddPatientFormState> mAddress = new MutableLiveData<>();
-    private final MutableLiveData<AddPatientFormState> mOccupation = new MutableLiveData<>();
-    private final MutableLiveData<AddPatientFormState> mCivilStatus = new MutableLiveData<>();
-    private final MutableLiveData<AddPatientFormState> mAge = new MutableLiveData<>();
-    private final MutableLiveData<AddPatientFormState> mPhoneNumber = new MutableLiveData<>();
+    private final MutableLiveData<FormState> addPatientFormState = new MutableLiveData<>();
+    private final MutableLiveData<FormState> mFirstname = new MutableLiveData<>();
+    private final MutableLiveData<FormState> mlastname = new MutableLiveData<>();
+    private final MutableLiveData<FormState> mMiddleInitial = new MutableLiveData<>();
+    private final MutableLiveData<FormState> mAddress = new MutableLiveData<>();
+    private final MutableLiveData<FormState> mOccupation = new MutableLiveData<>();
+    private final MutableLiveData<FormState> mCivilStatus = new MutableLiveData<>();
+    private final MutableLiveData<FormState> mAge = new MutableLiveData<>();
+    private final MutableLiveData<FormState> mPhoneNumber = new MutableLiveData<>();
 
     private static final String LETTER_FIELD = "LetterField";
     private static final String NUMBER_FIELD = "NumberField";
@@ -40,39 +43,39 @@ public class AddPatientViewModel extends ViewModel {
         this.repository = repository;
     }
 
-    public MutableLiveData<AddPatientFormState> getAddPatientFormState() {
+    public LiveData<FormState> getAddPatientFormState() {
         return addPatientFormState;
     }
 
-    public MutableLiveData<AddPatientFormState> getmFirstname() {
+    public LiveData<FormState> getmFirstname() {
         return mFirstname;
     }
 
-    public MutableLiveData<AddPatientFormState> getMlastname() {
+    public LiveData<FormState> getMlastname() {
         return mlastname;
     }
 
-    public MutableLiveData<AddPatientFormState> getmMiddleInitial() {
+    public LiveData<FormState> getmMiddleInitial() {
         return mMiddleInitial;
     }
 
-    public MutableLiveData<AddPatientFormState> getmAddress() {
+    public LiveData<FormState> getmAddress() {
         return mAddress;
     }
 
-    public MutableLiveData<AddPatientFormState> getmOccupation() {
+    public LiveData<FormState> getmOccupation() {
         return mOccupation;
     }
 
-    public MutableLiveData<AddPatientFormState> getmCivilStatus() {
+    public LiveData<FormState> getmCivilStatus() {
         return mCivilStatus;
     }
 
-    public MutableLiveData<AddPatientFormState> getmAge() {
+    public LiveData<FormState> getmAge() {
         return mAge;
     }
 
-    public MutableLiveData<AddPatientFormState> getmPhoneNumber() {
+    public LiveData<FormState> getmPhoneNumber() {
         return mPhoneNumber;
     }
 
@@ -85,40 +88,25 @@ public class AddPatientViewModel extends ViewModel {
     }
 
     public void dataChanged(String label, String input) {
-        Log.d(TAG, "dataChanged: Data cnanged");
-        Log.d(TAG, "dataChanged: input == null || input.isEmpty(): " + (input == null || input.isEmpty()));
-        Log.d(TAG, "dataChanged: isLetterField(label):" + isLetterField(label));
+        Log.d(TAG, "dataChanged: setting field: " + label);
+        Log.d(TAG, "dataChanged: isComplete: " + Checker.isIncomplete(mFirstname, mlastname, mAge, mAddress, mPhoneNumber));
         if (input == null || input.isEmpty()) setState(label, R.string.invalid_empty_input);
         else if (isLetterField(label)) {
-            if (hasNumber(input)) setState(label, R.string.invalid_contains_number);
+            if (Checker.hasNumber(input)) setState(label, R.string.invalid_contains_number);
             else setState(label, VALID);
         }
         else if (ADDRESS.equals(label)) setState(label, VALID);
         else if (!isLetterField(label)) {
-            if (hasLetter(input)) setState(label, R.string.invalid_contains_letter);
+            Log.d(TAG, "dataChanged: setting field > isLetterField: " + label);
+            if (Checker.hasLetter(input)) {
+                Log.d(TAG, "dataChanged: setting field > hasLetter: " + label);
+                setState(label, R.string.invalid_contains_letter);
+            }
             else setState(label, VALID);
         }
-//        if (isLetterFieldValid(input)) addPatientFormState.setValue(new AddPatientFormState(true));
-//        else addPatientFormState.setValue(new AddPatientFormState(R.string.invalid_input));
-    }
 
-    private boolean hasNumber(String s) {
-        boolean result = false;
-        Log.d(TAG, "hasNumber: checking letters if contains number");
-        for (char c : s.toCharArray()) {
-            Log.d(TAG, "hasNumber: c: " + c);
-            if (Character.isDigit(c)) result = true;
-        }
-        return result;
-    }
-
-    private boolean hasLetter(String s) {
-        boolean result = false;
-
-        for (char c : s.toCharArray())
-            if (Character.isLetter(c)) result = true;
-
-        return result;
+        if (Checker.isIncomplete(mFirstname, mlastname, mAge, mAddress, mPhoneNumber)) addPatientFormState.setValue(new FormState(true));
+        else addPatientFormState.setValue(new FormState(false));
     }
 
     private boolean isLetterField(final String s) {
@@ -136,18 +124,17 @@ public class AddPatientViewModel extends ViewModel {
     }
 
     private void setState(final String label, final Integer msg) {
-        AddPatientFormState field;
+        FormState field;
 
         if (msg == -1) {
-            field = new AddPatientFormState(true);
+            field = new FormState(true);
         } else {
-            field = new AddPatientFormState(msg);
+            field = new FormState(msg);
         }
         Log.d(TAG, "setState: has error: " + (field.getMsgError() != null));
         Log.d(TAG, "setState: no error: " + field.isDataValid());
         switch (label) {
             case FIRSTNAME:
-//                Log.d(TAG, "setState: setting state: " + field.isDataValid() + " " + field.getMsgError().toString());
                 mFirstname.setValue(field);
                 break;
             case LASTNAME:
@@ -173,4 +160,5 @@ public class AddPatientViewModel extends ViewModel {
                 break;
         }
     }
+
 }

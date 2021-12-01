@@ -22,4 +22,20 @@
     <style name="Theme.DentalRecordApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.DentalRecordApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="CollapsingBar" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:textColorPrimary">@color/white</item>
+
+        <item name="colorPrimary">@android:color/transparent</item>
+        <item name="colorPrimaryDark">#303F9F</item>
+        <item name="colorAccent">#4FC3F7</item>
+    </style>
+
+    <style name="CollapsingBar.TextApperance" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">25sp</item>
+    </style>
+
+    <style name="HeaderTextSize" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">20sp</item>
+    </style>
 </resources>
