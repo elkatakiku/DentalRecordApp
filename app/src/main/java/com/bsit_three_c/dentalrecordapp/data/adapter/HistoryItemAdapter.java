@@ -1,6 +1,7 @@
 package com.bsit_three_c.dentalrecordapp.data.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalOperation;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryItemAdapter extends ArrayAdapter {
@@ -31,6 +33,15 @@ public class HistoryItemAdapter extends ArrayAdapter {
         this.denstalHistory = dentalHistory;
     }
 
+    public HistoryItemAdapter(@NonNull Context context, int resource) {
+        this(context, resource, new ArrayList<>());
+    }
+
+
+    public void setItems(List<DentalOperation> dentalHistory) {
+        this.denstalHistory.addAll(dentalHistory);
+    }
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -39,19 +50,34 @@ public class HistoryItemAdapter extends ArrayAdapter {
         if (convertView == null) {
             convertView = layoutInflater.inflate(layoutResource, parent, false);
             viewHolder = new ViewHolder(convertView);
+            convertView.setTag(viewHolder);
+            Log.d(TAG, "getView: converView is null");
         } else {
+            Log.d(TAG, "getView: convertView tag: " + convertView.getTag());
+            Log.d(TAG, "getView: convertView value: " + convertView);
             viewHolder = (ViewHolder) convertView.getTag();
+            Log.d(TAG, "getView: convertView isn't null");
+            Log.d(TAG, "getView: viewHolder: " + viewHolder);
         }
 
         DentalOperation currentRecord = denstalHistory.get(position);
 
-        viewHolder.txtDentalDesc.setText(currentRecord.getDentalDesc());
-        viewHolder.txtDentalDate.setText(currentRecord.getDentalDate());
-        viewHolder.txtDentalAmount.setText(String.valueOf(currentRecord.getDentalAmount()));
-        viewHolder.isFullyPaid.setChecked(currentRecord.isFullyPaid());
+        Log.d(TAG, "getView: current Record: " + currentRecord);
 
-        viewHolder.isFullyPaid.setBackgroundTintList(UIUtil.getCheckBoxColor(currentRecord.isFullyPaid()));
-        viewHolder.txtFullyPaid.setTextColor(UIUtil.getCheckBoxColor(currentRecord.isFullyPaid()));
+        Log.d(TAG, "getView: viewholder: " + viewHolder.toString());
+        Log.d(TAG, "getView: txtView: " + viewHolder.txtDentalDesc);
+        viewHolder.txtDentalDesc.setText(currentRecord.getDentalDesc());
+//        try {
+//            viewHolder.txtDentalDate.setText(UIUtil.getDateInString(UIUtil.stringToDate(currentRecord.getDentalDate())));
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//            viewHolder.txtDentalDate.setText("Error parsing");
+//        }
+        viewHolder.txtDentalAmount.setText(String.valueOf(currentRecord.getDentalAmount()));
+        viewHolder.isFullyPaid.setChecked(!currentRecord.isDownpayment());
+
+        viewHolder.isFullyPaid.setBackgroundTintList(UIUtil.getCheckBoxColor(!currentRecord.isDownpayment()));
+        viewHolder.txtFullyPaid.setTextColor(UIUtil.getCheckBoxColor(!currentRecord.isDownpayment()));
 
         return convertView;
     }

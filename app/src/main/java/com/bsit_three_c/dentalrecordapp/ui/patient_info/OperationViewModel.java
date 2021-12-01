@@ -4,10 +4,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.bsit_three_c.dentalrecordapp.data.form_state.FormState;
+import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Person;
 import com.bsit_three_c.dentalrecordapp.data.patient.OperationRepository;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class OperationViewModel extends ViewModel {
     private static final String TAG = OperationViewModel.class.getSimpleName();
@@ -26,6 +28,10 @@ public class OperationViewModel extends ViewModel {
 
     public OperationRepository getRepository() {
         return repository;
+    }
+
+    public void addOperation(Patient patient, String dentalDesc, Date dentalDate, String modeOfPayment, String dentalAmount, boolean isFullyPaid) {
+        repository.addOperation(patient, dentalDesc, dentalDate, modeOfPayment, dentalAmount, isFullyPaid);
     }
 
 

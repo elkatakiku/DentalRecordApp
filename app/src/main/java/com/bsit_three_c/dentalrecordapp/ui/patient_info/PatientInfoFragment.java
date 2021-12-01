@@ -9,28 +9,31 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.adapter.HistoryItemAdapter;
-import com.bsit_three_c.dentalrecordapp.data.model.DentalOperation;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
+import com.bsit_three_c.dentalrecordapp.data.view_model_factory.PatientViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentPatientInfoBinding;
-import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.ArrayList;
 
 public class PatientInfoFragment extends Fragment {
     private static final String TAG = PatientInfoFragment.class.getSimpleName();
 
     private FragmentPatientInfoBinding binding;
+    private PatientInfoViewModel viewModel;
     private Patient patient;
+    private HistoryItemAdapter itemAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentPatientInfoBinding.inflate(inflater, container, false);
+        viewModel = new ViewModelProvider(this, new PatientViewModelFactory()).get(PatientInfoViewModel.class);;
+        itemAdapter = new HistoryItemAdapter(requireActivity(), R.layout.item_dental_history);
+
         return binding.getRoot();
 
     }
@@ -47,39 +50,45 @@ public class PatientInfoFragment extends Fragment {
         }
         else Snackbar.make(binding.getRoot(), "activity is null", Snackbar.LENGTH_SHORT).show();
 
-        binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "onClick: patient to be passed: " + patient);
-                PatientInfoFragmentDirections.ActionFirst2FragmentToSecondFragment action =
-                        PatientInfoFragmentDirections.actionFirst2FragmentToSecondFragment(patient);
-                Navigation.findNavController(view).navigate(action);
+        binding.buttonFirst.setOnClickListener(view1 -> {
+            Log.d(TAG, "onClick: patient to be passed: " + patient);
+            PatientInfoFragmentDirections.ActionFirst2FragmentToSecondFragment action =
+                    PatientInfoFragmentDirections.actionFirst2FragmentToSecondFragment(patient);
+            Navigation.findNavController(view1).navigate(action);
 //                NavHostFragment.findNavController(PatientInfoFragment.this)
 //                        .navigate(R.id.action_First2Fragment_to_SecondFragment);
-            }
         });
 
+
+
+//        ArrayList<DentalOperation> list = new ArrayList<>();
+//        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, true));
+//        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, false));
+//        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, true));
+//        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, false));
+//        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, false));
+//        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, false));
+//        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, true));
+//        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, true));
+//        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, true));
+//        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, true));
+//
+//
+////        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.item_civil_status, list);
+//        HistoryItemAdapter adapter = new HistoryItemAdapter(requireActivity(), R.layout.item_dental_history, list);
+//
+//        binding.listOperations.setAdapter(adapter);
+
         displayInfo();
+        binding.listOperations.setAdapter(itemAdapter);
+        viewModel.getRepository().getOperations(patient, itemAdapter, binding.listOperations);
 
-        ArrayList<DentalOperation> list = new ArrayList<>();
-        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, true));
-        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, false));
-        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, true));
-        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, false));
-        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, false));
-        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, false));
-        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, true));
-        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, true));
-        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, true));
-        list.add(new DentalOperation("Bunot ngalangala", "Aug 2, 2021", 6453, true));
+    }
 
-
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.item_civil_status, list);
-        HistoryItemAdapter adapter = new HistoryItemAdapter(requireActivity(), R.layout.item_dental_history, list);
-
-        binding.listOperations.setAdapter(adapter);
-
-        UIUtil.setListViewHeightBasedOnItems(binding.listOperations);
+    @Override
+    public void onResume() {
+        super.onResume();
+        itemAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -90,7 +99,7 @@ public class PatientInfoFragment extends Fragment {
 
     private void displayInfo() {
         String notAvailable = "N/A";
-        if (patient.getFirstname() != null && patient.getFirstname().isEmpty()) binding.txtViewPIFirstname.setText(patient.getFirstname());
+        if (patient.getFirstname() != null && !patient.getFirstname().isEmpty()) binding.txtViewPIFirstname.setText(patient.getFirstname());
         else binding.txtViewPIFirstname.setText(notAvailable);
 
         if (patient.getLastname() != null) binding.txtViewPILastname.setText(patient.getLastname());

@@ -23,7 +23,6 @@ import com.bsit_three_c.dentalrecordapp.databinding.FragmentHomeBinding;
 import com.bsit_three_c.dentalrecordapp.ui.add_patient.AddPatientActivity;
 import com.bsit_three_c.dentalrecordapp.ui.patient_info.PatientActivity;
 import com.bsit_three_c.dentalrecordapp.util.Internet;
-import com.google.android.material.snackbar.Snackbar;
 
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
@@ -156,7 +155,13 @@ public class HomeFragment extends Fragment {
         Log.d(TAG, "patient value: : " + patient.toString());
         Intent toPatient = new Intent(getActivity(), PatientActivity.class);
         toPatient.putExtra(getString(R.string.PATIENT), patient);
-        Snackbar.make(binding.getRoot(), person.getFirstname(), Snackbar.LENGTH_SHORT).show();
+//        Snackbar.make(binding.getRoot(), person.getFirstname(), Snackbar.LENGTH_SHORT).show();
         startActivity(toPatient);
     };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+    }
 }

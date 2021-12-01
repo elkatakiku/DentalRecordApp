@@ -5,14 +5,19 @@ public class DentalOperation {
     private String uid;
     private String dentalDesc;
     private String dentalDate;
+    private String modeOfPayment;
     private double dentalAmount;
-    private boolean isFullyPaid;
+    private boolean isDownpayment;
 
-    public DentalOperation(String dentalDesc, String dentalDate, double dentalAmount, boolean isFullyPaid) {
+    public DentalOperation() { }
+
+    public DentalOperation(String uid, String dentalDesc, String dentalDate, String modeOfPayment, double dentalAmount, boolean isDownpayment) {
+        this.uid = uid;
         this.dentalDesc = dentalDesc;
         this.dentalDate = dentalDate;
+        this.modeOfPayment = modeOfPayment;
         this.dentalAmount = dentalAmount;
-        this.isFullyPaid = isFullyPaid;
+        this.isDownpayment = isDownpayment;
     }
 
     public String getDentalDesc() {
@@ -31,6 +36,14 @@ public class DentalOperation {
         this.dentalDate = dentalDate;
     }
 
+    public String getModeOfPayment() {
+        return modeOfPayment;
+    }
+
+    public void setModeOfPayment(String modeOfPayment) {
+        this.modeOfPayment = modeOfPayment;
+    }
+
     public double getDentalAmount() {
         return dentalAmount;
     }
@@ -39,12 +52,12 @@ public class DentalOperation {
         this.dentalAmount = dentalAmount;
     }
 
-    public boolean isFullyPaid() {
-        return isFullyPaid;
+    public boolean isDownpayment() {
+        return isDownpayment;
     }
 
-    public void setFullyPaid(boolean fullyPaid) {
-        isFullyPaid = fullyPaid;
+    public void setDownpayment(boolean downpayment) {
+        isDownpayment = downpayment;
     }
 
     public String getUid() {
@@ -57,11 +70,11 @@ public class DentalOperation {
 
     @Override
     public String toString() {
-        return "DentalOperation{" +
+        return "DentalOperation{" + '\n' +
                 "dentalDesc='" + dentalDesc + '\n' +
                 ", dentalDate='" + dentalDate + '\n' +
                 ", dentalAmount=" + dentalAmount + '\n' +
-                ", isFullyPaid=" + isFullyPaid +
+                ", isFullyPaid=" + isDownpayment +
                 '}';
     }
 }

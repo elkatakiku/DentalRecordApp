@@ -49,7 +49,6 @@ public class PatientRepository {
 
     private ArrayList<Person> getPatients(DataSnapshot dataSnapshot) {
 //        if (dataSnapshot != null && this.personArrayList == null) {
-        Log.d(TAG, "getPatients: push key: " + databaseReference.push().getKey());
         if (dataSnapshot != null) {
             this.personArrayList = new ArrayList<>();
             for (DataSnapshot data : dataSnapshot.getChildren()) {

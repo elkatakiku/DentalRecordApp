@@ -13,6 +13,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.PatientViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentAddOperationBinding;
+import com.bsit_three_c.dentalrecordapp.util.UIUtil;
+
+import java.util.Date;
 
 public class OperationFragment extends Fragment {
     private static final String TAG = OperationFragment.class.getSimpleName();
@@ -38,6 +41,20 @@ public class OperationFragment extends Fragment {
         Log.d(TAG, "onViewCreated: got patient: " + patient);
 
         binding.buttonSecond.setOnClickListener(view1 -> {
+
+            Date date = UIUtil.getDate(binding.datePicker);
+            String dentalDesc = binding.editTxtDesc.getText().toString();
+            String modeOfPayment = binding.spnrModeOfPayment.getSelectedItem().toString();
+            String dentalAmount = binding.editTxtAmount.getText().toString();
+            boolean isDownpayment = binding.checkBoxDownpayment.isChecked();
+            Log.d(TAG, "onViewCreated: calling viewmodel");
+
+            Log.d(TAG, "onViewCreated: date: " + date.toString());
+            Log.d(TAG, "onViewCreated: dentaldate: " + UIUtil.getDate(date));
+
+            viewModel.addOperation(patient, dentalDesc, date, modeOfPayment, dentalAmount, isDownpayment);
+
+            requireActivity().onBackPressed();
 
 //            viewModel.getRepository().addOperation(pat);
 //            Log.d(TAG, "onClick: date Day: " + binding.datePicker.getDayOfMonth());

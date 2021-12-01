@@ -41,7 +41,7 @@ public class Checker {
         }
 
         return true;
-//
+
 //        return !isNull(mFirstname) &&
 //                !isNull(mlastname) &&
 //                !isNull(mAge) &&

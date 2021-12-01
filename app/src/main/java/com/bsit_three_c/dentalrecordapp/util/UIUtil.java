@@ -1,6 +1,7 @@
 package com.bsit_three_c.dentalrecordapp.util;
 
 import android.content.res.ColorStateList;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
@@ -14,7 +15,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public class UIUtil {
-    
+
+    private static final String TAG = UIUtil.class.getSimpleName();
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
 
     /**
@@ -66,9 +68,17 @@ public class UIUtil {
             int month = datePicker.getMonth() + 1;
             int year = datePicker.getYear();
 
+            Log.d(TAG, "getDate: day: " + day);
+            Log.d(TAG, "getDate: month: " + month);
+            Log.d(TAG, "getDate: year: " + year);
+
             try {
-                date = dateFormat.parse("1/12/2021");
+                Log.d(TAG, "getDate: parsing date");
+                Log.d(TAG, "getDate: date format: " + ("" + day + "/" + month + "/" + year));
+                date = dateFormat.parse("" + day + "/" + month + "/" + year);
             } catch (ParseException e) {
+                Log.d(TAG, "getDate: error in parsing");
+                Log.d(TAG, "getDate: setting date to null");
                 date = null;
             }
         }
@@ -77,10 +87,25 @@ public class UIUtil {
     }
     
     public static String getMonthName(int month) {
-        return DateFormatSymbols.getInstance().getMonths()[month+1];
+        return DateFormatSymbols.getInstance().getMonths()[month-1];
     }
 
     public static String[] getDateUnits(Date date) {
         return dateFormat.format(date).split("/");
     }
+    
+    public static String getDateInString(Date date) {
+        String[] units = getDateUnits(date);
+        return getMonthName(Integer.parseInt(units[1])) + units[0] + units[2];
+    }
+
+    public static String getDate(Date date) {
+        return dateFormat.format(date);
+    }
+
+    public static Date stringToDate(String dateString) throws ParseException {
+        return dateFormat.parse(dateString);
+    }
+
+
 }

@@ -7,6 +7,8 @@ public class Account extends Person {
     private String password;
     private boolean isAdmin;
 
+    public Account() { }
+
     public Account(String uid, String firstname, String lastname, String middlename, String phoneNumber, String email, String username, String password) {
         super(uid, firstname, lastname, middlename, phoneNumber);
         this.email = email;
