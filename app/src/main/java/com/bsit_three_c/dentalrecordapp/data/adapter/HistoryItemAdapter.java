@@ -16,6 +16,7 @@ import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalOperation;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class HistoryItemAdapter extends ArrayAdapter {
 
 
     public void setItems(List<DentalOperation> dentalHistory) {
+        this.denstalHistory.clear();
         this.denstalHistory.addAll(dentalHistory);
     }
 
@@ -67,12 +69,12 @@ public class HistoryItemAdapter extends ArrayAdapter {
         Log.d(TAG, "getView: viewholder: " + viewHolder.toString());
         Log.d(TAG, "getView: txtView: " + viewHolder.txtDentalDesc);
         viewHolder.txtDentalDesc.setText(currentRecord.getDentalDesc());
-//        try {
-//            viewHolder.txtDentalDate.setText(UIUtil.getDateInString(UIUtil.stringToDate(currentRecord.getDentalDate())));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//            viewHolder.txtDentalDate.setText("Error parsing");
-//        }
+        try {
+            viewHolder.txtDentalDate.setText(UIUtil.getReadableDate(UIUtil.stringToDate(currentRecord.getDentalDate())));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.d(TAG, "getView: error parsing");
+        }
         viewHolder.txtDentalAmount.setText(String.valueOf(currentRecord.getDentalAmount()));
         viewHolder.isFullyPaid.setChecked(!currentRecord.isDownpayment());
 
@@ -98,7 +100,7 @@ public class HistoryItemAdapter extends ArrayAdapter {
             this.txtDentalDesc = v.findViewById(R.id.txtDentalDesc);
             this.txtDentalDate = v.findViewById(R.id.txtDentalDate);
             this.txtDentalAmount = v.findViewById(R.id.txtDentalAmount);
-            this.txtFullyPaid = v.findViewById(R.id.txtFullyPaid);
+            this.txtFullyPaid = v.findViewById(R.id.txtDentalFullyPaid);
             this.isFullyPaid = v.findViewById(R.id.cbFullyPaid);
         }
     }

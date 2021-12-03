@@ -235,8 +235,9 @@
             <TextView
                 android:id="@+id/textView19"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="2"
+                android:gravity="center_vertical"
                 android:text="Dental History"
                 android:textColor="@color/header"
                 android:textSize="20sp"
@@ -251,6 +252,7 @@
                 android:layout_marginBottom="5dp"
                 android:backgroundTint="@color/button_patient_info"
                 android:backgroundTintMode="screen"
+                android:enabled="true"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="@string/add_dental_operation"
@@ -262,9 +264,27 @@
             android:id="@+id/listOperations"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="true">
+            android:nestedScrollingEnabled="true"
+            android:visibility="gone">
 
         </ListView>
+
+        <LinearLayout
+            android:id="@+id/tryList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:minHeight="48dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Linear Layout"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -283,7 +303,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/txtOperationsBalance"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"

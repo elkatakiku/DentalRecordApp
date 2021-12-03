@@ -8,16 +8,21 @@ public class DentalOperation {
     private String modeOfPayment;
     private double dentalAmount;
     private boolean isDownpayment;
+    private double dentalTotalAmount;
+    private double dentalBalance;
 
     public DentalOperation() { }
 
-    public DentalOperation(String uid, String dentalDesc, String dentalDate, String modeOfPayment, double dentalAmount, boolean isDownpayment) {
+    public DentalOperation(String uid, String dentalDesc, String dentalDate, String modeOfPayment, double dentalAmount, boolean isDownpayment,
+                           double dentalTotalAmount, double dentalBalance, String paymentUID) {
         this.uid = uid;
         this.dentalDesc = dentalDesc;
         this.dentalDate = dentalDate;
         this.modeOfPayment = modeOfPayment;
         this.dentalAmount = dentalAmount;
         this.isDownpayment = isDownpayment;
+        this.dentalTotalAmount = dentalTotalAmount;
+        this.dentalBalance = dentalBalance;
     }
 
     public String getDentalDesc() {
@@ -66,6 +71,22 @@ public class DentalOperation {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public double getDentalTotalAmount() {
+        return dentalTotalAmount;
+    }
+
+    public void setDentalTotalAmount(double dentalTotalAmount) {
+        this.dentalTotalAmount = dentalTotalAmount;
+    }
+
+    public double getDentalBalance() {
+        return dentalBalance;
+    }
+
+    public void setDentalBalance(double dentalBalance) {
+        this.dentalBalance = dentalBalance;
     }
 
     @Override

@@ -136,6 +136,10 @@
     <string name="invalid_empty_input">Please fill up the field.</string>
     <string name="invalid_contains_number">This field cannot contain number/s.</string>
     <string name="invalid_contains_letter">This field cannot contain letter/s.</string>
+    <string name="invalid_contains_special_character">This field cannot contain special character/s</string>
+    <string name="invalid_contains_more_than_one_character">This field cannot contain more than one character</string>
+    <string name="invalid_contains_two_or_more_dots">This field cannot contain two or more dots.</string>
+
     <string name="title_activity_patient">PatientActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="patient_info_label">Patient Info</string>

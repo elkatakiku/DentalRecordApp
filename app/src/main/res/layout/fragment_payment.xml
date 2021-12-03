@@ -122,8 +122,8 @@
             android:hint="Diagnosis"
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/textView12"
-            app:layout_constraintTop_toBottomOf="@+id/textView12" />
+            app:layout_constraintStart_toStartOf="@+id/txtViewDescLabel"
+            app:layout_constraintTop_toBottomOf="@+id/txtViewDescLabel" />
 
         <TextView
             android:id="@+id/textView11"
@@ -142,7 +142,7 @@
             app:layout_constraintGuide_begin="730dp" />
 
         <TextView
-            android:id="@+id/textView12"
+            android:id="@+id/txtViewDescLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -173,11 +173,11 @@
             android:inputType="numberDecimal"
             android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/textView13"
-            app:layout_constraintTop_toBottomOf="@+id/textView13" />
+            app:layout_constraintStart_toStartOf="@+id/txtViewAmountLabel"
+            app:layout_constraintTop_toBottomOf="@+id/txtViewAmountLabel" />
 
         <TextView
-            android:id="@+id/textView13"
+            android:id="@+id/txtViewAmountLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

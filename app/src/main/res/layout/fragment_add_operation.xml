@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".ui.patient_info.PatientActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout4"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/button_second"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddOperation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -92,19 +92,21 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textView12"
+            android:id="@+id/txtViewDescLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Operation"
+            android:text="Description"
             android:textColor="@color/label" />
 
         <EditText
             android:id="@+id/editTxtDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Operation"
-            android:inputType="textPersonName"
+            android:ems="10"
+            android:gravity="start|center_horizontal"
+            android:hint="Description"
+            android:inputType="textMultiLine|textPersonName"
             android:minHeight="48dp"
             android:textColor="@color/data" />
 
@@ -116,6 +118,34 @@
             android:text="Mode of Payment"
             android:textColor="@color/label" />
 
+        <RadioGroup
+            android:id="@+id/gRadioModeOfPayment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:paddingStart="60dp"
+            android:paddingEnd="60dp"
+            android:visibility="gone">
+
+            <RadioButton
+                android:id="@+id/radioButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="Debit" />
+
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Credit" />
+
+        </RadioGroup>
+
         <Spinner
             android:id="@+id/spnrModeOfPayment"
             android:layout_width="match_parent"
@@ -125,11 +155,12 @@
             tools:ignore="SpeakableTextPresentCheck" />
 
         <TextView
-            android:id="@+id/textView13"
+            android:id="@+id/txtViewAmountLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="Amount"
+            android:textColor="@color/label"
             app:layout_constraintTop_toBottomOf="@+id/spnrModeOfPayment" />
 
         <EditText
@@ -152,7 +183,8 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="?android:attr/listChoiceIndicatorMultiple"
-                android:button="@null" />
+                android:button="@null"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -163,20 +195,91 @@
                 android:text="Downpayment" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/layoutDownpayment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtViewTotalAmountLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total Amount"
+                    android:textColor="@color/label" />
+
+                <EditText
+                    android:id="@+id/editTxtTotalAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Total Amount"
+                    android:inputType="numberDecimal"
+                    android:minHeight="48dp"
+                    android:textColor="@color/data" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtViewBalanceLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Balance"
+                    android:textColor="@color/label" />
+
+                <TextView
+                    android:id="@+id/txtViewBalance"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="0.0"
+                    android:textColor="@color/data"
+                    android:textSize="18sp"
+                    tools:text="BalanceAmount" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnAddOperation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/button_patient_info"
+                android:enabled="false"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="Add Operation"
+                app:cornerRadius="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </LinearLayout>
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/button_second"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/button_patient_info"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:text="Add Operation"
-        app:cornerRadius="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

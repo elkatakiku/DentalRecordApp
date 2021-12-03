@@ -1,4 +1,4 @@
-package com.bsit_three_c.dentalrecordapp.data.form_state;
+package com.bsit_three_c.dentalrecordapp.data.model;
 
 public class FormState {
 
@@ -24,5 +24,13 @@ public class FormState {
 
     public boolean isDataValid() {
         return isDataValid;
+    }
+
+    @Override
+    public String toString() {
+        return "FormState{" +
+                "msgError=" + msgError +
+                "\nisDataValid=" + isDataValid +
+                '}';
     }
 }

@@ -7,12 +7,13 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.data.form_state.FormState;
+import com.bsit_three_c.dentalrecordapp.data.model.FormState;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.patient.PatientRepository;
+import com.bsit_three_c.dentalrecordapp.interfaces.TextChange;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 
-public class AddPatientViewModel extends ViewModel {
+public class AddPatientViewModel extends ViewModel implements TextChange {
     private static final String TAG = AddPatientViewModel.class.getSimpleName();
 
     private final PatientRepository repository;
@@ -26,8 +27,6 @@ public class AddPatientViewModel extends ViewModel {
     private final MutableLiveData<FormState> mAge = new MutableLiveData<>();
     private final MutableLiveData<FormState> mPhoneNumber = new MutableLiveData<>();
 
-    private static final String LETTER_FIELD = "LetterField";
-    private static final String NUMBER_FIELD = "NumberField";
     private static final String FIRSTNAME = "Firstname";
     private static final String LASTNAME = "Lastname";
     private static final String MIDDLE_INITIAL = "Middle Initial";
@@ -87,26 +86,39 @@ public class AddPatientViewModel extends ViewModel {
         repository.addPatients(newPatient);
     }
 
+    @Override
     public void dataChanged(String label, String input) {
-        Log.d(TAG, "dataChanged: setting field: " + label);
-        Log.d(TAG, "dataChanged: isComplete: " + Checker.isIncomplete(mFirstname, mlastname, mAge, mAddress, mPhoneNumber));
-        if (input == null || input.isEmpty()) setState(label, R.string.invalid_empty_input);
-        else if (isLetterField(label)) {
-            if (Checker.hasNumber(input)) setState(label, R.string.invalid_contains_number);
-            else setState(label, VALID);
-        }
-        else if (ADDRESS.equals(label)) setState(label, VALID);
-        else if (!isLetterField(label)) {
-            Log.d(TAG, "dataChanged: setting field > isLetterField: " + label);
-            if (Checker.hasLetter(input)) {
-                Log.d(TAG, "dataChanged: setting field > hasLetter: " + label);
-                setState(label, R.string.invalid_contains_letter);
+        boolean isInputNull = input == null;
+
+//        Log.d(TAG, "dataChanged: setting field: " + label);
+//        Log.d(TAG, "dataChanged: isComplete: " + Checker.isIncomplete(mFirstname, mlastname, mAge, mAddress, mPhoneNumber));
+        if ((!AGE.equals(label) && !OCCUPATION.equals(label)) && (isInputNull || input.isEmpty()))
+            setState(label, R.string.invalid_empty_input);
+
+        if (!isInputNull) {
+            if (ADDRESS.equals(label)) setState(label, VALID);
+            else if (Checker.containsSpecialCharacter(input))
+                setState(label, R.string.invalid_contains_special_character);
+            else if (isLetterField(label)) {
+                if (Checker.hasNumber(input)) setState(label, R.string.invalid_contains_number);
+                else setState(label, VALID);
+            } else if (!isLetterField(label)) {
+                Log.d(TAG, "dataChanged: setting field > isLetterField: " + label);
+                if (Checker.hasLetter(input)) {
+                    Log.d(TAG, "dataChanged: setting field > hasLetter: " + label);
+                    setState(label, R.string.invalid_contains_letter);
+                } else setState(label, VALID);
             }
-            else setState(label, VALID);
         }
 
-        if (Checker.isIncomplete(mFirstname, mlastname, mAge, mAddress, mPhoneNumber)) addPatientFormState.setValue(new FormState(true));
+        if (Checker.isComplete(mFirstname, mlastname, mAge, mAddress, mPhoneNumber))
+            addPatientFormState.setValue(new FormState(true));
         else addPatientFormState.setValue(new FormState(false));
+    }
+
+    @Override
+    public void beforeDataChange(String label, int after, String s) {
+        if (MIDDLE_INITIAL.equals(label) && after > 1) setState(label, R.string.invalid_contains_more_than_one_character);
     }
 
     private boolean isLetterField(final String s) {
@@ -126,13 +138,11 @@ public class AddPatientViewModel extends ViewModel {
     private void setState(final String label, final Integer msg) {
         FormState field;
 
-        if (msg == -1) {
-            field = new FormState(true);
-        } else {
-            field = new FormState(msg);
-        }
-        Log.d(TAG, "setState: has error: " + (field.getMsgError() != null));
-        Log.d(TAG, "setState: no error: " + field.isDataValid());
+        if (msg == -1) field = new FormState(true);
+        else field = new FormState(msg);
+
+//        Log.d(TAG, "setState: has error: " + (field.getMsgError() != null));
+//        Log.d(TAG, "setState: no error: " + field.isDataValid());
         switch (label) {
             case FIRSTNAME:
                 mFirstname.setValue(field);

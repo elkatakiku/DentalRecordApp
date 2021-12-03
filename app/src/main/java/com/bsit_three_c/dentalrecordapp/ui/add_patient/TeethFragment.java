@@ -27,7 +27,7 @@ public class TeethFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.buttonSecond.setOnClickListener(view1 ->
+        binding.btnAddOperation.setOnClickListener(view1 ->
                 NavHostFragment.findNavController(TeethFragment.this)
                         .navigate(R.id.action_SecondFragment_to_PaymentFragment));
     }

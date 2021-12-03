@@ -75,7 +75,7 @@ public class PatientRepository {
                 isGettingPatientsDone.setValue(false);
                 Log.d(TAG, "setAdapterChange: is getting patient done: " + isGettingPatientsDone.getValue());
 //                itemAdapter.getItemCount();
-                itemAdapter.clearAll();
+//                itemAdapter.clearAll();
                 itemAdapter.setItems(getPatients(snapshot));
                 itemAdapter.notifyDataSetChanged();
 //                itemAdapter.notifyItemRangeChanged();

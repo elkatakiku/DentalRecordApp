@@ -6,6 +6,7 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 
 import com.bsit_three_c.dentalrecordapp.data.adapter.HistoryItemAdapter;
+import com.bsit_three_c.dentalrecordapp.data.adapter.OperationsList;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalOperation;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
@@ -33,7 +34,8 @@ public class OperationRepository {
 
     private static volatile OperationRepository instance;
     private ArrayList<DentalOperation> dentalOperations;
-//    private MutableLiveData<Boolean> mIsOperationsLoaded = new MutableLiveData<>();
+
+    private double balance = 0;
 
     public OperationRepository() {
         this.database = FirebaseDatabase.getInstance(FIREBASE_URL);
@@ -46,20 +48,26 @@ public class OperationRepository {
         return instance;
     }
 
-    private ArrayList<DentalOperation> getOperations(DataSnapshot dataSnapshot) {
+    private void getOperations(DataSnapshot dataSnapshot) {
+        // Checks if dataSnapshot is null
         if (dataSnapshot != null) {
+
+            // Create an arrayList to store the data in the dataSnapshot
             dentalOperations = new ArrayList<>();
+
+            // Loop through the snapshot and store the data in the created arrayList
             for (DataSnapshot data : dataSnapshot.getChildren()) {
+
+                // Convert data to DentalOperation object
                 DentalOperation dentalOperation = data.getValue(DentalOperation.class);
+
+                // Checks if dentalOpeation is null and is not a duplicate in the arrayList
                 if (dentalOperation != null && !isDuplicate(dentalOperation)) {
-                    Log.d(TAG, "getOperations: dentalOp: " + dentalOperation);
+//                    Log.d(TAG, "getOperations: dentalOp: " + dentalOperation);
                     this.dentalOperations.add(dentalOperation);
                 }
             }
-            return dentalOperations;
         }
-
-        return null;
     }
 
     public void getOperations(Patient patient, HistoryItemAdapter itemAdapter, ListView listView) {
@@ -67,7 +75,8 @@ public class OperationRepository {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 //                mIsOperationsLoaded.setValue(false);
-                itemAdapter.clear();
+
+                // Initialize dentalOperations ArrayList
                 getOperations(snapshot);
                 if (!dentalOperations.isEmpty()) {
                     itemAdapter.setItems(dentalOperations);
@@ -75,6 +84,36 @@ public class OperationRepository {
                 }
 //                mIsOperationsLoaded.setValue(true);
                 UIUtil.setListViewHeightBasedOnItems(listView);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        databaseReference.child(patient.getDentalHistoryUID())
+                .child(DENTAL_HISTORY)
+                .addValueEventListener(valueEventListener);
+    }
+
+    public void getOperations(Patient patient, OperationsList operationsList) {
+        valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                // Load Operatiohs from the database
+                getOperations(snapshot);
+
+                // Checks local field dentalOperations if empty
+                if (!dentalOperations.isEmpty()) {
+                    operationsList.addItems(dentalOperations);
+
+                    // Compute balance
+                    for (DentalOperation operation : dentalOperations) {
+                        balance += operation.getDentalBalance();
+                    }
+                }
             }
 
             @Override
@@ -98,7 +137,14 @@ public class OperationRepository {
         return key;
     }
 
-    public void addOperation(Patient patient, String dentalDesc, Date dentalDate, String modeOfPayment, String dentalAmount, boolean isFullyPaid) {
+    public void addOperation(Patient patient,
+                             String dentalDesc,
+                             Date dentalDate,
+                             String modeOfPayment,
+                             String dentalAmount,
+                             boolean isFullyPaid,
+                             String dentalTotalAmount,
+                             String dentalBalance) {
 //        Log.d(TAG, "addOperation: getting dental history uid");
 //        databaseReference.child(patient.getDentalHistoryUID());
 //        String dentalKey = ;
@@ -122,8 +168,19 @@ public class OperationRepository {
                 }
 
                 String operationUID = databaseReference.push().getKey();
-                DentalOperation dentalOperation = new DentalOperation(operationUID, dentalDesc,
-                        UIUtil.getDate(dentalDate), modeOfPayment, Double.parseDouble(dentalAmount), isFullyPaid);
+                String paymentUID = databaseReference.push().getKey();
+                Log.d(TAG, "onDataChange: dentalTotalAmount value: " + dentalTotalAmount);
+                DentalOperation dentalOperation = new DentalOperation(
+                        operationUID,
+                        dentalDesc,
+                        UIUtil.getDate(dentalDate),
+                        modeOfPayment,
+                        Double.parseDouble(dentalAmount),
+                        isFullyPaid,
+                        Double.parseDouble(dentalTotalAmount),
+                        Double.parseDouble(dentalBalance),
+                        paymentUID
+                );
 
                 Log.d(TAG, "onDataChange: dental added: " + dentalOperation);
                 reference.child(DENTAL_HISTORY).push().setValue(dentalOperation);
@@ -141,8 +198,8 @@ public class OperationRepository {
     private boolean isDuplicate(DentalOperation dentalOperation) {
         return dentalOperations.contains(dentalOperation);
     }
-//
-//    public LiveData<Boolean> getmIsOperationsLoaded() {
-//        return mIsOperationsLoaded;
-//    }
+
+    public double getBalance() {
+        return balance;
+    }
 }

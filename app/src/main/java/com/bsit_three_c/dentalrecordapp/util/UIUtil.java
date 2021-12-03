@@ -31,14 +31,18 @@ public class UIUtil {
         if (listAdapter != null) {
 
             int numberOfItems = listAdapter.getCount();
+            Log.d(TAG, "setListViewHeightBasedOnItems: numberOfItems: " + numberOfItems);
 
             // Get total height of all items.
             int totalItemsHeight = 0;
+            Log.d(TAG, "setListViewHeightBasedOnItems: initial totalHeight: " + totalItemsHeight);
             for (int itemPos = 0; itemPos < numberOfItems; itemPos++) {
                 View item = listAdapter.getView(itemPos, null, listView);
+
                 item.measure(0, 0);
                 totalItemsHeight += item.getMeasuredHeight();
             }
+            Log.d(TAG, "setListViewHeightBasedOnItems: final totalHieght: " + totalItemsHeight);
 
             // Get total height of all item dividers.
             int totalDividersHeight = listView.getDividerHeight() *
@@ -60,7 +64,8 @@ public class UIUtil {
     public static ColorStateList getCheckBoxColor(boolean isFullyPaid) {
         return isFullyPaid ? ColorStateList.valueOf(0xFF01bb64) : ColorStateList.valueOf(0xFF6E6E6E);
     }
-    
+
+    // Return Date format from date picker
     public static Date getDate(DatePicker datePicker) {
         Date date = null;
         if (datePicker != null) {
@@ -85,26 +90,36 @@ public class UIUtil {
         
         return date;
     }
-    
+
+    // Return month name
     public static String getMonthName(int month) {
         return DateFormatSymbols.getInstance().getMonths()[month-1];
     }
 
+    // Return the arrays of units in strings type
     public static String[] getDateUnits(Date date) {
         return dateFormat.format(date).split("/");
     }
-    
-    public static String getDateInString(Date date) {
+
+    // Return date in a readable format (Month ddd, yyyy)
+    public static String getReadableDate(Date date) {
         String[] units = getDateUnits(date);
-        return getMonthName(Integer.parseInt(units[1])) + units[0] + units[2];
+        return getMonthName(Integer.parseInt(units[1])) + " " + units[0] + ", " + units[2];
     }
 
+    // Return date in numbers
     public static String getDate(Date date) {
         return dateFormat.format(date);
     }
 
+    // Converts date in string type to Date type
     public static Date stringToDate(String dateString) throws ParseException {
         return dateFormat.parse(dateString);
+    }
+
+    // Get the current date in String type
+    public static String getCurrentDate() {
+        return dateFormat.format(new Date());
     }
 
 

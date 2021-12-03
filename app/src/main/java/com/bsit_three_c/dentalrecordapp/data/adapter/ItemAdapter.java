@@ -32,7 +32,12 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void setItems(ArrayList<Person> list) {
 //        Log.d(TAG, "setItems: setting items");
+        personArrayList.clear();
         personArrayList.addAll(list);
+    }
+
+    public void addItem(Person person) {
+        personArrayList.add(person);
     }
 
     @NonNull
@@ -48,7 +53,9 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //        Log.d(TAG, "onBindViewHolder: Binding");
         ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
         Person person = personArrayList.get(position);
-        String name = person.getLastname() + ", " + person.getFirstname() + " " + person.getMiddleInitial() + ".";
+        String name = person.getLastname() + ", " + person.getFirstname();
+        if (person.getMiddleInitial() != null && !person.getMiddleInitial().isEmpty())
+            name += " " + person.getMiddleInitial() + ".";
 
         // Set image
 //        itemViewHolder.imageView.setImageResource();

@@ -4,14 +4,20 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
-import com.bsit_three_c.dentalrecordapp.data.form_state.FormState;
+import com.bsit_three_c.dentalrecordapp.data.model.FormState;
+
+import java.util.regex.Pattern;
 
 public class Checker {
 
     private static final String TAG = Checker.class.getSimpleName();
 
-    public static boolean isNull(LiveData<FormState> liveData) {
+    public static boolean isNullOrError(LiveData<FormState> liveData) {
         return liveData.getValue() == null || liveData.getValue().getMsgError() != null;
+    }
+
+    public static boolean isNotNullOrValid(LiveData<FormState> liveData) {
+        return liveData.getValue() != null && liveData.getValue().isDataValid();
     }
 
     public static boolean hasNumber(String s) {
@@ -34,10 +40,10 @@ public class Checker {
     }
 
     @SafeVarargs
-    public static boolean isIncomplete(LiveData<FormState>... forms) {
+    public static boolean isComplete(LiveData<FormState>... forms) {
 
         for (LiveData<FormState> state : forms) {
-            if (isNull(state)) return false;
+            if (isNullOrError(state)) return false;
         }
 
         return true;
@@ -48,5 +54,38 @@ public class Checker {
 //                !isNull(mAddress) &&
 //                !isNull(mPhoneNumber);
 ////                !isNull(mCivilStatus.getValue()) && !isNull(mCivilStatus.getValue().getMsgError());
+    }
+
+    public static boolean containsSpecialCharacter(String s) {
+        return Pattern.compile("[^a-zA-Z0-9 ]").matcher(s).find();
+    }
+
+    public static boolean isDataAvailable(String data) {
+        return !(data == null || data.isEmpty());
+    }
+
+    public static boolean isRepeated(String word, String character) {
+        int initialIndex = word.indexOf(character);
+        int finalIndex = initialIndex;
+        int temp = initialIndex;
+
+//        Log.d(TAG, "isRepeated: initial value of initialChar: " + initialIndex);
+//        Log.d(TAG, "isRepeated: initial value of finalChar: " + finalIndex);
+
+        while (temp >= 0) {
+//            Log.d(TAG, "isRepeated: character repeated in index: " + finalIndex);
+            temp = word.indexOf(character, temp + 1);
+
+            if (temp <= 0) break;
+            finalIndex = temp;
+//            Log.d(TAG, "isRepeated: index: " + initialIndex);
+//            Log.d(TAG, "isRepeated: temp: " + temp);
+//            Log.d(TAG, "isRepeated: final: " + finalIndex);
+        }
+
+//        Log.d(TAG, "isRepeated: initialChar: " + initialIndex);
+//        Log.d(TAG, "isRepeated: finalChar: " + finalIndex);
+
+        return initialIndex != finalIndex;
     }
 }
