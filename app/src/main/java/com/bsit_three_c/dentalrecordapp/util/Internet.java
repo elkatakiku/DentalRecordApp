@@ -17,6 +17,8 @@ public class Internet extends AsyncTask<Void, Void, Boolean> {
 
     private static final MutableLiveData<Boolean> isOnline = new MutableLiveData<>();
 
+    private static Internet instance = new Internet();
+
     @Override
     protected void onPostExecute(Boolean aBoolean) {
         isOnline.setValue(aBoolean);
@@ -50,5 +52,21 @@ public class Internet extends AsyncTask<Void, Void, Boolean> {
 
     public static MutableLiveData<Boolean> getIsOnline() {
         return isOnline;
+    }
+
+    public boolean isRunning() {
+        return instance.getStatus() == Status.RUNNING;
+    }
+
+    public boolean isDone() {
+        return instance.getStatus() == Status.FINISHED;
+    }
+
+    public static Internet getOldInternet() {
+        return instance;
+    }
+
+    public static Internet getInstance() {
+        return instance = new Internet();
     }
 }

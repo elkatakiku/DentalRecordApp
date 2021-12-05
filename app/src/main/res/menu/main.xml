@@ -6,7 +6,7 @@
         android:icon="?android:attr/actionModeWebSearchDrawable"
         android:title="Search"
         app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="ifRoom|collapseActionView" />
+        app:showAsAction="ifRoom|collapseActionView|withText" />
     <item
         android:id="@+id/menu_profile"
         android:icon="@drawable/icon_profile"

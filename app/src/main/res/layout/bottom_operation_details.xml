@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayoutOperation"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bottom_dialog_bg"
@@ -127,7 +128,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:text="Fully Paid"
+                android:text="Status"
                 android:textColor="@color/label" />
 
             <TextView
@@ -180,6 +181,7 @@
         tools:visibility="visible" />
 
     <LinearLayout
+        android:id="@+id/operationBalanceLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
@@ -191,8 +193,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="5"
-            android:text="Balance"
-            android:textAlignment="viewEnd" />
+            android:text="Balance:"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/label" />
 
         <TextView
             android:id="@+id/tvBalance"
@@ -202,7 +205,7 @@
             android:paddingStart="0dp"
             android:paddingEnd="16dp"
             android:text="Balance Amount"
-            android:textAlignment="viewEnd" />
+            android:textAlignment="center" />
 
     </LinearLayout>
 
@@ -216,31 +219,32 @@
         android:showDividers="middle">
 
         <Button
-            android:id="@+id/btnOperationEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="#33C0FF"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:text="Edit" />
-
-        <Button
             android:id="@+id/btnOperationDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="#FF5252"
+            android:backgroundTint="@color/button_delete"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:text="Delete" />
+
+        <Button
+            android:id="@+id/btnOperationEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/button_patient_info"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="Edit" />
+
     </LinearLayout>
 
     <Button
         android:id="@+id/btnOperationAddPayment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#33C0FF"
+        android:backgroundTint="@color/button_patient_info"
         android:text="Add Payment" />
 
     <LinearLayout

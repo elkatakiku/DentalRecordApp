@@ -13,10 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.data.model.DentalOperation;
+import com.bsit_three_c.dentalrecordapp.data.model.DentalProcedure;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,9 +24,9 @@ public class HistoryItemAdapter extends ArrayAdapter {
 
     private final int layoutResource;
     private final LayoutInflater layoutInflater;
-    private List<DentalOperation> denstalHistory;
+    private List<DentalProcedure> denstalHistory;
 
-    public HistoryItemAdapter(@NonNull Context context, int resource, List<DentalOperation> dentalHistory) {
+    public HistoryItemAdapter(@NonNull Context context, int resource, List<DentalProcedure> dentalHistory) {
         super(context, resource);
         this.layoutResource = resource;
         this.layoutInflater = LayoutInflater.from(context);
@@ -39,7 +38,7 @@ public class HistoryItemAdapter extends ArrayAdapter {
     }
 
 
-    public void setItems(List<DentalOperation> dentalHistory) {
+    public void setItems(List<DentalProcedure> dentalHistory) {
         this.denstalHistory.clear();
         this.denstalHistory.addAll(dentalHistory);
     }
@@ -62,20 +61,15 @@ public class HistoryItemAdapter extends ArrayAdapter {
             Log.d(TAG, "getView: viewHolder: " + viewHolder);
         }
 
-        DentalOperation currentRecord = denstalHistory.get(position);
+        DentalProcedure currentRecord = denstalHistory.get(position);
 
         Log.d(TAG, "getView: current Record: " + currentRecord);
 
         Log.d(TAG, "getView: viewholder: " + viewHolder.toString());
         Log.d(TAG, "getView: txtView: " + viewHolder.txtDentalDesc);
         viewHolder.txtDentalDesc.setText(currentRecord.getDentalDesc());
-        try {
-            viewHolder.txtDentalDate.setText(UIUtil.getReadableDate(UIUtil.stringToDate(currentRecord.getDentalDate())));
-        } catch (ParseException e) {
-            e.printStackTrace();
-            Log.d(TAG, "getView: error parsing");
-        }
-        viewHolder.txtDentalAmount.setText(String.valueOf(currentRecord.getDentalAmount()));
+        viewHolder.txtDentalDate.setText(UIUtil.getReadableDate(UIUtil.stringToDate(currentRecord.getDentalDate())));
+        viewHolder.txtDentalAmount.setText(String.valueOf(currentRecord.getDentalTotalAmount()));
         viewHolder.isFullyPaid.setChecked(!currentRecord.isDownpayment());
 
         viewHolder.isFullyPaid.setBackgroundTintList(UIUtil.getCheckBoxColor(!currentRecord.isDownpayment()));

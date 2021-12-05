@@ -47,9 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.appBarMain.toolbar);
 
-//        binding.appBarMain.fabAddPatients.setOnClickListener(view -> {
-//            startActivity(new Intent(MainActivity.this, AddPatientActivity.class));
-//        });
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
 

@@ -35,13 +35,19 @@ public class HomeFragment extends Fragment {
         homeViewModel = new ViewModelProvider(this, new PatientViewModelFactory()).get(HomeViewModel.class);
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
-        Log.d(TAG, "onCreateView: start");
-
 //        homeViewModel.runInternetTest();
+//        Log.d(TAG, "onCreateView: internet check is running: " + Internet.getInstance().isRunning());
+        Log.d(TAG, "onCreateView: internet check is done: " + Internet.getOldInternet().isDone());
+        Log.d(TAG, "onCreateView: internet is same: " + (Internet.getOldInternet().equals(Internet.getInstance())));
+        if (Internet.getOldInternet().isDone()) {
+            Internet.getInstance().execute();
+        }
+//        if (Internet.getInstance().isDone()) Internet.getInstance().execute();
         Internet.getIsOnline().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 Log.d(TAG, "onChanged: isOnline value changed to true");
                 showRecyclerView();
+                Log.d(TAG, "onCreateView: record is empty and patients is not loaded");
                 if (homeViewModel.isRecordEmpty() && !homeViewModel.isPatientsLoaded()) {
                     Log.d(TAG, "onChanged: getting patients");
                     new LoadPatients().execute();
@@ -95,7 +101,6 @@ public class HomeFragment extends Fragment {
 
 
         binding.swipeRefreshLayout.setOnRefreshListener(() -> {
-//            Toast.makeText(getActivity(), "onRefresh called", Toast.LENGTH_SHORT).show();
             homeViewModel.runInternetTest();
             homeViewModel.getRepository().getPatients(adapter);
             binding.swipeRefreshLayout.setRefreshing(false);
@@ -129,6 +134,22 @@ public class HomeFragment extends Fragment {
         binding.errorMsg.setVisibility(View.VISIBLE);
     }
 
+    private final ItemViewHolder.ItemOnClickListener itemOnClickListener = person -> {
+        Log.d(TAG, "person value: : " + person.toString());
+        Patient patient = (Patient) person;
+        Log.d(TAG, "patient value: : " + patient.toString());
+        Intent toPatient = new Intent(getActivity(), PatientActivity.class);
+        toPatient.putExtra(getString(R.string.PATIENT), patient);
+        startActivity(toPatient);
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: called");
+        homeViewModel.runInternetTest();
+        homeViewModel.getRepository().getPatients(adapter);
+    }
 
     private class LoadPatients extends AsyncTask<Void, Void, Void> {
 
@@ -147,21 +168,5 @@ public class HomeFragment extends Fragment {
             Log.d(TAG, "doInBackground: Exiting async");
             return null;
         }
-    }
-
-    private final ItemViewHolder.ItemOnClickListener itemOnClickListener = person -> {
-        Log.d(TAG, "person value: : " + person.toString());
-        Patient patient = (Patient) person;
-        Log.d(TAG, "patient value: : " + patient.toString());
-        Intent toPatient = new Intent(getActivity(), PatientActivity.class);
-        toPatient.putExtra(getString(R.string.PATIENT), patient);
-//        Snackbar.make(binding.getRoot(), person.getFirstname(), Snackbar.LENGTH_SHORT).show();
-        startActivity(toPatient);
-    };
-
-    @Override
-    public void onResume() {
-        super.onResume();
-//        adapter.notifyDataSetChanged();
     }
 }

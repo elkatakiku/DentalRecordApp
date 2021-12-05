@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class PatientRepository {
 
@@ -23,8 +24,11 @@ public class PatientRepository {
 
     private final FirebaseDatabase database;
     private final DatabaseReference databaseReference;
+
     private static final String FIREBASE_URL = "https://dental-record-app-default-rtdb.asia-southeast1.firebasedatabase.app";
     private static final String USERS_REFERENCE = "patients";
+    private static final String DENTAL_PROCEDURES = "dentalProcedures";
+    public static final String NEW_PATIENT = "New patient";
 
     private static volatile PatientRepository instance;
 
@@ -48,16 +52,15 @@ public class PatientRepository {
     }
 
     private ArrayList<Person> getPatients(DataSnapshot dataSnapshot) {
-//        if (dataSnapshot != null && this.personArrayList == null) {
         if (dataSnapshot != null) {
             this.personArrayList = new ArrayList<>();
             for (DataSnapshot data : dataSnapshot.getChildren()) {
                 Patient patient = data.getValue(Patient.class);
                 if (patient != null && !isDuplicate(patient)) {
                     patient.setUid(data.getKey());
-//                    patient.setDentalHistoryUID();
                     this.personArrayList.add(patient);
                     Log.d(TAG, "getPatients: Added new patient to array list");
+                    Log.d(TAG, "getPatients: patient: " + patient.getFirstname());
                 }
                 else Log.d(TAG, "getPatients: Patient already in array list");
             }
@@ -92,20 +95,44 @@ public class PatientRepository {
 
         Log.d(TAG, "setAdapterChange: event listener: " + valueEventListener);
 //        dataSource.setValueListener(valueEventListener);
-        databaseReference.addValueEventListener(valueEventListener);
+        databaseReference.addListenerForSingleValueEvent(valueEventListener);
     }
 
-    public boolean addPatients(Patient patient) {
-//        dataSource.addPatient(patient);
-        String keyUID = databaseReference.push().getKey();
-        if (keyUID != null) {
-            patient.setUid(keyUID);
-            patient.setDentalHistoryUID(databaseReference.push().getKey());
-            Log.d(TAG, "addPatients: patient: " + patient);
-            databaseReference.child(keyUID).setValue(patient);
-            return true;
-        }
-        return false;
+//    public boolean addPatients(Patient patient) {
+////        dataSource.addPatient(patient);
+//        String keyUID = databaseReference.push().getKey();
+//        if (keyUID != null) {
+//            patient.setUid(keyUID);
+//            patient.setDentalHistoryUID(databaseReference.push().getKey());
+//            Log.d(TAG, "addPatients: patient: " + patient);
+//            databaseReference.child(keyUID).setValue(patient);
+//            return true;
+//        }
+//        return false;
+//    }
+
+    public void addPatient(String firstname, String lastname, String middleInitial, String address,
+                           String phoneNumber, String civilStatus, int age, String occupation) {
+        String patientUID = databaseReference.push().getKey();
+
+        ArrayList<String> operationKeys = new ArrayList<>();
+        operationKeys.add(NEW_PATIENT);
+
+        Patient patient = new Patient(
+                patientUID,
+                firstname,
+                lastname,
+                middleInitial,
+                phoneNumber,
+                address,
+                civilStatus,
+                age,
+                occupation,
+                new Date(),
+                operationKeys
+        );
+
+        if (patientUID != null) databaseReference.child(patientUID).setValue(patient);
     }
 
     public void updatePatient() {
@@ -115,6 +142,33 @@ public class PatientRepository {
 
     public void removePatient() {
         // TODO: Remove Patients here
+    }
+
+    public void addProcedureKey(Patient patient, String procedureKey) {
+        patient.addProcedure(procedureKey);
+        databaseReference.child(patient.getUid()).child(DENTAL_PROCEDURES).setValue(patient.getDentalProcedures());
+    }
+
+    public void removeProcedureKey(Patient patient, String procedureKey) {
+        ArrayList<String> keys = patient.getDentalProcedures();
+
+        if (keys.size() == 1) {
+
+            keys.clear();
+            keys.add(NEW_PATIENT);
+
+        } else {
+
+            int index = keys.indexOf(procedureKey);
+            if (index == -1) {
+                Log.e(TAG, "removeProcedureKey: no key found");
+                return;
+            }
+
+            keys.remove(index);
+        }
+
+        databaseReference.child(patient.getUid()).child(DENTAL_PROCEDURES).setValue(keys);
     }
 
     public void removeValueEventListener() {

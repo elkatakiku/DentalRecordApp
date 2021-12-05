@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.FormState;
-import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.patient.PatientRepository;
 import com.bsit_three_c.dentalrecordapp.interfaces.TextChange;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
@@ -81,9 +80,11 @@ public class AddPatientViewModel extends ViewModel implements TextChange {
     public void addPatient(String firstname, String lastname, String middleInitial, String address,
                            String phoneNumber, String civilStatus, int age, String occupation) {
 
-        Patient newPatient = new Patient(firstname, lastname, middleInitial, address, phoneNumber,
-                                            civilStatus, age, occupation);
-        repository.addPatients(newPatient);
+//        Patient newPatient = new Patient(firstname, lastname, middleInitial, address, phoneNumber,
+//                                            civilStatus, age, occupation);
+//        repository.addPatients(newPatient);
+        repository.addPatient(firstname, lastname, middleInitial, address, phoneNumber,
+                civilStatus, age, occupation);
     }
 
     @Override

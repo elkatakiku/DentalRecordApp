@@ -59,6 +59,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         // Set image
 //        itemViewHolder.imageView.setImageResource();
+
         itemViewHolder.name.setText(name);
 
         if (isPatient) {

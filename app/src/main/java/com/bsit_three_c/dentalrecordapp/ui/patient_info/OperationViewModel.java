@@ -10,7 +10,7 @@ import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.FormState;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Person;
-import com.bsit_three_c.dentalrecordapp.data.patient.OperationRepository;
+import com.bsit_three_c.dentalrecordapp.data.patient.ProcedureRepository;
 import com.bsit_three_c.dentalrecordapp.interfaces.TextChange;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 
@@ -21,14 +21,14 @@ public class OperationViewModel extends ViewModel implements TextChange {
     private static final String TAG = OperationViewModel.class.getSimpleName();
 
     private final MutableLiveData<ArrayList<Person>> mPatientList = new MutableLiveData<>();
-    private final OperationRepository repository;
+    private final ProcedureRepository repository;
 
     private final MutableLiveData<FormState> mOperationState = new MutableLiveData<>();
     private final MutableLiveData<FormState> mDate = new MutableLiveData<>();
     private final MutableLiveData<FormState> mDescription = new MutableLiveData<>();
     private final MutableLiveData<FormState> mMOP = new MutableLiveData<>();
     private final MutableLiveData<FormState> mAmount = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> mIsDownpayment = new MutableLiveData<>();
+//    private final MutableLiveData<Boolean> mIsDownpayment = new MutableLiveData<>();
     private final MutableLiveData<FormState> mTotalAmount = new MutableLiveData<>();
     private final MutableLiveData<FormState> mBalance = new MutableLiveData<>();
     private final MutableLiveData<Double> mBalanceAmount = new MutableLiveData<>();
@@ -42,23 +42,52 @@ public class OperationViewModel extends ViewModel implements TextChange {
     private static final String TOTAL_AMOUNT = "Total Amount";
     private static final String BALANCE = "Balance";
     private static final int VALID = -1;
-    private boolean hasDot = false;
+    private boolean isDownpayment = false;
 
-    public OperationViewModel(OperationRepository repository) {
+    public OperationViewModel(ProcedureRepository repository) {
         this.repository = repository;
     }
 
-    public OperationRepository getRepository() {
+    public ProcedureRepository getRepository() {
         return repository;
     }
 
-    public void addOperation(Patient patient, String dentalDesc, Date dentalDate, String modeOfPayment, String dentalAmount,
-                             boolean isFullyPaid, String dentalTotalAmount, String dentalBalance) {
-        repository.addOperation(patient, dentalDesc, dentalDate, modeOfPayment, dentalAmount, isFullyPaid, dentalTotalAmount, dentalBalance);
+//    public void addOperation(Patient patient, String dentalDesc, Date dentalDate, String modeOfPayment, String dentalAmount,
+//                             boolean isFullyPaid, String dentalTotalAmount, String dentalBalance) {
+//        repository.addOperation(patient, dentalDesc, dentalDate, modeOfPayment, dentalAmount, isFullyPaid,
+//                dentalTotalAmount, dentalBalance);
+//    }
+//
+//    public void addOperation(Patient patient, String dentalDesc, Date dentalDate, String modeOfPayment, String dentalAmount, boolean isFullyPaid) {
+//        addOperation(patient, dentalDesc, dentalDate, modeOfPayment, dentalAmount, isFullyPaid, dentalAmount, "0");
+//    }
+
+    public void addProcedure(Patient patient, String dentalDesc, Date dentalDate, String modeOfPayment,
+                             String dentalAmount, boolean isFullyPaid, String dentalTotalAmount, String dentalBalance) {
+        repository.addProcedure(
+                patient,
+                dentalDesc,
+                dentalDate,
+                modeOfPayment,
+                dentalAmount,
+                isFullyPaid,
+                dentalTotalAmount,
+                dentalBalance
+        );
     }
 
-    public void addOperation(Patient patient, String dentalDesc, Date dentalDate, String modeOfPayment, String dentalAmount, boolean isFullyPaid) {
-        addOperation(patient, dentalDesc, dentalDate, modeOfPayment, dentalAmount, isFullyPaid, dentalAmount, "0");
+    public void addProcedure(Patient patient, String dentalDesc, Date dentalDate, String modeOfPayment,
+                             String dentalPaidAmount, boolean isFullyPaid) {
+        addProcedure(
+                patient,
+                dentalDesc,
+                dentalDate,
+                modeOfPayment,
+                dentalPaidAmount,
+                isFullyPaid,
+                dentalPaidAmount,
+                "0"
+        );
     }
 
     public LiveData<FormState> getmOperationState() {
@@ -73,13 +102,13 @@ public class OperationViewModel extends ViewModel implements TextChange {
         return mAmount;
     }
 
-    public LiveData<Boolean> getmIsDownpayment() {
-        return mIsDownpayment;
-    }
-
-    public void setmIsDownpayment(boolean bool) {
-        mIsDownpayment.setValue(bool);
-    }
+//    public LiveData<Boolean> getmIsDownpayment() {
+//        return mIsDownpayment;
+//    }
+//
+//    public void setmIsDownpayment(boolean bool) {
+//        mIsDownpayment.setValue(bool);
+//    }
 
     public LiveData<FormState> getmTotalAmount() {
         return mTotalAmount;
@@ -97,20 +126,16 @@ public class OperationViewModel extends ViewModel implements TextChange {
         return balance;
     }
 
+    public boolean isDownpayment() {
+        return isDownpayment;
+    }
+
+    public void setDownpayment(boolean downpayment) {
+        isDownpayment = downpayment;
+    }
+
     @Override
     public void beforeDataChange(String label, int after, String input) {
-//        Log.d(TAG, "beforeDataChange: input: " + input);
-//        if (input.contains(".")) {
-//            Log.d(TAG, "beforeDataChange: contains dot");
-//            setState(label, R.string.invalid_contains_two_or_more_dots);
-//            Log.d(TAG, "beforeDataChange: mAmount value: " + mAmount.getValue());
-//        }
-//        else {
-//            hasDot = true;
-//            Log.d(TAG, "beforeDataChange: not contains dot");
-//            setState(label, VALID);
-//        }
-
         // Ignore this
     }
 
@@ -160,40 +185,23 @@ public class OperationViewModel extends ViewModel implements TextChange {
                         }
                     }
                 }
-
-
-
-//                if (TOTAL_AMOUNT.equals(label) && mAmount.getValue().isDataValid() && mTotalAmount.getValue().isDataValid())
-
-//                }
             }
         }
         else setState(label, VALID);
 
-//        else if (AMOUNT.equals(label) && Checker.isRepeated(input, ".")) setState(label, R.string.invalid_contains_two_or_more_dots);
-//        else if (AMOUNT.equals(label) && Checker.hasLetter(input)) setState(label, R.string.invalid_contains_letter);
+        setButtonState();
+    }
 
-//        Log.d(TAG, "dataChanged: set state of " + label);
-
-//        if (DESCRIPTION.equals(label) && mDescription.getValue() != null) {
-//            Log.d(TAG, "dataChanged: state of description changed");
-//            Log.d(TAG, "dataChanged: mDesc: " + mDescription.getValue());
-//        }
-//        else if (AMOUNT.equals(label) && mAmount.getValue() != null) {
-//            Log.d(TAG, "dataChanged: state of amount changed");
-//            Log.d(TAG, "dataChanged: mAmount: " + mAmount.getValue());
-//        }
-
-        if (Checker.isComplete(mDescription, mAmount)) {
-//            Log.d(TAG, "dataChanged: iscomplete");
+    public void setButtonState() {
+        if (!isDownpayment && Checker.isComplete(mDescription, mAmount)) {
             mOperationState.setValue(new FormState(true));
-//            Log.d(TAG, "dataChanged: operation state: " + mOperationState.getValue());
         }
-        else {
-//            Log.d(TAG, "dataChanged: is incomplete");
-            mOperationState.setValue(new FormState(false));
-//            Log.d(TAG, "dataChanged: operation state: " + mOperationState.getValue());
+        else if (isDownpayment && Checker.isComplete(mDescription, mAmount, mTotalAmount)) {
+            mOperationState.setValue(new FormState(true));
         }
+        else mOperationState.setValue(new FormState(false));
+
+//        mOperationState.setValue(new FormState(state));
     }
 
     private void setState(String label, int msg) {
@@ -216,8 +224,4 @@ public class OperationViewModel extends ViewModel implements TextChange {
                 mBalance.setValue(field);
         }
     }
-
-//    public Double getBalanceAmount(String totalAmount, String downpayment) {
-//        return Double.parseDouble(totalAmount) - Double.parseDouble(downpayment);
-//    }
 }

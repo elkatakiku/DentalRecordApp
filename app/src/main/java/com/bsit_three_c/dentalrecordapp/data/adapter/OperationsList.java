@@ -8,16 +8,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
 
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.data.dialog.BottomOperationsDialog;
-import com.bsit_three_c.dentalrecordapp.data.model.DentalOperation;
-import com.bsit_three_c.dentalrecordapp.data.model.Payment;
+import com.bsit_three_c.dentalrecordapp.data.model.DentalProcedure;
+import com.bsit_three_c.dentalrecordapp.data.model.Patient;
+import com.bsit_three_c.dentalrecordapp.ui.dialog.BottomOperationsDialog;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
-import com.google.android.material.snackbar.Snackbar;
 
-import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.List;
 
 public class OperationsList {
     private static final String TAG = OperationsList.class.getSimpleName();
@@ -25,49 +25,82 @@ public class OperationsList {
     private final LinearLayout linearLayout;
     private final LayoutInflater layoutInflater;
 
-    public OperationsList(LinearLayout linearLayout, LayoutInflater layoutInflater) {
+    private List<DentalProcedure> dentalProcedures;
+    private final Patient patient;
+
+    private MutableLiveData<Boolean> hasProcedures = new MutableLiveData<>();
+
+    private LifecycleOwner lifecycleOwner;
+
+    public OperationsList(LinearLayout linearLayout, LayoutInflater layoutInflater, Patient patient, LifecycleOwner lifecycleOwner) {
         this.linearLayout = linearLayout;
         this.layoutInflater = layoutInflater;
+        this.patient = patient;
+        this.lifecycleOwner = lifecycleOwner;
     }
 
-    private void addItem(DentalOperation operation, int position) {
+    private void addItem(DentalProcedure operation, int position) {
         ViewHolder viewHolder = new ViewHolder(layoutInflater);
 
         viewHolder.txtDentalDesc.setText(operation.getDentalDesc());
-        try {
-            viewHolder.txtDentalDate.setText(UIUtil.getReadableDate(UIUtil.stringToDate(operation.getDentalDate())));
-        } catch (ParseException e) {
-            e.printStackTrace();
-            Log.d(TAG, "getView: error parsing");
-        }
-        viewHolder.txtDentalAmount.setText(String.valueOf(operation.getDentalAmount()));
+        viewHolder.txtDentalDate.setText(UIUtil.getReadableDate(UIUtil.stringToDate(operation.getDentalDate())));
+        viewHolder.txtDentalAmount.setText(String.valueOf(operation.getDentalTotalAmount()));
         viewHolder.cbIsFullyPaid.setChecked(!operation.isDownpayment());
-
-        viewHolder.cbIsFullyPaid.setBackgroundTintList(UIUtil.getCheckBoxColor(!operation.isDownpayment()));
-        viewHolder.txtDentalFullyPaid.setTextColor(UIUtil.getCheckBoxColor(!operation.isDownpayment()));
+        viewHolder.txtDentalFullyPaid.setText(UIUtil.getPaymentStatus(operation.getDentalBalance()));
+        viewHolder.txtDentalFullyPaid.setTextColor(UIUtil.getCheckBoxColor(operation.getDentalBalance()));
 
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, viewHolder.txtDentalDesc.getText().toString(), Snackbar.LENGTH_SHORT).show();
                 onItemClick(v);
             }
         });
-
-
 
         viewHolder.cardView.setTag(position);
 
         linearLayout.addView(viewHolder.cardView);
     }
 
-    public void addItems(ArrayList<DentalOperation> dentalOperations) {
-//        for (DentalOperation item : dentalOperations) {
-//            addItem(item);
-//        }
-        for (int position = 0; position < dentalOperations.size(); position++) {
-            addItem(dentalOperations.get(position), position);
+    public void addItem(DentalProcedure operation) {
+        ViewHolder viewHolder = new ViewHolder(layoutInflater);
+
+        viewHolder.txtDentalDesc.setText(operation.getDentalDesc());
+        viewHolder.txtDentalDate.setText(UIUtil.getReadableDate(UIUtil.stringToDate(operation.getDentalDate())));
+        viewHolder.txtDentalAmount.setText(String.valueOf(operation.getDentalTotalAmount()));
+        viewHolder.cbIsFullyPaid.setChecked(!operation.isDownpayment());
+
+        viewHolder.txtDentalFullyPaid.setText(UIUtil.getPaymentStatus(operation.isDownpayment()));
+        viewHolder.txtDentalFullyPaid.setTextColor(UIUtil.getCheckBoxColor(!operation.isDownpayment()));
+
+        viewHolder.cardView.setOnClickListener(v -> {
+            onItemClick(v);
+        });
+
+        linearLayout.addView(viewHolder.cardView);
+    }
+
+    public void addItems(List<DentalProcedure> dentalProcedures) {
+        if (dentalProcedures != null) {
+            this.dentalProcedures = dentalProcedures;
+
+            Log.d(TAG, "addItems: procedure array: " + dentalProcedures);
+            Log.d(TAG, "addItems: list size: " + dentalProcedures.size());
+
+            for (int position = 0; position < dentalProcedures.size(); position++) {
+                if (dentalProcedures.get(position) != null) {
+                    Log.d(TAG, "addItems: adding procedure: " + dentalProcedures.get(position).getDentalDesc());
+                    addItem(dentalProcedures.get(position), position);
+                }
+            }
         }
+    }
+
+    private void clearItems() {
+
+    }
+
+    private boolean isListEmpty() {
+        return dentalProcedures == null || dentalProcedures.isEmpty();
     }
 
     private static class ViewHolder {
@@ -95,8 +128,19 @@ public class OperationsList {
         if (v.getTag() instanceof Integer)
             position = (Integer) v.getTag();
 
-        BottomOperationsDialog bottomOperationsDialog = new BottomOperationsDialog(layoutInflater, layoutInflater.getContext());
-        bottomOperationsDialog.addItem(new Payment("UID", "oUID", 500.0, "Credit", "today"), 0);
-        bottomOperationsDialog.showDialog();
+        DentalProcedure operation = null;
+        if (position >= 0) {
+            Log.d(TAG, "onItemClick: clicked operation: " + dentalProcedures.get(position));
+            operation = dentalProcedures.get(position);
+        }
+
+        if (operation != null) {
+
+            // Get payments transaction of selected operation
+            BottomOperationsDialog bottomOperationsDialog = new BottomOperationsDialog(layoutInflater,
+                    layoutInflater.getContext(), lifecycleOwner, patient);
+            bottomOperationsDialog.createOperationDialog(operation);
+            bottomOperationsDialog.showDialog();
+        }
     }
 }

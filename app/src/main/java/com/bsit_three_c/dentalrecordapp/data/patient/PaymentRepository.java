@@ -5,10 +5,9 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.bsit_three_c.dentalrecordapp.data.adapter.PaymentList;
-import com.bsit_three_c.dentalrecordapp.data.model.DentalOperation;
+import com.bsit_three_c.dentalrecordapp.data.model.DentalProcedure;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Payment;
-import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,14 +28,17 @@ public class PaymentRepository {
     private static final String TOTAL = "total";
     private static final String BALANCE = "balance";
 
-    private ValueEventListener valueEventListener;
-
     private static volatile PaymentRepository instance;
     private ArrayList<Payment> dentalPayments;
+
+//    private final ProcedureRepository procedureRepository;
+
+    private ValueEventListener valueEventListener;
 
     public PaymentRepository() {
         this.database = FirebaseDatabase.getInstance(FIREBASE_URL);
         this.databaseReference = database.getReference(PAYMENTS_REFERENCE);
+//        this.procedureRepository = ProcedureRepository.getInstance();
     }
 
     public static PaymentRepository getInstance() {
@@ -48,7 +50,7 @@ public class PaymentRepository {
         if (dataSnapshot != null) {
             dentalPayments = new ArrayList<>();
             for (DataSnapshot data : dataSnapshot.getChildren()) {
-//                DentalOperation dentalOperation = data.getValue(DentalOperation.class);
+//                DentalProcedure dentalOperation = data.getValue(DentalProcedure.class);
                 Payment payment = data.getValue(Payment.class);
                 if (payment != null && !isDuplicate(payment)) {
                     Log.d(TAG, "getPayments: dentalPayment: " + payment);
@@ -78,57 +80,52 @@ public class PaymentRepository {
             }
         };
 
-        // IDK
-        databaseReference.child(patient.getDentalHistoryUID())
-                .child(PAYMENT_RECORDS)
-                .addValueEventListener(valueEventListener);
+//        // IDK
+//        databaseReference.child(patient.getDentalHistoryUID())
+//                .child(PAYMENT_RECORDS)
+//                .addValueEventListener(valueEventListener);
     }
 
-    public void addPayment(DentalOperation dentalOperation, String modeOfPayment, String dentalAmount, String dentalBalance) {
+    public DatabaseReference getPayments(String paymentUID) {
+        return databaseReference.child(paymentUID);
+    }
 
-        // Checks if there is an existing child with a key of dentalOpearation's uid
-        databaseReference.orderByChild(PAYMENTS_REFERENCE).equalTo(dentalOperation.getUid())
-                .addValueEventListener(new ValueEventListener() {
+    public void addPayment(DentalProcedure procedure, Payment payment) {
+        databaseReference.child(payment.getUid()).setValue(payment);
+        //  Update operation's balance
+        MiddleGround.updatePaymentKeys(procedure, payment.getUid());
+    }
 
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d(TAG, "onDataChange: checking if patient's dental key exists");
-                DatabaseReference reference = databaseReference;
+    public void addPayment(DentalProcedure procedure, String modeOfPayment, String paidAmount, String date) {
+        double convertedPaidAmount = Double.parseDouble(paidAmount);
+        String paymentUID = databaseReference.push().getKey();
 
-                if (!snapshot.exists()) {
-                    Log.d(TAG, "onDataChange: dental operation not exist");
-//                    databaseReference.child(patient.getDentalHistoryUID()).setValue(dentalOperation);
-                    if (dentalOperation.getUid() != null) {
-                        reference = databaseReference.child(dentalOperation.getUid());
-//                        reference.child(PATIENT_UID).setValue(patient.getUid());
-                        reference.child(TOTAL).setValue(dentalOperation.getDentalTotalAmount());
-                        reference.child(BALANCE).setValue(dentalOperation.getDentalBalance());
-                    }
-                }
-                else Log.d(TAG, "onDataChange: dental key doen't exist");
+        Log.d(TAG, "addPayment: paymentUID: " + (paymentUID != null));
 
-//                String operationUID = databaseReference.push().getKey();
-                String paymentUID = databaseReference.push().getKey();
-                Payment dentalPayment = new Payment(paymentUID, dentalOperation.getUid(), Double.parseDouble(dentalAmount), modeOfPayment, UIUtil.getCurrentDate());
+        if (paymentUID != null) {
 
-//                DentalOperation dentalOperation = new DentalOperation(operationUID, dentalDesc,
-//                        UIUtil.getDate(dentalDate), modeOfPayment, Double.parseDouble(dentalAmount), isFullyPaid,
-//                        Double.parseDouble(dentalTotalAmount), Double.parseDouble(dentalBalance), paymentUID);
+            Payment payment = new Payment(paymentUID, convertedPaidAmount, modeOfPayment, date);
+            databaseReference.child(paymentUID).setValue(payment);
 
-                Log.d(TAG, "onDataChange: payment added: " + dentalPayment);
-                reference.child(PAYMENT_RECORDS).child(paymentUID).setValue(dentalPayment);
-//                reference.child(dentalOperation.getUid()).setValue(dentalOperation);
+            MiddleGround.addPaymentKey(procedure, payment);
+        }
+    }
 
-            }
+    public void removePayment(String paymentUID) {
+        databaseReference.child(paymentUID).removeValue();
+    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+    //  For testing only
+    public void removePayment() {
+        databaseReference.removeValue();
     }
 
     private boolean isDuplicate(Payment payment) {
         return dentalPayments.contains(payment);
+    }
+
+    //  Remove listener here
+    public void removeListener() {
+
     }
 }

@@ -12,6 +12,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityPatientBinding;
+import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.google.android.material.snackbar.Snackbar;
 
 public class PatientActivity extends AppCompatActivity {
@@ -46,7 +47,8 @@ public class PatientActivity extends AppCompatActivity {
         });
 
         Patient patient = getIntent().getParcelableExtra(getString(R.string.PATIENT));
-        String fullname = patient.getLastname() + ", " + patient.getFirstname() + " " + patient.getMiddleInitial() + ".";
+        String fullname = patient.getLastname() + ", " + patient.getFirstname();
+        if (Checker.isDataAvailable(patient.getMiddleInitial())) fullname  += " " + patient.getMiddleInitial() + ".";
         binding.appBarPatient.collapsingToolbar.setTitle(fullname);
     }
 

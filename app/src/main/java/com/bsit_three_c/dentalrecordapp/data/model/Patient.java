@@ -2,36 +2,66 @@ package com.bsit_three_c.dentalrecordapp.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Patient extends Person implements Parcelable {
+    private static final String TAG = Parcelable.class.getSimpleName();
 
     private String address;
     private String civilStatus;
     private int age;
-    private double balance;
     private String occupation;
     private Date lastUpdated;
 
-    private String dentalHistoryUID;
+    private ArrayList<String> dentalProcedures;
+
+    private static final String NEW_PATIENT = "New patient";
 
     public Patient() {}
 
-//    public Patient(String uid, String firstname, String lastname, String middleInitial, String phoneNumber, String address, int age, double balance) {
-//        super(uid, firstname, lastname, middleInitial, phoneNumber);
+//    public Patient(String firstname, String lastname, String middleInitial, String address, String phoneNumber, String civilStatus, int age, String occupation) {
+//        super(firstname, lastname, middleInitial, phoneNumber);
 //        this.address = address;
+//        this.civilStatus = civilStatus;
 //        this.age = age;
-//        this.balance = balance;
+//        this.occupation = occupation;
 //    }
 
-    public Patient(String firstname, String lastname, String middleInitial, String address, String phoneNumber, String civilStatus, int age, String occupation) {
-        super(firstname, lastname, middleInitial, phoneNumber);
+    //  This constructor is used to retrive patient's detail
+    public Patient(String uid, String firstname, String lastname, String middleInitial, String phoneNumber,
+                   String address, String civilStatus, int age,
+//                   double balance,
+                   String occupation,
+                   Date lastUpdated, ArrayList<String> dentalProcedures) {
+        super(uid, firstname, lastname, middleInitial, phoneNumber);
         this.address = address;
         this.civilStatus = civilStatus;
         this.age = age;
+//        this.balance = balance;
         this.occupation = occupation;
+        this.lastUpdated = lastUpdated;
+        if (dentalProcedures == null) Log.d(TAG, "Patient: dentalProcedures is null");
+        this.dentalProcedures = dentalProcedures;
     }
+
+//    //  This constructor is used to create new patient
+//    public Patient(String uid, String firstname, String lastname, String middleInitial, String phoneNumber,
+//                   String address, String civilStatus, int age,
+////                   double balance,
+//                   String occupation,
+//                   Date lastUpdated) {
+//        super(uid, firstname, lastname, middleInitial, phoneNumber);
+//        this.address = address;
+//        this.civilStatus = civilStatus;
+//        this.age = age;
+////        this.balance = balance;
+//        this.occupation = occupation;
+//        this.lastUpdated = lastUpdated;
+//        this.dentalProcedures = new ArrayList<>();
+//    }
 
     protected Patient(Parcel in) {
         uid = in.readString();
@@ -42,9 +72,17 @@ public class Patient extends Person implements Parcelable {
         address = in.readString();
         civilStatus = in.readString();
         age = in.readInt();
-        balance = in.readDouble();
+//        balance = in.readDouble();
         occupation = in.readString();
-        dentalHistoryUID = in.readString();
+//        if (dentalProcedures != null) {
+//            in.readStringList(dentalProcedures);
+
+        dentalProcedures = in.createStringArrayList();
+
+        for (String data : dentalProcedures) {
+            Log.d(TAG, "Patient: dentalProcedures: " + data);
+        }
+//        }
     }
 
     public static final Creator<Patient> CREATOR = new Creator<Patient>() {
@@ -75,13 +113,13 @@ public class Patient extends Person implements Parcelable {
         this.age = age;
     }
 
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
+//    public double getBalance() {
+//        return balance;
+//    }
+//
+//    public void setBalance(double balance) {
+//        this.balance = balance;
+//    }
 
     public String getCivilStatus() {
         return civilStatus;
@@ -107,28 +145,33 @@ public class Patient extends Person implements Parcelable {
         this.lastUpdated = lastUpdated;
     }
 
-    public String getDentalHistoryUID() {
-        return dentalHistoryUID;
+    public ArrayList<String> getDentalProcedures() {
+        return dentalProcedures;
     }
 
-    public void setDentalHistoryUID(String dentalHistoryUID) {
-        this.dentalHistoryUID = dentalHistoryUID;
+    public void setDentalProcedures(ArrayList<String> dentalProcedures) {
+        this.dentalProcedures = dentalProcedures;
     }
 
     public static Creator<Patient> getCREATOR() {
         return CREATOR;
     }
 
+    public void addProcedure(String procedureKey) {
+        if (dentalProcedures.get(0).equals(NEW_PATIENT)) dentalProcedures.remove(0);
+        dentalProcedures.add(procedureKey);
+    }
+
     @Override
     public String toString() {
-        return "Patient{" + super.toString() +
-                "address='" + address + '\'' +
-                ", civilStatus='" + civilStatus + '\'' +
-                ", age=" + age +
-                ", balance=" + balance +
-                ", occupation='" + occupation + '\'' +
-                ", lastUpdated=" + lastUpdated +
-                ", dentalHistoryUID='" + dentalHistoryUID + '\'' +
+        return "Patient{" +
+                "\naddress='" + address + '\'' +
+                "\ncivilStatus='" + civilStatus + '\'' +
+                "\nage=" + age +
+//                "\nbalance=" + balance +
+                "\noccupation='" + occupation + '\'' +
+                "\nlastUpdated=" + lastUpdated +
+                "\ndentalProcedures=" + dentalProcedures +
                 '}';
     }
 
@@ -147,8 +190,9 @@ public class Patient extends Person implements Parcelable {
         dest.writeString(address);
         dest.writeString(civilStatus);
         dest.writeInt(age);
-        dest.writeDouble(balance);
+//        dest.writeDouble(balance);
         dest.writeString(occupation);
-        dest.writeString(dentalHistoryUID);
+//        if (dentalProcedures != null)
+            dest.writeStringList(dentalProcedures);
     }
 }

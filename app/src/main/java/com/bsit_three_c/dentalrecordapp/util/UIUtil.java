@@ -61,10 +61,6 @@ public class UIUtil {
         }
     }
 
-    public static ColorStateList getCheckBoxColor(boolean isFullyPaid) {
-        return isFullyPaid ? ColorStateList.valueOf(0xFF01bb64) : ColorStateList.valueOf(0xFF6E6E6E);
-    }
-
     // Return Date format from date picker
     public static Date getDate(DatePicker datePicker) {
         Date date = null;
@@ -96,7 +92,7 @@ public class UIUtil {
         return DateFormatSymbols.getInstance().getMonths()[month-1];
     }
 
-    // Return the arrays of units in strings type
+    // Return the arrays of units in strings type: dd/mm/yyyy
     public static String[] getDateUnits(Date date) {
         return dateFormat.format(date).split("/");
     }
@@ -113,8 +109,13 @@ public class UIUtil {
     }
 
     // Converts date in string type to Date type
-    public static Date stringToDate(String dateString) throws ParseException {
-        return dateFormat.parse(dateString);
+    public static Date stringToDate(String dateString) {
+        try {
+            return dateFormat.parse(dateString);
+        } catch (ParseException e) {
+            Log.e(TAG, "stringToDate: Error parsing", e);
+            return null;
+        }
     }
 
     // Get the current date in String type
@@ -122,5 +123,20 @@ public class UIUtil {
         return dateFormat.format(new Date());
     }
 
+    public static String getPaymentStatus(boolean isDownpayment) {
+        return isDownpayment ? "Incomplete" : "Fully Paid";
+    }
 
+    public static String getPaymentStatus(double balance) {
+        Log.d(TAG, "getPaymentStatus: balance == 0d " + (balance == 0d));
+        return balance <= 0d ? "Fully Paid"  : "Incomplete";
+    }
+
+    public static ColorStateList getCheckBoxColor(boolean isFullyPaid) {
+        return isFullyPaid ? ColorStateList.valueOf(0xFF01bb64) : ColorStateList.valueOf(0xFFFF5252);
+    }
+
+    public static ColorStateList getCheckBoxColor(double balance) {
+        return balance <= 0d ? ColorStateList.valueOf(0xFF01bb64) : ColorStateList.valueOf(0xFFFF5252);
+    }
 }

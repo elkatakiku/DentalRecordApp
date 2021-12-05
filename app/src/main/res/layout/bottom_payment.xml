@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayoutPayment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -45,7 +46,7 @@
     <DatePicker
         android:id="@+id/snprPaymentDate"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:calendarViewShown="false"
         android:datePickerMode="spinner"
         android:spinnersShown="true" />
@@ -89,5 +90,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:backgroundTint="@color/button_patient_info"
         android:text="Confirm" />
+
+    <LinearLayout
+        android:id="@+id/layoutEditDeletePayment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@drawable/empty_tall_divider"
+        android:dividerPadding="0dp"
+        android:orientation="horizontal"
+        android:showDividers="middle">
+
+        <Button
+            android:id="@+id/btnPaymentDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/button_delete"
+            android:text="Delete"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <Button
+            android:id="@+id/btnPaymentEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/button_patient_info"
+            android:text="Edit"
+            android:visibility="gone"
+            tools:visibility="gone" />
+
+    </LinearLayout>
+
 </LinearLayout>

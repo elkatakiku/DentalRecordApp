@@ -9,13 +9,14 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:theme="@style/Theme.DentalRecordApp.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/custom_gradient"
+            android:background="@drawable/toolbar_bg2"
             app:popupTheme="@style/Theme.DentalRecordApp.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>

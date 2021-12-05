@@ -3,14 +3,15 @@ package com.bsit_three_c.dentalrecordapp.data.model;
 public class Payment {
 
     private String uid;
-    private String operationUID;
-    private Double amount;
-    private String modeOfPayment;
     private String paymentDate;
+    private String modeOfPayment;
+    private Double amount;
 
-    public Payment(String uid, String operationUID, Double amount, String modeOfPayment, String paymentDate) {
+    public Payment() {
+    }
+
+    public Payment(String uid, Double amount, String modeOfPayment, String paymentDate) {
         this.uid = uid;
-        this.operationUID = operationUID;
         this.amount = amount;
         this.modeOfPayment = modeOfPayment;
         this.paymentDate = paymentDate;
@@ -22,14 +23,6 @@ public class Payment {
 
     public void setUid(String uid) {
         this.uid = uid;
-    }
-
-    public String getOperationUID() {
-        return operationUID;
-    }
-
-    public void setOperationUID(String operationUID) {
-        this.operationUID = operationUID;
     }
 
     public Double getAmount() {
@@ -60,7 +53,6 @@ public class Payment {
     public String toString() {
         return "Payment{" +
                 "uid='" + uid +
-                "\noperationUID='" + operationUID +
                 "\namount=" + amount +
                 "\nmodeOfPayment='" + modeOfPayment +
                 "\npaymentDate='" + paymentDate +

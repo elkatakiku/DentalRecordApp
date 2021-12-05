@@ -130,7 +130,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
 
         // Check internet connection in background
-        new Internet().execute();
+//        new Internet().execute();
+        Internet.getInstance().execute();
 
         // Checks if user has logged in before
         LoggedInUser loggedInUser = LocalStorage.getLoggedInUser(this);

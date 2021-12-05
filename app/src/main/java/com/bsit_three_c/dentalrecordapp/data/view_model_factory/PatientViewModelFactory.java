@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bsit_three_c.dentalrecordapp.data.patient.OperationRepository;
+import com.bsit_three_c.dentalrecordapp.data.patient.ProcedureRepository;
 import com.bsit_three_c.dentalrecordapp.data.patient.PatientRepository;
 import com.bsit_three_c.dentalrecordapp.ui.add_patient.AddPatientViewModel;
 import com.bsit_three_c.dentalrecordapp.ui.home.HomeViewModel;
@@ -24,10 +24,10 @@ public class PatientViewModelFactory implements ViewModelProvider.Factory {
             return (T) new AddPatientViewModel(PatientRepository.getInstance());
         }
         else if (aClass.isAssignableFrom(OperationViewModel.class)) {
-            return (T) new OperationViewModel(OperationRepository.getInstance());
+            return (T) new OperationViewModel(ProcedureRepository.getInstance());
         }
         else if (aClass.isAssignableFrom(PatientInfoViewModel.class)) {
-            return (T) new PatientInfoViewModel(OperationRepository.getInstance());
+            return (T) new PatientInfoViewModel(ProcedureRepository.getInstance());
         }
         else {
             throw new IllegalArgumentException("Unknown ViewModel class");
