@@ -6,12 +6,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
-import androidx.lifecycle.LifecycleOwner;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalProcedure;
 import com.bsit_three_c.dentalrecordapp.data.model.Payment;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.BottomPaymentDialog;
+import com.bsit_three_c.dentalrecordapp.ui.patient_info.PatientInfoFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
@@ -21,13 +21,13 @@ public class PaymentList {
 
     private final LinearLayout linearLayout;
     private final LayoutInflater layoutInflater;
-    private final LifecycleOwner lifecycleOwner;
+    private final PatientInfoFragment lifecycleOwner;
     private final BottomSheetDialog operationsDialog;
     private BottomPaymentDialog paymentDialog;
     private DentalProcedure operation;
 
     public PaymentList(LinearLayout linearLayout, LayoutInflater layoutInflater,
-                       LifecycleOwner lifecycleOwner, BottomSheetDialog operationsDialog) {
+                       PatientInfoFragment lifecycleOwner, BottomSheetDialog operationsDialog) {
         this.linearLayout = linearLayout;
         this.layoutInflater = layoutInflater;
         this.lifecycleOwner = lifecycleOwner;
@@ -52,13 +52,12 @@ public class PaymentList {
     }
 
     public void createDialog(LayoutInflater layoutInflater, Context context,
-                             LifecycleOwner lifecycleOwner, Payment payment) {
+                             PatientInfoFragment lifecycleOwner, Payment payment) {
 
         //  Create payment dialog edit/delete style
-        this.paymentDialog = new BottomPaymentDialog(layoutInflater,
-                context, lifecycleOwner);
-        paymentDialog.createDialog(payment);
+        this.paymentDialog = new BottomPaymentDialog(layoutInflater, context, lifecycleOwner, true);
         paymentDialog.setOperation(operation);
+        paymentDialog.createDialog(payment);
 
 //        paymentDialog.showDialog();
 //        operationsDialog.dismiss();

@@ -93,7 +93,6 @@ public class PaymentRepository {
     public void addPayment(DentalProcedure procedure, Payment payment) {
         databaseReference.child(payment.getUid()).setValue(payment);
         //  Update operation's balance
-        MiddleGround.updatePaymentKeys(procedure, payment.getUid());
     }
 
     public void addPayment(DentalProcedure procedure, String modeOfPayment, String paidAmount, String date) {
@@ -109,6 +108,15 @@ public class PaymentRepository {
 
             MiddleGround.addPaymentKey(procedure, payment);
         }
+    }
+
+    public void updatePayment(Payment payment) {
+        databaseReference.child(payment.getUid()).setValue(payment);
+    }
+
+    public void removePayment(DentalProcedure procedure, String paymentUID) {
+        removePayment(paymentUID);
+        MiddleGround.updateProcedurePaymentKeys(procedure, paymentUID);
     }
 
     public void removePayment(String paymentUID) {

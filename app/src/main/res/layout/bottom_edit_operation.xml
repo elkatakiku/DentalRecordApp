@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayoutPayment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bottom_dialog_bg"
     android:orientation="vertical"
     android:padding="20dp">
 
@@ -16,17 +13,17 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvPaymentTitle"
+            android:id="@+id/tvEPTitle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="5"
-            android:text="Add Payment"
+            android:text="Edit Procedure"
             android:textColor="@color/header"
             android:textSize="24sp"
             android:textStyle="bold" />
 
         <ImageView
-            android:id="@+id/iconPaymentClose"
+            android:id="@+id/iconEPClose"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -36,7 +33,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView18"
+        android:id="@+id/tvEPDateLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -44,7 +41,7 @@
         android:textColor="@color/label" />
 
     <DatePicker
-        android:id="@+id/snprPaymentDate"
+        android:id="@+id/snprEPDate"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:calendarViewShown="false"
@@ -52,76 +49,46 @@
         android:spinnersShown="true" />
 
     <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/tvEPDescLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Mode of Payment"
-        android:textColor="@color/label" />
-
-    <Spinner
-        android:id="@+id/sprPaymentModeOfPayment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/mop_array"
-        android:minHeight="48dp"
-        android:spinnerMode="dropdown" />
-
-    <TextView
-        android:id="@+id/textView22"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Amount"
+        android:text="Description"
         android:textColor="@color/label" />
 
     <EditText
-        android:id="@+id/editTextPaymentAmount"
+        android:id="@+id/edtEPDesc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Amount"
+        android:hint="Description"
+        android:inputType="numberDecimal"
+        android:minHeight="48dp"
+        android:textColor="@color/data" />
+
+    <TextView
+        android:id="@+id/tvEPTotalAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Total Amount"
+        android:textColor="@color/label" />
+
+    <EditText
+        android:id="@+id/editEPTotalAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Total Amount"
         android:inputType="numberDecimal"
         android:minHeight="48dp"
         android:textColor="@color/data" />
 
     <Button
-        android:id="@+id/btnPaymentConfirm"
+        android:id="@+id/btnEPConfirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:backgroundTint="@color/button_patient_info"
         android:text="Confirm" />
-
-    <LinearLayout
-        android:id="@+id/layoutEditDeletePayment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@drawable/empty_tall_divider"
-        android:dividerPadding="0dp"
-        android:orientation="horizontal"
-        android:showDividers="middle">
-
-        <Button
-            android:id="@+id/btnPaymentDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/button_delete"
-            android:text="Delete"
-            android:visibility="gone"
-            tools:visibility="visible" />
-
-        <Button
-            android:id="@+id/btnPaymentEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/button_patient_info"
-            android:text="Edit"
-            android:visibility="gone"
-            tools:visibility="gone" />
-
-    </LinearLayout>
 
 </LinearLayout>

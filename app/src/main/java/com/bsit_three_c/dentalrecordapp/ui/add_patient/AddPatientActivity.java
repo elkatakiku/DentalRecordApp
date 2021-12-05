@@ -26,7 +26,7 @@ public class AddPatientActivity extends AppCompatActivity {
         binding = ActivityAddPatientBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.toolbar);
+        setSupportActionBar(binding.addPatientToolbar);
         ActionBar actionBar = getSupportActionBar();
         Log.d(TAG, "onCreate: action bar: " + (actionBar != null));
         if (actionBar != null) {

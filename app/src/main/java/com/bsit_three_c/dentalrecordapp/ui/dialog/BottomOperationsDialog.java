@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 
 import com.bsit_three_c.dentalrecordapp.R;
@@ -19,8 +18,9 @@ import com.bsit_three_c.dentalrecordapp.data.adapter.PaymentList;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalProcedure;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Payment;
-import com.bsit_three_c.dentalrecordapp.data.patient.ProcedureRepository;
 import com.bsit_three_c.dentalrecordapp.data.patient.PaymentRepository;
+import com.bsit_three_c.dentalrecordapp.data.patient.ProcedureRepository;
+import com.bsit_three_c.dentalrecordapp.ui.patient_info.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DataSnapshot;
@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class BottomOperationsDialog {
     private static final String TAG = BottomOperationsDialog.class.getSimpleName();
 
-    private LayoutInflater layoutInflater;
+    private final LayoutInflater layoutInflater;
     private final Context context;
     private BottomSheetDialog operationDialog;
 
@@ -40,9 +40,9 @@ public class BottomOperationsDialog {
     private final ProcedureRepository procedureRepository;
     private DentalProcedure operation;
 
-    private final LinearLayout opeartionLayout;
+    private final LinearLayout operationLayout;
     private final View view;
-    private final LifecycleOwner lifecycleOwner;
+    private final PatientInfoFragment lifecycleOwner;
 
     private final MutableLiveData<Integer> paymentsCounter = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isDoneLoading = new MutableLiveData<>();
@@ -56,26 +56,15 @@ public class BottomOperationsDialog {
 
     private Patient patient;
 
-    public BottomOperationsDialog(LayoutInflater layoutInflater, Context context, LifecycleOwner lifecycleOwner) {
-        this.layoutInflater = layoutInflater;
-        this.context = context;
-        this.paymentRepository = PaymentRepository.getInstance();
-        this.procedureRepository = ProcedureRepository.getInstance();
-        this.view = layoutInflater.inflate(R.layout.bottom_operation_details, null, false);
-        this.opeartionLayout = view.findViewById(R.id.linearLayoutOperation);
-        this.lifecycleOwner = lifecycleOwner;
-    }
-
     public BottomOperationsDialog(LayoutInflater layoutInflater, Context context,
-                                  LifecycleOwner lifecycleOwner, Patient patient) {
+                                  PatientInfoFragment lifecycleOwner) {
         this.layoutInflater = layoutInflater;
         this.context = context;
         this.paymentRepository = PaymentRepository.getInstance();
         this.procedureRepository = ProcedureRepository.getInstance();
         this.view = layoutInflater.inflate(R.layout.bottom_operation_details, null, false);
-        this.opeartionLayout = view.findViewById(R.id.linearLayoutOperation);
+        this.operationLayout = view.findViewById(R.id.linearLayoutOperation);
         this.lifecycleOwner = lifecycleOwner;
-        this.patient = patient;
     }
 
     // Sets local field operator and readied the dialog
@@ -83,8 +72,9 @@ public class BottomOperationsDialog {
         isDoneLoading.setValue(false);
         this.operation = operation;
 
-        ViewHolder viewHolder = new ViewHolder(opeartionLayout);
+        ViewHolder viewHolder = new ViewHolder(operationLayout);
         operationDialog = new BottomSheetDialog(context);
+        dialogDismissListener(operationDialog);
 
         viewHolder.btnAddPayment.setOnClickListener(v -> {
             BottomPaymentDialog paymentDialog = new BottomPaymentDialog(layoutInflater, context, lifecycleOwner);
@@ -102,7 +92,8 @@ public class BottomOperationsDialog {
         viewHolder.operationDesc.setText(operation.getDentalDesc());
         viewHolder.operationDate.setText(operation.getDentalDate());
         viewHolder.operationTotalAmount.setText(totalAmount);
-        mBalance.observe(lifecycleOwner, aDouble -> {
+
+        mBalance.observe(lifecycleOwner.getViewLifecycleOwner(), aDouble -> {
             String status = UIUtil.getPaymentStatus(aDouble);
             viewHolder.fullyPaid.setText(status);
 
@@ -113,7 +104,7 @@ public class BottomOperationsDialog {
             else viewHolder.btnAddPayment.setVisibility(View.VISIBLE);
         });
 
-        mBalance.observe(lifecycleOwner, aDouble -> {
+        mBalance.observe(lifecycleOwner.getViewLifecycleOwner(), aDouble -> {
             String balance = aDouble.toString();
             viewHolder.balance.setText(balance);
         });
@@ -122,6 +113,7 @@ public class BottomOperationsDialog {
             @Override
             public void onClick(View v) {
                 removeProcedure();
+
             }
         });
 
@@ -174,7 +166,7 @@ public class BottomOperationsDialog {
 
         Log.d(TAG, "loadPayments: paymentCounter value: " + paymentsCounter);
 
-        paymentsCounter.observe(lifecycleOwner, integer -> {
+        paymentsCounter.observe(lifecycleOwner.getViewLifecycleOwner(), integer -> {
             Log.d(TAG, "loadPayments: integer: " + integer);
             Log.d(TAG, "loadPayments: total payments: " + totalPayments);
             if (integer == totalPayments) {
@@ -187,13 +179,22 @@ public class BottomOperationsDialog {
     }
 
     private void removeProcedure() {
+        operationDialog.dismiss();
         procedureRepository.removeProcedure(patient, operation.getUid(), operation.getPaymentKeys());
+    }
 
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     public void showDialog() {
         operationDialog.show();
         operationDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+    }
+
+    private void dialogDismissListener(BottomSheetDialog dialog) {
+        Log.d(TAG, "dialogDismissListener: Load procedures called");
+        dialog.setOnDismissListener(dialog1 -> lifecycleOwner.loadProcedures());
     }
 
     private static class ViewHolder {

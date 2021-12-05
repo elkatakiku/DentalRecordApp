@@ -42,21 +42,14 @@ public class PatientInfoViewModel extends ViewModel {
     }
 
     public void loadOperations(Patient patient, LifecycleOwner lifecycleOwner) {
+        Log.d(TAG, "loadOperations: called");
 
         ArrayList<String> operationKeys = patient.getDentalProcedures();
         procedureSize = patient.getDentalProcedures().size();
-
         procedureList = new ArrayList<>(procedureSize);
-//        Log.d(TAG, "loadOperations: keys: " + operationKeys);
-
         procedures = new DentalProcedure[procedureSize];
-//        Log.d(TAG, "loadOperations: procedure size: " + procedureSize);
-//        Log.d(TAG, "loadOperations: list size: " + procedures.length);
-
         isLoaded.setValue(false);
-
         mBalance.setValue(0d);
-
         mProceduresCounter.setValue(0);
         totalCount = 0;
 
@@ -68,6 +61,7 @@ public class PatientInfoViewModel extends ViewModel {
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                     DentalProcedure procedure = snapshot.getValue(DentalProcedure.class);
 
                     if (procedure != null) {

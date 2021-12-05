@@ -34,9 +34,6 @@ public class CustomObserver implements Observer<FormState> {
     }
 
 
-
-
-
     public static class ObserverButton implements Observer<FormState> {
 
         private final Button button;

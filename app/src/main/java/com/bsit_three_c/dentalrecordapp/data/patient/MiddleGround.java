@@ -21,11 +21,14 @@ class MiddleGround {
         procedureRepository.updateBalance(procedure, payment);
     }
 
-    public static void addPayment(Patient patient, DentalProcedure procedure, Payment payment) {
+    public static void addNewProdecurePayment(Patient patient, DentalProcedure procedure, Payment payment) {
         Log.d(TAG, "addPayment: addPayment");
+
         procedure.addPaymentKey(payment.getUid());
         paymentRepository.addPayment(procedure, payment);
+
         Log.d(TAG, "addPayment: calling addProcedureKey");
+
         patientRepository.addProcedureKey(patient, procedure.getUid());
     }
 
@@ -37,7 +40,7 @@ class MiddleGround {
         }
     }
 
-    public static void updatePaymentKeys(DentalProcedure procedure, String paymentUID) {
-
+    public static void updateProcedurePaymentKeys(DentalProcedure procedure, String paymentUID) {
+        procedureRepository.updatePaymentKeys(procedure, paymentUID);
     }
 }

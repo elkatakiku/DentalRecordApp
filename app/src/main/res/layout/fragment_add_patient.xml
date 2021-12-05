@@ -1,262 +1,302 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.add_patient.AddPatientActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/custom_gradient"
+        android:gravity="bottom|center_vertical"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/txtViewPILastname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add patient"
+            android:textAlignment="viewStart"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fill in the basic information of the patient."
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/labelFirstname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".FirstFragment">
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="20dp"
+        android:labelFor="@id/eTxtFirstname"
+        android:text="Firstname"
+        android:visibility="invisible" />
+
+    <EditText
+        android:id="@+id/eTxtFirstname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/shape_input"
+        android:elevation="5dp"
+        android:ems="10"
+        android:hint="Firsnamt"
+        android:inputType="textPersonName"
+        android:labelFor="@id/labelFirstname"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:shadowColor="#32ED7D" />
+
+    <TextView
+        android:id="@+id/labelLastname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="20dp"
+        android:text="Lastname"
+        android:visibility="invisible" />
+
+    <EditText
+        android:id="@+id/eTxtLastname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/shape_input"
+        android:elevation="5dp"
+        android:ems="10"
+        android:hint="Lastname"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:shadowColor="#32ED7D" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:divider="@drawable/empty_tall_divider"
+        android:orientation="horizontal"
+        android:showDividers="middle">
 
         <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@drawable/custom_gradient"
-            android:gravity="bottom|center_vertical"
-            android:orientation="vertical"
-            android:padding="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline5"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txtViewPILastname"
+                android:id="@+id/labelMiddle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Add patient"
-                android:textAlignment="viewStart"
-                android:textColor="@color/white"
-                android:textSize="24sp" />
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:labelFor="@id/eTxtMiddleInitial"
+                android:text="Middle Initial"
+                android:visibility="invisible" />
 
-            <TextView
-                android:id="@+id/textView14"
+            <EditText
+                android:id="@+id/eTxtMiddleInitial"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Fill in the basic information of the patient."
-                android:textColor="@color/white" />
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/shape_input"
+                android:elevation="5dp"
+                android:ems="10"
+                android:hint="Middle Initial"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:paddingStart="20dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="10dp"
+                android:shadowColor="#32ED7D" />
         </LinearLayout>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline5"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.2" />
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnAddPatient"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/button_patient_info"
-            android:text="@string/add"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spnrCivilStatus"
-            app:layout_constraintVertical_bias="1.0" />
+            <TextView
+                android:id="@+id/labelAge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:text="Age"
+                android:visibility="invisible" />
 
-        <EditText
-            android:id="@+id/eTxtFirstname"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:labelFor="@id/labelFirstname"
-            android:minHeight="48dp"
-            app:layout_constraintEnd_toStartOf="@+id/eTxtMiddleInitial"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/labelFirstname" />
+            <EditText
+                android:id="@+id/eTxtAge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/shape_input"
+                android:elevation="5dp"
+                android:ems="10"
+                android:hint="Age"
+                android:inputType="number"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:paddingStart="20dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="10dp"
+                android:shadowColor="#32ED7D" />
+        </LinearLayout>
+    </LinearLayout>
 
-        <TextView
-            android:id="@+id/labelFirstname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:labelFor="@id/eTxtFirstname"
-            android:text="Firstname"
-            app:layout_constraintStart_toStartOf="@+id/eTxtFirstname"
-            app:layout_constraintTop_toTopOf="@+id/guideline5" />
+    <TextView
+        android:id="@+id/labelAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="20dp"
+        android:text="Address"
+        android:visibility="invisible" />
 
-        <EditText
-            android:id="@+id/eTxtLastname"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:minHeight="48dp"
-            app:layout_constraintEnd_toStartOf="@+id/eTxtAge"
-            app:layout_constraintStart_toStartOf="@+id/eTxtFirstname"
-            app:layout_constraintTop_toBottomOf="@+id/labelLastname" />
+    <EditText
+        android:id="@+id/eTxtAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/shape_input"
+        android:elevation="5dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Address"
+        android:inputType="textMultiLine"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:shadowColor="#32ED7D" />
 
-        <TextView
-            android:id="@+id/labelLastname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Lastname"
-            app:layout_constraintStart_toStartOf="@+id/eTxtLastname"
-            app:layout_constraintTop_toBottomOf="@+id/eTxtFirstname" />
+    <TextView
+        android:id="@+id/labelTelephone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="20dp"
+        android:text="Telephone"
+        android:visibility="invisible" />
 
-        <EditText
-            android:id="@+id/eTxtAge"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:inputType="number"
-            android:minWidth="48dp"
-            android:minHeight="48dp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/eTxtLastname"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline4" />
+    <EditText
+        android:id="@+id/eTxtPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/shape_input"
+        android:elevation="5dp"
+        android:ems="10"
+        android:hint="Telephone"
+        android:inputType="phone"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:shadowColor="#32ED7D" />
 
-        <EditText
-            android:id="@+id/eTxtMiddleInitial"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:hint="Optional"
-            android:inputType="textPersonName"
-            android:minHeight="48dp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/eTxtFirstname"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline4" />
+    <TextView
+        android:id="@+id/labelOccupation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="20dp"
+        android:text="Occupation"
+        android:visibility="invisible" />
 
-        <TextView
-            android:id="@+id/labelAge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Age"
-            app:layout_constraintBaseline_toBaselineOf="@+id/labelLastname"
-            app:layout_constraintStart_toStartOf="@+id/eTxtAge" />
+    <EditText
+        android:id="@+id/eTxtOccupation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/shape_input"
+        android:elevation="5dp"
+        android:ems="10"
+        android:hint="Occupation"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:shadowColor="#32ED7D" />
 
-        <TextView
-            android:id="@+id/labelMiddle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:labelFor="@id/eTxtMiddleInitial"
-            android:text="Middle Initial"
-            app:layout_constraintBaseline_toBaselineOf="@+id/labelFirstname"
-            app:layout_constraintStart_toStartOf="@+id/eTxtMiddleInitial" />
+    <TextView
+        android:id="@+id/labelCivilStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="20dp"
+        android:text="Civil Status"
+        android:visibility="invisible" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="135dp" />
+    <Spinner
+        android:id="@+id/spnrCivilStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/shape_input"
+        android:elevation="5dp"
+        android:entries="@array/civil_status_array"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:spinnerMode="dropdown" />
 
-        <EditText
-            android:id="@+id/eTxtAddress"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:gravity="start|top"
-            android:inputType="textMultiLine"
-            android:minHeight="48dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/labelAddress" />
+    <Button
+        android:id="@+id/btnAddPatient"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="@color/button_patient_info"
+        android:padding="16dp"
+        android:text="@string/add"
+        app:cornerRadius="50dp" />
 
-        <TextView
-            android:id="@+id/labelAddress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Address"
-            app:layout_constraintStart_toStartOf="@+id/eTxtAddress"
-            app:layout_constraintTop_toBottomOf="@+id/eTxtLastname" />
-
-        <EditText
-            android:id="@+id/eTxtPhoneNumber"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:inputType="phone"
-            android:minHeight="48dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/labelTelephone" />
-
-        <EditText
-            android:id="@+id/eTxtOccupation"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:hint="Optional"
-            android:inputType="textPersonName"
-            app:layout_constraintEnd_toStartOf="@+id/guideline4"
-            app:layout_constraintStart_toStartOf="@+id/labelOccupation"
-            app:layout_constraintTop_toBottomOf="@+id/labelOccupation" />
-
-        <TextView
-            android:id="@+id/labelOccupation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Occupation"
-            app:layout_constraintStart_toStartOf="@+id/eTxtPhoneNumber"
-            app:layout_constraintTop_toBottomOf="@+id/eTxtPhoneNumber" />
-
-        <TextView
-            android:id="@+id/labelTelephone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Telephone"
-            app:layout_constraintStart_toStartOf="@+id/eTxtPhoneNumber"
-            app:layout_constraintTop_toBottomOf="@+id/eTxtAddress" />
-
-        <TextView
-            android:id="@+id/labelCivilStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Civil Status"
-            app:layout_constraintStart_toStartOf="@+id/spnrCivilStatus"
-            app:layout_constraintTop_toBottomOf="@+id/eTxtPhoneNumber" />
-
-        <Spinner
-            android:id="@+id/spnrCivilStatus"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:entries="@array/civil_status_array"
-            android:minHeight="48dp"
-            android:spinnerMode="dropdown"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline4"
-            app:layout_constraintTop_toBottomOf="@+id/labelCivilStatus" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="733dp" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</ScrollView>
+</LinearLayout>

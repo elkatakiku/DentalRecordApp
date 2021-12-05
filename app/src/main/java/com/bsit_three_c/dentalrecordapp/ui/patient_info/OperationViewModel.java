@@ -9,26 +9,20 @@ import androidx.lifecycle.ViewModel;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.FormState;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
-import com.bsit_three_c.dentalrecordapp.data.model.Person;
 import com.bsit_three_c.dentalrecordapp.data.patient.ProcedureRepository;
 import com.bsit_three_c.dentalrecordapp.interfaces.TextChange;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 public class OperationViewModel extends ViewModel implements TextChange {
     private static final String TAG = OperationViewModel.class.getSimpleName();
 
-    private final MutableLiveData<ArrayList<Person>> mPatientList = new MutableLiveData<>();
     private final ProcedureRepository repository;
 
     private final MutableLiveData<FormState> mOperationState = new MutableLiveData<>();
-    private final MutableLiveData<FormState> mDate = new MutableLiveData<>();
     private final MutableLiveData<FormState> mDescription = new MutableLiveData<>();
-    private final MutableLiveData<FormState> mMOP = new MutableLiveData<>();
     private final MutableLiveData<FormState> mAmount = new MutableLiveData<>();
-//    private final MutableLiveData<Boolean> mIsDownpayment = new MutableLiveData<>();
     private final MutableLiveData<FormState> mTotalAmount = new MutableLiveData<>();
     private final MutableLiveData<FormState> mBalance = new MutableLiveData<>();
     private final MutableLiveData<Double> mBalanceAmount = new MutableLiveData<>();
@@ -47,20 +41,6 @@ public class OperationViewModel extends ViewModel implements TextChange {
     public OperationViewModel(ProcedureRepository repository) {
         this.repository = repository;
     }
-
-    public ProcedureRepository getRepository() {
-        return repository;
-    }
-
-//    public void addOperation(Patient patient, String dentalDesc, Date dentalDate, String modeOfPayment, String dentalAmount,
-//                             boolean isFullyPaid, String dentalTotalAmount, String dentalBalance) {
-//        repository.addOperation(patient, dentalDesc, dentalDate, modeOfPayment, dentalAmount, isFullyPaid,
-//                dentalTotalAmount, dentalBalance);
-//    }
-//
-//    public void addOperation(Patient patient, String dentalDesc, Date dentalDate, String modeOfPayment, String dentalAmount, boolean isFullyPaid) {
-//        addOperation(patient, dentalDesc, dentalDate, modeOfPayment, dentalAmount, isFullyPaid, dentalAmount, "0");
-//    }
 
     public void addProcedure(Patient patient, String dentalDesc, Date dentalDate, String modeOfPayment,
                              String dentalAmount, boolean isFullyPaid, String dentalTotalAmount, String dentalBalance) {
@@ -101,14 +81,6 @@ public class OperationViewModel extends ViewModel implements TextChange {
     public LiveData<FormState> getmAmount() {
         return mAmount;
     }
-
-//    public LiveData<Boolean> getmIsDownpayment() {
-//        return mIsDownpayment;
-//    }
-//
-//    public void setmIsDownpayment(boolean bool) {
-//        mIsDownpayment.setValue(bool);
-//    }
 
     public LiveData<FormState> getmTotalAmount() {
         return mTotalAmount;
@@ -196,12 +168,10 @@ public class OperationViewModel extends ViewModel implements TextChange {
         if (!isDownpayment && Checker.isComplete(mDescription, mAmount)) {
             mOperationState.setValue(new FormState(true));
         }
-        else if (isDownpayment && Checker.isComplete(mDescription, mAmount, mTotalAmount)) {
+        else if (isDownpayment && Checker.isComplete(mDescription, mAmount, mTotalAmount, mBalance)) {
             mOperationState.setValue(new FormState(true));
         }
         else mOperationState.setValue(new FormState(false));
-
-//        mOperationState.setValue(new FormState(state));
     }
 
     private void setState(String label, int msg) {

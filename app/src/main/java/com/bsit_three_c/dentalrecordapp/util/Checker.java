@@ -69,23 +69,20 @@ public class Checker {
         int finalIndex = initialIndex;
         int temp = initialIndex;
 
-//        Log.d(TAG, "isRepeated: initial value of initialChar: " + initialIndex);
-//        Log.d(TAG, "isRepeated: initial value of finalChar: " + finalIndex);
-
         while (temp >= 0) {
-//            Log.d(TAG, "isRepeated: character repeated in index: " + finalIndex);
             temp = word.indexOf(character, temp + 1);
 
             if (temp <= 0) break;
             finalIndex = temp;
-//            Log.d(TAG, "isRepeated: index: " + initialIndex);
-//            Log.d(TAG, "isRepeated: temp: " + temp);
-//            Log.d(TAG, "isRepeated: final: " + finalIndex);
         }
-
-//        Log.d(TAG, "isRepeated: initialChar: " + initialIndex);
-//        Log.d(TAG, "isRepeated: finalChar: " + finalIndex);
-
         return initialIndex != finalIndex;
+    }
+
+    public static double convertToDouble(String input) {
+        try {
+            return Double.parseDouble(input);
+        } catch (Exception e) {
+            return -1;
+        }
     }
 }

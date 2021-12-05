@@ -93,17 +93,6 @@ public class AddPatientFragment extends Fragment {
         basicViewModel.getmPhoneNumber().observe(getViewLifecycleOwner(), new CustomObserver(binding.eTxtPhoneNumber, resources));
         basicViewModel.getmOccupation().observe(getViewLifecycleOwner(), new CustomObserver(binding.eTxtOccupation, resources));
         basicViewModel.getAddPatientFormState().observe(getViewLifecycleOwner(), new CustomObserver.ObserverButton(binding.btnAddPatient));
-
-//        basicViewModel.getAddPatientFormState().observe(getViewLifecycleOwner(), new Observer<FormState>() {
-//            @Override
-//            public void onChanged(FormState formState) {
-//                Log.d(TAG, "onChanged: addpatientformstate: " + (formState != null));
-//                if (formState == null) return;
-//
-//                Log.d(TAG, "onChanged: setting button enabled: " + formState.isDataValid());
-//                binding.btnAddPatient.setEnabled(formState.isDataValid());
-//            }
-//        });
     }
 
     private void setTextChangedListener() {

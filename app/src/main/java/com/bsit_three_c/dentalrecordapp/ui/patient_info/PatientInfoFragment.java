@@ -18,6 +18,7 @@ import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.PatientViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentPatientInfoBinding;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
+import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 import java.util.Arrays;
 
@@ -56,69 +57,34 @@ public class PatientInfoFragment extends Fragment {
                     PatientInfoFragmentDirections.actionFirst2FragmentToSecondFragment(patient);
             Navigation.findNavController(view1).navigate(action);
             onPause();
-//                NavHostFragment.findNavController(PatientInfoFragment.this)
-//                        .navigate(R.id.action_First2Fragment_to_SecondFragment);
         });
 
+        viewModel.getmBalance().observe(getViewLifecycleOwner(), aDouble -> {
+            if (aDouble <= 0) {
+                binding.txtOperationsBalance.setText(UIUtil.getPaymentStatus(aDouble));
+//                binding.txtOperationsBalance.setTextColor(UIUtil.getCheckBoxColor(aDouble));
+                binding.balanceLayoutPatientInfo.setVisibility(View.GONE);
+            } else {
+                binding.balanceLayoutPatientInfo.setVisibility(View.VISIBLE);
+                String convertedBalance = String.valueOf(aDouble);
+                binding.txtOperationsBalance.setText(convertedBalance);
+            }
 
+        });
+
+        displayInfo();
+
+        Log.d(TAG, "onViewCreated: Load procedures called");
+        loadProcedures();
+    }
+
+    public void loadProcedures() {
         operationsList = new OperationsList(binding.tryList, getLayoutInflater(), patient, this);
         viewModel.loadOperations(patient, this);
 
-//        viewModel.getmProceduresCounter().observe(getViewLifecycleOwner(), integer -> {
-//
-//            if (integer <= 0) {
-//                binding.textViewEmptyProcedures.setVisibility(View.VISIBLE);
-//                binding.proceduresLoading.setVisibility(View.INVISIBLE);
-//            }
-//            else {
-//                binding.textViewEmptyProcedures.setVisibility(View.GONE);
-//                binding.proceduresLoading.setVisibility(View.GONE);
-//            }
-//
-//            Log.d(TAG, "onViewCreated: integer: " + integer);
-//            Log.d(TAG, "onViewCreated: array size: " + viewModel.getProcedureSize());
-//
-//            if (viewModel.getProcedureSize() == integer) {
-//                operationsList.addItems(viewModel.getProcedureList());
-//                for (DentalProcedure procedure :
-//                        viewModel.getProcedureList()) { Log.d(TAG, "onViewCreated: procedure: " + procedure.getDentalDesc());
-//                }
-//
-//            }
-//        });
-//
-//        viewModel.getmOperations().observe(getViewLifecycleOwner(), dentalOperations -> {
-//
-//            Log.d(TAG, "onViewCreated: dental operations size: " + dentalOperations.length);
-////            Log.d(TAG, "onViewCreated: dental operations empty: " + dentalOperations.isEmpty());
-////            Log.d(TAG, "onViewCreated: dental operations null: " + (dentalOperations == null));
-//
-//            if (dentalOperations[0] != null) {
-//                binding.textViewEmptyProcedures.setVisibility(View.VISIBLE);
-//                binding.proceduresLoading.setVisibility(View.INVISIBLE);
-//            }
-//            else {
-//                binding.textViewEmptyProcedures.setVisibility(View.GONE);
-//                binding.proceduresLoading.setVisibility(View.GONE);
-//            }
-//
-//            if (dentalOperations.length == viewModel.getProcedureSize()) {
-//                Log.d(TAG, "onViewCreated: size == length");
-//                operationsList.addItems(Arrays.asList(dentalOperations));
-//            }
-//            for (DentalProcedure operation : dentalOperations) {
-//                Log.d(TAG, "onViewCreated: operatioh: " + operation.getDentalBalance());
-//            }
-//            for (int position = 0; position < dentalOperations.size(); position++) {
-//                Log.d(TAG, "onViewCreated: operation desc: " + dentalOperations.get(position).getDentalDesc());
-//            }
-//        });
-
         viewModel.getmProceduresCounter().observe(getViewLifecycleOwner(), integer -> {
-            Log.d(TAG, "onChanged: integer val: " + integer);
-            Log.d(TAG, "onViewCreated: procedure array size: " + viewModel.getProcedureSize());
 
-            //  Checks if there is no procedure
+            //  Checks if there are no procedure
             if (integer <= 0) {
                 binding.textViewEmptyProcedures.setVisibility(View.VISIBLE);
                 binding.proceduresLoading.setVisibility(View.INVISIBLE);
@@ -133,34 +99,13 @@ public class PatientInfoFragment extends Fragment {
                 operationsList.addItems(Arrays.asList(viewModel.getProcedures()));
             }
         });
-
-        viewModel.getmBalance().observe(getViewLifecycleOwner(), aDouble -> {
-            String convertedBalance = String.valueOf(aDouble);
-            binding.txtOperationsBalance.setText(convertedBalance);
-        });
-
-        displayInfo();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-//        viewModel.getIsLoaded().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-//            @Override
-//            public void onChanged(Boolean aBoolean) {
-//                Log.d(TAG, "onChanged: isDone: " + aBoolean);
-//                if (aBoolean) operationsList.addItems(viewModel.getProcedureList());
-//            }
-//        });
 
         Log.d(TAG, "onResume: patient info resumed");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        Log.d(TAG, "onPause: patient info paused");
     }
 
     @Override

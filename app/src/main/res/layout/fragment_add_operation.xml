@@ -179,19 +179,19 @@
 
             <CheckBox
                 android:id="@+id/checkBoxDownpayment"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="?android:attr/listChoiceIndicatorMultiple"
-                android:button="@null"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Downpayment"
                 tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/textView3"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:labelFor="@id/checkBoxDownpayment"
-                android:text="Downpayment" />
+                android:text="Downpayment"
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout

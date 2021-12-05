@@ -27,21 +27,14 @@ public class ProcedureRepository {
     private static final String PAYMENT_KEYS = "paymentKeys";
     private static final String BALANCE = "dentalBalance";
 
-    private ValueEventListener valueEventListener;
-
     private static volatile ProcedureRepository instance;
     private ArrayList<DentalProcedure> dentalProcedures;
-
-//    private final PaymentRepository paymentRepository;
-//    private final PatientRepository patientRepository;
 
     private double balance = 0;
 
     public ProcedureRepository() {
         this.database = FirebaseDatabase.getInstance(FIREBASE_URL);
         this.databaseReference = database.getReference(OPERATIONS_REFERENCE);
-//        this.paymentRepository = PaymentRepository.getInstance();
-//        this.patientRepository = PatientRepository.getInstance();
     }
 
 
@@ -71,131 +64,6 @@ public class ProcedureRepository {
             }
         }
     }
-
-//    public void getOperations(Patient patient, HistoryItemAdapter itemAdapter, ListView listView, TextView tvBalance) {
-//        valueEventListener = new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-////                mIsOperationsLoaded.setValue(false);
-//
-//                // Initialize dentalProcedures ArrayList
-//                getOperations(snapshot);
-//                if (!dentalProcedures.isEmpty()) {
-//                    itemAdapter.setItems(dentalProcedures);
-//                    itemAdapter.notifyDataSetChanged();
-//                }
-////                mIsOperationsLoaded.setValue(true);
-//                UIUtil.setListViewHeightBasedOnItems(listView);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        };
-//
-//        databaseReference.child(patient.getDentalHistoryUID())
-//                .child(DENTAL_HISTORY)
-//                .addValueEventListener(valueEventListener);
-//    }
-
-//    public void getOperations(Patient patient, OperationsList operationsList, TextView tvBalance) {
-//        valueEventListener = new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//
-//                // Load Operatiohs from the database
-//                getOperations(snapshot);
-//
-//                // Checks local field dentalProcedures if empty
-//                if (!dentalProcedures.isEmpty()) {
-//
-//                    //  Add item to linearLayout
-//                    operationsList.addItems(dentalProcedures);
-//
-//                    // Compute balance
-//                    for (DentalProcedure operation : dentalProcedures) {
-//                        Log.d(TAG, "onDataChange: current operation: " + operation);
-//                        Log.d(TAG, "onDataChange: current balance: " + balance);
-//                        balance += operation.getDentalBalance();
-//
-//                        Log.d(TAG, "onDataChange: updated balance: " + balance);
-//                    }
-//
-//                }
-//
-//                // Setting balance to text
-//                String txtBalance = String.valueOf(balance);
-//                tvBalance.setText(txtBalance);
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        };
-//
-//        databaseReference.child(patient.getDentalHistoryUID())
-//                .child(DENTAL_HISTORY)
-//                .addValueEventListener(valueEventListener);
-//    }
-
-//
-//    public String addOperationList(Patient patient, DentalProcedure dentalOperation) {
-//        String key = databaseReference.push().getKey();
-//        if (patient.getDentalHistoryUID() == null && key != null) {
-//            databaseReference.child(key).setValue(dentalOperation);
-//        }
-//
-//
-//        return key;
-//    }
-//
-//    public void addOperation(Patient patient,
-//                             String dentalDesc,
-//                             Date dentalDate,
-//                             String modeOfPayment,
-//                             String dentalAmount,
-//                             boolean isDownpayment,
-//                             String dentalTotalAmount,
-//                             String dentalBalance) {
-//
-//        // Checks if operation uid exists
-//        databaseReference.orderByChild(OPERATIONS_REFERENCE).equalTo(patient.getDentalHistoryUID()).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                Log.d(TAG, "onDataChange: checking if patient's dental key exists");
-//                DatabaseReference reference = databaseReference;
-//
-//                if (!snapshot.exists()) {
-//                    Log.d(TAG, "onDataChange: dental operation not exist");
-////                    databaseReference.child(patient.getDentalHistoryUID()).setValue(dentalOperation);
-//                    if (patient.getDentalHistoryUID() != null) {
-//                        reference = databaseReference.child(patient.getDentalHistoryUID());
-//                        reference.child(PATIENT_UID).setValue(patient.getUid());
-//                    }
-//                }
-//                else {
-//                    Log.d(TAG, "onDataChange: dental key exist");
-//                }
-//
-//                //  Creates dentalOperation
-//                DentalProcedure dentalOperation = createOperation(dentalDesc, dentalDate, modeOfPayment, dentalAmount, isDownpayment, dentalTotalAmount, dentalBalance);
-//
-//                Log.d(TAG, "onDataChange: dental added: " + dentalOperation);
-//                reference.child(DENTAL_HISTORY).push().setValue(dentalOperation);
-////                reference.child(dentalOperation.getUid()).setValue(dentalOperation);
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//    }
-
     public void addProcedure(Patient patient,
                              String dentalDesc,
                              Date dentalDate,
@@ -264,7 +132,7 @@ public class ProcedureRepository {
                 UIUtil.getDate(dentalDate)
         );
 
-        MiddleGround.addPayment(patient, dentalProcedure, payment);
+        MiddleGround.addNewProdecurePayment(patient, dentalProcedure, payment);
 
         return dentalProcedure;
     }
