@@ -159,10 +159,15 @@ public class BottomPaymentDialog implements SpinnerState {
             String date = UIUtil.getDate(UIUtil.getDate(viewHolder.paymentDialogDate));
             int modeOfPayment = viewHolder.modeOfPaymentDialog.getSelectedItemPosition();
             String amount = viewHolder.paymentDialogAmount.getText().toString();
+            double convertedAmount = Double.parseDouble(amount);
+
+            double newBalance = procedure.getDentalBalance() - convertedAmount;
 
             payment.setPaymentDate(date);
             payment.setModeOfPayment(modeOfPayment);
-            payment.setAmount(Double.parseDouble(amount));
+            payment.setAmount(convertedAmount);
+
+            procedure.setDentalBalance(newBalance);
             repository.updatePayment(payment, procedure);
 
             paymentDialog.dismiss();

@@ -17,6 +17,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder{
     final TextView text3;
     final TextView text4;
     final ImageView imageView;
+    final ImageView delete;
+    final ImageView edit;
 
     public ItemViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -26,6 +28,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder{
         this.text3 = itemView.findViewById(R.id.txtView3);
         this.text4 = itemView.findViewById(R.id.txtView4);
         this.imageView = itemView.findViewById(R.id.imgViewPicture);
+        this.delete = itemView.findViewById(R.id.btnPatientDelete);
+        this.edit = itemView.findViewById(R.id.btnPatientEdit);
     }
     
     public interface ItemOnClickListener {

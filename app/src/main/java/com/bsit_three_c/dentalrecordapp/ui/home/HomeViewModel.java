@@ -7,8 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.bsit_three_c.dentalrecordapp.data.adapter.ItemAdapter;
-import com.bsit_three_c.dentalrecordapp.data.patient.PatientRepository;
 import com.bsit_three_c.dentalrecordapp.data.model.Person;
+import com.bsit_three_c.dentalrecordapp.data.patient.PatientRepository;
 import com.bsit_three_c.dentalrecordapp.util.Internet;
 
 import java.util.ArrayList;
@@ -23,15 +23,12 @@ public class HomeViewModel extends ViewModel {
         this.repository = repository;
     }
 
-    public PatientRepository getRepository() {
-        return repository;
-    }
-
     public boolean isPatientsLoaded() {
         return repository.isPatientsLoaded();
     }
 
     public void removeEventListener() {
+        Log.d(TAG, "removeEventListener: this is called");
         repository.removeValueEventListener();
     }
 
@@ -40,7 +37,6 @@ public class HomeViewModel extends ViewModel {
     }
 
     public void initializePatients(ItemAdapter adapter) {
-        Log.d(TAG, "initializePatients: getting arraylist: " + repository.getPersonArrayList());
         mPatientList.setValue(repository.getPersonArrayList());
         adapter.setItems(mPatientList.getValue());
     }
@@ -55,6 +51,15 @@ public class HomeViewModel extends ViewModel {
 
     public LiveData<Boolean> getIsPatientsGettingDone() {
         return repository.isGettingPatientsDone();
+    }
+
+    public void loadPatients() {
+        repository.getPatients();
+    }
+
+    public void initializeEventListener(ItemAdapter adapter) {
+        repository.setAdapter(adapter);
+//        repository.setValueEventListener();
     }
 
 }

@@ -23,11 +23,18 @@ public class Patient extends Person implements Parcelable {
     public Patient() {}
 
     //  This constructor is used to retrive patient's detail
-    public Patient(String uid, String firstname, String lastname, String middleInitial, String phoneNumber,
-                   String address, int civilStatus, int age,
-//                   double balance,
+    public Patient(String uid,
+                   String firstname,
+                   String lastname,
+                   String middleInitial,
+                   String phoneNumber,
+                   String address,
+                   int civilStatus,
+                   int age,
                    String occupation,
-                   Date lastUpdated, ArrayList<String> dentalProcedures) {
+                   Date lastUpdated,
+                   ArrayList<String> dentalProcedures) {
+
         super(uid, firstname, lastname, middleInitial, phoneNumber);
         this.address = address;
         this.civilStatus = civilStatus;
@@ -64,17 +71,8 @@ public class Patient extends Person implements Parcelable {
         address = in.readString();
         civilStatus = in.readInt();
         age = in.readInt();
-//        balance = in.readDouble();
         occupation = in.readString();
-//        if (dentalProcedures != null) {
-//            in.readStringList(dentalProcedures);
-
         dentalProcedures = in.createStringArrayList();
-
-        for (String data : dentalProcedures) {
-            Log.d(TAG, "Patient: dentalProcedures: " + data);
-        }
-//        }
     }
 
     public static final Creator<Patient> CREATOR = new Creator<Patient>() {

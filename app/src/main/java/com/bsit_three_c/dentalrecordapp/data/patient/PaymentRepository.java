@@ -106,22 +106,33 @@ public class PaymentRepository {
             Payment payment = new Payment(paymentUID, convertedPaidAmount, modeOfPayment, date);
             databaseReference.child(paymentUID).setValue(payment);
 
-            MiddleGround.addPaymentKey(procedure, payment);
+            procedure.addPaymentKey(payment.getUid());
+            ProcedureRepository.getInstance().addPaymentKey(procedure);
+            ProcedureRepository.getInstance().updateBalance(procedure, payment);
         }
     }
 
     public void updatePayment(Payment payment, Procedure procedure) {
+        ProcedureRepository procedureRepository = ProcedureRepository.getInstance();
+
         databaseReference.child(payment.getUid()).setValue(payment);
-        MiddleGround.updateProce(procedure);
+        procedureRepository.updateProcedure(procedure);
     }
 
     public void removePayment(Procedure procedure, String paymentUID) {
         removePayment(paymentUID);
-        MiddleGround.updateProcedurePaymentKeys(procedure, paymentUID);
+        ProcedureRepository.getInstance().updatePaymentKeys(procedure, paymentUID);
     }
 
     public void removePayment(String paymentUID) {
         databaseReference.child(paymentUID).removeValue();
+    }
+
+    public void removePaymets(ArrayList<String> paymentKeys) {
+        for (int position = 0; position < paymentKeys.size(); position++) {
+            Log.d(TAG, "removePaymets: removing payment");
+            removePayment(paymentKeys.get(position));
+        }
     }
 
     //  For testing only
@@ -131,10 +142,5 @@ public class PaymentRepository {
 
     private boolean isDuplicate(Payment payment) {
         return dentalPayments.contains(payment);
-    }
-
-    //  Remove listener here
-    public void removeListener() {
-
     }
 }

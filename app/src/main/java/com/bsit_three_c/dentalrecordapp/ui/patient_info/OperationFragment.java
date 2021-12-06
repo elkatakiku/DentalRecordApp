@@ -2,7 +2,6 @@ package com.bsit_three_c.dentalrecordapp.ui.patient_info;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,16 +81,13 @@ public class OperationFragment extends Fragment {
             }
         });
 
-        int service = binding.snprProcedureChoices.getSelectedItemPosition();
-        Log.d(TAG, "onViewCreated: selected service: " + service);
-
     }
 
     private void setListeners() {
         //  EditText text listeners
         binding.editTxtDesc.addTextChangedListener(new CustomTextWatcher(viewModel, binding.txtViewDescLabel));
         binding.editTxtAmount.addTextChangedListener(new CustomTextWatcher(viewModel, binding.txtViewAmountLabel));
-        binding.editTxtAPPayment.addTextChangedListener(new CustomTextWatcher(viewModel, binding.tvModeOfPaymentLabel));
+        binding.editTxtAPPayment.addTextChangedListener(new CustomTextWatcher(viewModel, binding.txtViewPaymentLabel));
 
         //  Spinner item selected listeners
         binding.spnrModeOfPayment.setOnItemSelectedListener(new CustomItemSelectedListener(binding.tvModeOfPaymentLabel.getText().toString(), viewModel));

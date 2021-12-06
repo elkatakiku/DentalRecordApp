@@ -31,7 +31,6 @@ public class CustomTextWatcher implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable s) {
-        Log.d(TAG, "afterTextChanged: called");
         viewModel.dataChanged(label.getText().toString(), s.toString());
     }
 }

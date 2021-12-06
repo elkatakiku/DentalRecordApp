@@ -1,7 +1,5 @@
 package com.bsit_three_c.dentalrecordapp.ui.patient_info;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -123,7 +121,6 @@ public class OperationViewModel extends ViewModel implements TextChange, Spinner
 
     @Override
     public void dataChanged(String label, String input) {
-        Log.d(TAG, "dataChanged: called");
         boolean isNull = input == null;
 
         if (isInputEmpty(isNull, input)) {
@@ -162,22 +159,14 @@ public class OperationViewModel extends ViewModel implements TextChange, Spinner
         boolean hasAmount = Checker.isNotNullOrValid(mAmount);
         boolean hasPayment = Checker.isNotNullOrValid(mPayment);
 
-        if (AMOUNT.equals(label) && hasAmount) {
-            amount = Double.parseDouble(input);
-        }
+        if (AMOUNT.equals(label) && hasAmount) amount = Double.parseDouble(input);
+
         if (PAYMENT.equals(label)) {
-            if (hasPayment) {
-                payment = Double.parseDouble(input);
-            } else {
-                setState(BALANCE, R.string.invalid_input);
-//                mBalanceAmount.setValue(0d);
-            }
-
+            if (hasPayment) payment = Double.parseDouble(input);
+            else setState(BALANCE, R.string.invalid_input);
         }
 
-        if (hasAmount && hasPayment) {
-            computeBalance();
-        }
+        if (hasAmount && hasPayment) computeBalance();
     }
 
     private void computeBalance() {
@@ -198,8 +187,6 @@ public class OperationViewModel extends ViewModel implements TextChange, Spinner
     }
 
     public void setButtonState() {
-        Log.d(TAG, "setButtonState: checker is complete: " + Checker.isComplete(mDescription, mServices, mModeOfPayment,
-                mAmount));
         if (!isDownpayment && Checker.isComplete(mDescription, mServices, mModeOfPayment,
                 mAmount)) {
             mOperationState.setValue(new FormState(true));

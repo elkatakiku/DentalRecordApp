@@ -2,11 +2,15 @@ package com.bsit_three_c.dentalrecordapp.data.patient;
 
 import android.util.Log;
 
-import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
+import androidx.annotation.NonNull;
+
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Payment;
+import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -29,8 +33,6 @@ public class ProcedureRepository {
 
     private static volatile ProcedureRepository instance;
     private ArrayList<Procedure> procedures;
-
-    private double balance = 0;
 
     public ProcedureRepository() {
         this.database = FirebaseDatabase.getInstance(FIREBASE_URL);
@@ -80,11 +82,18 @@ public class ProcedureRepository {
     }
 
     public void removeProcedure(Patient patient, String operationUID, ArrayList<String> paymentKeys) {
-        //  Remove in operations and patients operation keys
         databaseReference.child(operationUID).removeValue();
-        //  Remove from patients keys
-        MiddleGround.removeProcedureKey(patient, operationUID, paymentKeys);
+        PatientRepository.getInstance().removeProcedureKey(patient, operationUID);
+        PaymentRepository.getInstance().removePaymets(paymentKeys);
     }
+
+    public void removeProcedure(String procedureUID) {
+        databaseReference.child(procedureUID).removeValue();
+    }
+
+//    private DatabaseReference getPaymentKeys(Patient patient) {
+//        databaseReference.child(patient.getUid()).child(PAYMENT_KEYS);
+//    }
 
     public void removeListener(String operationUID, ValueEventListener eventListener) {
         databaseReference.child(operationUID).removeEventListener(eventListener);
@@ -135,7 +144,9 @@ public class ProcedureRepository {
                 UIUtil.getDate(dentalDate)
         );
 
-        MiddleGround.addNewProdecurePayment(patient, procedure, payment);
+        procedure.addPaymentKey(payment.getUid());
+        PaymentRepository.getInstance().addPayment(procedure, payment);
+        PatientRepository.getInstance().addProcedureKey(patient, procedure.getUid());
 
         return procedure;
     }
@@ -168,34 +179,49 @@ public class ProcedureRepository {
     }
 
     public void updateBalance(Procedure procedure, Payment payment) {
-        Log.d(TAG, "updateBalance: total amount: " + procedure.getDentalBalance());
-        Log.d(TAG, "updateBalance: amount: " + payment.getAmount());
         double newBalance = procedure.getDentalBalance() - payment.getAmount();
-        Log.d(TAG, "updateBalance: new balance: " + newBalance);
         procedure.setDentalBalance(newBalance);
         databaseReference.child(procedure.getUid()).child(BALANCE).setValue(procedure.getDentalBalance());
     }
 
     public void updateProcedure(Procedure procedure) {
-        databaseReference.child(procedure.getUid()).setValue(procedure);
+        Log.d(TAG, "updateProcedure: updating procedure: " + procedure.getUid());
+        Log.d(TAG, "updateProcedure: balance: " + procedure.getDentalBalance());
+        databaseReference.child(procedure.getUid()).setValue(procedure).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d(TAG, "onSuccess: update success");
+            }
+        });
     }
 
-    private Procedure createProcedure(String uid,
-                                      int service,
-                                      String dentalDesc,
-                                      String dentalDate,
-                                      double dentalTotalAmount,
-                                      boolean isDownpayment,
-                                      double dentalBalance,
-                                      ArrayList<String> paymentKeys) {
-        return new Procedure(
-                uid,
-                service,
-                dentalDesc,
-                dentalDate,
-                dentalTotalAmount,
-                isDownpayment,
-                dentalBalance,
-                paymentKeys);
+    public void removePaymentKeys(String procedureUID) {
+
+        PaymentRepository paymentRepository = PaymentRepository.getInstance();
+
+        //  Remove payments of procedure
+        databaseReference.child(procedureUID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d(TAG, "onDataChange: snapshot count: " + (snapshot.getChildrenCount()));
+                Procedure procedure = snapshot.getValue(Procedure.class);
+
+                if (procedure != null) {
+                    ArrayList<String> keys = procedure.getPaymentKeys();
+                    int keySize = keys.size();
+
+                    for (int pos = 0; pos <keySize; pos++) {
+                        paymentRepository.removePayment(keys.get(pos));
+                    }
+
+                    removeProcedure(procedure.getUid());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

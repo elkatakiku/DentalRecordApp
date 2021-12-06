@@ -28,9 +28,9 @@ public class OperationsList {
     private List<Procedure> procedures;
     private final Patient patient;
 
-    private MutableLiveData<Boolean> hasProcedures = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> hasProcedures = new MutableLiveData<>();
 
-    private PatientInfoFragment lifecycleOwner;
+    private final PatientInfoFragment lifecycleOwner;
 
     public OperationsList(LinearLayout linearLayout, LayoutInflater layoutInflater, Patient patient,
                           PatientInfoFragment lifecycleOwner) {
@@ -56,22 +56,6 @@ public class OperationsList {
 
         linearLayout.addView(viewHolder.cardView);
     }
-
-//    public void addItem(Procedure operation) {
-//        ViewHolder viewHolder = new ViewHolder(layoutInflater);
-//
-//        viewHolder.txtDentalDesc.setText(operation.getDentalDesc());
-//        viewHolder.txtDentalDate.setText(UIUtil.getReadableDate(UIUtil.stringToDate(operation.getDentalDate())));
-//        viewHolder.txtDentalAmount.setText(String.valueOf(operation.getDentalTotalAmount()));
-//        viewHolder.cbIsFullyPaid.setChecked(!operation.isDownpayment());
-//
-//        viewHolder.txtDentalFullyPaid.setText(UIUtil.getPaymentStatus(operation.isDownpayment()));
-//        viewHolder.txtDentalFullyPaid.setTextColor(UIUtil.getCheckBoxColor(!operation.isDownpayment()));
-//
-//        viewHolder.cardView.setOnClickListener(this::onItemClick);
-//
-//        linearLayout.addView(viewHolder.cardView);
-//    }
 
     public void addItems(List<Procedure> procedures) {
         Log.d(TAG, "addItems: called");
