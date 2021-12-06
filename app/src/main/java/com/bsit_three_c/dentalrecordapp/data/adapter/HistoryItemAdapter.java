@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.data.model.DentalProcedure;
+import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 import java.util.ArrayList;
@@ -24,9 +24,9 @@ public class HistoryItemAdapter extends ArrayAdapter {
 
     private final int layoutResource;
     private final LayoutInflater layoutInflater;
-    private List<DentalProcedure> denstalHistory;
+    private List<Procedure> denstalHistory;
 
-    public HistoryItemAdapter(@NonNull Context context, int resource, List<DentalProcedure> dentalHistory) {
+    public HistoryItemAdapter(@NonNull Context context, int resource, List<Procedure> dentalHistory) {
         super(context, resource);
         this.layoutResource = resource;
         this.layoutInflater = LayoutInflater.from(context);
@@ -38,7 +38,7 @@ public class HistoryItemAdapter extends ArrayAdapter {
     }
 
 
-    public void setItems(List<DentalProcedure> dentalHistory) {
+    public void setItems(List<Procedure> dentalHistory) {
         this.denstalHistory.clear();
         this.denstalHistory.addAll(dentalHistory);
     }
@@ -61,7 +61,7 @@ public class HistoryItemAdapter extends ArrayAdapter {
             Log.d(TAG, "getView: viewHolder: " + viewHolder);
         }
 
-        DentalProcedure currentRecord = denstalHistory.get(position);
+        Procedure currentRecord = denstalHistory.get(position);
 
         Log.d(TAG, "getView: current Record: " + currentRecord);
 
@@ -91,7 +91,7 @@ public class HistoryItemAdapter extends ArrayAdapter {
         final CheckBox isFullyPaid;
 
         public ViewHolder(View v) {
-            this.txtDentalDesc = v.findViewById(R.id.txtDentalDesc);
+            this.txtDentalDesc = v.findViewById(R.id.txtDentalService);
             this.txtDentalDate = v.findViewById(R.id.txtDentalDate);
             this.txtDentalAmount = v.findViewById(R.id.txtDentalAmount);
             this.txtFullyPaid = v.findViewById(R.id.txtDentalFullyPaid);

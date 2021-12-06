@@ -4,13 +4,13 @@ public class Payment {
 
     private String uid;
     private String paymentDate;
-    private String modeOfPayment;
+    private int modeOfPayment;
     private Double amount;
 
     public Payment() {
     }
 
-    public Payment(String uid, Double amount, String modeOfPayment, String paymentDate) {
+    public Payment(String uid, Double amount, int modeOfPayment, String paymentDate) {
         this.uid = uid;
         this.amount = amount;
         this.modeOfPayment = modeOfPayment;
@@ -33,11 +33,11 @@ public class Payment {
         this.amount = amount;
     }
 
-    public String getModeOfPayment() {
+    public int getModeOfPayment() {
         return modeOfPayment;
     }
 
-    public void setModeOfPayment(String modeOfPayment) {
+    public void setModeOfPayment(int modeOfPayment) {
         this.modeOfPayment = modeOfPayment;
     }
 

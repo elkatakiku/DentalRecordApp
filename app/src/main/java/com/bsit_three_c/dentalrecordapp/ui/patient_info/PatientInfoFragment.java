@@ -95,6 +95,8 @@ public class PatientInfoFragment extends Fragment {
             }
 
             //  Checks if procedures has been loaded from the firebase
+            Log.d(TAG, "loadProcedures: integer: " + integer);
+            Log.d(TAG, "loadProcedures: procedures size: " + viewModel.getProcedureSize());
             if (integer == viewModel.getProcedureSize()) {
                 operationsList.addItems(Arrays.asList(viewModel.getProcedures()));
             }
@@ -118,29 +120,46 @@ public class PatientInfoFragment extends Fragment {
 
     private void displayInfo() {
         String notAvailable = "N/A";
-        if (Checker.isDataAvailable(patient.getFirstname())) binding.txtViewPIFirstname.setText(patient.getFirstname());
-        else binding.txtViewPIFirstname.setText(notAvailable);
 
-        if (Checker.isDataAvailable(patient.getLastname())) binding.txtViewPILastname.setText(patient.getLastname());
-        else binding.txtViewPILastname.setText(notAvailable);
+        if (Checker.isDataAvailable(patient.getFirstname()))
+            binding.txtViewPIFirstname.setText(patient.getFirstname());
+        else
+            binding.txtViewPIFirstname.setText(notAvailable);
 
-        if (Checker.isDataAvailable(patient.getMiddleInitial())) binding.txtViewPIMiddleInitial.setText(patient.getMiddleInitial());
-        else binding.txtViewPIMiddleInitial.setText(notAvailable);
+        if (Checker.isDataAvailable(patient.getLastname()))
+            binding.txtViewPILastname.setText(patient.getLastname());
+        else
+            binding.txtViewPILastname.setText(notAvailable);
 
-        if (Checker.isDataAvailable(patient.getAddress())) binding.txtViewPIAddress.setText(patient.getAddress());
-        else binding.txtViewPIAddress.setText(notAvailable);
+        if (Checker.isDataAvailable(patient.getMiddleInitial()))
+            binding.txtViewPIMiddleInitial.setText(patient.getMiddleInitial());
+        else
+            binding.txtViewPIMiddleInitial.setText(notAvailable);
 
-        if (Checker.isDataAvailable(patient.getPhoneNumber())) binding.txtViewPITelephoneNumber.setText(patient.getPhoneNumber());
-        else binding.txtViewPITelephoneNumber.setText(notAvailable);
+        if (Checker.isDataAvailable(patient.getAddress()))
+            binding.txtViewPIAddress.setText(patient.getAddress());
+        else
+            binding.txtViewPIAddress.setText(notAvailable);
+
+        if (Checker.isDataAvailable(patient.getPhoneNumber()))
+            binding.txtViewPITelephoneNumber.setText(patient.getPhoneNumber());
+        else
+            binding.txtViewPITelephoneNumber.setText(notAvailable);
 
         if (patient.getAge() > 0) binding.txtViewPIAge.setText(String.valueOf(patient.getAge()));
-        else binding.txtViewPIAge.setText(notAvailable);
+        else
+            binding.txtViewPIAge.setText(notAvailable);
 
-        if (Checker.isDataAvailable(patient.getCivilStatus())) binding.txtViewPICivilStatus.setText(patient.getCivilStatus());
-        else binding.txtViewPICivilStatus.setText(notAvailable);
+        Log.d(TAG, "displayInfo: civil: " + patient.getCivilStatus());
+        if (Checker.isNotDefault(patient.getCivilStatus()))
+            binding.txtViewPICivilStatus.setText(UIUtil.getCivilStatus(getResources(), patient.getCivilStatus()));
+        else
+            binding.txtViewPICivilStatus.setText(notAvailable);
 
-        if (Checker.isDataAvailable(patient.getOccupation())) binding.txtViewPIOccupation.setText(patient.getOccupation());
-        else binding.txtViewPIOccupation.setText(notAvailable);
+        if (Checker.isDataAvailable(patient.getOccupation()))
+            binding.txtViewPIOccupation.setText(patient.getOccupation());
+        else
+            binding.txtViewPIOccupation.setText(notAvailable);
     }
 
 }

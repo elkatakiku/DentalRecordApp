@@ -2,7 +2,7 @@ package com.bsit_three_c.dentalrecordapp.data.model;
 
 import java.util.ArrayList;
 
-public class DentalProcedure {
+public class Procedure {
 
     private String uid;
     private String dentalDesc;
@@ -10,22 +10,24 @@ public class DentalProcedure {
     private double dentalTotalAmount;
     private boolean isDownpayment;
     private double dentalBalance;
+    private int service;
 
     private ArrayList<String> paymentKeys;
 
-    public DentalProcedure() { }
+    public Procedure() { }
 
     //  This constructor is used in getting dental operations
-    public DentalProcedure(String uid, String dentalDesc, String dentalDate, double dentalTotalAmount,
-                           boolean isDownpayment, double dentalBalance, ArrayList<String> paymentKeys) {
-        this(uid, dentalDesc, dentalDate, dentalTotalAmount, isDownpayment, dentalBalance);
+    public Procedure(String uid, int service, String dentalDesc, String dentalDate, double dentalTotalAmount,
+                     boolean isDownpayment, double dentalBalance, ArrayList<String> paymentKeys) {
+        this(uid, service, dentalDesc, dentalDate, dentalTotalAmount, isDownpayment, dentalBalance);
         this.paymentKeys = paymentKeys;
     }
 
     //  This constructor is used in creating new dental operations
-    public DentalProcedure(String uid, String dentalDesc, String dentalDate, double dentalTotalAmount,
-                           boolean isDownpayment, double dentalBalance) {
+    public Procedure(String uid, int service, String dentalDesc, String dentalDate, double dentalTotalAmount,
+                     boolean isDownpayment, double dentalBalance) {
         this.uid = uid;
+        this.service = service;
         this.dentalDesc = dentalDesc;
         this.dentalDate = dentalDate;
         this.dentalTotalAmount = dentalTotalAmount;
@@ -85,6 +87,14 @@ public class DentalProcedure {
         return paymentKeys;
     }
 
+    public int getService() {
+        return service;
+    }
+
+    public void setService(int service) {
+        this.service = service;
+    }
+
     public void setPaymentKeys(ArrayList<String> paymentKeys) {
         this.paymentKeys = paymentKeys;
     }
@@ -96,7 +106,7 @@ public class DentalProcedure {
 
     @Override
     public String toString() {
-        return "DentalProcedure{\n" +
+        return "Procedure{\n" +
                 "uid='" + uid +
                 "\n, dentalDesc='" + dentalDesc +
                 "\n, dentalDate='" + dentalDate +

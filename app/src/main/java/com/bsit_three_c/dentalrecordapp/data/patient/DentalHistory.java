@@ -1,28 +1,28 @@
 package com.bsit_three_c.dentalrecordapp.data.patient;
 
-import com.bsit_three_c.dentalrecordapp.data.model.DentalProcedure;
+import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 
 import java.util.ArrayList;
 
 public class DentalHistory {
 
     private String patientUID;
-    private ArrayList<DentalProcedure> dentalProcedures;
+    private ArrayList<Procedure> procedures;
 
-    public DentalHistory(String patientUID, ArrayList<DentalProcedure> dentalProcedures) {
+    public DentalHistory(String patientUID, ArrayList<Procedure> procedures) {
         this.patientUID = patientUID;
-        this.dentalProcedures = dentalProcedures;
+        this.procedures = procedures;
     }
 
     public String getPatientUID() {
         return patientUID;
     }
 
-    public ArrayList<DentalProcedure> getDentalOperations() {
-        return dentalProcedures;
+    public ArrayList<Procedure> getDentalOperations() {
+        return procedures;
     }
 
-//    public void addDentalOperation(DentalProcedure) {
+//    public void addDentalOperation(Procedure) {
 //
 //    }
 }

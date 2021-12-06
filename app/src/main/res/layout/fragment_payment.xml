@@ -126,7 +126,7 @@
             app:layout_constraintTop_toBottomOf="@+id/txtViewDescLabel" />
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/tvModeOfPaymentLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -159,8 +159,8 @@
             android:entries="@array/mop_array"
             android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/textView11"
-            app:layout_constraintTop_toBottomOf="@+id/textView11"
+            app:layout_constraintStart_toStartOf="@+id/tvModeOfPaymentLabel"
+            app:layout_constraintTop_toBottomOf="@+id/tvModeOfPaymentLabel"
             tools:ignore="SpeakableTextPresentCheck" />
 
         <EditText

@@ -15,11 +15,11 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvEditPaymentTitle"
+            android:id="@+id/tvProcedureTitle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="5"
-            android:text="Operation"
+            android:text="Procedure"
             android:textColor="@color/header"
             android:textSize="24sp"
             android:textStyle="bold" />

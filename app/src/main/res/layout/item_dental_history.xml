@@ -25,12 +25,12 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txtDentalDesc"
+                android:id="@+id/txtDentalService"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/data"
                 android:textSize="18sp"
-                tools:text="Description" />
+                tools:text="Service" />
 
             <TextView
                 android:id="@+id/txtDentalDate"

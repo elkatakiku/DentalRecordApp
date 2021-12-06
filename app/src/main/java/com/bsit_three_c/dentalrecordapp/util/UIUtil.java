@@ -1,12 +1,15 @@
 package com.bsit_three_c.dentalrecordapp.util;
 
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+
+import com.bsit_three_c.dentalrecordapp.R;
 
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
@@ -103,7 +106,7 @@ public class UIUtil {
         return getMonthName(Integer.parseInt(units[1])) + " " + units[0] + ", " + units[2];
     }
 
-    // Return date in numbers
+    // Return date in numbers: dd/mm/yyyy
     public static String getDate(Date date) {
         return dateFormat.format(date);
     }
@@ -138,5 +141,25 @@ public class UIUtil {
 
     public static ColorStateList getCheckBoxColor(double balance) {
         return balance <= 0d ? ColorStateList.valueOf(0xFF01bb64) : ColorStateList.valueOf(0xFFFF5252);
+    }
+
+    public static String getService(Resources resources, int position) {
+        return resources.getStringArray(R.array.services_array)[position];
+    }
+
+    public static String getModeOfPayment(Resources resources, int position) {
+        return resources.getStringArray(R.array.mop_array)[position];
+    }
+
+    public static String getCivilStatus(Resources resources, int position) {
+        return resources.getStringArray(R.array.civil_status_array)[position];
+    }
+
+    public static double convertToDouble(String input) {
+        try {
+            return Double.parseDouble(input);
+        } catch (Exception e) {
+            return -1;
+        }
     }
 }

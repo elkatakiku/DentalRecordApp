@@ -29,7 +29,7 @@ public class FormState {
     @Override
     public String toString() {
         return "FormState{" +
-                "msgError=" + msgError +
+                "\nmsgError=" + msgError +
                 "\nisDataValid=" + isDataValid +
                 '}';
     }

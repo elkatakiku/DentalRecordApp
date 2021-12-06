@@ -54,7 +54,7 @@
         android:background="@drawable/shape_input"
         android:elevation="5dp"
         android:ems="10"
-        android:hint="Firsnamt"
+        android:hint="Firsname"
         android:inputType="textPersonName"
         android:labelFor="@id/labelFirstname"
         android:minHeight="48dp"

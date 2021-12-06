@@ -8,10 +8,11 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.data.model.DentalProcedure;
+import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.model.Payment;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.BottomPaymentDialog;
 import com.bsit_three_c.dentalrecordapp.ui.patient_info.PatientInfoFragment;
+import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class PaymentList {
     private final PatientInfoFragment lifecycleOwner;
     private final BottomSheetDialog operationsDialog;
     private BottomPaymentDialog paymentDialog;
-    private DentalProcedure operation;
+    private Procedure procedure;
 
     public PaymentList(LinearLayout linearLayout, LayoutInflater layoutInflater,
                        PatientInfoFragment lifecycleOwner, BottomSheetDialog operationsDialog) {
@@ -39,7 +40,7 @@ public class PaymentList {
 
         String amount = payment.getAmount().toString();
         viewHolder.paymentAmount.setText(amount);
-        viewHolder.modeOfPayment.setText(payment.getModeOfPayment());
+        viewHolder.modeOfPayment.setText(UIUtil.getModeOfPayment(lifecycleOwner.getResources(), payment.getModeOfPayment()));
         viewHolder.paymentDate.setText(payment.getPaymentDate());
 
         viewHolder.cardView.setOnClickListener(v -> {
@@ -56,15 +57,12 @@ public class PaymentList {
 
         //  Create payment dialog edit/delete style
         this.paymentDialog = new BottomPaymentDialog(layoutInflater, context, lifecycleOwner, true);
-        paymentDialog.setOperation(operation);
+        paymentDialog.setProcedure(procedure);
         paymentDialog.createDialog(payment);
-
-//        paymentDialog.showDialog();
-//        operationsDialog.dismiss();
     }
 
-    public void setOperation(DentalProcedure operation) {
-        this.operation = operation;
+    public void setProcedure(Procedure procedure) {
+        this.procedure = procedure;
     }
 
     public void addItems(ArrayList<Payment> payments) {

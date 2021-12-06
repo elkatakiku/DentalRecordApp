@@ -43,7 +43,7 @@ public class AddPatientFragment extends Fragment {
             String address = binding.eTxtAddress.getText().toString();
             String phoneNumber = binding.eTxtPhoneNumber.getText().toString();
             int age = Integer.parseInt(binding.eTxtAge.getText().toString());
-            String civilStatus = binding.spnrCivilStatus.getSelectedItem().toString();
+            int civilStatus = binding.spnrCivilStatus.getSelectedItemPosition();
             String occupation = binding.eTxtOccupation.getText().toString();
 
 

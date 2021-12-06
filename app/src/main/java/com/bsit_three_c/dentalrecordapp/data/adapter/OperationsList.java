@@ -11,7 +11,7 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.MutableLiveData;
 
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.data.model.DentalProcedure;
+import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.BottomOperationsDialog;
 import com.bsit_three_c.dentalrecordapp.ui.patient_info.PatientInfoFragment;
@@ -25,7 +25,7 @@ public class OperationsList {
     private final LinearLayout linearLayout;
     private final LayoutInflater layoutInflater;
 
-    private List<DentalProcedure> dentalProcedures;
+    private List<Procedure> procedures;
     private final Patient patient;
 
     private MutableLiveData<Boolean> hasProcedures = new MutableLiveData<>();
@@ -40,10 +40,10 @@ public class OperationsList {
         this.lifecycleOwner = lifecycleOwner;
     }
 
-    private void addItem(DentalProcedure operation, int position) {
+    private void addItem(Procedure operation, int position) {
         ViewHolder viewHolder = new ViewHolder(layoutInflater);
 
-        viewHolder.txtDentalDesc.setText(operation.getDentalDesc());
+        viewHolder.txtDentalService.setText(UIUtil.getService(lifecycleOwner.getResources(), operation.getService()));
         viewHolder.txtDentalDate.setText(UIUtil.getReadableDate(UIUtil.stringToDate(operation.getDentalDate())));
         viewHolder.txtDentalAmount.setText(String.valueOf(operation.getDentalTotalAmount()));
         viewHolder.cbIsFullyPaid.setChecked(!operation.isDownpayment());
@@ -57,7 +57,7 @@ public class OperationsList {
         linearLayout.addView(viewHolder.cardView);
     }
 
-//    public void addItem(DentalProcedure operation) {
+//    public void addItem(Procedure operation) {
 //        ViewHolder viewHolder = new ViewHolder(layoutInflater);
 //
 //        viewHolder.txtDentalDesc.setText(operation.getDentalDesc());
@@ -73,16 +73,17 @@ public class OperationsList {
 //        linearLayout.addView(viewHolder.cardView);
 //    }
 
-    public void addItems(List<DentalProcedure> dentalProcedures) {
+    public void addItems(List<Procedure> procedures) {
+        Log.d(TAG, "addItems: called");
 
         clearItems();
 
-        if (dentalProcedures != null) {
-            this.dentalProcedures = dentalProcedures;
+        if (procedures != null) {
+            this.procedures = procedures;
 
-            for (int position = 0; position < dentalProcedures.size(); position++) {
-                if (dentalProcedures.get(position) != null)
-                    addItem(dentalProcedures.get(position), position);
+            for (int position = 0; position < procedures.size(); position++) {
+                if (procedures.get(position) != null)
+                    addItem(procedures.get(position), position);
             }
         }
 
@@ -106,7 +107,7 @@ public class OperationsList {
 
     private static class ViewHolder {
         final CardView cardView;
-        final TextView txtDentalDesc;
+        final TextView txtDentalService;
         final TextView txtDentalDate;
         final TextView txtDentalAmount;
         final TextView txtDentalFullyPaid;
@@ -114,7 +115,7 @@ public class OperationsList {
 
         public ViewHolder(LayoutInflater layoutInflater) {
             this.cardView = (CardView) layoutInflater.inflate(R.layout.item_dental_history, null);
-            this.txtDentalDesc = cardView.findViewById(R.id.txtDentalDesc);
+            this.txtDentalService = cardView.findViewById(R.id.txtDentalService);
             this.txtDentalDate = cardView.findViewById(R.id.txtDentalDate);
             this.txtDentalAmount = cardView.findViewById(R.id.txtDentalAmount);
             this.txtDentalFullyPaid = cardView.findViewById(R.id.txtDentalFullyPaid);
@@ -129,10 +130,10 @@ public class OperationsList {
         if (v.getTag() instanceof Integer)
             position = (Integer) v.getTag();
 
-        DentalProcedure operation = null;
+        Procedure operation = null;
         if (position >= 0) {
-            Log.d(TAG, "onItemClick: clicked operation: " + dentalProcedures.get(position));
-            operation = dentalProcedures.get(position);
+            Log.d(TAG, "onItemClick: clicked operation: " + procedures.get(position));
+            operation = procedures.get(position);
         }
 
         if (operation != null) {

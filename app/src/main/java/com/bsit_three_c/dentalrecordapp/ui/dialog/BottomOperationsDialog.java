@@ -15,7 +15,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.adapter.PaymentList;
-import com.bsit_three_c.dentalrecordapp.data.model.DentalProcedure;
+import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Payment;
 import com.bsit_three_c.dentalrecordapp.data.patient.PaymentRepository;
@@ -34,15 +34,15 @@ public class BottomOperationsDialog {
 
     private final LayoutInflater layoutInflater;
     private final Context context;
-    private BottomSheetDialog operationDialog;
+    private BottomSheetDialog procedureDialog;
 
     private final PaymentRepository paymentRepository;
     private final ProcedureRepository procedureRepository;
-    private DentalProcedure operation;
+    private Procedure operation;
 
+    private final PatientInfoFragment lifecycleOwner;
     private final LinearLayout operationLayout;
     private final View view;
-    private final PatientInfoFragment lifecycleOwner;
 
     private final MutableLiveData<Integer> paymentsCounter = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isDoneLoading = new MutableLiveData<>();
@@ -68,30 +68,33 @@ public class BottomOperationsDialog {
     }
 
     // Sets local field operator and readied the dialog
-    public void createOperationDialog(DentalProcedure operation){
+    public void createOperationDialog(Procedure procedure){
         isDoneLoading.setValue(false);
-        this.operation = operation;
+        this.operation = procedure;
 
         ViewHolder viewHolder = new ViewHolder(operationLayout);
-        operationDialog = new BottomSheetDialog(context);
-        dialogDismissListener(operationDialog);
+        procedureDialog = new BottomSheetDialog(context);
+        dialogDismissListener(procedureDialog);
 
         viewHolder.btnAddPayment.setOnClickListener(v -> {
             BottomPaymentDialog paymentDialog = new BottomPaymentDialog(layoutInflater, context, lifecycleOwner);
-            paymentDialog.createDialog(operation);
+            paymentDialog.createDialog(procedure);
             paymentDialog.setPatient(patient);
 
-            operationDialog.dismiss();
+            procedureDialog.dismiss();
             paymentDialog.showDialog();
         });
 
-        viewHolder.iconClose.setOnClickListener(v -> operationDialog.dismiss());
+        viewHolder.iconClose.setOnClickListener(v -> procedureDialog.dismiss());
 
-        String totalAmount = String.valueOf(operation.getDentalTotalAmount());
+        String totalAmount = String.valueOf(procedure.getDentalTotalAmount());
 
-        viewHolder.operationDesc.setText(operation.getDentalDesc());
-        viewHolder.operationDate.setText(operation.getDentalDate());
+        viewHolder.title.setText(UIUtil.getService(lifecycleOwner.getResources(), procedure.getService()));
+        viewHolder.operationDesc.setText(procedure.getDentalDesc());
+        viewHolder.operationDate.setText(procedure.getDentalDate());
         viewHolder.operationTotalAmount.setText(totalAmount);
+
+        loadPayments(viewHolder.paymentsLayout);
 
         mBalance.observe(lifecycleOwner.getViewLifecycleOwner(), aDouble -> {
             String status = UIUtil.getPaymentStatus(aDouble);
@@ -106,6 +109,8 @@ public class BottomOperationsDialog {
 
         mBalance.observe(lifecycleOwner.getViewLifecycleOwner(), aDouble -> {
             String balance = aDouble.toString();
+
+            procedure.setDentalBalance(aDouble);
             viewHolder.balance.setText(balance);
         });
 
@@ -117,9 +122,17 @@ public class BottomOperationsDialog {
             }
         });
 
-        loadPayments(viewHolder.paymentsLayout);
+        viewHolder.btnEdit.setOnClickListener(v -> {
+            BottomEditOperationDialog editOperationDialog = new BottomEditOperationDialog(layoutInflater, context, lifecycleOwner);
+            editOperationDialog.createOperationDialog(procedure);
+            editOperationDialog.setPatient(patient);
+            editOperationDialog.setProcedure(procedure);
 
-        operationDialog.setContentView(view);
+            procedureDialog.dismiss();
+            editOperationDialog.showDialog();
+        });
+
+        procedureDialog.setContentView(view);
     }
 
     //  Get payments from firebase then add them to payment layout
@@ -129,8 +142,8 @@ public class BottomOperationsDialog {
         totalPayments = paymentKeys.size();
 
         ArrayList<Payment> paymentArrayList = new ArrayList<>();
-        PaymentList paymentList = new PaymentList(paymentLayout, layoutInflater, lifecycleOwner, operationDialog);
-        paymentList.setOperation(operation);
+        PaymentList paymentList = new PaymentList(paymentLayout, layoutInflater, lifecycleOwner, procedureDialog);
+        paymentList.setProcedure(operation);
 
         totalAmount = operation.getDentalTotalAmount();
         totalPaid = 0;
@@ -179,7 +192,7 @@ public class BottomOperationsDialog {
     }
 
     private void removeProcedure() {
-        operationDialog.dismiss();
+        procedureDialog.dismiss();
         procedureRepository.removeProcedure(patient, operation.getUid(), operation.getPaymentKeys());
     }
 
@@ -188,8 +201,8 @@ public class BottomOperationsDialog {
     }
 
     public void showDialog() {
-        operationDialog.show();
-        operationDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        procedureDialog.show();
+        procedureDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
     private void dialogDismissListener(BottomSheetDialog dialog) {
@@ -199,6 +212,7 @@ public class BottomOperationsDialog {
 
     private static class ViewHolder {
 
+        final TextView title;
         final ImageView iconClose;
         final TextView operationDesc;
         final TextView operationTotalAmount;
@@ -213,6 +227,7 @@ public class BottomOperationsDialog {
 
 
         public ViewHolder(View view) {
+            this.title = view.findViewById(R.id.tvProcedureTitle);
             this.operationDesc = view.findViewById(R.id.tvOperationDescription);
             this.operationTotalAmount = view.findViewById(R.id.tvOperationTotalAmount);
             this.operationDate = view.findViewById(R.id.tvOperationDate);

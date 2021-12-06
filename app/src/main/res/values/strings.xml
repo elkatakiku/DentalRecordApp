@@ -61,48 +61,6 @@
     <string name="PATIENT">Patient</string>
     <string name="PATIENT_UID">patient_uid</string>
 
-    <!-- Spinner Civil Status Options -->
-    <string-array name="civil_status_array">
-        <item>Single</item>
-        <item>Married</item>
-        <item>Separated</item>
-        <item>Divorced</item>
-        <item>Widowed</item>
-    </string-array>
-
-    <!-- Spinner Mode of Payment -->
-    <string-array name="mop_array">
-        <item>Debit</item>
-        <item>Credit</item>
-    </string-array>
-
-    <!-- Spinner Month -->
-    <string-array name="month_array">
-        <item>January</item>
-        <item>February</item>
-        <item>March</item>
-        <item>April</item>
-        <item>May</item>
-        <item>June</item>
-        <item>July</item>
-        <item>August</item>
-        <item>September</item>
-        <item>October</item>
-        <item>November</item>
-        <item>December</item>
-    </string-array>
-
-    <!-- Spinner Day -->
-    <string-array name="day_array">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-
-    <!-- Spinner Year -->
-    <string-array name="year_array">
-        <item>2021</item>
-        <item>2022</item>
-    </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
@@ -158,6 +116,6 @@
     <string name="Occupation">Occupation</string>
     <string name="CivilStatus">Civil Status</string>
 
-    <string name="add_dental_operation">New Operation</string>
+    <string name="add_dental_operation">New Procedure</string>
     <string name="fully_paid">Fully Paid</string>
 </resources>

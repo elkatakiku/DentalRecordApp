@@ -20,7 +20,7 @@
             android:id="@+id/textview_second"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="New Operation"
+            android:text="New Procedure"
             android:textColor="@color/header"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -49,46 +49,21 @@
             android:spinnersShown="true" />
 
 
-        <LinearLayout
-            android:id="@+id/linearLayout3"
+        <TextView
+            android:id="@+id/tvServicesLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="@android:drawable/divider_horizontal_dark"
-            android:dividerPadding="5dp"
+            android:layout_marginTop="10dp"
+            android:text="Services"
+            android:textColor="@color/label" />
+
+        <Spinner
+            android:id="@+id/snprProcedureChoices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/services_array"
             android:minHeight="48dp"
-            android:orientation="horizontal"
-            android:showDividers="middle"
-            android:visibility="gone"
-            tools:visibility="gone">
-
-            <Spinner
-                android:id="@+id/spinner2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="10dp"
-                android:layout_weight="1"
-                android:entries="@array/month_array"
-                android:padding="5dp" />
-
-            <Spinner
-                android:id="@+id/spinner3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_weight="1"
-                android:entries="@array/day_array"
-                android:padding="5dp" />
-
-            <Spinner
-                android:id="@+id/spinner4"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:entries="@array/year_array"
-                android:padding="5dp" />
-        </LinearLayout>
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <TextView
             android:id="@+id/txtViewDescLabel"
@@ -110,40 +85,12 @@
             android:textColor="@color/data" />
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/tvModeOfPaymentLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="Mode of Payment"
             android:textColor="@color/label" />
-
-        <RadioGroup
-            android:id="@+id/gRadioModeOfPayment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:paddingStart="60dp"
-            android:paddingEnd="60dp"
-            android:visibility="gone">
-
-            <RadioButton
-                android:id="@+id/radioButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:checked="true"
-                android:text="Debit" />
-
-            <RadioButton
-                android:id="@+id/radioButton2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Credit" />
-
-        </RadioGroup>
 
         <Spinner
             android:id="@+id/spnrModeOfPayment"
@@ -211,18 +158,18 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/txtViewTotalAmountLabel"
+                    android:id="@+id/txtViewPaymentLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Total Amount"
+                    android:text="Payment"
                     android:textColor="@color/label" />
 
                 <EditText
-                    android:id="@+id/editTxtTotalAmount"
+                    android:id="@+id/editTxtAPPayment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Total Amount"
+                    android:hint="Payment"
                     android:inputType="numberDecimal"
                     android:minHeight="48dp"
                     android:textColor="@color/data" />

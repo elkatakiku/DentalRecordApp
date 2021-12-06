@@ -2,7 +2,7 @@ package com.bsit_three_c.dentalrecordapp.data.patient;
 
 import android.util.Log;
 
-import com.bsit_three_c.dentalrecordapp.data.model.DentalProcedure;
+import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Payment;
 
@@ -15,13 +15,13 @@ class MiddleGround {
     private static final PaymentRepository paymentRepository = PaymentRepository.getInstance();
     private static final PatientRepository patientRepository = PatientRepository.getInstance();
 
-    public static void addPaymentKey(DentalProcedure procedure, Payment payment) {
+    public static void addPaymentKey(Procedure procedure, Payment payment) {
         procedure.addPaymentKey(payment.getUid());
         procedureRepository.addPaymentKey(procedure);
         procedureRepository.updateBalance(procedure, payment);
     }
 
-    public static void addNewProdecurePayment(Patient patient, DentalProcedure procedure, Payment payment) {
+    public static void addNewProdecurePayment(Patient patient, Procedure procedure, Payment payment) {
         Log.d(TAG, "addPayment: addPayment");
 
         procedure.addPaymentKey(payment.getUid());
@@ -40,7 +40,11 @@ class MiddleGround {
         }
     }
 
-    public static void updateProcedurePaymentKeys(DentalProcedure procedure, String paymentUID) {
+    public static void updateProcedurePaymentKeys(Procedure procedure, String paymentUID) {
         procedureRepository.updatePaymentKeys(procedure, paymentUID);
+    }
+
+    public static void updateProce(Procedure procedure) {
+        procedureRepository.updateProcedure(procedure);
     }
 }

@@ -78,11 +78,8 @@ public class AddPatientViewModel extends ViewModel implements TextChange {
     }
 
     public void addPatient(String firstname, String lastname, String middleInitial, String address,
-                           String phoneNumber, String civilStatus, int age, String occupation) {
+                           String phoneNumber, int civilStatus, int age, String occupation) {
 
-//        Patient newPatient = new Patient(firstname, lastname, middleInitial, address, phoneNumber,
-//                                            civilStatus, age, occupation);
-//        repository.addPatients(newPatient);
         repository.addPatient(firstname, lastname, middleInitial, address, phoneNumber,
                 civilStatus, age, occupation);
     }

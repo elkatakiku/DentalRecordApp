@@ -9,4 +9,62 @@
         <item>reply</item>
         <item>reply_all</item>
     </string-array>
+
+
+    <!-- Spinner Civil Status Options -->
+    <string-array name="civil_status_array">
+        <item>Choose civil status…</item>
+        <item>Single</item>
+        <item>Married</item>
+        <item>Separated</item>
+        <item>Divorced</item>
+        <item>Widowed</item>
+    </string-array>
+
+    <!-- Spinner Mode of Payment -->
+    <string-array name="mop_array">
+        <item>Choose mode of payment…</item>
+        <item>Debit</item>
+        <item>Credit</item>
+    </string-array>
+
+    <!-- Spinner Month -->
+    <string-array name="month_array">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+
+    <!-- Spinner Day -->
+    <string-array name="day_array">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <!-- Spinner Year -->
+    <string-array name="year_array">
+        <item>2021</item>
+        <item>2022</item>
+    </string-array>
+
+    <!-- Services -->
+    <string-array name="services_array">
+        <item>Choose services…</item>
+        <item>Oral Prophylaxis</item>
+        <item>Restoration</item>
+        <item>Extraction</item>
+        <item>Odontectomy</item>
+        <item>Root Canal Treatment</item>
+        <item>Protodontics</item>
+        <item>Orthodontics</item>
+    </string-array>
 </resources>

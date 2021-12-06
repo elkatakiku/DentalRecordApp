@@ -5,7 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.bsit_three_c.dentalrecordapp.data.adapter.PaymentList;
-import com.bsit_three_c.dentalrecordapp.data.model.DentalProcedure;
+import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Payment;
 import com.google.firebase.database.DataSnapshot;
@@ -50,7 +50,7 @@ public class PaymentRepository {
         if (dataSnapshot != null) {
             dentalPayments = new ArrayList<>();
             for (DataSnapshot data : dataSnapshot.getChildren()) {
-//                DentalProcedure dentalOperation = data.getValue(DentalProcedure.class);
+//                Procedure dentalOperation = data.getValue(Procedure.class);
                 Payment payment = data.getValue(Payment.class);
                 if (payment != null && !isDuplicate(payment)) {
                     Log.d(TAG, "getPayments: dentalPayment: " + payment);
@@ -90,12 +90,12 @@ public class PaymentRepository {
         return databaseReference.child(paymentUID);
     }
 
-    public void addPayment(DentalProcedure procedure, Payment payment) {
+    public void addPayment(Procedure procedure, Payment payment) {
         databaseReference.child(payment.getUid()).setValue(payment);
         //  Update operation's balance
     }
 
-    public void addPayment(DentalProcedure procedure, String modeOfPayment, String paidAmount, String date) {
+    public void addPayment(Procedure procedure, int modeOfPayment, String paidAmount, String date) {
         double convertedPaidAmount = Double.parseDouble(paidAmount);
         String paymentUID = databaseReference.push().getKey();
 
@@ -110,11 +110,12 @@ public class PaymentRepository {
         }
     }
 
-    public void updatePayment(Payment payment) {
+    public void updatePayment(Payment payment, Procedure procedure) {
         databaseReference.child(payment.getUid()).setValue(payment);
+        MiddleGround.updateProce(procedure);
     }
 
-    public void removePayment(DentalProcedure procedure, String paymentUID) {
+    public void removePayment(Procedure procedure, String paymentUID) {
         removePayment(paymentUID);
         MiddleGround.updateProcedurePaymentKeys(procedure, paymentUID);
     }

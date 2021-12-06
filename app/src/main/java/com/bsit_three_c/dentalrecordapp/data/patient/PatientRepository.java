@@ -112,7 +112,7 @@ public class PatientRepository {
 //    }
 
     public void addPatient(String firstname, String lastname, String middleInitial, String address,
-                           String phoneNumber, String civilStatus, int age, String occupation) {
+                           String phoneNumber, int civilStatus, int age, String occupation) {
         String patientUID = databaseReference.push().getKey();
 
         ArrayList<String> operationKeys = new ArrayList<>();

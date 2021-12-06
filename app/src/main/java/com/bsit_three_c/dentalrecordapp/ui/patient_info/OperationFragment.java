@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.PatientViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentAddOperationBinding;
+import com.bsit_three_c.dentalrecordapp.util.CustomItemSelectedListener;
 import com.bsit_three_c.dentalrecordapp.util.CustomObserver;
 import com.bsit_three_c.dentalrecordapp.util.CustomTextWatcher;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
@@ -27,8 +28,6 @@ public class OperationFragment extends Fragment {
     private FragmentAddOperationBinding binding;
     private OperationViewModel viewModel;
     private Patient patient;
-
-//    private boolean isDownpayment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,33 +43,29 @@ public class OperationFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         patient = OperationFragmentArgs.fromBundle(getArguments()).getItemPatient();
-        Log.d(TAG, "onViewCreated: got patient: " + patient);
 
         binding.btnAddOperation.setOnClickListener(view1 -> {
 
             Date date = UIUtil.getDate(binding.datePicker);
+            int service = binding.snprProcedureChoices.getSelectedItemPosition();
             String dentalDesc = binding.editTxtDesc.getText().toString();
-            String modeOfPayment = binding.spnrModeOfPayment.getSelectedItem().toString();
+            int modeOfPayment = binding.spnrModeOfPayment.getSelectedItemPosition();
             String dentalAmount = binding.editTxtAmount.getText().toString();
             boolean isDownpayment = binding.checkBoxDownpayment.isChecked();
-            Log.d(TAG, "onViewCreated: calling viewmodel");
-
-            Log.d(TAG, "onViewCreated: date: " + date.toString());
-            Log.d(TAG, "onViewCreated: dentaldate: " + UIUtil.getDate(date));
 
             if (isDownpayment) {
-                String dentalTotalAmount = binding.editTxtTotalAmount.getText().toString();
+                String dentalPayment = binding.editTxtAPPayment.getText().toString();
                 String dentalBalance = binding.txtViewBalance.getText().toString();
-                viewModel.addProcedure(patient, dentalDesc, date, modeOfPayment, dentalAmount, isDownpayment, dentalTotalAmount, dentalBalance);
+                viewModel.addProcedure(patient, service, dentalDesc, date, modeOfPayment, dentalAmount, isDownpayment, dentalPayment, dentalBalance);
             }
             else {
-                viewModel.addProcedure(patient, dentalDesc, date, modeOfPayment, dentalAmount, isDownpayment);
+                viewModel.addProcedure(patient, service, dentalDesc, date, modeOfPayment, dentalAmount, isDownpayment);
             }
 
             requireActivity().onBackPressed();
         });
 
-        setTextChangedListener();
+        setListeners();
         setObservers();
 
         binding.checkBoxDownpayment.setOnClickListener(v -> {
@@ -87,12 +82,20 @@ public class OperationFragment extends Fragment {
             }
         });
 
+        int service = binding.snprProcedureChoices.getSelectedItemPosition();
+        Log.d(TAG, "onViewCreated: selected service: " + service);
+
     }
 
-    private void setTextChangedListener() {
+    private void setListeners() {
+        //  EditText text listeners
         binding.editTxtDesc.addTextChangedListener(new CustomTextWatcher(viewModel, binding.txtViewDescLabel));
         binding.editTxtAmount.addTextChangedListener(new CustomTextWatcher(viewModel, binding.txtViewAmountLabel));
-        binding.editTxtTotalAmount.addTextChangedListener(new CustomTextWatcher(viewModel, binding.txtViewTotalAmountLabel));
+        binding.editTxtAPPayment.addTextChangedListener(new CustomTextWatcher(viewModel, binding.tvModeOfPaymentLabel));
+
+        //  Spinner item selected listeners
+        binding.spnrModeOfPayment.setOnItemSelectedListener(new CustomItemSelectedListener(binding.tvModeOfPaymentLabel.getText().toString(), viewModel));
+        binding.snprProcedureChoices.setOnItemSelectedListener(new CustomItemSelectedListener(binding.tvServicesLabel.getText().toString(), viewModel));
     }
 
     private void setObservers() {
@@ -100,11 +103,14 @@ public class OperationFragment extends Fragment {
         viewModel.getmDescription().observe(getViewLifecycleOwner(), new CustomObserver(binding.editTxtDesc, resources));
         viewModel.getmAmount().observe(getViewLifecycleOwner(), new CustomObserver(binding.editTxtAmount, resources));
         viewModel.getmOperationState().observe(getViewLifecycleOwner(), new CustomObserver.ObserverButton(binding.btnAddOperation));
-        viewModel.getmTotalAmount().observe(getViewLifecycleOwner(), new CustomObserver(binding.editTxtTotalAmount, resources));
+        viewModel.getmPayment().observe(getViewLifecycleOwner(), new CustomObserver(binding.editTxtAPPayment, resources));
+
         viewModel.getmBalance().observe(getViewLifecycleOwner(), formState -> {
             if (formState == null) return;
 
-            if (formState.getMsgError() != null) binding.txtViewBalance.setText(getString(formState.getMsgError()));
+            if (formState.getMsgError() != null) {
+                binding.txtViewBalance.setText(getString(formState.getMsgError()));
+            }
             else {
                 String balance = viewModel.getBalance().toString();
                 binding.txtViewBalance.setText(balance);

@@ -12,7 +12,7 @@ public class Checker {
 
     private static final String TAG = Checker.class.getSimpleName();
 
-    public static boolean isNullOrError(LiveData<FormState> liveData) {
+    private static boolean isNullOrError(LiveData<FormState> liveData) {
         return liveData.getValue() == null || liveData.getValue().getMsgError() != null;
     }
 
@@ -47,13 +47,6 @@ public class Checker {
         }
 
         return true;
-
-//        return !isNull(mFirstname) &&
-//                !isNull(mlastname) &&
-//                !isNull(mAge) &&
-//                !isNull(mAddress) &&
-//                !isNull(mPhoneNumber);
-////                !isNull(mCivilStatus.getValue()) && !isNull(mCivilStatus.getValue().getMsgError());
     }
 
     public static boolean containsSpecialCharacter(String s) {
@@ -78,11 +71,7 @@ public class Checker {
         return initialIndex != finalIndex;
     }
 
-    public static double convertToDouble(String input) {
-        try {
-            return Double.parseDouble(input);
-        } catch (Exception e) {
-            return -1;
-        }
+    public static boolean isNotDefault(int pos) {
+        return pos > 0;
     }
 }

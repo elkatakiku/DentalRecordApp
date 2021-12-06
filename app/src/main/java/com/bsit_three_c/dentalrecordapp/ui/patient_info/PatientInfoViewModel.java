@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.bsit_three_c.dentalrecordapp.data.model.DentalProcedure;
+import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.patient.ProcedureRepository;
 import com.google.firebase.database.DataSnapshot;
@@ -23,7 +23,7 @@ public class PatientInfoViewModel extends ViewModel {
     private ProcedureRepository repository;
     private Patient patient;
 
-//    private final MutableLiveData<DentalProcedure[]> mOperations = new MutableLiveData<>();
+//    private final MutableLiveData<Procedure[]> mOperations = new MutableLiveData<>();
 
     private final MutableLiveData<Double> mBalance = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoaded = new MutableLiveData<>();
@@ -33,8 +33,8 @@ public class PatientInfoViewModel extends ViewModel {
 
     private int procedureSize;
     private int totalCount;
-    private ArrayList<DentalProcedure> procedureList;
-    private DentalProcedure[] procedures;
+    private ArrayList<Procedure> procedureList;
+    private Procedure[] procedures;
 
     public PatientInfoViewModel(ProcedureRepository repository) {
         this.repository = repository;
@@ -47,7 +47,7 @@ public class PatientInfoViewModel extends ViewModel {
         ArrayList<String> operationKeys = patient.getDentalProcedures();
         procedureSize = patient.getDentalProcedures().size();
         procedureList = new ArrayList<>(procedureSize);
-        procedures = new DentalProcedure[procedureSize];
+        procedures = new Procedure[procedureSize];
         isLoaded.setValue(false);
         mBalance.setValue(0d);
         mProceduresCounter.setValue(0);
@@ -62,7 +62,7 @@ public class PatientInfoViewModel extends ViewModel {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                    DentalProcedure procedure = snapshot.getValue(DentalProcedure.class);
+                    Procedure procedure = snapshot.getValue(Procedure.class);
 
                     if (procedure != null) {
 
@@ -118,7 +118,7 @@ public class PatientInfoViewModel extends ViewModel {
         return mProceduresCounter;
     }
 
-    public DentalProcedure[] getProcedures() {
+    public Procedure[] getProcedures() {
         return procedures;
     }
 }

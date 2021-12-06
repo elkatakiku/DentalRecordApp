@@ -11,7 +11,7 @@ public class Patient extends Person implements Parcelable {
     private static final String TAG = Parcelable.class.getSimpleName();
 
     private String address;
-    private String civilStatus;
+    private int civilStatus;
     private int age;
     private String occupation;
     private Date lastUpdated;
@@ -22,17 +22,9 @@ public class Patient extends Person implements Parcelable {
 
     public Patient() {}
 
-//    public Patient(String firstname, String lastname, String middleInitial, String address, String phoneNumber, String civilStatus, int age, String occupation) {
-//        super(firstname, lastname, middleInitial, phoneNumber);
-//        this.address = address;
-//        this.civilStatus = civilStatus;
-//        this.age = age;
-//        this.occupation = occupation;
-//    }
-
     //  This constructor is used to retrive patient's detail
     public Patient(String uid, String firstname, String lastname, String middleInitial, String phoneNumber,
-                   String address, String civilStatus, int age,
+                   String address, int civilStatus, int age,
 //                   double balance,
                    String occupation,
                    Date lastUpdated, ArrayList<String> dentalProcedures) {
@@ -70,7 +62,7 @@ public class Patient extends Person implements Parcelable {
         middleInitial = in.readString();
         phoneNumber = in.readString();
         address = in.readString();
-        civilStatus = in.readString();
+        civilStatus = in.readInt();
         age = in.readInt();
 //        balance = in.readDouble();
         occupation = in.readString();
@@ -121,11 +113,11 @@ public class Patient extends Person implements Parcelable {
 //        this.balance = balance;
 //    }
 
-    public String getCivilStatus() {
+    public int getCivilStatus() {
         return civilStatus;
     }
 
-    public void setCivilStatus(String civilStatus) {
+    public void setCivilStatus(int civilStatus) {
         this.civilStatus = civilStatus;
     }
 
@@ -188,11 +180,9 @@ public class Patient extends Person implements Parcelable {
         dest.writeString(middleInitial);
         dest.writeString(phoneNumber);
         dest.writeString(address);
-        dest.writeString(civilStatus);
+        dest.writeInt(civilStatus);
         dest.writeInt(age);
-//        dest.writeDouble(balance);
         dest.writeString(occupation);
-//        if (dentalProcedures != null)
-            dest.writeStringList(dentalProcedures);
+        dest.writeStringList(dentalProcedures);
     }
 }
