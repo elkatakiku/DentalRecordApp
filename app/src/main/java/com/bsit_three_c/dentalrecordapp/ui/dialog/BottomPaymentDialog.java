@@ -17,22 +17,20 @@ import android.widget.TextView;
 import androidx.lifecycle.MutableLiveData;
 
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.model.FormState;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Payment;
+import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.patient.PaymentRepository;
-import com.bsit_three_c.dentalrecordapp.interfaces.SpinnerState;
 import com.bsit_three_c.dentalrecordapp.ui.patient_info.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
-import com.bsit_three_c.dentalrecordapp.util.CustomItemSelectedListener;
 import com.bsit_three_c.dentalrecordapp.util.CustomObserver;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.Date;
 
-public class BottomPaymentDialog implements SpinnerState {
+public class BottomPaymentDialog {
     private static final String TAG = BottomPaymentDialog.class.getSimpleName();
 
     private final LayoutInflater layoutInflater;
@@ -45,14 +43,12 @@ public class BottomPaymentDialog implements SpinnerState {
     private Procedure procedure;
     private Patient patient;
 
-    private static final String MODE_DEBIT = "Debit";
-    private static final String MODE_CREDIT = "Credit";
-
     private final MutableLiveData<FormState> mAmount = new MutableLiveData<>();
-    private final MutableLiveData<FormState> mModeOfPayment = new MutableLiveData<>();
+//    private final MutableLiveData<FormState> mModeOfPayment = new MutableLiveData<>();
     private final MutableLiveData<FormState> mState = new MutableLiveData<>();
 
     private final boolean isEdit;
+    private boolean isOnlyOne;
 
     //  Used to create dialog to add payment
     public BottomPaymentDialog(LayoutInflater layoutInflater, Context context, PatientInfoFragment lifecycleOwner) {
@@ -87,40 +83,18 @@ public class BottomPaymentDialog implements SpinnerState {
             int modeOfPayment = viewHolder.modeOfPaymentDialog.getSelectedItemPosition();
             String amount = viewHolder.paymentDialogAmount.getText().toString();
 
-            Log.d(TAG, "onClick: date: " + date);
-            Log.d(TAG, "onClick: modeOfPayment: " + modeOfPayment);
-            Log.d(TAG, "onClick: amount: " + amount);
-
-            repository.addPayment(operation, modeOfPayment, amount, date);
+            repository.addPayment(operation,
+//                    modeOfPayment,
+                    amount, date);
             paymentDialog.dismiss();
 
         });
 
-        viewHolder.paymentDialogAmount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        viewHolder.paymentDialogAmount.addTextChangedListener(textWatcher);
 
-            }
+//        viewHolder.modeOfPaymentDialog.setOnItemSelectedListener(new CustomItemSelectedListener("None", this));
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                setAmountState(s.toString());
-                setButtonState();
-            }
-        });
-
-        viewHolder.modeOfPaymentDialog.setOnItemSelectedListener(new CustomItemSelectedListener("None", this));
-
-        mAmount.observe(lifecycleOwner.getViewLifecycleOwner(),
-                new CustomObserver(viewHolder.paymentDialogAmount, lifecycleOwner.getResources()));
-        mState.observe(lifecycleOwner.getViewLifecycleOwner(),
-                new CustomObserver.ObserverButton(viewHolder.btnPaymentConfirm));
-
+        setObservers(viewHolder);
         setCloseIcon(viewHolder);
         setDialogDismissListener(paymentDialog);
 
@@ -138,11 +112,14 @@ public class BottomPaymentDialog implements SpinnerState {
         int year = Integer.parseInt(UIUtil.getDateUnits(oldDate)[2]);
         String oldAmount = String.valueOf(payment.getAmount());
 
+        viewHolder.paymentDialogAmount.addTextChangedListener(textWatcher);
+
         viewHolder.paymentDialogTitle.setText(isEdit ? "Edit Payment" : "Add Payment");
         viewHolder.paymentDialogDate.updateDate(year, month, day);
-        viewHolder.modeOfPaymentDialog.setSelection(payment.getModeOfPayment());
+//        viewHolder.modeOfPaymentDialog.setSelection(payment.getModeOfPayment());
         viewHolder.paymentDialogAmount.setText(oldAmount);
 
+        setObservers(viewHolder);
         setBtnConfirm(viewHolder, payment);
         setCloseIcon(viewHolder);
         setBtnDelete(viewHolder, payment.getUid());
@@ -157,17 +134,18 @@ public class BottomPaymentDialog implements SpinnerState {
 
             // Update payment
             String date = UIUtil.getDate(UIUtil.getDate(viewHolder.paymentDialogDate));
-            int modeOfPayment = viewHolder.modeOfPaymentDialog.getSelectedItemPosition();
+//            int modeOfPayment = viewHolder.modeOfPaymentDialog.getSelectedItemPosition();
             String amount = viewHolder.paymentDialogAmount.getText().toString();
-            double convertedAmount = Double.parseDouble(amount);
+            double convertedAmount = UIUtil.convertToDouble(amount);
 
             double newBalance = procedure.getDentalBalance() - convertedAmount;
 
             payment.setPaymentDate(date);
-            payment.setModeOfPayment(modeOfPayment);
+//            payment.setModeOfPayment(modeOfPayment);
             payment.setAmount(convertedAmount);
 
             procedure.setDentalBalance(newBalance);
+            Log.d(TAG, "setBtnConfirm: new balance: " + newBalance);
             repository.updatePayment(payment, procedure);
 
             paymentDialog.dismiss();
@@ -184,7 +162,9 @@ public class BottomPaymentDialog implements SpinnerState {
     }
 
     private void setBtnDelete(ViewHolder viewHolder, String paymentUID) {
-        viewHolder.btnDelete.setVisibility(View.VISIBLE);
+        if (!isOnlyOne) viewHolder.btnDelete.setVisibility(View.VISIBLE);
+        else viewHolder.btnDelete.setVisibility(View.GONE);
+
         viewHolder.btnDelete.setOnClickListener(v -> {
 
             //  Add value payment UID to delete specific payment
@@ -199,6 +179,10 @@ public class BottomPaymentDialog implements SpinnerState {
 
     public void setProcedure(Procedure procedure) {
         if (this.procedure == null) this.procedure = procedure;
+    }
+
+    public void setOnlyOne(boolean onlyOne) {
+        isOnlyOne = onlyOne;
     }
 
     private void setDialogDismissListener(BottomSheetDialog dialog) {
@@ -220,24 +204,45 @@ public class BottomPaymentDialog implements SpinnerState {
             mAmount.setValue(new FormState(R.string.invalid_contains_two_or_more_dots));
         else if (UIUtil.convertToDouble(input) == -1)
             mAmount.setValue(new FormState(R.string.invalid_input));
+        else if (Checker.isFullyPaid(input, procedure.getDentalBalance()))
+            mAmount.setValue(new FormState(R.string.invalid_fully_paid));
         else mAmount.setValue(new FormState(true));
 
     }
 
     private void setButtonState() {
-        if (Checker.isComplete(mAmount, mModeOfPayment)) mState.setValue(new FormState(true));
+//        if (Checker.isComplete(mAmount, mModeOfPayment)) mState.setValue(new FormState(true));
+        if (Checker.isComplete(mAmount)) mState.setValue(new FormState(true));
         else mState.setValue(new FormState(R.string.invalid_input));
+    }
+
+    private TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            setAmountState(s.toString());
+            setButtonState();
+        }
+    };
+
+    private void setObservers(ViewHolder viewHolder) {
+        mAmount.observe(lifecycleOwner.getViewLifecycleOwner(),
+                new CustomObserver(viewHolder.paymentDialogAmount, lifecycleOwner.getResources()));
+        mState.observe(lifecycleOwner.getViewLifecycleOwner(),
+                new CustomObserver.ObserverButton(viewHolder.btnPaymentConfirm));
     }
 
     public void showDialog() {
         BottomDialog.showDialog(paymentDialog);
-    }
-
-    @Override
-    public void setSpinnerState(String label, int pos) {
-        if (pos > 0) mModeOfPayment.setValue(new FormState(true));
-        else mModeOfPayment.setValue(new FormState(pos));
-        setButtonState();
     }
 
     private static class ViewHolder {

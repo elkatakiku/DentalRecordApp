@@ -151,6 +151,7 @@ public class PatientRepository {
     }
 
     public void removeProcedureKey(Patient patient, String procedureKey) {
+        Log.d(TAG, "removeProcedureKey: patient: " + patient);
         ArrayList<String> keys = patient.getDentalProcedures();
 
         if (keys.size() == 1) {

@@ -3,16 +3,14 @@ package com.bsit_three_c.dentalrecordapp.data.adapter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
-import androidx.lifecycle.MutableLiveData;
 
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
+import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.BottomOperationsDialog;
 import com.bsit_three_c.dentalrecordapp.ui.patient_info.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
@@ -27,8 +25,6 @@ public class OperationsList {
 
     private List<Procedure> procedures;
     private final Patient patient;
-
-    private final MutableLiveData<Boolean> hasProcedures = new MutableLiveData<>();
 
     private final PatientInfoFragment lifecycleOwner;
 
@@ -46,7 +42,6 @@ public class OperationsList {
         viewHolder.txtDentalService.setText(UIUtil.getService(lifecycleOwner.getResources(), operation.getService()));
         viewHolder.txtDentalDate.setText(UIUtil.getReadableDate(UIUtil.stringToDate(operation.getDentalDate())));
         viewHolder.txtDentalAmount.setText(String.valueOf(operation.getDentalTotalAmount()));
-        viewHolder.cbIsFullyPaid.setChecked(!operation.isDownpayment());
         viewHolder.txtDentalFullyPaid.setText(UIUtil.getPaymentStatus(operation.getDentalBalance()));
         viewHolder.txtDentalFullyPaid.setTextColor(UIUtil.getCheckBoxColor(operation.getDentalBalance()));
 
@@ -58,7 +53,6 @@ public class OperationsList {
     }
 
     public void addItems(List<Procedure> procedures) {
-        Log.d(TAG, "addItems: called");
 
         clearItems();
 
@@ -71,22 +65,15 @@ public class OperationsList {
             }
         }
 
-        Log.d(TAG, "addItems: child count after adding: " + linearLayout.getChildCount());
-        for (int pos = 0; pos < linearLayout.getChildCount(); pos++) {
-
-            Log.d(TAG, "addItems: pos: " + pos);
-            View v = linearLayout.getChildAt(pos);
-            Log.d(TAG, "addItems: id: " + v.getId());
-        }
     }
 
     public void clearItems() {
 
         //  Remove views from index 2 upwards
         while (linearLayout.getChildCount() > 2) {
-            Log.d(TAG, "clearItems: removing view");
             linearLayout.removeViewAt(linearLayout.getChildCount()-1);
         }
+
     }
 
     private static class ViewHolder {
@@ -95,7 +82,6 @@ public class OperationsList {
         final TextView txtDentalDate;
         final TextView txtDentalAmount;
         final TextView txtDentalFullyPaid;
-        final CheckBox cbIsFullyPaid;
 
         public ViewHolder(LayoutInflater layoutInflater) {
             this.cardView = (CardView) layoutInflater.inflate(R.layout.item_dental_history, null);
@@ -103,7 +89,6 @@ public class OperationsList {
             this.txtDentalDate = cardView.findViewById(R.id.txtDentalDate);
             this.txtDentalAmount = cardView.findViewById(R.id.txtDentalAmount);
             this.txtDentalFullyPaid = cardView.findViewById(R.id.txtDentalFullyPaid);
-            this.cbIsFullyPaid = cardView.findViewById(R.id.cbFullyPaid);
         }
     }
 
@@ -114,19 +99,19 @@ public class OperationsList {
         if (v.getTag() instanceof Integer)
             position = (Integer) v.getTag();
 
-        Procedure operation = null;
+        Procedure procedure = null;
         if (position >= 0) {
             Log.d(TAG, "onItemClick: clicked operation: " + procedures.get(position));
-            operation = procedures.get(position);
+            procedure = procedures.get(position);
         }
 
-        if (operation != null) {
+        if (procedure != null) {
 
             // Get payments transaction of selected operation
             BottomOperationsDialog bottomOperationsDialog = new BottomOperationsDialog(layoutInflater,
                     layoutInflater.getContext(), lifecycleOwner);
             bottomOperationsDialog.setPatient(patient);
-            bottomOperationsDialog.createOperationDialog(operation);
+            bottomOperationsDialog.createOperationDialog(procedure);
             bottomOperationsDialog.showDialog();
         }
     }

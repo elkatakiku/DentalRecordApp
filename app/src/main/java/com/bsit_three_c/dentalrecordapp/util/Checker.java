@@ -74,4 +74,8 @@ public class Checker {
     public static boolean isNotDefault(int pos) {
         return pos > 0;
     }
+
+    public static boolean isFullyPaid(String input, double balance) {
+        return balance - UIUtil.convertToDouble(input) < 0;
+    }
 }

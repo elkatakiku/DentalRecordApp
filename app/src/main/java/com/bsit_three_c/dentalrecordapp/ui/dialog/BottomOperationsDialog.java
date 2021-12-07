@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.adapter.PaymentList;
@@ -47,7 +48,9 @@ public class BottomOperationsDialog {
     private final MutableLiveData<Integer> paymentsCounter = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isDoneLoading = new MutableLiveData<>();
     private final MutableLiveData<Double> mBalance = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isOnlyOnePayment = new MutableLiveData<>();
 
+    private Procedure procedure;
     private int totalPayments;
     private double totalPaid;
     private double totalAmount;
@@ -69,6 +72,7 @@ public class BottomOperationsDialog {
 
     // Sets local field operator and readied the dialog
     public void createOperationDialog(Procedure procedure){
+        this.procedure = procedure;
         isDoneLoading.setValue(false);
         this.operation = procedure;
 
@@ -144,17 +148,27 @@ public class BottomOperationsDialog {
         ArrayList<Payment> paymentArrayList = new ArrayList<>();
         PaymentList paymentList = new PaymentList(paymentLayout, layoutInflater, lifecycleOwner, procedureDialog);
         paymentList.setProcedure(operation);
+        paymentList.setPatient(patient);
+
+        isOnlyOnePayment.observe(lifecycleOwner.getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                paymentList.setOnlyOne(aBoolean);
+            }
+        });
+
 
         totalAmount = operation.getDentalTotalAmount();
         totalPaid = 0;
-
-        Log.d(TAG, "loadPayments: operation keys: " + operation.getPaymentKeys());
 
         for (int position = 0; position < paymentKeys.size(); position++) {
             int finalPosition = position;
             paymentRepository.getPayments(paymentKeys.get(position)).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                    isOnlyOnePayment.setValue(paymentKeys.size() == 1);
+
                     Payment payment = snapshot.getValue(Payment.class);
 
                     if (payment != null) {
@@ -163,10 +177,10 @@ public class BottomOperationsDialog {
                         paymentsCounter.setValue(finalPosition +1);
 
                         totalPaid += payment.getAmount();
-                        Log.d(TAG, "onDataChange: balance: " + mBalance.getValue());
                         mBalance.setValue(totalAmount - totalPaid);
 
-                        Log.d(TAG, "onDataChange: balance: " + mBalance.getValue());
+                        if (mBalance.getValue() != null)
+                            procedureRepository.updateBalance(procedure, mBalance.getValue());
                     }
                 }
 
@@ -193,10 +207,12 @@ public class BottomOperationsDialog {
 
     private void removeProcedure() {
         procedureDialog.dismiss();
+        Log.d(TAG, "removeProcedure: patient: " + patient);
         procedureRepository.removeProcedure(patient, operation.getUid(), operation.getPaymentKeys());
     }
 
     public void setPatient(Patient patient) {
+        Log.d(TAG, "setPatient: patient: " + patient);
         this.patient = patient;
     }
 

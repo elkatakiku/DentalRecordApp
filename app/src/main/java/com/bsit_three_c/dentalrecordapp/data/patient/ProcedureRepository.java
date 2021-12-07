@@ -8,7 +8,6 @@ import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Payment;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -70,30 +69,27 @@ public class ProcedureRepository {
                              int service,
                              String dentalDesc,
                              Date dentalDate,
-                             int modeOfPayment,
+//                             int modeOfPayment,
                              String dentalAmount,
                              boolean isDownpayment,
                              String dentalPayment,
                              String dentalBalance) {
 
         Procedure procedure = createProcedure(patient, service, dentalDesc, dentalDate,
-                modeOfPayment, dentalAmount, isDownpayment, dentalPayment, dentalBalance);
+//                modeOfPayment,
+                dentalAmount, isDownpayment, dentalPayment, dentalBalance);
         databaseReference.child(procedure.getUid()).setValue(procedure);
     }
 
     public void removeProcedure(Patient patient, String operationUID, ArrayList<String> paymentKeys) {
         databaseReference.child(operationUID).removeValue();
         PatientRepository.getInstance().removeProcedureKey(patient, operationUID);
-        PaymentRepository.getInstance().removePaymets(paymentKeys);
+        PaymentRepository.getInstance().removePayments(paymentKeys);
     }
 
     public void removeProcedure(String procedureUID) {
         databaseReference.child(procedureUID).removeValue();
     }
-
-//    private DatabaseReference getPaymentKeys(Patient patient) {
-//        databaseReference.child(patient.getUid()).child(PAYMENT_KEYS);
-//    }
 
     public void removeListener(String operationUID, ValueEventListener eventListener) {
         databaseReference.child(operationUID).removeEventListener(eventListener);
@@ -107,16 +103,11 @@ public class ProcedureRepository {
         return this.procedures.contains(procedure);
     }
 
-    public DatabaseReference getBalance(Procedure procedure) {
-        Log.d(TAG, "getBalance: returning balance");
-        return databaseReference.child(procedure.getUid()).child(BALANCE);
-    }
-
     private Procedure createProcedure(Patient patient,
                                       int service,
                                       String dentalDesc,
                                       Date dentalDate,
-                                      int modeOfPayment,
+//                                      int modeOfPayment,
                                       String dentalAmount,
                                       boolean isDownpayment,
                                       String dentalPayment,
@@ -140,7 +131,7 @@ public class ProcedureRepository {
         Payment payment = new Payment(
                 paymentUID,
                 Double.parseDouble(dentalPayment),
-                modeOfPayment,
+//                modeOfPayment,
                 UIUtil.getDate(dentalDate)
         );
 
@@ -184,15 +175,14 @@ public class ProcedureRepository {
         databaseReference.child(procedure.getUid()).child(BALANCE).setValue(procedure.getDentalBalance());
     }
 
+    public void updateBalance(Procedure procedure, double balance) {
+        databaseReference.child(procedure.getUid()).child(BALANCE).setValue(balance);
+    }
+
     public void updateProcedure(Procedure procedure) {
         Log.d(TAG, "updateProcedure: updating procedure: " + procedure.getUid());
         Log.d(TAG, "updateProcedure: balance: " + procedure.getDentalBalance());
-        databaseReference.child(procedure.getUid()).setValue(procedure).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.d(TAG, "onSuccess: update success");
-            }
-        });
+        databaseReference.child(procedure.getUid()).setValue(procedure);
     }
 
     public void removePaymentKeys(String procedureUID) {

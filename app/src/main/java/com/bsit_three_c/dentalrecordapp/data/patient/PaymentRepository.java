@@ -95,7 +95,9 @@ public class PaymentRepository {
         //  Update operation's balance
     }
 
-    public void addPayment(Procedure procedure, int modeOfPayment, String paidAmount, String date) {
+    public void addPayment(Procedure procedure,
+//                           int modeOfPayment,
+                           String paidAmount, String date) {
         double convertedPaidAmount = Double.parseDouble(paidAmount);
         String paymentUID = databaseReference.push().getKey();
 
@@ -103,7 +105,9 @@ public class PaymentRepository {
 
         if (paymentUID != null) {
 
-            Payment payment = new Payment(paymentUID, convertedPaidAmount, modeOfPayment, date);
+            Payment payment = new Payment(paymentUID, convertedPaidAmount,
+//                    modeOfPayment,
+                    date);
             databaseReference.child(paymentUID).setValue(payment);
 
             procedure.addPaymentKey(payment.getUid());
@@ -116,6 +120,7 @@ public class PaymentRepository {
         ProcedureRepository procedureRepository = ProcedureRepository.getInstance();
 
         databaseReference.child(payment.getUid()).setValue(payment);
+        Log.d(TAG, "updatePayment: updating balance: " + procedure.getDentalBalance());
         procedureRepository.updateProcedure(procedure);
     }
 
@@ -128,7 +133,7 @@ public class PaymentRepository {
         databaseReference.child(paymentUID).removeValue();
     }
 
-    public void removePaymets(ArrayList<String> paymentKeys) {
+    public void removePayments(ArrayList<String> paymentKeys) {
         for (int position = 0; position < paymentKeys.size(); position++) {
             Log.d(TAG, "removePaymets: removing payment");
             removePayment(paymentKeys.get(position));

@@ -134,7 +134,8 @@
                 android:paddingTop="10dp"
                 android:paddingEnd="20dp"
                 android:paddingBottom="10dp"
-                android:shadowColor="#32ED7D" />
+                android:shadowColor="#32ED7D"
+                android:textColorHint="#BDC7C8" />
         </LinearLayout>
 
         <LinearLayout
@@ -258,7 +259,8 @@
         android:paddingTop="10dp"
         android:paddingEnd="20dp"
         android:paddingBottom="10dp"
-        android:shadowColor="#32ED7D" />
+        android:shadowColor="#32ED7D"
+        android:textColorHint="#BDC7C8" />
 
     <TextView
         android:id="@+id/labelCivilStatus"

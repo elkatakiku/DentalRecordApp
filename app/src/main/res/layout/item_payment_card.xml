@@ -16,16 +16,16 @@
         <TextView
             android:id="@+id/txtViewPaymentAmount"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
             android:gravity="center_horizontal|center_vertical"
             android:padding="20dp"
             android:text="Payment"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center|center_horizontal|center_vertical"
             android:orientation="vertical">
@@ -36,7 +36,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="Mode Of Payment"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/textViewPaymentDate"

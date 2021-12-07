@@ -4,16 +4,20 @@ public class Payment {
 
     private String uid;
     private String paymentDate;
-    private int modeOfPayment;
+//    private int modeOfPayment;
     private Double amount;
 
     public Payment() {
     }
 
-    public Payment(String uid, Double amount, int modeOfPayment, String paymentDate) {
+    public Payment(
+            String uid,
+            Double amount,
+//            int modeOfPayment,
+            String paymentDate) {
         this.uid = uid;
         this.amount = amount;
-        this.modeOfPayment = modeOfPayment;
+//        this.modeOfPayment = modeOfPayment;
         this.paymentDate = paymentDate;
     }
 
@@ -33,13 +37,13 @@ public class Payment {
         this.amount = amount;
     }
 
-    public int getModeOfPayment() {
-        return modeOfPayment;
-    }
+//    public int getModeOfPayment() {
+//        return modeOfPayment;
+//    }
 
-    public void setModeOfPayment(int modeOfPayment) {
-        this.modeOfPayment = modeOfPayment;
-    }
+//    public void setModeOfPayment(int modeOfPayment) {
+//        this.modeOfPayment = modeOfPayment;
+//    }
 
     public String getPaymentDate() {
         return paymentDate;
@@ -54,7 +58,7 @@ public class Payment {
         return "Payment{" +
                 "uid='" + uid +
                 "\namount=" + amount +
-                "\nmodeOfPayment='" + modeOfPayment +
+//                "\nmodeOfPayment='" + modeOfPayment +
                 "\npaymentDate='" + paymentDate +
                 '}';
     }

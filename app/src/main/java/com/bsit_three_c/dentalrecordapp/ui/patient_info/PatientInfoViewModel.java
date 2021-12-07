@@ -23,8 +23,6 @@ public class PatientInfoViewModel extends ViewModel {
     private ProcedureRepository repository;
     private Patient patient;
 
-//    private final MutableLiveData<Procedure[]> mOperations = new MutableLiveData<>();
-
     private final MutableLiveData<Double> mBalance = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoaded = new MutableLiveData<>();
 
@@ -90,7 +88,6 @@ public class PatientInfoViewModel extends ViewModel {
             if (integer == procedureSize)
                 isLoaded.setValue(true);
             else isLoaded.setValue(false);
-            Log.d(TAG, "loadOperations: integer and size: " + (integer == procedureSize));
         });
     }
 

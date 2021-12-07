@@ -8,11 +8,11 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
+import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Payment;
+import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.BottomPaymentDialog;
 import com.bsit_three_c.dentalrecordapp.ui.patient_info.PatientInfoFragment;
-import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
@@ -26,6 +26,8 @@ public class PaymentList {
     private final BottomSheetDialog operationsDialog;
     private BottomPaymentDialog paymentDialog;
     private Procedure procedure;
+    private boolean isOnlyOne;
+    private Patient patient;
 
     public PaymentList(LinearLayout linearLayout, LayoutInflater layoutInflater,
                        PatientInfoFragment lifecycleOwner, BottomSheetDialog operationsDialog) {
@@ -40,7 +42,7 @@ public class PaymentList {
 
         String amount = payment.getAmount().toString();
         viewHolder.paymentAmount.setText(amount);
-        viewHolder.modeOfPayment.setText(UIUtil.getModeOfPayment(lifecycleOwner.getResources(), payment.getModeOfPayment()));
+//        viewHolder.modeOfPayment.setText(UIUtil.getModeOfPayment(lifecycleOwner.getResources(), payment.getModeOfPayment()));
         viewHolder.paymentDate.setText(payment.getPaymentDate());
 
         viewHolder.cardView.setOnClickListener(v -> {
@@ -58,11 +60,21 @@ public class PaymentList {
         //  Create payment dialog edit/delete style
         this.paymentDialog = new BottomPaymentDialog(layoutInflater, context, lifecycleOwner, true);
         paymentDialog.setProcedure(procedure);
+        paymentDialog.setOnlyOne(isOnlyOne);
+        paymentDialog.setPatient(patient);
         paymentDialog.createDialog(payment);
     }
 
     public void setProcedure(Procedure procedure) {
         this.procedure = procedure;
+    }
+
+    public void setOnlyOne(boolean isOnlyOne) {
+        this.isOnlyOne = isOnlyOne;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     public void addItems(ArrayList<Payment> payments) {

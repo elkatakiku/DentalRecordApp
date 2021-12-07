@@ -55,7 +55,16 @@ public class OperationFragment extends Fragment {
             if (isDownpayment) {
                 String dentalPayment = binding.editTxtAPPayment.getText().toString();
                 String dentalBalance = binding.txtViewBalance.getText().toString();
-                viewModel.addProcedure(patient, service, dentalDesc, date, modeOfPayment, dentalAmount, isDownpayment, dentalPayment, dentalBalance);
+                viewModel.addProcedure(
+                        patient,
+                        service,
+                        dentalDesc,
+                        date,
+//                        modeOfPayment,
+                        dentalAmount,
+                        isDownpayment,
+                        dentalPayment,
+                        dentalBalance);
             }
             else {
                 viewModel.addProcedure(patient, service, dentalDesc, date, modeOfPayment, dentalAmount, isDownpayment);
@@ -90,7 +99,7 @@ public class OperationFragment extends Fragment {
         binding.editTxtAPPayment.addTextChangedListener(new CustomTextWatcher(viewModel, binding.txtViewPaymentLabel));
 
         //  Spinner item selected listeners
-        binding.spnrModeOfPayment.setOnItemSelectedListener(new CustomItemSelectedListener(binding.tvModeOfPaymentLabel.getText().toString(), viewModel));
+//        binding.spnrModeOfPayment.setOnItemSelectedListener(new CustomItemSelectedListener(binding.tvModeOfPaymentLabel.getText().toString(), viewModel));
         binding.snprProcedureChoices.setOnItemSelectedListener(new CustomItemSelectedListener(binding.tvServicesLabel.getText().toString(), viewModel));
     }
 

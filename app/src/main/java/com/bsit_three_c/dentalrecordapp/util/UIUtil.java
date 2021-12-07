@@ -158,8 +158,34 @@ public class UIUtil {
     public static double convertToDouble(String input) {
         try {
             return Double.parseDouble(input);
-        } catch (Exception e) {
+        } catch (NumberFormatException | NullPointerException e) {
             return -1;
         }
+    }
+
+    public static int convertToInteger(String input) {
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    public static String capitalize(String s) {
+        StringBuilder capitalize = new StringBuilder(s.length());
+        boolean nextTitleCase = true;
+
+        for (char c : s.toCharArray()) {
+            if (Character.isSpaceChar(c))
+                nextTitleCase = true;
+            else if (nextTitleCase) {
+                c = Character.toTitleCase(c);
+                nextTitleCase = false;
+            }
+
+            capitalize.append(c);
+        }
+
+        return capitalize.toString();
     }
 }

@@ -9,10 +9,12 @@ import androidx.lifecycle.ViewModel;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.FormState;
 import com.bsit_three_c.dentalrecordapp.data.patient.PatientRepository;
+import com.bsit_three_c.dentalrecordapp.interfaces.SpinnerState;
 import com.bsit_three_c.dentalrecordapp.interfaces.TextChange;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
+import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
-public class AddPatientViewModel extends ViewModel implements TextChange {
+public class AddPatientViewModel extends ViewModel implements TextChange, SpinnerState {
     private static final String TAG = AddPatientViewModel.class.getSimpleName();
 
     private final PatientRepository repository;
@@ -80,43 +82,8 @@ public class AddPatientViewModel extends ViewModel implements TextChange {
     public void addPatient(String firstname, String lastname, String middleInitial, String address,
                            String phoneNumber, int civilStatus, int age, String occupation) {
 
-        repository.addPatient(firstname, lastname, middleInitial, address, phoneNumber,
+        repository.addPatient(UIUtil.capitalize(firstname), UIUtil.capitalize(lastname), UIUtil.capitalize(middleInitial), address, phoneNumber,
                 civilStatus, age, occupation);
-    }
-
-    @Override
-    public void dataChanged(String label, String input) {
-        boolean isInputNull = input == null;
-
-//        Log.d(TAG, "dataChanged: setting field: " + label);
-//        Log.d(TAG, "dataChanged: isComplete: " + Checker.isIncomplete(mFirstname, mlastname, mAge, mAddress, mPhoneNumber));
-        if ((!AGE.equals(label) && !OCCUPATION.equals(label)) && (isInputNull || input.isEmpty()))
-            setState(label, R.string.invalid_empty_input);
-
-        if (!isInputNull) {
-            if (ADDRESS.equals(label)) setState(label, VALID);
-            else if (Checker.containsSpecialCharacter(input))
-                setState(label, R.string.invalid_contains_special_character);
-            else if (isLetterField(label)) {
-                if (Checker.hasNumber(input)) setState(label, R.string.invalid_contains_number);
-                else setState(label, VALID);
-            } else if (!isLetterField(label)) {
-                Log.d(TAG, "dataChanged: setting field > isLetterField: " + label);
-                if (Checker.hasLetter(input)) {
-                    Log.d(TAG, "dataChanged: setting field > hasLetter: " + label);
-                    setState(label, R.string.invalid_contains_letter);
-                } else setState(label, VALID);
-            }
-        }
-
-        if (Checker.isComplete(mFirstname, mlastname, mAge, mAddress, mPhoneNumber))
-            addPatientFormState.setValue(new FormState(true));
-        else addPatientFormState.setValue(new FormState(false));
-    }
-
-    @Override
-    public void beforeDataChange(String label, int after, String s) {
-        if (MIDDLE_INITIAL.equals(label) && after > 1) setState(label, R.string.invalid_contains_more_than_one_character);
     }
 
     private boolean isLetterField(final String s) {
@@ -133,14 +100,18 @@ public class AddPatientViewModel extends ViewModel implements TextChange {
         return result;
     }
 
+    private void setButtonState() {
+        if (Checker.isComplete(mFirstname, mlastname, mAge, mAddress, mPhoneNumber, mCivilStatus))
+            addPatientFormState.setValue(new FormState(true));
+        else addPatientFormState.setValue(new FormState(false));
+    }
+
     private void setState(final String label, final Integer msg) {
         FormState field;
 
         if (msg == -1) field = new FormState(true);
         else field = new FormState(msg);
 
-//        Log.d(TAG, "setState: has error: " + (field.getMsgError() != null));
-//        Log.d(TAG, "setState: no error: " + field.isDataValid());
         switch (label) {
             case FIRSTNAME:
                 mFirstname.setValue(field);
@@ -169,4 +140,48 @@ public class AddPatientViewModel extends ViewModel implements TextChange {
         }
     }
 
+    @Override
+    public void dataChanged(String label, String input) {
+        boolean isInputNull = input == null;
+
+        if ((!AGE.equals(label) && !OCCUPATION.equals(label)) && (isInputNull || input.isEmpty()))
+            setState(label, R.string.invalid_empty_input);
+
+        if (!isInputNull) {
+            if (ADDRESS.equals(label)) setState(label, VALID);
+            else if (Checker.containsSpecialCharacter(input))
+                setState(label, R.string.invalid_contains_special_character);
+
+            else if (isLetterField(label)) {
+                if (Checker.hasNumber(input))
+                    setState(label, R.string.invalid_contains_number);
+                else if (MIDDLE_INITIAL.equals(label) && (input.length() > 1))
+                    setState(label, R.string.invalid_contains_more_than_one_character);
+                else setState(label, VALID);
+            }
+
+            else if (!isLetterField(label)) {
+                if (Checker.hasLetter(input)) setState(label, R.string.invalid_contains_letter);
+                else if (AGE.equals(label) && (UIUtil.convertToInteger(input) < 0 || UIUtil.convertToInteger(input) > 150))
+                    setState(label, R.string.invalid_too_old);
+                else setState(label, VALID);
+
+            }
+        }
+
+        setButtonState();
+    }
+
+    @Override
+    public void beforeDataChange(String label, int after, String s) {
+        if (MIDDLE_INITIAL.equals(label) && after > 1) setState(label, R.string.invalid_contains_more_than_one_character);
+    }
+
+    @Override
+    public void setSpinnerState(String label, int pos) {
+        Log.d(TAG, "setSpinnerState: spinner state change");
+        if (pos == 0) setState(label, pos);
+        else setState(label, VALID);
+        setButtonState();
+    }
 }

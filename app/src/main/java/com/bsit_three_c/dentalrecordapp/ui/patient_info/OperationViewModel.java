@@ -25,7 +25,7 @@ public class OperationViewModel extends ViewModel implements TextChange, Spinner
     private final MutableLiveData<FormState> mAmount = new MutableLiveData<>();
     private final MutableLiveData<FormState> mPayment = new MutableLiveData<>();
     private final MutableLiveData<FormState> mBalance = new MutableLiveData<>();
-    private final MutableLiveData<FormState> mModeOfPayment = new MutableLiveData<>();
+//    private final MutableLiveData<FormState> mModeOfPayment = new MutableLiveData<>();
     private final MutableLiveData<FormState> mServices = new MutableLiveData<>();
     private final MutableLiveData<Double> mBalanceAmount = new MutableLiveData<>();
 
@@ -48,14 +48,15 @@ public class OperationViewModel extends ViewModel implements TextChange, Spinner
         this.repository = repository;
     }
 
-    public void addProcedure(Patient patient, int service, String dentalDesc, Date dentalDate, int modeOfPayment,
+    public void addProcedure(Patient patient, int service, String dentalDesc, Date dentalDate,
+//                             int modeOfPayment,
                              String dentalAmount, boolean isFullyPaid, String dentalPayment, String dentalBalance) {
         repository.addProcedure(
                 patient,
                 service,
                 dentalDesc,
                 dentalDate,
-                modeOfPayment,
+//                modeOfPayment,
                 dentalAmount,
                 isFullyPaid,
                 dentalPayment,
@@ -70,7 +71,7 @@ public class OperationViewModel extends ViewModel implements TextChange, Spinner
                 service,
                 dentalDesc,
                 dentalDate,
-                modeOfPayment,
+//                modeOfPayment,
                 dentalAmount,
                 isFullyPaid,
                 dentalAmount,
@@ -102,9 +103,9 @@ public class OperationViewModel extends ViewModel implements TextChange, Spinner
         return balance;
     }
 
-    public MutableLiveData<FormState> getmModeOfPayment() {
-        return mModeOfPayment;
-    }
+//    public MutableLiveData<FormState> getmModeOfPayment() {
+//        return mModeOfPayment;
+//    }
 
     public MutableLiveData<FormState> getmServices() {
         return mServices;
@@ -112,39 +113,6 @@ public class OperationViewModel extends ViewModel implements TextChange, Spinner
 
     public void setDownpayment(boolean downpayment) {
         isDownpayment = downpayment;
-    }
-
-    @Override
-    public void beforeDataChange(String label, int after, String input) {
-        // Ignore this
-    }
-
-    @Override
-    public void dataChanged(String label, String input) {
-        boolean isNull = input == null;
-
-        if (isInputEmpty(isNull, input)) {
-            setState(label, R.string.invalid_empty_input);
-            if (PAYMENT.equals(label)) setBalance(label, input);
-        }
-        else if (isNumberField(label)) {
-            if (UIUtil.convertToDouble(input) == -1)
-                setState(label, R.string.invalid_input);
-
-            else if (Checker.isRepeated(input, "."))
-                setState(label, R.string.invalid_contains_two_or_more_dots);
-
-            else if (Checker.hasLetter(input))
-                setState(label, R.string.invalid_contains_letter);
-
-            else {
-                setState(label, VALID);
-                setBalance(label, input);
-            }
-        }
-        else setState(label, VALID);
-
-        setButtonState();
     }
 
     private boolean isInputEmpty(boolean isNull, String input) {
@@ -180,6 +148,39 @@ public class OperationViewModel extends ViewModel implements TextChange, Spinner
     }
 
     @Override
+    public void beforeDataChange(String label, int after, String input) {
+        // Ignore this
+    }
+
+    @Override
+    public void dataChanged(String label, String input) {
+        boolean isNull = input == null;
+
+        if (isInputEmpty(isNull, input)) {
+            setState(label, R.string.invalid_empty_input);
+            if (PAYMENT.equals(label)) setBalance(label, input);
+        }
+        else if (isNumberField(label)) {
+            if (UIUtil.convertToDouble(input) == -1)
+                setState(label, R.string.invalid_input);
+
+            else if (Checker.isRepeated(input, "."))
+                setState(label, R.string.invalid_contains_two_or_more_dots);
+
+            else if (Checker.hasLetter(input))
+                setState(label, R.string.invalid_contains_letter);
+
+            else {
+                setState(label, VALID);
+                setBalance(label, input);
+            }
+        }
+        else setState(label, VALID);
+
+        setButtonState();
+    }
+
+    @Override
     public void setSpinnerState(final String label, int pos) {
         if (pos == 0) setState(label, pos);
         else setState(label, VALID);
@@ -187,11 +188,13 @@ public class OperationViewModel extends ViewModel implements TextChange, Spinner
     }
 
     public void setButtonState() {
-        if (!isDownpayment && Checker.isComplete(mDescription, mServices, mModeOfPayment,
+        if (!isDownpayment && Checker.isComplete(mDescription, mServices,
+//                mModeOfPayment,
                 mAmount)) {
             mOperationState.setValue(new FormState(true));
         }
-        else if (isDownpayment && Checker.isComplete(mDescription, mServices, mModeOfPayment,
+        else if (isDownpayment && Checker.isComplete(mDescription, mServices,
+//                mModeOfPayment,
                 mAmount, mPayment, mBalance)) {
             mOperationState.setValue(new FormState(true));
         }
@@ -217,9 +220,9 @@ public class OperationViewModel extends ViewModel implements TextChange, Spinner
             case BALANCE:
                 mBalance.setValue(field);
                 break;
-            case MODE_OF_PAYMENT:
-                mModeOfPayment.setValue(field);
-                break;
+//            case MODE_OF_PAYMENT:
+//                mModeOfPayment.setValue(field);
+//                break;
             case SERVICE:
                 mServices.setValue(field);
                 break;

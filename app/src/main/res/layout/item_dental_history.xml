@@ -15,83 +15,60 @@
         android:layout_margin="5dp"
         android:background="?attr/selectableItemBackground"
         android:baselineAligned="false"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="5dp">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/txtDentalService"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="3"
                 android:textColor="@color/data"
                 android:textSize="18sp"
                 tools:text="Service" />
 
             <TextView
-                android:id="@+id/txtDentalDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:textColor="@color/label"
-                android:textSize="14sp"
-                tools:ignore="TextContrastCheck"
-                tools:text="Date" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
                 android:id="@+id/txtDentalAmount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:textAlignment="viewEnd"
                 android:textColor="@color/label"
                 android:textSize="18sp"
                 tools:ignore="TextContrastCheck"
                 tools:text="Amount" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtDentalDate"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:gravity="bottom|end"
-                android:orientation="horizontal">
+                android:layout_weight="3"
+                android:textColor="@color/label"
+                android:textSize="14sp"
+                tools:ignore="TextContrastCheck"
+                tools:text="Date" />
 
-                <TextView
-                    android:id="@+id/txtDentalFullyPaid"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingEnd="3dp"
-                    android:text="@string/fully_paid"
-                    android:textAlignment="viewEnd"
-                    android:textColor="#6E6E6E"
-                    android:textSize="14sp" />
-
-                <CheckBox
-                    android:id="@+id/cbFullyPaid"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="?android:attr/listChoiceIndicatorSingle"
-                    android:backgroundTint="#6E6E6E"
-                    android:button="@null"
-                    android:checked="false"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:gravity="bottom|end"
-                    android:textAlignment="viewEnd"
-                    android:textColor="#B8B8B8"
-                    android:textSize="14sp"
-                    android:visibility="gone" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/txtDentalFullyPaid"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/fully_paid"
+                android:textAlignment="viewEnd"
+                android:textColor="#6E6E6E"
+                android:textSize="14sp" />
 
         </LinearLayout>
     </LinearLayout>

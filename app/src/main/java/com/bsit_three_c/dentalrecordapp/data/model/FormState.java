@@ -26,6 +26,10 @@ public class FormState {
         return isDataValid;
     }
 
+//    public FormState setFormState() {
+//
+//    }
+
     @Override
     public String toString() {
         return "FormState{" +

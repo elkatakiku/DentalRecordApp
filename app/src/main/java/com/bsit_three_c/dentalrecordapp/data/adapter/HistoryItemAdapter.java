@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -70,9 +69,6 @@ public class HistoryItemAdapter extends ArrayAdapter {
         viewHolder.txtDentalDesc.setText(currentRecord.getDentalDesc());
         viewHolder.txtDentalDate.setText(UIUtil.getReadableDate(UIUtil.stringToDate(currentRecord.getDentalDate())));
         viewHolder.txtDentalAmount.setText(String.valueOf(currentRecord.getDentalTotalAmount()));
-        viewHolder.isFullyPaid.setChecked(!currentRecord.isDownpayment());
-
-        viewHolder.isFullyPaid.setBackgroundTintList(UIUtil.getCheckBoxColor(!currentRecord.isDownpayment()));
         viewHolder.txtFullyPaid.setTextColor(UIUtil.getCheckBoxColor(!currentRecord.isDownpayment()));
 
         return convertView;
@@ -88,14 +84,12 @@ public class HistoryItemAdapter extends ArrayAdapter {
         final TextView txtDentalDate;
         final TextView txtDentalAmount;
         final TextView txtFullyPaid;
-        final CheckBox isFullyPaid;
 
         public ViewHolder(View v) {
             this.txtDentalDesc = v.findViewById(R.id.txtDentalService);
             this.txtDentalDate = v.findViewById(R.id.txtDentalDate);
             this.txtDentalAmount = v.findViewById(R.id.txtDentalAmount);
             this.txtFullyPaid = v.findViewById(R.id.txtDentalFullyPaid);
-            this.isFullyPaid = v.findViewById(R.id.cbFullyPaid);
         }
     }
 }

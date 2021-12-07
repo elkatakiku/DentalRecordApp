@@ -99,7 +99,7 @@ public class PatientInfoFragment extends Fragment {
             Log.d(TAG, "loadProcedures: procedures size: " + viewModel.getProcedureSize());
             if (integer == viewModel.getProcedureSize()) {
                 operationsList.addItems(Arrays.asList(viewModel.getProcedures()));
-            }
+            } else operationsList.clearItems();
         });
     }
 
