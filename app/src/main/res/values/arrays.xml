@@ -58,7 +58,7 @@
 
     <!-- Services -->
     <string-array name="services_array">
-        <item>Choose services…</item>
+        <item>Choose serviceOptions…</item>
         <item>Oral Prophylaxis</item>
         <item>Restoration</item>
         <item>Extraction</item>

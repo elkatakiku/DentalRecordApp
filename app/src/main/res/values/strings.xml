@@ -17,17 +17,12 @@
     <string name="login_failed">"Login failed"</string>
     <string name="prompt_forgot_password">Forgot password?</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">User Display Name</string>
     <string name="nav_header_subtitle">user_email@email.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
 
     <!-- Nav Menu -->
-    <string name="menu_home">Home</string>
     <string name="menu_add_patient">Add Patient</string>
-    <string name="menu_search">Search</string>
     <string name="menu_logout">Logout</string>
     <string name="menu_help">Help</string>
     <string name="menu_settings">Settings</string>
@@ -37,32 +32,16 @@
     <!-- Strings used for fragments for navigation -->
     <string name="basic_info_fragment_label">Basic Info Fragment</string>
     <string name="teeth_fragment_label">TeethFragment</string>
-    <string name="payment_fragment_label">Payment Fragment</string>
     <string name="next">Next</string>
     <string name="add">Add Patient</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
     <!-- Constants -->
-    <string name="FIREBASE_URL">https://dental-record-app-default-rtdb.asia-southeast1.firebasedatabase.app</string>
-    <string name="USERS">users</string>
-    <string name="PATIENTS">patients</string>
-    <string name="UID">uid</string>
-    <string name="FIRSTNAME">firstname</string>
-    <string name="MIDDLE_NAME">middlename</string>
-    <string name="LASTNAME">lastname</string>
-    <string name="EMAIL">email</string>
-    <string name="PHONE_NUMBER">phoneNumber</string>
-    <string name="ADDRESS">address</string>
-    <string name="AGE">age</string>
-    <string name="BALANCE">balance</string>
     <string name="TODO">TODO</string>
     <string name="PATIENT">Patient</string>
-    <string name="PATIENT_UID">patient_uid</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Home -->
     <string name="error_network">Connect to a network.</string>
@@ -70,7 +49,6 @@
     <string name="last_update">Last Updated </string>
 
     <!-- Patient Item -->
-    <string name="content_desc">patientLetter</string>
     <string name="ellipces">…</string>
     <string name="title_activity_settings">SettingsActivity</string>
 
@@ -106,7 +84,7 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="previous">Previous</string>
     <string name="collapsing_toolbar_background">Collapsing Toolbar Background</string>
-    
+
     <!-- Patient Info -->
     <string name="patient_basic_info">Basic Info</string>
     <string name="Firstname">Firstname</string>
@@ -120,7 +98,12 @@
 
     <string name="add_dental_operation">New Procedure</string>
     <string name="fully_paid">Fully Paid</string>
-    
+
     <string name="delete_title">Delete Patient</string>
     <string name="delete_message">Are you sure you want to delete </string>
+    <string name="title_activity_menu">MenuActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="title_activity_employees">EmployeesActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 </resources>

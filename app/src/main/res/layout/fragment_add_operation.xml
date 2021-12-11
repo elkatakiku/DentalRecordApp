@@ -65,6 +65,12 @@
             android:minHeight="48dp"
             tools:ignore="SpeakableTextPresentCheck" />
 
+        <Spinner
+            android:id="@+id/sprTry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp" />
+
         <TextView
             android:id="@+id/txtViewDescLabel"
             android:layout_width="match_parent"

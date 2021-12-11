@@ -5,12 +5,16 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 
 import com.bsit_three_c.dentalrecordapp.data.model.FormState;
+import com.bsit_three_c.dentalrecordapp.data.model.ServiceOption;
 
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class Checker {
 
     private static final String TAG = Checker.class.getSimpleName();
+
+    private static String NOT_AVAILABLE = "N/A";
 
     private static boolean isNullOrError(LiveData<FormState> liveData) {
         return liveData.getValue() == null || liveData.getValue().getMsgError() != null;
@@ -77,5 +81,18 @@ public class Checker {
 
     public static boolean isFullyPaid(String input, double balance) {
         return balance - UIUtil.convertToDouble(input) < 0;
+    }
+
+    public static boolean hasItemChecked(ArrayList<ServiceOption> serviceOptions) {
+        for (ServiceOption serviceOption : serviceOptions) {
+            if (serviceOption.isSelected())
+                return true;
+        }
+
+        return false;
+    }
+
+    public static boolean isNotAvailable(String data) {
+        return NOT_AVAILABLE.equals(data);
     }
 }

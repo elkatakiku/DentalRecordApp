@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ItemAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Person;
+import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,6 +40,7 @@ public class PatientRepository {
     private final MutableLiveData<Boolean> isGettingPatientsDone = new MutableLiveData<>();
 
     private ItemAdapter adapter;
+    private int count;
 
     private PatientRepository() {
         this.database = FirebaseDatabase.getInstance(FIREBASE_URL);
@@ -52,7 +54,14 @@ public class PatientRepository {
         return instance;
     }
 
-    private ArrayList<Person> getPatients(DataSnapshot dataSnapshot) {
+    private void getPatients(DataSnapshot dataSnapshot) {
+
+        int counter = 0;
+
+        if (adapter.getItemCount() != 0 && adapter.getItemCount() == count){
+            adapter.clearAll();
+        }
+
         if (dataSnapshot != null) {
             this.personArrayList = new ArrayList<>();
             for (DataSnapshot data : dataSnapshot.getChildren()) {
@@ -61,39 +70,39 @@ public class PatientRepository {
                 if (patient != null && !isDuplicate(patient)) {
 
                     patient.setUid(data.getKey());
-                    this.personArrayList.add(patient);
+                    initialize(patient);
+                    adapter.addItem(patient);
+
+                    counter++;
 
                 }
-                else Log.d(TAG, "getPatients: Patient already in array list");
             }
         }
 
+
+        count = counter;
         isPatientsLoaded = true;
-        return this.personArrayList;
     }
 
     public void getPatients() {
         databaseReference.addValueEventListener(valueEventListener);
     }
 
-//    public void setValueEventListener() {
-//        databaseReference.addValueEventListener(valueEventListener);
-//    }
-
     public void setAdapter(ItemAdapter adapter) {
         this.adapter = adapter;
     }
 
     private final ValueEventListener valueEventListener = new ValueEventListener() {
+
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             Log.d(TAG, "onDataChange: data changed");
-
             isGettingPatientsDone.setValue(false);
-            adapter.setItems(getPatients(snapshot));
-            adapter.notifyDataSetChanged();
+
+            getPatients(snapshot);
 
             isGettingPatientsDone.setValue(true);
+            adapter.notifyDataSetChanged();
         }
 
         @Override
@@ -103,8 +112,8 @@ public class PatientRepository {
     };
 
 
-    public void addPatient(String firstname, String lastname, String middleInitial, String address,
-                           String phoneNumber, int civilStatus, int age, String occupation) {
+    public void add(String firstname, String lastname, String middleInitial, String address,
+                    String phoneNumber, int civilStatus, int age, String occupation) {
         String patientUID = databaseReference.push().getKey();
 
         ArrayList<String> operationKeys = new ArrayList<>();
@@ -127,12 +136,13 @@ public class PatientRepository {
         if (patientUID != null) databaseReference.child(patientUID).setValue(patient);
     }
 
-    public void updatePatient() {
+    public void update(Patient patient) {
         // TODO: Update Patients here
         // Use notifyItemRangeChanged or notifyItemChanged
+
     }
 
-    public void removePatient(Patient patient) {
+    public void remove(Patient patient) {
 
         // TODO: Remove Patients here
         ProcedureRepository repository = ProcedureRepository.getInstance();
@@ -151,15 +161,15 @@ public class PatientRepository {
     }
 
     public void removeProcedureKey(Patient patient, String procedureKey) {
-        Log.d(TAG, "removeProcedureKey: patient: " + patient);
+
         ArrayList<String> keys = patient.getDentalProcedures();
-
-        if (keys.size() == 1) {
-
-            keys.clear();
-            keys.add(NEW_PATIENT);
-
-        } else {
+//
+//        if (keys.size() == 1) {
+//
+//            keys.clear();
+//            keys.add(NEW_PATIENT);
+//
+//        } else {
 
             int index = keys.indexOf(procedureKey);
             if (index == -1) {
@@ -168,9 +178,35 @@ public class PatientRepository {
             }
 
             keys.remove(index);
-        }
+//        }
 
         databaseReference.child(patient.getUid()).child(DENTAL_PROCEDURES).setValue(keys);
+    }
+
+    private void initialize(Patient patient) {
+
+        String notAvailable = "N/A";
+
+        if (!Checker.isDataAvailable(patient.getFirstname()))
+            patient.setFirstname(notAvailable);
+
+        if (!Checker.isDataAvailable(patient.getLastname()))
+            patient.setLastname(notAvailable);
+
+        if (!Checker.isDataAvailable(patient.getMiddleInitial()))
+            patient.setMiddleInitial(notAvailable);
+
+        if (!Checker.isDataAvailable(patient.getAddress()))
+            patient.setAddress(notAvailable);
+
+        if (!Checker.isDataAvailable(patient.getPhoneNumber()))
+            patient.setPhoneNumber(notAvailable);
+
+        if (!Checker.isDataAvailable(patient.getOccupation()))
+            patient.setOccupation(notAvailable);
+
+        if (patient.getDentalProcedures() == null)
+            patient.setDentalProcedures(new ArrayList<>());
     }
 
     public void removeValueEventListener() {

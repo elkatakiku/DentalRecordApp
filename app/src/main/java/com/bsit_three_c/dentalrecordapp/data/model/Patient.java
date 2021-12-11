@@ -39,28 +39,11 @@ public class Patient extends Person implements Parcelable {
         this.address = address;
         this.civilStatus = civilStatus;
         this.age = age;
-//        this.balance = balance;
         this.occupation = occupation;
         this.lastUpdated = lastUpdated;
         if (dentalProcedures == null) Log.d(TAG, "Patient: dentalProcedures is null");
         this.dentalProcedures = dentalProcedures;
     }
-
-//    //  This constructor is used to create new patient
-//    public Patient(String uid, String firstname, String lastname, String middleInitial, String phoneNumber,
-//                   String address, String civilStatus, int age,
-////                   double balance,
-//                   String occupation,
-//                   Date lastUpdated) {
-//        super(uid, firstname, lastname, middleInitial, phoneNumber);
-//        this.address = address;
-//        this.civilStatus = civilStatus;
-//        this.age = age;
-////        this.balance = balance;
-//        this.occupation = occupation;
-//        this.lastUpdated = lastUpdated;
-//        this.dentalProcedures = new ArrayList<>();
-//    }
 
     protected Patient(Parcel in) {
         uid = in.readString();
@@ -103,14 +86,6 @@ public class Patient extends Person implements Parcelable {
         this.age = age;
     }
 
-//    public double getBalance() {
-//        return balance;
-//    }
-//
-//    public void setBalance(double balance) {
-//        this.balance = balance;
-//    }
-
     public int getCivilStatus() {
         return civilStatus;
     }
@@ -148,8 +123,8 @@ public class Patient extends Person implements Parcelable {
     }
 
     public void addProcedure(String procedureKey) {
+        if (dentalProcedures != null ) dentalProcedures.add(procedureKey);
         if (dentalProcedures.get(0).equals(NEW_PATIENT)) dentalProcedures.remove(0);
-        dentalProcedures.add(procedureKey);
     }
 
     @Override
@@ -158,7 +133,6 @@ public class Patient extends Person implements Parcelable {
                 "\naddress='" + address + '\'' +
                 "\ncivilStatus='" + civilStatus + '\'' +
                 "\nage=" + age +
-//                "\nbalance=" + balance +
                 "\noccupation='" + occupation + '\'' +
                 "\nlastUpdated=" + lastUpdated +
                 "\ndentalProcedures=" + dentalProcedures +

@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private MainViewModel mainViewModel;
     private ActivityMainBinding binding;
     private LoggedInUser loggedInUser;
+    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,18 +49,23 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(binding.appBarMain.toolbar);
 
         DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
+        NavigationView navigationView = binding.navMainView;
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_menu, R.id.nav_dashboard, R.id.nav_patients, R.id.nav_service, R.id.nav_appointments)
                 .setOpenableLayout(drawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
         onNavMenuItemSelected(navigationView.getMenu());
+
+    }
+
+    public NavController getNavController() {
+        return navController;
     }
 
     @Override
@@ -68,10 +74,11 @@ public class MainActivity extends AppCompatActivity {
 
         loggedInUser = (LoggedInUser) getIntent().getSerializableExtra(LocalStorage.LOGGED_IN_USER_KEY);
         if (loggedInUser == null) {
+            loggedInUser = new LoggedInUser("N/A", "N/A", "N/A");
             Log.d(TAG, "onStart: getIntent is null");
         } else Log.d(TAG, "onStart: getIntent isn't null");
 
-        updateHeader(binding.navView);
+        updateHeader(binding.navMainView);
     }
 
     @Override

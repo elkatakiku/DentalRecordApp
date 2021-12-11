@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:theme="@style/Theme.DentalRecordApp.AppBarOverlay">
+        android:theme="@style/Theme.DentalRecordApp.AppBarOverlay"
+        app:toolbarId="@+id/toolbar">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -33,6 +34,6 @@
         android:contentDescription="@string/TODO"
         android:visibility="gone"
         app:backgroundTint="@color/accent"
-        app:srcCompat="@drawable/add_icon_final" />
+        app:srcCompat="@mipmap/add_icon_final" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

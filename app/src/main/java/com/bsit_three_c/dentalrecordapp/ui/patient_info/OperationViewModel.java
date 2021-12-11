@@ -21,11 +21,10 @@ public class OperationViewModel extends ViewModel implements TextChange, Spinner
     private final ProcedureRepository repository;
 
     private final MutableLiveData<FormState> mOperationState = new MutableLiveData<>();
-    private final MutableLiveData<FormState> mDescription = new MutableLiveData<>();
+//    private final MutableLiveData<FormState> mDescription = new MutableLiveData<>();
     private final MutableLiveData<FormState> mAmount = new MutableLiveData<>();
     private final MutableLiveData<FormState> mPayment = new MutableLiveData<>();
     private final MutableLiveData<FormState> mBalance = new MutableLiveData<>();
-//    private final MutableLiveData<FormState> mModeOfPayment = new MutableLiveData<>();
     private final MutableLiveData<FormState> mServices = new MutableLiveData<>();
     private final MutableLiveData<Double> mBalanceAmount = new MutableLiveData<>();
 
@@ -37,10 +36,7 @@ public class OperationViewModel extends ViewModel implements TextChange, Spinner
     private static final String AMOUNT = "Amount";
     private static final String PAYMENT = "Payment";
     private static final String BALANCE = "Balance";
-    private static final String MODE_OF_PAYMENT = "Mode of Payment";
     private static final String SERVICE = "Services";
-    private static final String DEFAULT_MODE_OF_PAYMENT = "Choose mode of payment…";
-    private static final String DEFAULT_SERVICES = "Choose services…";
     private static final int VALID = -1;
     private boolean isDownpayment = false;
 
@@ -83,9 +79,9 @@ public class OperationViewModel extends ViewModel implements TextChange, Spinner
         return mOperationState;
     }
 
-    public LiveData<FormState> getmDescription() {
-        return mDescription;
-    }
+//    public LiveData<FormState> getmDescription() {
+//        return mDescription;
+//    }
 
     public LiveData<FormState> getmAmount() {
         return mAmount;
@@ -188,14 +184,14 @@ public class OperationViewModel extends ViewModel implements TextChange, Spinner
     }
 
     public void setButtonState() {
-        if (!isDownpayment && Checker.isComplete(mDescription, mServices,
-//                mModeOfPayment,
-                mAmount)) {
+        if (!isDownpayment && Checker.isComplete(
+//                mDescription,
+                mServices, mAmount)) {
             mOperationState.setValue(new FormState(true));
         }
-        else if (isDownpayment && Checker.isComplete(mDescription, mServices,
-//                mModeOfPayment,
-                mAmount, mPayment, mBalance)) {
+        else if (isDownpayment && Checker.isComplete(
+//                mDescription,
+                mServices, mAmount, mPayment, mBalance)) {
             mOperationState.setValue(new FormState(true));
         }
         else mOperationState.setValue(new FormState(false));
@@ -208,9 +204,9 @@ public class OperationViewModel extends ViewModel implements TextChange, Spinner
         else field = new FormState(msg);
 
         switch (label) {
-            case DESCRIPTION:
-                mDescription.setValue(field);
-                break;
+//            case DESCRIPTION:
+//                mDescription.setValue(field);
+//                break;
             case AMOUNT:
                 mAmount.setValue(field);
                 break;
@@ -220,9 +216,6 @@ public class OperationViewModel extends ViewModel implements TextChange, Spinner
             case BALANCE:
                 mBalance.setValue(field);
                 break;
-//            case MODE_OF_PAYMENT:
-//                mModeOfPayment.setValue(field);
-//                break;
             case SERVICE:
                 mServices.setValue(field);
                 break;

@@ -16,6 +16,7 @@ import com.bsit_three_c.dentalrecordapp.databinding.FragmentAddPatientBinding;
 import com.bsit_three_c.dentalrecordapp.util.CustomItemSelectedListener;
 import com.bsit_three_c.dentalrecordapp.util.CustomObserver;
 import com.bsit_three_c.dentalrecordapp.util.CustomTextWatcher;
+import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 public class AddPatientFragment extends Fragment {
     private static final String TAG = AddPatientFragment.class.getSimpleName();
@@ -43,7 +44,7 @@ public class AddPatientFragment extends Fragment {
             String middieInitial = binding.eTxtMiddleInitial.getText().toString();
             String address = binding.eTxtAddress.getText().toString();
             String phoneNumber = binding.eTxtPhoneNumber.getText().toString();
-            int age = Integer.parseInt(binding.eTxtAge.getText().toString());
+            int age = UIUtil.convertToInteger(binding.eTxtAge.getText().toString());
             int civilStatus = binding.spnrCivilStatus.getSelectedItemPosition();
             String occupation = binding.eTxtOccupation.getText().toString();
 
@@ -78,14 +79,20 @@ public class AddPatientFragment extends Fragment {
     }
 
     private void setListeners() {
-        binding.eTxtFirstname.addTextChangedListener(new CustomTextWatcher(basicViewModel, binding.labelFirstname));
-        binding.eTxtLastname.addTextChangedListener(new CustomTextWatcher(basicViewModel, binding.labelLastname));
-        binding.eTxtMiddleInitial.addTextChangedListener(new CustomTextWatcher(basicViewModel, binding.labelMiddle));
-        binding.eTxtAge.addTextChangedListener(new CustomTextWatcher(basicViewModel, binding.labelAge));
-        binding.eTxtAddress.addTextChangedListener(new CustomTextWatcher(basicViewModel, binding.labelAddress));
-        binding.eTxtPhoneNumber.addTextChangedListener(new CustomTextWatcher(basicViewModel, binding.labelTelephone));
-        binding.eTxtOccupation.addTextChangedListener(new CustomTextWatcher(basicViewModel, binding.labelOccupation));
+        binding.eTxtFirstname.addTextChangedListener(new CustomTextWatcher(basicViewModel, binding.labelFirstname.getText().toString()));
+        binding.eTxtLastname.addTextChangedListener(new CustomTextWatcher(basicViewModel, binding.labelLastname.getText().toString()));
+        binding.eTxtMiddleInitial.addTextChangedListener(new CustomTextWatcher(basicViewModel, binding.eTxtMiddleInitial.getHint().toString()));
+        binding.eTxtAge.addTextChangedListener(new CustomTextWatcher(basicViewModel, binding.eTxtAge.getHint().toString()));
+        binding.eTxtAddress.addTextChangedListener(new CustomTextWatcher(basicViewModel, binding.labelAddress.getText().toString()));
+        binding.eTxtPhoneNumber.addTextChangedListener(new CustomTextWatcher(basicViewModel, binding.labelTelephone.getText().toString()));
+        binding.eTxtOccupation.addTextChangedListener(new CustomTextWatcher(basicViewModel, binding.labelOccupation.getText().toString()));
         binding.spnrCivilStatus.setOnItemSelectedListener(new CustomItemSelectedListener(binding.labelCivilStatus.getText().toString(), basicViewModel));
+
+        binding.cbMIS.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) binding.layoutMIS.setVisibility(View.VISIBLE);
+            else binding.layoutMIS.setVisibility(View.GONE);
+
+        });
     }
 
     @Override

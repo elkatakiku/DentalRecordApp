@@ -82,7 +82,7 @@ public class AddPatientViewModel extends ViewModel implements TextChange, Spinne
     public void addPatient(String firstname, String lastname, String middleInitial, String address,
                            String phoneNumber, int civilStatus, int age, String occupation) {
 
-        repository.addPatient(UIUtil.capitalize(firstname), UIUtil.capitalize(lastname), UIUtil.capitalize(middleInitial), address, phoneNumber,
+        repository.add(UIUtil.capitalize(firstname), UIUtil.capitalize(lastname), UIUtil.capitalize(middleInitial), address, phoneNumber,
                 civilStatus, age, occupation);
     }
 
@@ -101,7 +101,7 @@ public class AddPatientViewModel extends ViewModel implements TextChange, Spinne
     }
 
     private void setButtonState() {
-        if (Checker.isComplete(mFirstname, mlastname, mAge, mAddress, mPhoneNumber, mCivilStatus))
+        if (Checker.isComplete(mFirstname, mlastname))
             addPatientFormState.setValue(new FormState(true));
         else addPatientFormState.setValue(new FormState(false));
     }

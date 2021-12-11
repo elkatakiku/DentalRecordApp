@@ -62,7 +62,6 @@ public class PatientInfoFragment extends Fragment {
         viewModel.getmBalance().observe(getViewLifecycleOwner(), aDouble -> {
             if (aDouble <= 0) {
                 binding.txtOperationsBalance.setText(UIUtil.getPaymentStatus(aDouble));
-//                binding.txtOperationsBalance.setTextColor(UIUtil.getCheckBoxColor(aDouble));
                 binding.balanceLayoutPatientInfo.setVisibility(View.GONE);
             } else {
                 binding.balanceLayoutPatientInfo.setVisibility(View.VISIBLE);
@@ -73,8 +72,6 @@ public class PatientInfoFragment extends Fragment {
         });
 
         displayInfo();
-
-        Log.d(TAG, "onViewCreated: Load procedures called");
         loadProcedures();
     }
 
@@ -95,8 +92,6 @@ public class PatientInfoFragment extends Fragment {
             }
 
             //  Checks if procedures has been loaded from the firebase
-            Log.d(TAG, "loadProcedures: integer: " + integer);
-            Log.d(TAG, "loadProcedures: procedures size: " + viewModel.getProcedureSize());
             if (integer == viewModel.getProcedureSize()) {
                 operationsList.addItems(Arrays.asList(viewModel.getProcedures()));
             } else operationsList.clearItems();

@@ -5,7 +5,7 @@ public class Account extends Person {
     private String email;
     private String username;
     private String password;
-    private boolean isAdmin;
+    private String userTypeCode;
 
     public Account() { }
 
@@ -32,12 +32,12 @@ public class Account extends Person {
         this.username = username;
     }
 
-    public boolean isAdmin() {
-        return isAdmin;
+    public String getUserTypeCode() {
+        return userTypeCode;
     }
 
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
+    public void setUserTypeCode(String userTypeCode) {
+        this.userTypeCode = userTypeCode;
     }
 
     public String getPassword() {

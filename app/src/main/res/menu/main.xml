@@ -9,7 +9,7 @@
         app:showAsAction="ifRoom|collapseActionView|withText" />
     <item
         android:id="@+id/menu_profile"
-        android:icon="@drawable/icon_profile"
+        android:icon="@mipmap/icon_profile"
         android:title="TODO"
         app:showAsAction="ifRoom|collapseActionView" />
 

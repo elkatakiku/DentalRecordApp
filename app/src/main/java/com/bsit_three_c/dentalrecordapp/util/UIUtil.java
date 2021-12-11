@@ -10,10 +10,12 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.data.model.ServiceOption;
 
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -187,5 +189,53 @@ public class UIUtil {
         }
 
         return capitalize.toString();
+    }
+
+    public static String getServiceTitle(String selectedTitles, String selectedTitle, ArrayList<ServiceOption> serviceOptions, String defaultTitle, String[] strings) {
+        if (selectedTitles.equals(defaultTitle)) {
+            Log.d(TAG, "getServiceTitle: this is true");
+            return selectedTitle;
+        }
+
+        Log.d(TAG, "getServiceTitle: selected titles: " + selectedTitles);
+        Log.d(TAG, "getServiceTitle: selected title: " + selectedTitle);
+
+        StringBuilder newTitle = new StringBuilder();
+
+        String[] titles = selectedTitles.split(" \\| ");
+        boolean inTitle = false;
+
+        for (int pos = 0; pos < titles.length; pos++) {
+            String title = titles[pos];
+            if (selectedTitle.equals(title)) {
+                inTitle = true;
+
+                //  This is wrong
+                int titlePos = getPosition(strings, selectedTitle);
+                if (titlePos != -1)
+                    serviceOptions.get(titlePos).setSelected(false);
+                continue;
+            }
+
+            newTitle.append(title).append(" | ");
+        }
+
+        if (!inTitle) {
+            newTitle.append(selectedTitle);
+        }
+        else {
+            int index = newTitle.lastIndexOf(" | ");
+            newTitle.delete(index, newTitle.capacity());
+        }
+
+        return newTitle.toString();
+    }
+
+    private static int getPosition(String[] titles, String selectedTitle) {
+        for (int pos = 0; pos < titles.length; pos++) {
+            if (titles[pos].equals(selectedTitle)) return pos;
+        }
+
+        return -1;
     }
 }

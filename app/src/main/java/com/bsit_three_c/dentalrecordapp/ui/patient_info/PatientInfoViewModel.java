@@ -31,12 +31,11 @@ public class PatientInfoViewModel extends ViewModel {
 
     private int procedureSize;
     private int totalCount;
-    private ArrayList<Procedure> procedureList;
+//    private ArrayList<Procedure> procedureList;
     private Procedure[] procedures;
 
     public PatientInfoViewModel(ProcedureRepository repository) {
         this.repository = repository;
-//        this.mBalance.setValue(0d);
     }
 
     public void loadOperations(Patient patient, LifecycleOwner lifecycleOwner) {
@@ -44,7 +43,7 @@ public class PatientInfoViewModel extends ViewModel {
 
         ArrayList<String> operationKeys = patient.getDentalProcedures();
         procedureSize = patient.getDentalProcedures().size();
-        procedureList = new ArrayList<>(procedureSize);
+//        procedureList = new ArrayList<>(procedureSize);
         procedures = new Procedure[procedureSize];
         isLoaded.setValue(false);
         mBalance.setValue(0d);
@@ -64,7 +63,7 @@ public class PatientInfoViewModel extends ViewModel {
 
                     if (procedure != null) {
 
-                        //  Assignes the procedure in the array in their respective order
+                        //  Assigns the procedure in the array in their respective order
                         procedures[finalPosition] = procedure;
 
                         // Update the counter after adding the procedure to array

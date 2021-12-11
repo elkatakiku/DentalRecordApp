@@ -14,6 +14,7 @@ import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Person;
 import com.bsit_three_c.dentalrecordapp.data.patient.PatientRepository;
+import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -60,7 +61,8 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
         Person person = personArrayList.get(position);
         String name = person.getLastname() + ", " + person.getFirstname();
-        if (person.getMiddleInitial() != null && !person.getMiddleInitial().isEmpty())
+
+        if (!Checker.isNotAvailable(person.getMiddleInitial()))
             name += " " + person.getMiddleInitial() + ".";
 
         itemViewHolder.name.setText(name);
@@ -77,9 +79,9 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         } else {
             Account account = (Account) person;
-            String accountType = account.isAdmin() ? "Admin" : "Non Admin";
+//            String accountType = account.isAdmin() ? "Admin" : "Non Admin";
             itemViewHolder.text2.setText(account.getEmail());
-            itemViewHolder.text3.setText(accountType);
+//            itemViewHolder.text3.setText(accountType);
         }
 
         itemViewHolder.delete.setOnClickListener(v -> {
@@ -91,7 +93,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .setTitle(R.string.delete_title)
                     .setMessage(context.getString(R.string.delete_message) + " " + person.getLastname())
                     .setPositiveButton("Yes", (dialog, which) -> {
-                        if (isPatient) patientRepository.removePatient((Patient) person);
+                        if (isPatient) patientRepository.remove((Patient) person);
                         else Snackbar.make(v, "Delete user", Snackbar.LENGTH_SHORT).show();
                     })
                     .setNegativeButton("No", (dialog, which) -> alertDialog.dismiss());

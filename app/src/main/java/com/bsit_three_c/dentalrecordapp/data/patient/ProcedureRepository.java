@@ -182,6 +182,8 @@ public class ProcedureRepository {
     public void updateProcedure(Procedure procedure) {
         Log.d(TAG, "updateProcedure: updating procedure: " + procedure.getUid());
         Log.d(TAG, "updateProcedure: balance: " + procedure.getDentalBalance());
+
+        //  Update procedure
         databaseReference.child(procedure.getUid()).setValue(procedure);
     }
 
@@ -193,7 +195,7 @@ public class ProcedureRepository {
         databaseReference.child(procedureUID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d(TAG, "onDataChange: snapshot count: " + (snapshot.getChildrenCount()));
+
                 Procedure procedure = snapshot.getValue(Procedure.class);
 
                 if (procedure != null) {

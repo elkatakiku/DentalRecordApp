@@ -35,7 +35,4 @@
         <item name="android:textSize">25sp</item>
     </style>
 
-    <style name="HeaderTextSize" parent="Widget.AppCompat.TextView">
-        <item name="android:textSize">20sp</item>
-    </style>
 </resources>

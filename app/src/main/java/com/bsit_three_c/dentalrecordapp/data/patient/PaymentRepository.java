@@ -119,8 +119,10 @@ public class PaymentRepository {
     public void updatePayment(Payment payment, Procedure procedure) {
         ProcedureRepository procedureRepository = ProcedureRepository.getInstance();
 
+        //  Update payment
         databaseReference.child(payment.getUid()).setValue(payment);
-        Log.d(TAG, "updatePayment: updating balance: " + procedure.getDentalBalance());
+
+        //  Update procedure
         procedureRepository.updateProcedure(procedure);
     }
 

@@ -3,23 +3,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_menu">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/nav_menu"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.menu.MenuFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_menu"/>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.add_patient.AddPatientFragment"
-        android:label="@string/menu_add_patient"
-        tools:layout="@layout/fragment_add_patient"/>
+        android:id="@+id/nav_dashboard"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.dashboard.AdminDashboardFragment"
+        android:label="Dashboard"
+        tools:layout="@layout/fragment_admin_dashboard"/>
 
     <fragment
-        android:id="@+id/nav_slideshow"
+        android:id="@+id/nav_patients"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.patients.PatientsFragment"
+        android:label="Patients"
+        tools:layout="@layout/fragment_patients" />
+
+    <fragment
+        android:id="@+id/nav_employees"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.services.ServicesFragment"
+        android:label="Services"
+        tools:layout="@layout/fragment_services"/>
+
+    <fragment
+        android:id="@+id/nav_service"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.services.ServicesFragment"
+        android:label="Services"
+        tools:layout="@layout/fragment_services"/>
+
+    <fragment
+        android:id="@+id/nav_appointments"
         android:name="com.bsit_three_c.dentalrecordapp.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_search"
+        android:label="Appointments"
         tools:layout="@layout/fragment_slideshow" />
 </navigation>

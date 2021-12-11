@@ -44,7 +44,6 @@ public class BottomPaymentDialog {
     private Patient patient;
 
     private final MutableLiveData<FormState> mAmount = new MutableLiveData<>();
-//    private final MutableLiveData<FormState> mModeOfPayment = new MutableLiveData<>();
     private final MutableLiveData<FormState> mState = new MutableLiveData<>();
 
     private final boolean isEdit;
@@ -116,7 +115,6 @@ public class BottomPaymentDialog {
 
         viewHolder.paymentDialogTitle.setText(isEdit ? "Edit Payment" : "Add Payment");
         viewHolder.paymentDialogDate.updateDate(year, month, day);
-//        viewHolder.modeOfPaymentDialog.setSelection(payment.getModeOfPayment());
         viewHolder.paymentDialogAmount.setText(oldAmount);
 
         setObservers(viewHolder);
@@ -134,18 +132,27 @@ public class BottomPaymentDialog {
 
             // Update payment
             String date = UIUtil.getDate(UIUtil.getDate(viewHolder.paymentDialogDate));
-//            int modeOfPayment = viewHolder.modeOfPaymentDialog.getSelectedItemPosition();
             String amount = viewHolder.paymentDialogAmount.getText().toString();
             double convertedAmount = UIUtil.convertToDouble(amount);
 
-            double newBalance = procedure.getDentalBalance() - convertedAmount;
+            double newBalance = 0d;
+            Log.d(TAG, "setBtnConfirm: size: " + procedure.getPaymentKeys().size());
+            if (procedure.getPaymentKeys().size() >= 1) {
+                Log.d(TAG, "setBtnConfirm: this is only 1 payment");
+                newBalance = procedure.getDentalBalance() - convertedAmount;
+            }
+            else {
+                Log.d(TAG, "setBtnConfirm: this is not");
+                newBalance = procedure.getDentalTotalAmount() - convertedAmount;
+            }
+
 
             payment.setPaymentDate(date);
-//            payment.setModeOfPayment(modeOfPayment);
             payment.setAmount(convertedAmount);
 
             procedure.setDentalBalance(newBalance);
-            Log.d(TAG, "setBtnConfirm: new balance: " + newBalance);
+
+            //  Update payment
             repository.updatePayment(payment, procedure);
 
             paymentDialog.dismiss();
@@ -204,6 +211,8 @@ public class BottomPaymentDialog {
             mAmount.setValue(new FormState(R.string.invalid_contains_two_or_more_dots));
         else if (UIUtil.convertToDouble(input) == -1)
             mAmount.setValue(new FormState(R.string.invalid_input));
+        else if (procedure.getPaymentKeys().size() <= 1 && (procedure.getDentalTotalAmount() - UIUtil.convertToDouble(input) >= 0))
+            mAmount.setValue(new FormState(true));
         else if (Checker.isFullyPaid(input, procedure.getDentalBalance()))
             mAmount.setValue(new FormState(R.string.invalid_fully_paid));
         else mAmount.setValue(new FormState(true));

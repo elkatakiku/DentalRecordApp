@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
 
             loadingProgressBar.setVisibility(View.GONE);
             if (LocalStorage.getLoggedInUser(this) != null) {
-                redirectToHome();
+                redirectToMenu();
             } else if (!isOnline) {
                 Internet.showSnackBarInternetError(binding.getRoot());
                 return;
@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                 showLoginFailed(loginResult.getError());
             } else if (loginResult.getSuccess() != null) {
                 updateUiWithUser(loginResult.getSuccess());
-                redirectToHome();
+                redirectToMenu();
             }
 
             setResult(Activity.RESULT_OK);
@@ -142,17 +142,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void redirectToHome() {
-        Log.i(TAG, "redirectToHome: login result is success");
+    private void redirectToMenu() {
 
-        Log.i(TAG, "redirectToHome: Saving user info");
+        //  TODO: checks if account is admin, staff or client
+
+
+
         // Checks if logged in user is already saved
         if (LocalStorage.getLoggedInUser(this) == null)
             LocalStorage.saveLoggedInUser(this, loginViewModel.getLoggedInUser());
-        Log.d(TAG, "redirectToHome: Starting sample activity");
 
         // Passing loggedInUser object
-        Log.d(TAG, "redirectToHome: passing loggedInUser object");
         intent.putExtra(LocalStorage.LOGGED_IN_USER_KEY, loginViewModel.getLoggedInUser());
 
         // Redirect user to main activity

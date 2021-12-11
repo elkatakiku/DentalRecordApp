@@ -24,13 +24,9 @@ public class CustomObserver implements Observer<FormState> {
     public void onChanged(FormState formState) {
         if (formState == null) return;
 
-        Log.d(TAG, "onChanged: formstate no error: " + (formState.getMsgError() == null));
         if (formState.getMsgError() != null) {
-            int error = formState.getMsgError();
-            Log.d(TAG, "onChanged: error value: " + res.getString(error));
-            editText.setError(res.getString(error));
+            editText.setError(res.getString(formState.getMsgError()));
         }
-        Log.d(TAG, "onChanged: done analyzing if have error");
     }
 
 

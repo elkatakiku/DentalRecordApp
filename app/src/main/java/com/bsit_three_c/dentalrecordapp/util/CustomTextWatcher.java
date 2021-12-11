@@ -3,7 +3,6 @@ package com.bsit_three_c.dentalrecordapp.util;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.bsit_three_c.dentalrecordapp.interfaces.TextChange;
 
@@ -11,9 +10,9 @@ public class CustomTextWatcher implements TextWatcher {
     private static final String TAG = CustomObserver.class.getSimpleName();
 
     private final TextChange viewModel;
-    private final TextView label;
+    private final String label;
 
-    public CustomTextWatcher(TextChange viewModel, TextView label) {
+    public CustomTextWatcher(TextChange viewModel, String label) {
         this.viewModel = viewModel;
         this.label = label;
     }
@@ -21,7 +20,7 @@ public class CustomTextWatcher implements TextWatcher {
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         Log.d(TAG, "beforeTextChanged called");
-        viewModel.beforeDataChange(label.getText().toString(), after, s.toString());
+        viewModel.beforeDataChange(label, after, s.toString());
     }
 
     @Override
@@ -31,6 +30,6 @@ public class CustomTextWatcher implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable s) {
-        viewModel.dataChanged(label.getText().toString(), s.toString());
+        viewModel.dataChanged(label, s.toString());
     }
 }

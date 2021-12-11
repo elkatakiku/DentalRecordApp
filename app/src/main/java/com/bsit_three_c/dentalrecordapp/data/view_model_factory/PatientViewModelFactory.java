@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bsit_three_c.dentalrecordapp.data.patient.ProcedureRepository;
 import com.bsit_three_c.dentalrecordapp.data.patient.PatientRepository;
 import com.bsit_three_c.dentalrecordapp.ui.add_patient.AddPatientViewModel;
-import com.bsit_three_c.dentalrecordapp.ui.home.HomeViewModel;
+import com.bsit_three_c.dentalrecordapp.ui.patients.PatientsViewModel;
 import com.bsit_three_c.dentalrecordapp.ui.patient_info.OperationViewModel;
 import com.bsit_three_c.dentalrecordapp.ui.patient_info.PatientInfoViewModel;
 
@@ -17,8 +17,8 @@ public class PatientViewModelFactory implements ViewModelProvider.Factory {
     @Override
 
     public <T extends ViewModel> T create(@NonNull Class<T> aClass) {
-        if (aClass.isAssignableFrom(HomeViewModel.class)) {
-            return (T) new HomeViewModel(PatientRepository.getInstance());
+        if (aClass.isAssignableFrom(PatientsViewModel.class)) {
+            return (T) new PatientsViewModel(PatientRepository.getInstance());
         }
         else if (aClass.isAssignableFrom(AddPatientViewModel.class)) {
             return (T) new AddPatientViewModel(PatientRepository.getInstance());

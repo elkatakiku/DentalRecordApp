@@ -10,7 +10,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/custom_gradient"
         android:gravity="bottom|center_vertical"
         android:orientation="vertical"
@@ -54,7 +54,7 @@
         android:background="@drawable/shape_input"
         android:elevation="5dp"
         android:ems="10"
-        android:hint="Firsname"
+        android:hint="Firstname"
         android:inputType="textPersonName"
         android:labelFor="@id/labelFirstname"
         android:minHeight="48dp"
@@ -92,89 +92,87 @@
         android:paddingBottom="10dp"
         android:shadowColor="#32ED7D" />
 
+    <CheckBox
+        android:id="@+id/cbMIS"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:buttonTint="#64B5F6"
+        android:text="Middle Initial / Suffix"
+        android:textColor="@color/label" />
+
     <LinearLayout
+        android:id="@+id/layoutMIS"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:divider="@drawable/empty_tall_divider"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:showDividers="middle">
+        android:visibility="gone"
+        tools:visibility="visible">
 
-        <LinearLayout
+        <EditText
+            android:id="@+id/eTxtMiddleInitial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:background="@drawable/shape_input"
+            android:elevation="5dp"
+            android:ems="10"
+            android:hint="Middle Initial"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="10dp"
+            android:shadowColor="#32ED7D"
+            android:textColorHint="#BDC7C8" />
 
-            <TextView
-                android:id="@+id/labelMiddle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:labelFor="@id/eTxtMiddleInitial"
-                android:text="Middle Initial"
-                android:visibility="invisible" />
-
-            <EditText
-                android:id="@+id/eTxtMiddleInitial"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/shape_input"
-                android:elevation="5dp"
-                android:ems="10"
-                android:hint="Middle Initial"
-                android:inputType="textPersonName"
-                android:minHeight="48dp"
-                android:paddingStart="20dp"
-                android:paddingTop="10dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="10dp"
-                android:shadowColor="#32ED7D"
-                android:textColorHint="#BDC7C8" />
-        </LinearLayout>
-
-        <LinearLayout
+        <EditText
+            android:id="@+id/editTextTextPersonName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/labelAge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:text="Age"
-                android:visibility="invisible" />
-
-            <EditText
-                android:id="@+id/eTxtAge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/shape_input"
-                android:elevation="5dp"
-                android:ems="10"
-                android:hint="Age"
-                android:inputType="number"
-                android:minWidth="48dp"
-                android:minHeight="48dp"
-                android:paddingStart="20dp"
-                android:paddingTop="10dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="10dp"
-                android:shadowColor="#32ED7D" />
-        </LinearLayout>
+            android:background="@drawable/shape_input"
+            android:elevation="5dp"
+            android:ems="10"
+            android:hint="Suffix"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="10dp"
+            android:textColorHint="@color/optional_field" />
     </LinearLayout>
+
+    <EditText
+        android:id="@+id/eTxtAge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/shape_input"
+        android:elevation="5dp"
+        android:ems="10"
+        android:hint="Age"
+        android:inputType="number"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:shadowColor="#32ED7D" />
 
     <TextView
         android:id="@+id/labelAddress"
@@ -260,7 +258,7 @@
         android:paddingEnd="20dp"
         android:paddingBottom="10dp"
         android:shadowColor="#32ED7D"
-        android:textColorHint="#BDC7C8" />
+        android:textColorHint="@color/optional_field" />
 
     <TextView
         android:id="@+id/labelCivilStatus"
@@ -288,6 +286,16 @@
         android:paddingBottom="10dp"
         android:spinnerMode="dropdown" />
 
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:buttonTint="#64B5F6"
+        android:text="Consent Form"
+        android:textColor="@color/label" />
+
     <Button
         android:id="@+id/btnAddPatient"
         android:layout_width="match_parent"
@@ -296,6 +304,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:backgroundTint="@color/button_patient_info"
         android:padding="16dp"
         android:text="@string/add"
