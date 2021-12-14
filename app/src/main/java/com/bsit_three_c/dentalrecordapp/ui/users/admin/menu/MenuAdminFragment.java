@@ -1,7 +1,6 @@
 package com.bsit_three_c.dentalrecordapp.ui.users.admin.menu;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
-import com.bsit_three_c.dentalrecordapp.MainActivity;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentAdminMenuBinding;
 import com.google.android.material.snackbar.Snackbar;
@@ -45,23 +44,27 @@ public class MenuAdminFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Log.d(TAG, "onViewCreated: view created");
-
-        MainActivity mainActivity = (MainActivity) requireActivity();
+        binding.bntMenuDashboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(MenuAdminFragment.this)
+                        .navigate(R.id.nav_dashboard);
+            }
+        });
 
         binding.btnMenuPatients.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, "Patients", Snackbar.LENGTH_SHORT).show();
-                mainActivity.getNavController().navigate(R.id.nav_patients);
+                NavHostFragment.findNavController(MenuAdminFragment.this)
+                        .navigate(R.id.nav_patients);
             }
         });
 
-        binding.bntMenuDashboard.setOnClickListener(new View.OnClickListener() {
+        binding.btnMenuServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, "Dashboard", Snackbar.LENGTH_SHORT).show();
-                mainActivity.getNavController().navigate(R.id.nav_dashboard);
+                NavHostFragment.findNavController(MenuAdminFragment.this)
+                        .navigate(R.id.nav_service);
             }
         });
 
@@ -78,14 +81,6 @@ public class MenuAdminFragment extends Fragment {
                 Snackbar.make(v, "Appointments", Snackbar.LENGTH_SHORT).show();
             }
         });
-
-        binding.btnMenuServices.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(v, "Services", Snackbar.LENGTH_SHORT).show();
-            }
-        });
-
 
     }
 

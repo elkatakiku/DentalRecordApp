@@ -14,8 +14,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ServiceAdapter;
+import com.bsit_three_c.dentalrecordapp.data.model.DentalServiceOption;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
-import com.bsit_three_c.dentalrecordapp.data.model.ServiceOption;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.PatientViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentAddOperationBinding;
 import com.bsit_three_c.dentalrecordapp.util.CustomItemSelectedListener;
@@ -96,10 +96,10 @@ public class OperationFragment extends Fragment {
         });
 
         final String[] servicesArray = getResources().getStringArray(R.array.services_array);
-        ArrayList<ServiceOption> serviceOptions = new ArrayList<>();
+        ArrayList<DentalServiceOption> serviceOptions = new ArrayList<>();
 
         for (int i = 0; i < servicesArray.length; i++) {
-            serviceOptions.add(new ServiceOption(servicesArray[i], i, false));
+            serviceOptions.add(new DentalServiceOption(servicesArray[i], i, false));
         }
 
         ServiceAdapter serviceAdapter = new ServiceAdapter(getContext(), 0, serviceOptions,
@@ -107,7 +107,7 @@ public class OperationFragment extends Fragment {
         binding.sprTry.setAdapter(serviceAdapter);
 
         Log.d(TAG, "onViewCreated: " + binding.sprTry.getItemAtPosition(0).toString());
-        ServiceOption serviceOption = (ServiceOption) binding.sprTry.getItemAtPosition(0);
+        DentalServiceOption serviceOption = (DentalServiceOption) binding.sprTry.getItemAtPosition(0);
     }
 
     private void setListeners() {

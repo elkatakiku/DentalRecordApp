@@ -56,7 +56,7 @@ public class AddPatientFragment extends Fragment {
             if (activity != null) {
                 String activityName = activity.getClass().getSimpleName();
                 if (activityName.equals("AddPatientActivity")) activity.finish();
-                else if (activityName.equals("MainActivity")) getActivity().onBackPressed();
+                else if (activityName.equals("MainAdminActivity")) getActivity().onBackPressed();
             }
 
 

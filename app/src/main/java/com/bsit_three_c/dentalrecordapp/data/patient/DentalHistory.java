@@ -21,8 +21,4 @@ public class DentalHistory {
     public ArrayList<Procedure> getDentalOperations() {
         return procedures;
     }
-
-//    public void addDentalOperation(Procedure) {
-//
-//    }
 }

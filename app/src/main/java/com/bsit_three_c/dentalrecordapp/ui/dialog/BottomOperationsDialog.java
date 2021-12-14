@@ -1,5 +1,6 @@
 package com.bsit_three_c.dentalrecordapp.ui.dialog;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,14 +17,15 @@ import androidx.lifecycle.Observer;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.adapter.PaymentList;
-import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Payment;
-import com.bsit_three_c.dentalrecordapp.data.patient.PaymentRepository;
-import com.bsit_three_c.dentalrecordapp.data.patient.ProcedureRepository;
+import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
+import com.bsit_three_c.dentalrecordapp.data.repository.PaymentRepository;
+import com.bsit_three_c.dentalrecordapp.data.repository.ProcedureRepository;
 import com.bsit_three_c.dentalrecordapp.ui.patient_info.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -54,6 +56,8 @@ public class BottomOperationsDialog {
     private int totalPayments;
     private double totalPaid;
     private double totalAmount;
+
+    private AlertDialog alertDialog;
 
     private static final String FULLY_PAID = "Fully Paid";
 
@@ -121,8 +125,19 @@ public class BottomOperationsDialog {
         viewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeProcedure();
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+                builder
+                        .setTitle(R.string.delete_title)
+                        .setMessage(context.getString(R.string.delete_message) + " " + UIUtil.getService(context.getResources(), procedure.getService()))
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            Snackbar.make(v, "Delete procedure", Snackbar.LENGTH_SHORT).show();
+                            removeProcedure();
+                        })
+                        .setNegativeButton("No", (dialog, which) -> alertDialog.dismiss());
+                alertDialog = builder.create();
+                alertDialog.show();
             }
         });
 

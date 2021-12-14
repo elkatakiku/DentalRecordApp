@@ -10,7 +10,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.data.model.ServiceOption;
+import com.bsit_three_c.dentalrecordapp.data.model.DentalServiceOption;
 
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
@@ -191,7 +191,7 @@ public class UIUtil {
         return capitalize.toString();
     }
 
-    public static String getServiceTitle(String selectedTitles, String selectedTitle, ArrayList<ServiceOption> serviceOptions, String defaultTitle, String[] strings) {
+    public static String getServiceTitle(String selectedTitles, String selectedTitle, ArrayList<DentalServiceOption> serviceOptions, String defaultTitle, String[] strings) {
         if (selectedTitles.equals(defaultTitle)) {
             Log.d(TAG, "getServiceTitle: this is true");
             return selectedTitle;
@@ -238,4 +238,6 @@ public class UIUtil {
 
         return -1;
     }
+
+
 }

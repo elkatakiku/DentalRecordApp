@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph2"
+    app:startDestination="@id/CreatePatientAccount">
+
+    <fragment
+        android:id="@+id/CreatePatientAccount"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.register.CreateAccountFragment"
+        android:label="fragment_create_account"
+        tools:layout="@layout/fragment_create_account" >
+        <action
+            android:id="@+id/action_CreateAcountFragment_to_VerifyFragment"
+            app:destination="@id/VerifyFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/VerifyFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.register.VerifyFragment"
+        android:label="Verify"
+        tools:layout="@layout/fragment_verify">
+
+        <action
+            android:id="@+id/action_FirstFragment_to_Second2Fragment"
+            app:destination="@id/PatientFormFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/PatientFormFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.register.PatientFormFragment"
+        android:label="Patient Form"
+        tools:layout="@layout/fragment_patient_form"/>
+</navigation>

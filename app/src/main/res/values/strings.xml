@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">Smile Stone</string>
+    <string name="app_name">ELL Clinic</string>
     <!-- Strings related to btnLogin -->
 
     <string name="system">ELL DENTAL RECORD SYSTEM</string>
-    <string name="systemName">Smile Stone</string>
+    <string name="systemName">ELL Record</string>
 
     <!-- Login Strings -->
     <string name="logo_content_desc">ELL Logo</string>
@@ -103,7 +103,9 @@
     <string name="delete_message">Are you sure you want to delete </string>
     <string name="title_activity_menu">MenuActivity</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="title_activity_employees">EmployeesActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="title_activity_add_service">AddServiceActivity</string>
+
 </resources>

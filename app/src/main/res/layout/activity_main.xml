@@ -9,13 +9,13 @@
     tools:openDrawer="start">
 
     <include
-        android:id="@+id/app_bar_main"
-        layout="@layout/app_bar_main"
+        android:id="@+id/app_bar_main_user"
+        layout="@layout/app_bar_main_user"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_main_view"
+        android:id="@+id/nav_user_main_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
@@ -29,5 +29,5 @@
         app:itemShapeInsetStart="0dp"
         app:itemShapeInsetTop="0dp"
         app:itemTextColor="@drawable/selector_nav_item"
-        app:menu="@menu/activity_main_drawer" />
+        app:menu="@menu/user_drawer" />
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -10,11 +10,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.data.adapter.ItemAdapter;
+import com.bsit_three_c.dentalrecordapp.databinding.FragmentAdminServicesBinding;
 
 public class AdminServicesFragment extends Fragment {
 
     private AdminServicesViewModel mViewModel;
+    private FragmentAdminServicesBinding binding;
+
+    private ItemAdapter adapter;
 
     public static AdminServicesFragment newInstance() {
         return new AdminServicesFragment();
@@ -23,7 +27,17 @@ public class AdminServicesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_admin_services, container, false);
+        binding = FragmentAdminServicesBinding.inflate(inflater, container, false);
+
+        adapter = new ItemAdapter(getActivity(), true);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
     }
 
     @Override

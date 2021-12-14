@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.bsit_three_c.dentalrecordapp.data.adapter.ItemAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.Person;
-import com.bsit_three_c.dentalrecordapp.data.patient.PatientRepository;
+import com.bsit_three_c.dentalrecordapp.data.repository.PatientRepository;
 import com.bsit_three_c.dentalrecordapp.util.Internet;
 
 import java.util.ArrayList;

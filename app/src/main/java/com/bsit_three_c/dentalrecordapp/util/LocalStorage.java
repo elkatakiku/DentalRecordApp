@@ -14,6 +14,10 @@ public class LocalStorage {
     private static final String TAG = "LocalStorage";
     private static final String SP_KEY = "LoggedInUser Object";
 
+    private static final String ADMIN = "ELL_Admin";
+    private static final String EMPLOYEE = "ELL_Employee";
+    private static final String CLIENT = "ELL_Patient";
+
     public static void saveLoggedInUser(Context context, LoggedInUser loggedInUser) {
         String jsonLoggedInUser = new Gson().toJson(loggedInUser);
 

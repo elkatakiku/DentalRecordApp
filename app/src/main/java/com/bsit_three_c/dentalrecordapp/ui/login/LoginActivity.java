@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
 
             loadingProgressBar.setVisibility(View.GONE);
             if (LocalStorage.getLoggedInUser(this) != null) {
-                redirectToMenu();
+                returnResult();
             } else if (!isOnline) {
                 Internet.showSnackBarInternetError(binding.getRoot());
                 return;
@@ -85,10 +85,10 @@ public class LoginActivity extends AppCompatActivity {
                 showLoginFailed(loginResult.getError());
             } else if (loginResult.getSuccess() != null) {
                 updateUiWithUser(loginResult.getSuccess());
-                redirectToMenu();
+                returnResult();
             }
 
-            setResult(Activity.RESULT_OK);
+            setResult(Activity.RESULT_CANCELED);
         });
 
         TextWatcher afterTextChangedListener = new TextWatcher() {
@@ -142,11 +142,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void redirectToMenu() {
+    private void returnResult() {
 
         //  TODO: checks if account is admin, staff or client
-
-
 
         // Checks if logged in user is already saved
         if (LocalStorage.getLoggedInUser(this) == null)
@@ -156,7 +154,8 @@ public class LoginActivity extends AppCompatActivity {
         intent.putExtra(LocalStorage.LOGGED_IN_USER_KEY, loginViewModel.getLoggedInUser());
 
         // Redirect user to main activity
-        startActivity(intent);
+//        startActivity(intent);
+        setResult(RESULT_OK, intent);
         finish();
     }
 

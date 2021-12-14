@@ -4,8 +4,8 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
+import com.bsit_three_c.dentalrecordapp.data.model.DentalServiceOption;
 import com.bsit_three_c.dentalrecordapp.data.model.FormState;
-import com.bsit_three_c.dentalrecordapp.data.model.ServiceOption;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -83,8 +83,8 @@ public class Checker {
         return balance - UIUtil.convertToDouble(input) < 0;
     }
 
-    public static boolean hasItemChecked(ArrayList<ServiceOption> serviceOptions) {
-        for (ServiceOption serviceOption : serviceOptions) {
+    public static boolean hasItemChecked(ArrayList<DentalServiceOption> serviceOptions) {
+        for (DentalServiceOption serviceOption : serviceOptions) {
             if (serviceOption.isSelected())
                 return true;
         }

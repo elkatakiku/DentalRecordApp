@@ -23,7 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="5dp">
 
             <ImageView
                 android:id="@+id/imageView3"
@@ -76,12 +77,12 @@
                     android:padding="10dp">
 
                     <TextView
-                        android:id="@+id/textView31"
+                        android:id="@+id/tvTotalPatient"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:text="Count"
+                        android:text="0"
                         android:textColor="@color/label"
                         android:textSize="24sp"
                         android:textStyle="bold" />
@@ -90,7 +91,7 @@
                         android:id="@+id/textView32"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="4"
                         android:gravity="center_vertical"
                         android:text="Total Patients"
                         android:textColor="@color/data" />
@@ -106,6 +107,13 @@
                         android:visibility="gone" />
                 </LinearLayout>
 
+                <View
+                    android:id="@+id/divider4"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="?android:attr/listDivider" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -119,7 +127,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:text="Count"
+                        android:text="0"
                         android:textColor="@color/label"
                         android:textSize="24sp"
                         android:textStyle="bold" />
@@ -128,7 +136,7 @@
                         android:id="@+id/textView30"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="4"
                         android:gravity="center_vertical"
                         android:text="Patients Today"
                         android:textColor="@color/data" />
@@ -165,7 +173,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="16dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="5dp">
 
             <ImageView
                 android:id="@+id/imageView9"
@@ -221,7 +230,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:text="Count"
+                        android:text="0"
                         android:textColor="@color/label"
                         android:textSize="24sp"
                         android:textStyle="bold" />
@@ -230,7 +239,7 @@
                         android:id="@+id/textView35"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="4"
                         android:gravity="center_vertical"
                         android:text="Today"
                         android:textColor="@color/data" />
@@ -247,6 +256,12 @@
 
                 </LinearLayout>
 
+                <View
+                    android:id="@+id/divider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -260,7 +275,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:text="Count"
+                        android:text="0"
                         android:textColor="@color/label"
                         android:textSize="24sp"
                         android:textStyle="bold" />
@@ -269,7 +284,7 @@
                         android:id="@+id/textView36"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="4"
                         android:gravity="center_vertical"
                         android:text="Upcoming"
                         android:textColor="@color/data" />
@@ -320,7 +335,7 @@
             android:id="@+id/linearLayout7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <FrameLayout
@@ -354,7 +369,7 @@
                                 android:layout_height="0dp"
                                 android:layout_weight="3"
                                 android:gravity="center"
-                                android:text="Count"
+                                android:text="0"
                                 android:textColor="@color/label"
                                 android:textSize="24sp"
                                 android:textStyle="bold" />
@@ -415,7 +430,7 @@
                                 android:layout_height="0dp"
                                 android:layout_weight="3"
                                 android:gravity="center"
-                                android:text="Count"
+                                android:text="0"
                                 android:textColor="@color/label"
                                 android:textSize="24sp"
                                 android:textStyle="bold" />

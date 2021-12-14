@@ -14,28 +14,28 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.data.model.ServiceOption;
+import com.bsit_three_c.dentalrecordapp.data.model.DentalServiceOption;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServiceAdapter extends ArrayAdapter<ServiceOption> {
+public class ServiceAdapter extends ArrayAdapter<DentalServiceOption> {
     private static final String TAG = ServiceAdapter.class.getSimpleName();
 
     private Context mContext;
-    private ArrayList<ServiceOption> serviceOptionArrayList;
+    private ArrayList<DentalServiceOption> serviceOptionArrayList;
     private ServiceAdapter myAdapter;
     private boolean isFromView = false;
     private String[] servicesArray;
     private Spinner spinner;
-    private ServiceOption titleServiceOptionItem;
+    private DentalServiceOption titleServiceOptionItem;
 
-    public ServiceAdapter(Context context, int resource, List<ServiceOption> objects, String[] servicesArray, Spinner spinner) {
+    public ServiceAdapter(Context context, int resource, List<DentalServiceOption> objects, String[] servicesArray, Spinner spinner) {
         super(context, resource, objects);
         this.mContext = context;
-        this.serviceOptionArrayList = (ArrayList<ServiceOption>) objects;
+        this.serviceOptionArrayList = (ArrayList<DentalServiceOption>) objects;
         this.myAdapter = this;
         this.servicesArray = servicesArray;
         this.spinner = spinner;
@@ -60,7 +60,7 @@ public class ServiceAdapter extends ArrayAdapter<ServiceOption> {
         final ViewHolder holder;
         if (convertView == null) {
             LayoutInflater layoutInflator = LayoutInflater.from(mContext);
-            convertView = layoutInflator.inflate(R.layout.item__spinner_services, parent, false);
+            convertView = layoutInflator.inflate(R.layout.item_spinner_services, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
@@ -100,7 +100,7 @@ public class ServiceAdapter extends ArrayAdapter<ServiceOption> {
                 else {
                     if (!getItem(position).equals(titleServiceOptionItem)) {
                         Log.d(TAG, "getCustomView: changing title");
-                        ServiceOption currentServiceOption = getItem(position);
+                        DentalServiceOption currentServiceOption = getItem(position);
                         titleServiceOptionItem.setTitle(UIUtil.getServiceTitle(
                                 titleServiceOptionItem.getTitle(),
                                 currentServiceOption.getTitle(),

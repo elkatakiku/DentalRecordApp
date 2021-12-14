@@ -1,5 +1,6 @@
 package com.bsit_three_c.dentalrecordapp.ui.dialog;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,12 +22,14 @@ import com.bsit_three_c.dentalrecordapp.data.model.FormState;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Payment;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
-import com.bsit_three_c.dentalrecordapp.data.patient.PaymentRepository;
+import com.bsit_three_c.dentalrecordapp.data.repository.PaymentRepository;
+import com.bsit_three_c.dentalrecordapp.data.repository.ProcedureRepository;
 import com.bsit_three_c.dentalrecordapp.ui.patient_info.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.CustomObserver;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Date;
 
@@ -39,12 +42,15 @@ public class BottomPaymentDialog {
     private final PatientInfoFragment lifecycleOwner;
     private BottomSheetDialog paymentDialog;
 
-    private final PaymentRepository repository;
+    private final PaymentRepository paymentRepository;
+    private final ProcedureRepository procedureRepository;
     private Procedure procedure;
     private Patient patient;
 
     private final MutableLiveData<FormState> mAmount = new MutableLiveData<>();
     private final MutableLiveData<FormState> mState = new MutableLiveData<>();
+
+    private AlertDialog alertDialog;
 
     private final boolean isEdit;
     private boolean isOnlyOne;
@@ -63,7 +69,8 @@ public class BottomPaymentDialog {
         this.isEdit = isEditPayment;
 
         this.view = layoutInflater.inflate(R.layout.bottom_payment, null, false);
-        this.repository = PaymentRepository.getInstance();
+        this.paymentRepository = PaymentRepository.getInstance();
+        this.procedureRepository = ProcedureRepository.getInstance();
     }
 
     //  Used to create a dialog to add payment
@@ -82,7 +89,7 @@ public class BottomPaymentDialog {
             int modeOfPayment = viewHolder.modeOfPaymentDialog.getSelectedItemPosition();
             String amount = viewHolder.paymentDialogAmount.getText().toString();
 
-            repository.addPayment(operation,
+            paymentRepository.addPayment(operation,
 //                    modeOfPayment,
                     amount, date);
             paymentDialog.dismiss();
@@ -153,7 +160,7 @@ public class BottomPaymentDialog {
             procedure.setDentalBalance(newBalance);
 
             //  Update payment
-            repository.updatePayment(payment, procedure);
+            paymentRepository.updatePayment(payment, procedure);
 
             paymentDialog.dismiss();
 
@@ -174,9 +181,24 @@ public class BottomPaymentDialog {
 
         viewHolder.btnDelete.setOnClickListener(v -> {
 
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+            builder
+                    .setTitle(R.string.delete_title)
+                    .setMessage(context.getString(R.string.delete_message) + " payment?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        Snackbar.make(v, "Delete payment", Snackbar.LENGTH_SHORT).show();
+                        procedureRepository.updatePaymentKeys(procedure, paymentUID);
+                        paymentDialog.dismiss();
+                    })
+                    .setNegativeButton("No", (dialog, which) -> alertDialog.dismiss());
+            alertDialog = builder.create();
+            alertDialog.show();
+
             //  Add value payment UID to delete specific payment
-            repository.removePayment(procedure, paymentUID);
-            paymentDialog.dismiss();
+
+//            paymentRepository.removePayment(procedure, paymentUID);
+
         });
     }
 
