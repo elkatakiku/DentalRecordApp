@@ -12,7 +12,7 @@ import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.BottomOperationsDialog;
-import com.bsit_three_c.dentalrecordapp.ui.patient_info.PatientInfoFragment;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 import java.util.List;

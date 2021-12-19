@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph3"
+    app:startDestination="@id/viewServiceFragment">
+
+    <fragment
+        android:id="@+id/viewServiceFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.services.view_service.ViewServiceFragment"
+        android:label="Service"
+        tools:layout="@layout/fragment_admin_view_service">
+
+        <action
+            android:id="@+id/action_FirstFragment_to_Second2Fragment"
+            app:destination="@id/editServiceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editServiceFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.services.add_services.AddServiceFragment"
+        android:label="Edit Service"
+        tools:layout="@layout/fragment_admin_add_service">
+
+        <action
+            android:id="@+id/action_Second2Fragment_to_FirstFragment"
+            app:destination="@id/viewServiceFragment" />
+    </fragment>
+</navigation>

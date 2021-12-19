@@ -27,6 +27,7 @@ public class Patient extends Person implements Parcelable {
                    String firstname,
                    String lastname,
                    String middleInitial,
+                   String suffix,
                    String phoneNumber,
                    String address,
                    int civilStatus,
@@ -35,7 +36,7 @@ public class Patient extends Person implements Parcelable {
                    Date lastUpdated,
                    ArrayList<String> dentalProcedures) {
 
-        super(uid, firstname, lastname, middleInitial, phoneNumber);
+        super(uid, firstname, lastname, middleInitial, suffix, phoneNumber);
         this.address = address;
         this.civilStatus = civilStatus;
         this.age = age;

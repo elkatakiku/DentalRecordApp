@@ -7,22 +7,6 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.services.add_services.ServiceTitleFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_service_title">
-
-        <action
-            android:id="@+id/action_FirstFragment_to_Second2Fragment"
-            app:destination="@id/Second2Fragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/Second2Fragment"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.services.add_services.ServiceDescriptionFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_service_description">
-
-        <action
-            android:id="@+id/action_Second2Fragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
-    </fragment>
+        android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.services.add_services.AddServiceFragment"
+        tools:layout="@layout/fragment_admin_add_service"/>
 </navigation>

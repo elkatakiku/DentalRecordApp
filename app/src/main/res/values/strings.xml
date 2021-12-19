@@ -108,4 +108,19 @@
     <string name="first_fragment_label">First Fragment</string>
     <string name="title_activity_add_service">AddServiceActivity</string>
 
+
+    <!--    Button Titles   -->
+    <string name="btn_add_patient">ADD PATIENT</string>
+    <string name="btn_patient_list">PATIENT LIST</string>
+    <string name="btn_add_employee">ADD EMPLOYEE</string>
+    <string name="btn_employee_list">EMPLOYEE LIST</string>
+    <string name="btn_create_appointment">CREATE APPOINTMENT</string>
+    <string name="btn_appointment_lsit">APPOINTMENT LIST</string>
+    <string name="title_activity_view_service">ViewServiceActivity</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="btn_view_service">View</string>
+    <string name="btn_remove_service">Delete</string>
+    <string name="title_activity_add_employee">AddEmployeeActivity</string>
+
+
 </resources>

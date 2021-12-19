@@ -6,23 +6,23 @@ public class Person {
     protected String firstname;
     protected String lastname;
     protected String middleInitial;
+    protected String suffix;
     protected String phoneNumber;
 
     public Person() {
     }
 
-    public Person(String uid, String firstname, String lastname, String middleInitial, String phoneNumber) {
+    public Person(String uid,
+                  String firstname,
+                  String lastname,
+                  String middleInitial,
+                  String suffix,
+                  String phoneNumber) {
         this.uid = uid;
         this.firstname = firstname;
         this.lastname = lastname;
         this.middleInitial = middleInitial;
-        this.phoneNumber = phoneNumber;
-    }
-
-    public Person(String firstname, String lastname, String middleInitial, String phoneNumber) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.middleInitial = middleInitial;
+        this.suffix = suffix;
         this.phoneNumber = phoneNumber;
     }
 
@@ -66,14 +66,23 @@ public class Person {
         this.phoneNumber = phoneNumber;
     }
 
+    public String getSuffix() {
+        return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
-                "uid='" + uid + '\'' +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", middlename='" + middleInitial + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
+                "\nuid='" + uid + '\'' +
+                "\nfirstname='" + firstname + '\'' +
+                "\nlastname='" + lastname + '\'' +
+                "\nmiddleInitial='" + middleInitial + '\'' +
+                "\nsuffix='" + suffix + '\'' +
+                "\nphoneNumber='" + phoneNumber + '\'' +
                 '}';
     }
 }

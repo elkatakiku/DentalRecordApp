@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/blue_green"
+    android:minWidth="350dp"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <FrameLayout
+        android:id="@+id/customDialogHeader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="8"
+        tools:ignore="TouchTargetSizeCheck">
+
+        <TextView
+            android:id="@+id/tvDialogTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:letterSpacing=".1"
+            android:text="TextView"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imgDialogClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
+            app:tint="@color/white" />
+
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/btnDialog1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/white"
+        android:insetLeft="6dp"
+        android:insetRight="6dp"
+        android:minHeight="70dp"
+        android:text="1st Option"
+        android:textColor="@color/blue_green"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btnDialog2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/white"
+        android:insetLeft="6dp"
+        android:insetRight="6dp"
+        android:minHeight="70dp"
+        android:text="2nd Option"
+        android:textColor="@color/blue_green"
+        android:textSize="16sp" />
+
+</LinearLayout>

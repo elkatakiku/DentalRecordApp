@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".ui.patient_info.PatientActivity">
+    tools:context=".ui.users.admin.patients.patient_info.PatientActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -250,7 +250,7 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/button_first"
+                android:id="@+id/btnNewProcedure"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"

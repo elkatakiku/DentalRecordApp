@@ -10,10 +10,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
+import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProcedureRepository;
-import com.bsit_three_c.dentalrecordapp.ui.patient_info.PatientInfoFragment;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -46,6 +46,7 @@ public class BottomEditOperationDialog {
 
         ViewHolder viewHolder = new ViewHolder(view);
         editOperationDialog = new BottomSheetDialog(context);
+        BottomDialog.setBackgroundColorTransparent(editOperationDialog);
         dialogDismissListener(editOperationDialog);
 
         Date oldDate = UIUtil.stringToDate(procedure.getDentalDate());

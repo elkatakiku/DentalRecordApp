@@ -58,7 +58,7 @@ public class Checker {
     }
 
     public static boolean isDataAvailable(String data) {
-        return !(data == null || data.isEmpty());
+        return !(data == null || data.isEmpty() || NOT_AVAILABLE.equals(data));
     }
 
     public static boolean isRepeated(String word, String character) {

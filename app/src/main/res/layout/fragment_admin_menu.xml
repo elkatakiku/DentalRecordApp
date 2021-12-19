@@ -17,6 +17,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="225dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/textView47"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="20dp"
+                android:text="Welcom, "
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/home_header" />
+        </FrameLayout>
+
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="wrap_content"
@@ -58,32 +85,32 @@
 
                 <Button
                     android:id="@+id/bntMenuDashboard"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="2.5dp"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:backgroundTint="#FFFFFF"
                     android:text="Dashboard"
                     android:textAllCaps="false"
                     android:textColor="@color/blue_green"
-                    app:icon="@mipmap/icon_dashboard"
+                    app:icon="@drawable/ic_baseline_dashboard_24"
                     app:iconGravity="textTop"
                     app:iconSize="50dp"
                     app:iconTint="@color/blue_green" />
 
                 <Button
                     android:id="@+id/btnMenuPatients"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="2.dp"
+                    android:layout_marginStart="2.5dp"
                     android:layout_marginEnd="16dp"
                     android:layout_weight="1"
                     android:backgroundTint="#FFFFFF"
                     android:text="Patients"
                     android:textAllCaps="false"
                     android:textColor="@color/blue_green"
-                    app:icon="@mipmap/icon_patients1"
+                    app:icon="@drawable/ic_baseline_person_24"
                     app:iconGravity="textTop"
                     app:iconSize="50dp"
                     app:iconTint="@color/blue_green" />
@@ -95,7 +122,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="6dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="6dp"
                 android:layout_weight="1"
                 app:cardCornerRadius="5dp">
 
@@ -113,7 +142,7 @@
                         android:layout_marginStart="50dp"
                         android:adjustViewBounds="true"
                         android:cropToPadding="false"
-                        android:src="@mipmap/icon_services3"
+                        android:src="@drawable/ic_baseline_medical_services_24"
                         app:tint="@color/white" />
 
                     <TextView
@@ -141,32 +170,32 @@
 
                 <Button
                     android:id="@+id/btnMenuEmployees"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="2.5dp"
                     android:layout_weight="1"
                     android:backgroundTint="#FFFFFF"
-                    android:text="Employee"
+                    android:text="Employees"
                     android:textAllCaps="false"
                     android:textColor="@color/blue_green"
-                    app:icon="@mipmap/icon_employee"
+                    app:icon="@drawable/ic_baseline_people_24"
                     app:iconGravity="textTop"
                     app:iconSize="50dp"
                     app:iconTint="@color/blue_green" />
 
                 <Button
                     android:id="@+id/btnMenuAppointments"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="2.5dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:backgroundTint="#FFFFFF"
-                    android:text="Appointment"
+                    android:text="Appointments"
                     android:textAllCaps="false"
                     android:textColor="@color/blue_green"
-                    app:icon="@mipmap/icon_appointments"
+                    app:icon="@drawable/ic_baseline_calendar_today_24"
                     app:iconGravity="textTop"
                     app:iconSize="50dp"
                     app:iconTint="@color/blue_green" />

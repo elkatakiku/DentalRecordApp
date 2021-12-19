@@ -15,7 +15,8 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentAdminMenuBinding;
-import com.google.android.material.snackbar.Snackbar;
+import com.bsit_three_c.dentalrecordapp.ui.dialog.CustomDialog;
+import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 
 public class MenuAdminFragment extends Fragment {
     private static final String TAG = MenuAdminFragment.class.getSimpleName();
@@ -25,6 +26,8 @@ public class MenuAdminFragment extends Fragment {
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
+
+    private CustomDialog customDialog;
 
     public static MenuAdminFragment newInstance() {
         return new MenuAdminFragment();
@@ -55,8 +58,9 @@ public class MenuAdminFragment extends Fragment {
         binding.btnMenuPatients.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavHostFragment.findNavController(MenuAdminFragment.this)
-                        .navigate(R.id.nav_patients);
+                customDialog = new CustomDialog(requireActivity(), NavHostFragment.findNavController(MenuAdminFragment.this));
+                customDialog.setTitle(LocalStorage.DIALOG_PATIENT);
+                customDialog.show();
             }
         });
 
@@ -71,14 +75,18 @@ public class MenuAdminFragment extends Fragment {
         binding.btnMenuEmployees.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, "Employees", Snackbar.LENGTH_SHORT).show();
+                customDialog = new CustomDialog(requireActivity(), NavHostFragment.findNavController(MenuAdminFragment.this));
+                customDialog.setTitle(LocalStorage.DIALOG_EMPLOYEE);
+                customDialog.show();
             }
         });
 
         binding.btnMenuAppointments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, "Appointments", Snackbar.LENGTH_SHORT).show();
+                customDialog = new CustomDialog(requireActivity(), NavHostFragment.findNavController(MenuAdminFragment.this));
+                customDialog.setTitle(LocalStorage.DIALOG_APPOINTMENT);
+                customDialog.show();
             }
         });
 

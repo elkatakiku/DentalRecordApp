@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.add_patient.AddPatientActivity">
+    tools:context=".ui.users.admin.patients.add_patient.AddPatientActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -134,7 +134,7 @@
             android:textColorHint="#BDC7C8" />
 
         <EditText
-            android:id="@+id/editTextTextPersonName"
+            android:id="@+id/eTxtSuffix"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -286,16 +286,6 @@
         android:paddingBottom="10dp"
         android:spinnerMode="dropdown" />
 
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:buttonTint="#64B5F6"
-        android:text="Consent Form"
-        android:textColor="@color/label" />
-
     <Button
         android:id="@+id/btnAddPatient"
         android:layout_width="match_parent"
@@ -305,9 +295,9 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:backgroundTint="@color/button_patient_info"
+        android:backgroundTint="@color/blue_green"
         android:padding="16dp"
-        android:text="@string/add"
+        android:text="Confirm"
         app:cornerRadius="50dp" />
 
 </LinearLayout>

@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bsit_three_c.dentalrecordapp.MainViewModel;
 import com.bsit_three_c.dentalrecordapp.data.login.LoginDataSource;
 import com.bsit_three_c.dentalrecordapp.data.login.LoginRepository;
-import com.bsit_three_c.dentalrecordapp.main_activity.admin.MainAdminViewModel;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.MainAdminViewModel;
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

@@ -22,7 +22,7 @@ import com.bsit_three_c.dentalrecordapp.data.model.Payment;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.repository.PaymentRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProcedureRepository;
-import com.bsit_three_c.dentalrecordapp.ui.patient_info.PatientInfoFragment;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
@@ -82,6 +82,7 @@ public class BottomOperationsDialog {
 
         ViewHolder viewHolder = new ViewHolder(operationLayout);
         procedureDialog = new BottomSheetDialog(context);
+        BottomDialog.setBackgroundColorTransparent(procedureDialog);
         dialogDismissListener(procedureDialog);
 
         viewHolder.btnAddPayment.setOnClickListener(v -> {

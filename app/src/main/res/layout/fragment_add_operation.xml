@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".ui.patient_info.PatientActivity">
+    tools:context=".ui.users.admin.patients.patient_info.PatientActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout4"

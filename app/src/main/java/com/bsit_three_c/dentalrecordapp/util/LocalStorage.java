@@ -18,6 +18,14 @@ public class LocalStorage {
     private static final String EMPLOYEE = "ELL_Employee";
     private static final String CLIENT = "ELL_Patient";
 
+    public static final String DIALOG_PATIENT = "PATIENT";
+    public static final String DIALOG_EMPLOYEE = "EMPLOYEE";
+    public static final String DIALOG_APPOINTMENT = "APPOINTMENT";
+    public static final String DIALOG_SERVICE = "SERVICE";
+
+    public static final String PARCEL_KEY = "parcel";
+
+
     public static void saveLoggedInUser(Context context, LoggedInUser loggedInUser) {
         String jsonLoggedInUser = new Gson().toJson(loggedInUser);
 

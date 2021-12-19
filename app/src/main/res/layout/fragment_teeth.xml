@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.add_patient.AddPatientActivity">
+    tools:context=".ui.users.admin.patients.add_patient.AddPatientActivity">
 
     <TextView
         android:id="@+id/textview_second"

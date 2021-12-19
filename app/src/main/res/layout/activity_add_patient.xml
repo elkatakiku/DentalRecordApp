@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F1F6F6"
-    tools:context=".ui.add_patient.AddPatientActivity">
+    android:background="@color/bg_home_color"
+    tools:context=".ui.users.admin.patients.add_patient.AddPatientActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbarAddPatient"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@drawable/bg4"
+        android:background="@drawable/toolbar_bg2"
         android:fitsSystemWindows="true"
         android:theme="@style/CollapsingBar">
 
@@ -23,9 +23,9 @@
             app:expandedTitleGravity="bottom|start"
             app:expandedTitleTextAppearance="@style/CollapsingBar.TextApperance"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:title="@string/menu_add_patient"
             app:titleEnabled="true"
-            app:toolbarId="@+id/add_patient_toolbar">
+            app:toolbarId="@+id/add_patient_toolbar"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
             <!--            app:layout_scrollInterpolator="@android:interpolator/decelerate_cubic"-->
             <ImageView
                 android:id="@+id/app_bar_addpatient_image"

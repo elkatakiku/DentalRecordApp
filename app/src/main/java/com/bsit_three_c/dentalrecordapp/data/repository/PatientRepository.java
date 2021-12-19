@@ -80,7 +80,7 @@ public class PatientRepository {
     }
 
     public void getPatients() {
-        databaseReference.addValueEventListener(valueEventListener);
+        databaseReference.orderByChild("lastname").addValueEventListener(valueEventListener);
     }
 
     public void setAdapter(ItemAdapter adapter) {
@@ -107,8 +107,15 @@ public class PatientRepository {
     };
 
 
-    public void add(String firstname, String lastname, String middleInitial, String address,
-                    String phoneNumber, int civilStatus, int age, String occupation) {
+    public Patient add(String firstname,
+                    String lastname,
+                    String middleInitial,
+                    String suffix,
+                    String address,
+                    String phoneNumber,
+                    int civilStatus,
+                    int age,
+                    String occupation) {
         String patientUID = databaseReference.push().getKey();
 
         ArrayList<String> operationKeys = new ArrayList<>();
@@ -119,6 +126,7 @@ public class PatientRepository {
                 firstname,
                 lastname,
                 middleInitial,
+                suffix,
                 phoneNumber,
                 address,
                 civilStatus,
@@ -128,12 +136,18 @@ public class PatientRepository {
                 operationKeys
         );
 
-        if (patientUID != null) databaseReference.child(patientUID).setValue(patient);
+        if (patientUID != null) {
+            databaseReference.child(patientUID).setValue(patient);
+            return patient;
+        }
+
+        return null;
     }
 
     public void update(Patient patient) {
         // TODO: Update Patients here
         // Use notifyItemRangeChanged or notifyItemChanged
+        databaseReference.child(patient.getUid()).setValue(patient);
 
     }
 
@@ -195,6 +209,9 @@ public class PatientRepository {
         if (!Checker.isDataAvailable(patient.getMiddleInitial()))
             patient.setMiddleInitial(notAvailable);
 
+        if (!Checker.isDataAvailable(patient.getSuffix()))
+            patient.setSuffix(notAvailable);
+
         if (!Checker.isDataAvailable(patient.getAddress()))
             patient.setAddress(notAvailable);
 
@@ -206,6 +223,9 @@ public class PatientRepository {
 
         if (patient.getDentalProcedures() == null)
             patient.setDentalProcedures(new ArrayList<>());
+
+        if (patient.getLastUpdated() == null)
+            patient.setLastUpdated(new Date());
     }
 
     public void removeValueEventListener() {

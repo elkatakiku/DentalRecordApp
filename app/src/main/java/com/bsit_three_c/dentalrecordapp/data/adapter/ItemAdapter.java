@@ -2,6 +2,7 @@ package com.bsit_three_c.dentalrecordapp.data.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Person;
 import com.bsit_three_c.dentalrecordapp.data.repository.PatientRepository;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.add_patient.AddPatientActivity;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.snackbar.Snackbar;
@@ -102,13 +104,17 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         });
 
         itemViewHolder.edit.setOnClickListener(v -> {
-            Snackbar.make(v, "Edit", Snackbar.LENGTH_SHORT).show();
+//            Snackbar.make(v, "Edit", Snackbar.LENGTH_SHORT).show();
             // TODO:    Show Edit Patient dialog
+            context.startActivity(new Intent(context, AddPatientActivity.class)
+                    .putExtra(context.getString(R.string.PATIENT), (Patient) personArrayList.get(holder.getAdapterPosition())));
         });
 
         // Sets item on click listener
-        itemViewHolder.itemView.setOnClickListener(v ->
-                mItemOnClickListener.onItemClick(personArrayList.get(holder.getAdapterPosition())));
+        itemViewHolder.itemView.setOnClickListener(v -> {
+            if (isPatient) mItemOnClickListener.onItemClick(personArrayList.get(holder.getAdapterPosition()));
+            
+        });
 
     }
 

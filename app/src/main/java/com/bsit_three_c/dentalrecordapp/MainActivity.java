@@ -20,7 +20,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityMainBinding;
-import com.bsit_three_c.dentalrecordapp.main_activity.admin.MainAdminActivity;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.MainAdminActivity;
 import com.bsit_three_c.dentalrecordapp.ui.login.LoginViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.ui.search.SearchActivity;
 import com.bsit_three_c.dentalrecordapp.ui.settings.SettingsActivity;
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 //                Log.d(TAG, "onCreate: user is null");
 //                navigationView.inflateMenu(R.menu.home_drawer);
                 mAppBarConfiguration = new AppBarConfiguration.Builder(
-                        R.id.nav_user_home, R.id.nav_user_service, R.id.nav_user_dental_chart)
+                        R.id.nav_user_home, R.id.nav_user_service)
                         .setOpenableLayout(drawer)
                         .build();
 

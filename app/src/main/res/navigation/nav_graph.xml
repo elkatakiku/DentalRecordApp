@@ -7,31 +7,8 @@
 
     <fragment
         android:id="@+id/BasicInfoFragment"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.add_patient.AddPatientFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.add_patient.AddPatientFragment"
         android:label="@string/basic_info_fragment_label"
-        tools:layout="@layout/fragment_add_patient">
+        tools:layout="@layout/fragment_add_patient"/>
 
-        <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/TeethFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/TeethFragment"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.add_patient.TeethFragment"
-        android:label="@string/teeth_fragment_label"
-        tools:layout="@layout/fragment_teeth">
-
-        <action
-            android:id="@+id/action_SecondFragment_to_PaymentFragment"
-            app:destination="@id/PaymentFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/PaymentFragment"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.add_patient.PaymentFragment"
-        android:label="PaymentFragment"
-        tools:layout="@layout/fragment_payment">
-
-
-    </fragment>
 </navigation>

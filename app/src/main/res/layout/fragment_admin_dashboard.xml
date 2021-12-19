@@ -20,6 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/adminDashboardPatientsHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -32,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:src="@mipmap/icon_patients1"
+                android:src="@drawable/ic_baseline_person_24"
                 app:tint="#509E9F" />
 
             <TextView
@@ -47,11 +48,11 @@
                 android:textSize="20sp" />
 
             <ImageView
-                android:id="@+id/imageView8"
+                android:id="@+id/imgDBArrowPatients"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:src="@mipmap/icon_arrow_right"
+                android:src="@drawable/ic_baseline_navigate_next_24"
                 app:tint="@color/blue_green" />
 
         </LinearLayout>
@@ -157,6 +158,14 @@
 
     </LinearLayout>
 
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout6"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+
     <LinearLayout
         android:id="@+id/linearLayout6"
         android:layout_width="0dp"
@@ -170,6 +179,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
 
         <LinearLayout
+            android:id="@+id/adminDashboardAppointmentHeader"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="16dp"
@@ -182,7 +192,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:src="@mipmap/icon_appointments"
+                android:src="@drawable/ic_baseline_calendar_today_24"
                 app:tint="#509E9F" />
 
             <TextView
@@ -197,11 +207,11 @@
                 android:textSize="20sp" />
 
             <ImageView
-                android:id="@+id/imageView11"
+                android:id="@+id/imgDBArrowAppointments"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:src="@mipmap/icon_arrow_right"
+                android:src="@drawable/ic_baseline_navigate_next_24"
                 app:tint="@color/blue_green" />
         </LinearLayout>
 
@@ -312,6 +322,14 @@
 
     </LinearLayout>
 
+    <View
+        android:id="@+id/divider5"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout8"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
+
     <LinearLayout
         android:id="@+id/linearLayout8"
         android:layout_width="0dp"
@@ -339,6 +357,7 @@
             android:orientation="horizontal">
 
             <FrameLayout
+                android:id="@+id/adminDashboardServicesCard"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:layout_weight="1">
@@ -394,12 +413,13 @@
                     android:layout_gravity="center_horizontal"
                     android:background="@drawable/icon_header"
                     android:padding="20dp"
-                    android:src="@mipmap/icon_services3"
+                    android:src="@drawable/ic_baseline_medical_services_24"
                     app:tint="#FFFFFF" />
 
             </FrameLayout>
 
             <FrameLayout
+                android:id="@+id/adminDashboardEmployeesCard"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:layout_weight="1">
@@ -441,7 +461,7 @@
                                 android:layout_height="0dp"
                                 android:layout_weight="1"
                                 android:gravity="center|top"
-                                android:text="Total Employee"
+                                android:text="Total Employees"
                                 android:textAlignment="center"
                                 android:textColor="@color/data" />
                         </LinearLayout>
@@ -455,7 +475,7 @@
                     android:layout_gravity="center_horizontal"
                     android:background="@drawable/icon_header"
                     android:padding="20dp"
-                    android:src="@mipmap/icon_employee"
+                    android:src="@drawable/ic_baseline_people_24"
                     app:tint="#FFFFFF" />
 
             </FrameLayout>

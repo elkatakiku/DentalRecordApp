@@ -9,8 +9,16 @@ public class Account extends Person {
 
     public Account() { }
 
-    public Account(String uid, String firstname, String lastname, String middlename, String phoneNumber, String email, String username, String password) {
-        super(uid, firstname, lastname, middlename, phoneNumber);
+    public Account(String uid,
+                   String firstname,
+                   String lastname,
+                   String middlename,
+                   String suffix,
+                   String phoneNumber,
+                   String email,
+                   String username,
+                   String password) {
+        super(uid, firstname, lastname, middlename, suffix, phoneNumber);
         this.email = email;
         this.username = username;
         this.password = password;
