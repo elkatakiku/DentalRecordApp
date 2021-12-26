@@ -31,9 +31,11 @@
     <color name="login_button_tint">#00B6BC</color>
     <color name="button_patient_info">#40C4FF</color>
     <color name="button_delete">#FF6F6F</color>
-
     <color name="bg_home_color">#E4F4F3</color>
-
     <color name="optional_field">#BDC7C8</color>
+
+    <!--    Field Color     -->
+    <color name="bg_field">#FFFFFF</color>
+    <color name="field_hint">#99295859</color>
 
 </resources>

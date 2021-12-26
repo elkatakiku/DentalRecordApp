@@ -6,6 +6,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Patient extends Person implements Parcelable {
     private static final String TAG = Parcelable.class.getSimpleName();
@@ -22,13 +23,13 @@ public class Patient extends Person implements Parcelable {
 
     public Patient() {}
 
-    //  This constructor is used to retrive patient's detail
+    //  This constructor is used to retrieve patient's detail
     public Patient(String uid,
                    String firstname,
                    String lastname,
                    String middleInitial,
                    String suffix,
-                   String phoneNumber,
+                   List<String> phoneNumber,
                    String address,
                    int civilStatus,
                    int age,
@@ -51,7 +52,8 @@ public class Patient extends Person implements Parcelable {
         firstname = in.readString();
         lastname = in.readString();
         middleInitial = in.readString();
-        phoneNumber = in.readString();
+        suffix = in.readString();
+        phoneNumber = in.createStringArrayList();
         address = in.readString();
         civilStatus = in.readInt();
         age = in.readInt();
@@ -151,7 +153,8 @@ public class Patient extends Person implements Parcelable {
         dest.writeString(firstname);
         dest.writeString(lastname);
         dest.writeString(middleInitial);
-        dest.writeString(phoneNumber);
+        dest.writeString(suffix);
+        dest.writeStringList(phoneNumber);
         dest.writeString(address);
         dest.writeInt(civilStatus);
         dest.writeInt(age);

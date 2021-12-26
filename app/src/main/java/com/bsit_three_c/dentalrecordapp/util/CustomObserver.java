@@ -12,8 +12,10 @@ import com.bsit_three_c.dentalrecordapp.data.model.FormState;
 public class CustomObserver implements Observer<FormState> {
     private static final String TAG = CustomObserver.class.getSimpleName();
 
-    final Resources res;
-    final EditText editText;
+    private final Resources res;
+    private final EditText editText;
+
+    private Button btn;
 
     public CustomObserver(EditText editText, Resources res) {
         this.editText = editText;
@@ -26,9 +28,17 @@ public class CustomObserver implements Observer<FormState> {
 
         if (formState.getMsgError() != null) {
             editText.setError(res.getString(formState.getMsgError()));
+
+            if (btn != null) btn.setEnabled(false);
         }
+        else if (btn != null) btn.setEnabled(true);
+
     }
 
+    public CustomObserver setBtn(Button btn) {
+        this.btn = btn;
+        return this;
+    }
 
     public static class ObserverButton implements Observer<FormState> {
 

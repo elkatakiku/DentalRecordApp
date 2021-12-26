@@ -23,17 +23,17 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:visibility="gone">
+            android:background="@drawable/bg_header">
 
             <TextView
-                android:id="@+id/textView47"
-                android:layout_width="wrap_content"
+                android:id="@+id/tvAdminGreet"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="20dp"
-                android:text="Welcom, "
+                android:text="@string/greet_admin"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="30sp"
                 android:textStyle="bold" />
 
             <ImageView
@@ -52,7 +52,8 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:adjustViewBounds="true"
-            android:src="@drawable/home_header_wtext" />
+            android:src="@drawable/home_header_wtext"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textView24"

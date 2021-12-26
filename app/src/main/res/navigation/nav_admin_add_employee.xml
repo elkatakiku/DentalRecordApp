@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph3"
+    app:startDestination="@id/FirstFragment">
+
+    <fragment
+        android:id="@+id/FirstFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.employees.employee_form.BasicInfoFormFragment"
+        android:label="New Employee"
+        tools:layout="@layout/fragment_admin_add_employee1">
+
+        <action
+            android:id="@+id/action_FirstFragment_to_Second2Fragment"
+            app:destination="@id/Second2Fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/Second2Fragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.employees.employee_form.EmergencyContactFormFragment"
+        android:label="Emergency Contact"
+        tools:layout="@layout/fragment_admin_add_employee2" />
+</navigation>

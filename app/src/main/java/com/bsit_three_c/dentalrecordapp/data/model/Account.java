@@ -1,5 +1,7 @@
 package com.bsit_three_c.dentalrecordapp.data.model;
 
+import java.util.List;
+
 public class Account extends Person {
 
     private String email;
@@ -14,7 +16,7 @@ public class Account extends Person {
                    String lastname,
                    String middlename,
                    String suffix,
-                   String phoneNumber,
+                   List<String> phoneNumber,
                    String email,
                    String username,
                    String password) {

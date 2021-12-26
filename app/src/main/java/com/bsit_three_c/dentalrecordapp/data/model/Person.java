@@ -1,5 +1,7 @@
 package com.bsit_three_c.dentalrecordapp.data.model;
 
+import java.util.List;
+
 public class Person {
 
     protected String uid;
@@ -7,7 +9,8 @@ public class Person {
     protected String lastname;
     protected String middleInitial;
     protected String suffix;
-    protected String phoneNumber;
+//    protected String dateOfBirth;
+    protected List<String> phoneNumber;
 
     public Person() {
     }
@@ -17,7 +20,7 @@ public class Person {
                   String lastname,
                   String middleInitial,
                   String suffix,
-                  String phoneNumber) {
+                  List<String> phoneNumber) {
         this.uid = uid;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -58,11 +61,11 @@ public class Person {
         this.middleInitial = middleInitial;
     }
 
-    public String getPhoneNumber() {
+    public List<String> getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(List<String> phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

@@ -130,8 +130,6 @@ public class MainAdminActivity extends AppCompatActivity {
         this.loggedInUser = loggedInUser;
         updateHeader(binding.navAdminMainView);
 
-//        binding.
-
         Log.d(TAG, "onStart: onstart called");
     }
 

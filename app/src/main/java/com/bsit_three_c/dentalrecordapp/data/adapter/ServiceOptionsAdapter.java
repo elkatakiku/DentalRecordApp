@@ -96,6 +96,7 @@ public class ServiceOptionsAdapter extends ArrayAdapter<DentalServiceOption> {
                 if (!Checker.hasItemChecked(serviceOptionArrayList)) {
                     Log.d(TAG, "getCustomView: has no item chekces");
                     titleServiceOptionItem.setTitle(servicesArray[0]);
+                    Log.d(TAG, "getCustomView: default title: " + servicesArray[0]);
                 }
                 else {
                     if (!getItem(position).equals(titleServiceOptionItem)) {
@@ -108,9 +109,10 @@ public class ServiceOptionsAdapter extends ArrayAdapter<DentalServiceOption> {
                                 servicesArray[0],
                                 servicesArray
                         ));
-                        spinner.setAdapter(this);
                     }
                 }
+
+                spinner.setAdapter(this);
 
                 Log.d(TAG, "getCustomView: is selected: " + getItem(position).isSelected());
             }

@@ -112,8 +112,8 @@ public class OperationViewModel extends ViewModel implements TextChange, Spinner
     }
 
     private void setBalance(String label, String input) {
-        boolean hasAmount = Checker.isNotNullOrValid(mAmount);
-        boolean hasPayment = Checker.isNotNullOrValid(mPayment);
+        boolean hasAmount = Checker.isNotNullAndValid(mAmount);
+        boolean hasPayment = Checker.isNotNullAndValid(mPayment);
 
         if (AMOUNT.equals(label) && hasAmount) amount = Double.parseDouble(input);
 

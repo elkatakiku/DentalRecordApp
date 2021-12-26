@@ -1,303 +1,362 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_home_color"
     android:orientation="vertical"
-    tools:context=".ui.users.admin.patients.add_patient.AddPatientActivity">
+    tools:context=".ui.users.admin.patients.patient_form.AddPatientActivity">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/custom_gradient"
-        android:gravity="bottom|center_vertical"
+        android:layout_height="match_parent"
+        android:background="@color/bg_home_color"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:visibility="gone">
+        android:padding="16dp">
 
         <TextView
-            android:id="@+id/txtViewPILastname"
+            android:id="@+id/textView56"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add patient"
-            android:textAlignment="viewStart"
-            android:textColor="@color/white"
-            android:textSize="24sp" />
+            android:text="Name"
+            android:textColor="@color/label" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:divider="@drawable/empty_tall_divider"
+            android:showDividers="middle">
+
+            <EditText
+                android:id="@+id/eTxtFirstname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@color/white"
+                android:ems="10"
+                android:hint="Firstname"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:textColorHint="@color/field_hint" />
+
+            <EditText
+                android:id="@+id/eTxtMiddleInitial"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:ems="10"
+                android:hint="MI"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:shadowColor="#32ED7D"
+                android:textColorHint="@color/field_hint" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:divider="@drawable/empty_tall_divider"
+            android:showDividers="middle">
+
+            <EditText
+                android:id="@+id/eTxtLastname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@color/white"
+                android:ems="10"
+                android:hint="Lastname"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:textColorHint="@color/field_hint" />
+
+            <EditText
+                android:id="@+id/eTxtSuffix"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:ems="10"
+                android:hint="Suffix"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:textColorHint="@color/field_hint" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider7"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/tvPatientBirthdayLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Birthdate"
+            android:textColor="@color/label" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tvPatientMonth"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="Month"
+                    android:textAlignment="center"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+
+                <View
+                    android:id="@+id/divider11"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/listDivider" />
+
+                <TextView
+                    android:id="@+id/tvPatientDay"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="Day"
+                    android:textAlignment="center"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+
+                <View
+                    android:id="@+id/divider12"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/listDivider" />
+
+                <TextView
+                    android:id="@+id/tvPatientYear"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="Year"
+                    android:textAlignment="center"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/ibPatientCalendar"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/blue_green"
+                android:minHeight="50dp"
+                app:srcCompat="@drawable/ic_baseline_calendar_today_24"
+                app:tint="@color/white"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvPatientAgeLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Age"
+            android:textColor="@color/label" />
+
+        <EditText
+            android:id="@+id/etPatientAge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/bg_field"
+            android:ems="10"
+            android:hint="Age"
+            android:inputType="number"
+            android:minHeight="48dp"
+            android:padding="10dp"
+            android:textColor="@color/data"
+            android:textColorHint="@color/field_hint" />
+
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/tvPatientContactLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Contact"
+            android:textColor="@color/label" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:divider="@drawable/empty_tall_divider"
+            android:orientation="horizontal"
+            android:showDividers="middle">
+
+            <FrameLayout
+                android:layout_width="75dp"
+                android:layout_height="match_parent"
+                android:background="@color/bg_field">
+
+                <ImageView
+                    android:id="@+id/imageView15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="10dp"
+                    app:srcCompat="@drawable/ic_baseline_arrow_drop_down_24" />
+
+                <Spinner
+                    android:id="@+id/spnrPatientNumberMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:entries="@array/mobile_numbers" />
+
+            </FrameLayout>
+
+            <EditText
+                android:id="@+id/etPatientNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:background="@color/white"
+                android:ems="10"
+                android:hint="Contact Number"
+                android:inputType="phone"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:textColorHint="@color/field_hint" />
+
+            <Button
+                android:id="@+id/btnPatientAddNumber"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="@color/blue_green"
+                android:text="Add" />
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/lvPatientMobileNumbers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" >
+
+        </ListView>
+
+        <View
+            android:id="@+id/divider14"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
 
         <TextView
             android:id="@+id/textView14"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Fill in the basic information of the patient."
-            android:textColor="@color/white" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/labelFirstname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="20dp"
-        android:labelFor="@id/eTxtFirstname"
-        android:text="Firstname"
-        android:visibility="invisible" />
-
-    <EditText
-        android:id="@+id/eTxtFirstname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/shape_input"
-        android:elevation="5dp"
-        android:ems="10"
-        android:hint="Firstname"
-        android:inputType="textPersonName"
-        android:labelFor="@id/labelFirstname"
-        android:minHeight="48dp"
-        android:paddingStart="20dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="10dp"
-        android:shadowColor="#32ED7D" />
-
-    <TextView
-        android:id="@+id/labelLastname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="20dp"
-        android:text="Lastname"
-        android:visibility="invisible" />
-
-    <EditText
-        android:id="@+id/eTxtLastname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/shape_input"
-        android:elevation="5dp"
-        android:ems="10"
-        android:hint="Lastname"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:paddingStart="20dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="10dp"
-        android:shadowColor="#32ED7D" />
-
-    <CheckBox
-        android:id="@+id/cbMIS"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:buttonTint="#64B5F6"
-        android:text="Middle Initial / Suffix"
-        android:textColor="@color/label" />
-
-    <LinearLayout
-        android:id="@+id/layoutMIS"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        tools:visibility="visible">
+            android:text="@string/Address"
+            android:textColor="@color/label" />
 
         <EditText
-            android:id="@+id/eTxtMiddleInitial"
-            android:layout_width="wrap_content"
+            android:id="@+id/eTxtAddress"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/shape_input"
-            android:elevation="5dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/white"
             android:ems="10"
-            android:hint="Middle Initial"
-            android:inputType="textPersonName"
+            android:gravity="start|top"
+            android:hint="Address"
+            android:inputType="textMultiLine"
             android:minHeight="48dp"
-            android:paddingStart="20dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="10dp"
-            android:shadowColor="#32ED7D"
-            android:textColorHint="#BDC7C8" />
+            android:padding="10dp"
+            android:textColorHint="@color/field_hint" />
+
+        <View
+            android:id="@+id/divider6"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/textView58"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Background"
+            android:textColor="@color/label" />
 
         <EditText
-            android:id="@+id/eTxtSuffix"
-            android:layout_width="wrap_content"
+            android:id="@+id/eTxtOccupation"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/shape_input"
-            android:elevation="5dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/white"
             android:ems="10"
-            android:hint="Suffix"
+            android:hint="Occupation"
             android:inputType="textPersonName"
             android:minHeight="48dp"
-            android:paddingStart="20dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="10dp"
-            android:textColorHint="@color/optional_field" />
+            android:padding="10dp"
+            android:textColorHint="@color/field_hint" />
+
+        <Spinner
+            android:id="@+id/spnrCivilStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/white"
+            android:entries="@array/civil_status_array"
+            android:minHeight="48dp"
+            android:spinnerMode="dropdown"
+            android:tag="@string/CivilStatus" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="100dp">
+
+            <Button
+                android:id="@+id/btnAddPatient"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:backgroundTint="@color/blue_green"
+                android:text="Confirm"
+                app:cornerRadius="50dp" />
+        </FrameLayout>
+
     </LinearLayout>
-
-    <EditText
-        android:id="@+id/eTxtAge"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/shape_input"
-        android:elevation="5dp"
-        android:ems="10"
-        android:hint="Age"
-        android:inputType="number"
-        android:minWidth="48dp"
-        android:minHeight="48dp"
-        android:paddingStart="20dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="10dp"
-        android:shadowColor="#32ED7D" />
-
-    <TextView
-        android:id="@+id/labelAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="20dp"
-        android:text="Address"
-        android:visibility="invisible" />
-
-    <EditText
-        android:id="@+id/eTxtAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/shape_input"
-        android:elevation="5dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="Address"
-        android:inputType="textMultiLine"
-        android:minHeight="48dp"
-        android:paddingStart="20dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="10dp"
-        android:shadowColor="#32ED7D" />
-
-    <TextView
-        android:id="@+id/labelTelephone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="20dp"
-        android:text="Telephone"
-        android:visibility="invisible" />
-
-    <EditText
-        android:id="@+id/eTxtPhoneNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/shape_input"
-        android:elevation="5dp"
-        android:ems="10"
-        android:hint="Telephone"
-        android:inputType="phone"
-        android:minHeight="48dp"
-        android:paddingStart="20dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="10dp"
-        android:shadowColor="#32ED7D" />
-
-    <TextView
-        android:id="@+id/labelOccupation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="20dp"
-        android:text="Occupation"
-        android:visibility="invisible" />
-
-    <EditText
-        android:id="@+id/eTxtOccupation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/shape_input"
-        android:elevation="5dp"
-        android:ems="10"
-        android:hint="Occupation"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:paddingStart="20dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="10dp"
-        android:shadowColor="#32ED7D"
-        android:textColorHint="@color/optional_field" />
-
-    <TextView
-        android:id="@+id/labelCivilStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="20dp"
-        android:text="Civil Status"
-        android:visibility="invisible" />
-
-    <Spinner
-        android:id="@+id/spnrCivilStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/shape_input"
-        android:elevation="5dp"
-        android:entries="@array/civil_status_array"
-        android:minHeight="48dp"
-        android:paddingStart="20dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dropdown" />
-
-    <Button
-        android:id="@+id/btnAddPatient"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:backgroundTint="@color/blue_green"
-        android:padding="16dp"
-        android:text="Confirm"
-        app:cornerRadius="50dp" />
-
-</LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/editServiceFragment"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.services.add_services.AddServiceFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.services.services_form.ServiceFormFragment"
         android:label="Edit Service"
         tools:layout="@layout/fragment_admin_add_service">
 

@@ -5,9 +5,9 @@
     android:id="@+id/addServiceLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_add_filtered"
+    android:background="@color/bg_home_color"
     android:padding="20dp"
-    tools:context=".ui.users.admin.services.add_services.AddServiceActivity">
+    tools:context=".ui.users.admin.services.services_form.ServiceFormActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout9"
@@ -36,7 +36,7 @@
             android:maxHeight="150dp"
             android:minWidth="50dp"
             android:minHeight="50dp"
-            android:src="@mipmap/ic_launcher_round" />
+            android:src="@drawable/ic_baseline_image_24" />
 
         <Button
             android:id="@+id/btnAddServiceImage"
@@ -68,6 +68,7 @@
             android:id="@+id/etAddServiceName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:background="#99FFFFFF"
             android:ems="10"
             android:hint="Name"
@@ -81,7 +82,7 @@
         android:id="@+id/textView51"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="Description"
         android:textColor="@color/label"
         app:layout_constraintStart_toStartOf="@+id/linearLayout11"
@@ -91,7 +92,7 @@
         android:id="@+id/etAddServiceDescription"
         android:layout_width="0dp"
         android:layout_height="150dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:background="#99FFFFFF"
         android:ems="10"
         android:gravity="start|top"
@@ -108,7 +109,7 @@
         android:id="@+id/textView50"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="Category"
         android:textColor="@color/label"
         android:textSize="14sp"
@@ -136,7 +137,7 @@
         android:id="@+id/btnAddServiceCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="@color/blue_green"
         android:text="Add"
         app:layout_constraintEnd_toEndOf="@+id/etAddServiceDescription"
@@ -146,9 +147,11 @@
         android:id="@+id/lvServiceCategory"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
         android:isScrollContainer="true"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
         app:layout_constraintBottom_toTopOf="@+id/btnAddService"
         app:layout_constraintEnd_toEndOf="@+id/btnAddServiceCategory"
         app:layout_constraintStart_toStartOf="@+id/etAddServiceCategory"

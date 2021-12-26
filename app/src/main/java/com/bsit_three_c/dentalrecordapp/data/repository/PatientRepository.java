@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class PatientRepository {
 
@@ -112,7 +113,7 @@ public class PatientRepository {
                     String middleInitial,
                     String suffix,
                     String address,
-                    String phoneNumber,
+                    List<String> phoneNumber,
                     int civilStatus,
                     int age,
                     String occupation) {
@@ -120,6 +121,8 @@ public class PatientRepository {
 
         ArrayList<String> operationKeys = new ArrayList<>();
         operationKeys.add(FirebaseHelper.NEW_PATIENT);
+
+        if (phoneNumber.size() <= 0) phoneNumber.add(FirebaseHelper.NEW_PATIENT);
 
         Patient patient = new Patient(
                 patientUID,
@@ -215,8 +218,8 @@ public class PatientRepository {
         if (!Checker.isDataAvailable(patient.getAddress()))
             patient.setAddress(notAvailable);
 
-        if (!Checker.isDataAvailable(patient.getPhoneNumber()))
-            patient.setPhoneNumber(notAvailable);
+        if (patient.getPhoneNumber() == null)
+            patient.setPhoneNumber(new ArrayList<>());
 
         if (!Checker.isDataAvailable(patient.getOccupation()))
             patient.setOccupation(notAvailable);

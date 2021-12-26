@@ -278,7 +278,7 @@ public class BottomPaymentDialog {
     };
 
     private void setBalance(String input) {
-        boolean hasAmount = Checker.isNotNullOrValid(mAmountState);
+        boolean hasAmount = Checker.isNotNullAndValid(mAmountState);
 
         //  Set event trigger function for input
 

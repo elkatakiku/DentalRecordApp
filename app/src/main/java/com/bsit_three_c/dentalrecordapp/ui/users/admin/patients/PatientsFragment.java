@@ -23,7 +23,7 @@ import com.bsit_three_c.dentalrecordapp.data.adapter.ItemViewHolder;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentPatientsBinding;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.add_patient.AddPatientActivity;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_form.AddPatientActivity;
 import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info.PatientActivity;
 import com.bsit_three_c.dentalrecordapp.util.Internet;
 

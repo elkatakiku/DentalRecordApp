@@ -17,7 +17,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityPatientBinding;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.add_patient.AddPatientActivity;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_form.AddPatientActivity;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 
 public class PatientActivity extends AppCompatActivity {

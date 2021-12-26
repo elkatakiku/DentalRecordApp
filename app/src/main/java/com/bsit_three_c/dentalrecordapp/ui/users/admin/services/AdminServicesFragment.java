@@ -23,7 +23,7 @@ import com.bsit_three_c.dentalrecordapp.data.adapter.ServicesViewHolder;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentAdminServicesBinding;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.CustomDialog;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.services.add_services.AddServiceActivity;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.services.services_form.ServiceFormActivity;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 
 public class AdminServicesFragment extends Fragment {
@@ -65,7 +65,7 @@ public class AdminServicesFragment extends Fragment {
         binding.fabAddService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent toAddPatient = new Intent(requireActivity(), AddServiceActivity.class);
+                Intent toAddPatient = new Intent(requireActivity(), ServiceFormActivity.class);
 //                toAddPatientResult.launch(toAddPatient);
                 startActivity(toAddPatient);
             }

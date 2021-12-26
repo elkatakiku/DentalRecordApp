@@ -14,7 +14,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalService;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityViewServiceBinding;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.services.add_services.AddServiceActivity;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.services.services_form.ServiceFormActivity;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -54,7 +54,7 @@ public class ViewServiceActivity extends AppCompatActivity {
 
                 //  Start activity for result
                 startActivity(
-                        new Intent(ViewServiceActivity.this, AddServiceActivity.class)
+                        new Intent(ViewServiceActivity.this, ServiceFormActivity.class)
                         .putExtra(LocalStorage.PARCEL_KEY, service));
 
             }

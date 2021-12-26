@@ -35,4 +35,16 @@
         <item name="android:textSize">25sp</item>
     </style>
 
+    <style name="MySpinnerDatePickerStyle" parent="android:Theme.Material.Dialog">
+        <item name="android:background">@color/white</item>
+        <item name="android:datePickerStyle">@style/MySpinnerDatePicker</item>
+
+    </style>
+
+    <style name="MySpinnerDatePicker" parent="android:Widget.Material.DatePicker">
+        <item name="android:textColorPrimary">@color/data</item>
+        <item name="colorControlNormal">@color/blue_green</item>
+        <item name="android:datePickerMode">spinner</item>
+    </style>
+
 </resources>

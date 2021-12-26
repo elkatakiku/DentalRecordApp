@@ -20,7 +20,7 @@ public class Checker {
         return liveData.getValue() == null || liveData.getValue().getMsgError() != null;
     }
 
-    public static boolean isNotNullOrValid(LiveData<FormState> liveData) {
+    public static boolean isNotNullAndValid(LiveData<FormState> liveData) {
         return liveData.getValue() != null && liveData.getValue().isDataValid();
     }
 

@@ -15,7 +15,7 @@ import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Person;
 import com.bsit_three_c.dentalrecordapp.data.repository.PatientRepository;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.add_patient.AddPatientActivity;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_form.AddPatientActivity;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.snackbar.Snackbar;
@@ -75,7 +75,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             String lastUpdated = context.getString(R.string.last_update) + " " + UIUtil.getDate(patient.getLastUpdated());
 
             itemViewHolder.text2.setText(address);
-            itemViewHolder.text3.setText(patient.getPhoneNumber());
+            itemViewHolder.text3.setText(patient.getPhoneNumber().get(0));
             itemViewHolder.text4.setText(lastUpdated);
 
 

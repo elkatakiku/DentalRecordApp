@@ -14,6 +14,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
+import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentAdminMenuBinding;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.CustomDialog;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
@@ -90,6 +92,21 @@ public class MenuAdminFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        LoggedInUser loggedInUser = LocalStorage.getLoggedInUser(requireContext());
+
+        if (loggedInUser == null || !FirebaseHelper.TYPE_ADMIN.equals(loggedInUser.getType())) {
+//            logout();
+//            sendUserToGuestHome();
+            return;
+        }
+
+        binding.tvAdminGreet.setText(getString(R.string.greet_admin, loggedInUser.getDisplayName()));
     }
 
     @Override

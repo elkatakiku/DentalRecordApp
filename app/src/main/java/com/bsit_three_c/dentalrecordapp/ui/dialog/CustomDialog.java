@@ -20,7 +20,8 @@ import androidx.navigation.NavController;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalService;
 import com.bsit_three_c.dentalrecordapp.data.repository.ServiceRepository;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.add_patient.AddPatientActivity;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.employees.employee_form.EmployeeFormActivity;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_form.AddPatientActivity;
 import com.bsit_three_c.dentalrecordapp.ui.users.admin.services.view_service.ViewServiceActivity;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 
@@ -155,7 +156,7 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
                 intent = new Intent(activity, AddPatientActivity.class);
                 break;
             case LocalStorage.DIALOG_EMPLOYEE:
-                intent = new Intent(activity, AddPatientActivity.class);
+                intent = new Intent(activity, EmployeeFormActivity.class);
                 break;
             case LocalStorage.DIALOG_APPOINTMENT:
                 intent = new Intent(activity, AddPatientActivity.class);

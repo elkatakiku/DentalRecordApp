@@ -146,8 +146,16 @@ public class PatientInfoFragment extends Fragment {
         else
             binding.txtViewPIAddress.setText(notAvailable);
 
-        if (Checker.isDataAvailable(patient.getPhoneNumber()))
-            binding.txtViewPITelephoneNumber.setText(patient.getPhoneNumber());
+        if (patient.getPhoneNumber().size() > 0) {
+            StringBuilder builder = new StringBuilder();
+
+            for (String number : patient.getPhoneNumber()) {
+                builder.append(number).append("\n");
+            }
+
+            builder.deleteCharAt(builder.length()-1);
+            binding.txtViewPITelephoneNumber.setText(builder.toString());
+        }
         else
             binding.txtViewPITelephoneNumber.setText(notAvailable);
 

@@ -16,6 +16,7 @@ import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -92,6 +93,17 @@ public class UIUtil {
         return date;
     }
 
+    public static int getMonthNumber(String monthName) {
+        final String[] months = {"January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"};
+
+        for (int pos = 0; pos < months.length; pos++) {
+            if (months[pos].equalsIgnoreCase(monthName)) return pos + 1;
+        }
+
+        return -1;
+    }
+
     // Return month name
     public static String getMonthName(int month) {
         return DateFormatSymbols.getInstance().getMonths()[month-1];
@@ -113,7 +125,7 @@ public class UIUtil {
         return dateFormat.format(date);
     }
 
-    // Converts date in string type to Date type
+    // Converts date in string type to Date type: dd/mm/yyyy
     public static Date stringToDate(String dateString) {
         try {
             return dateFormat.parse(dateString);
@@ -121,6 +133,29 @@ public class UIUtil {
             Log.e(TAG, "stringToDate: Error parsing", e);
             return null;
         }
+    }
+
+    public static String getAge(int year, int month, int day){
+        Calendar dob = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+
+        int currentYear = today.get(Calendar.YEAR);
+
+        dob.set(year, month, day);
+
+        int age = currentYear - dob.get(Calendar.YEAR);
+
+        int dobDayOfYear = dob.get(Calendar.DAY_OF_YEAR);
+
+        if (!isLeapYear(currentYear) && isLeapYear(year)) dobDayOfYear --;
+
+        if (today.get(Calendar.DAY_OF_YEAR) < dobDayOfYear) age--;
+
+        return Integer.toString(age);
+    }
+
+    private static boolean isLeapYear(int year) {
+        return year % 4 == 0;
     }
 
     // Get the current date in String type

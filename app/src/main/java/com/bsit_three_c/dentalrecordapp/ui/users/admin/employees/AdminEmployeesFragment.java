@@ -1,5 +1,6 @@
 package com.bsit_three_c.dentalrecordapp.ui.users.admin.employees;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentAdminEmployeesBinding;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.employees.employee_form.EmployeeFormActivity;
 
 public class AdminEmployeesFragment extends Fragment {
 
@@ -28,6 +30,18 @@ public class AdminEmployeesFragment extends Fragment {
         binding = FragmentAdminEmployeesBinding.inflate(inflater, container, false);
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        binding.fabAdminAddEmployee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requireActivity().startActivity(new Intent(requireActivity(), EmployeeFormActivity.class));
+            }
+        });
     }
 
     @Override

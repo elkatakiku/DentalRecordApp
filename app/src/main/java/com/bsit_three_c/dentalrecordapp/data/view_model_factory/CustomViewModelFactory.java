@@ -7,13 +7,13 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bsit_three_c.dentalrecordapp.data.repository.PatientRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProcedureRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.ServiceRepository;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.add_patient.AddPatientViewModel;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_form.AddPatientViewModel;
 import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info.OperationViewModel;
 import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info.PatientInfoViewModel;
 import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.PatientsViewModel;
 import com.bsit_three_c.dentalrecordapp.ui.users.admin.dashboard.AdminDashboardViewModel;
 import com.bsit_three_c.dentalrecordapp.ui.users.admin.services.AdminServicesViewModel;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.services.add_services.AddServiceViewModel;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.services.services_form.ServiceFormViewModel;
 
 public class CustomViewModelFactory implements ViewModelProvider.Factory {
 
@@ -36,8 +36,8 @@ public class CustomViewModelFactory implements ViewModelProvider.Factory {
         else if (aClass.isAssignableFrom(AdminDashboardViewModel.class)) {
             return (T) new AdminDashboardViewModel(PatientRepository.getInstance());
         }
-        else if (aClass.isAssignableFrom(AddServiceViewModel.class)) {
-            return (T) new AddServiceViewModel(ServiceRepository.getInstance());
+        else if (aClass.isAssignableFrom(ServiceFormViewModel.class)) {
+            return (T) new ServiceFormViewModel(ServiceRepository.getInstance());
         }
         else if (aClass.isAssignableFrom(AdminServicesViewModel.class)) {
             return (T) new AdminServicesViewModel(ServiceRepository.getInstance());
