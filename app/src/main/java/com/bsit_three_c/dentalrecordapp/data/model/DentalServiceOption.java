@@ -1,5 +1,7 @@
 package com.bsit_three_c.dentalrecordapp.data.model;
 
+import androidx.annotation.NonNull;
+
 public class DentalServiceOption extends DentalService {
 
     private int servicePosition;
@@ -27,11 +29,12 @@ public class DentalServiceOption extends DentalService {
         isSelected = selected;
     }
 
+    @NonNull
     @Override
     public String toString() {
-        return "DentalServiceOption{" +
-                "\nservicePosition=" + servicePosition +
-                "\nisSelected=" + isSelected +
-                '}';
+        return "\nDentalServiceOption{" +
+                "\n\t\tservicePosition=" + servicePosition +
+                "\n\t\tisSelected=" + isSelected +
+                "}\n";
     }
 }

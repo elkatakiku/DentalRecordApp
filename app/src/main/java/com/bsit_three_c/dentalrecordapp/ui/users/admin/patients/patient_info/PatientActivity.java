@@ -19,6 +19,7 @@ import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityPatientBinding;
 import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_form.AddPatientActivity;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class PatientActivity extends AppCompatActivity {
 
@@ -48,8 +49,6 @@ public class PatientActivity extends AppCompatActivity {
         binding.appBarPatient.floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Show dental chart here", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
                 Intent toEditPatient = new Intent(PatientActivity.this, AddPatientActivity.class);
                 toEditPatient.putExtra(getString(R.string.PATIENT), patient);
                 toEditPatientResult.launch(toEditPatient);
@@ -70,6 +69,10 @@ public class PatientActivity extends AppCompatActivity {
             }
         }
     });
+
+    public FloatingActionButton getFloatingButton() {
+        return binding.appBarPatient.floatingActionButton;
+    }
 
     @Override
     public boolean onSupportNavigateUp() {

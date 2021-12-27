@@ -1,17 +1,26 @@
 package com.bsit_three_c.dentalrecordapp.ui.users.admin.employees.employee_form;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.databinding.FragmentAdminAddEmployee1Binding;
+import com.bsit_three_c.dentalrecordapp.databinding.FragmentAdminEmployeeForm1Binding;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.DatePickerFragment;
+import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 import java.util.Calendar;
@@ -19,13 +28,32 @@ import java.util.Calendar;
 public class BasicInfoFormFragment extends Fragment {
     private static final String TAG = BasicInfoFormFragment.class.getSimpleName();
 
-    private FragmentAdminAddEmployee1Binding binding;
+    private FragmentAdminEmployeeForm1Binding binding;
     private final Calendar mCalendar = Calendar.getInstance();
+    private boolean isImageChanged;
+
+    private final ActivityResultLauncher<Intent> selectImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+
+            if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+
+                isImageChanged = true;
+                // Get the url of the image from data
+                Uri selectedImageUri = result.getData().getData();
+                if (null != selectedImageUri) {
+                    // update the preview image in the layout
+                    binding.ivEmployeeDisplay.setImageTintList(null);
+                    binding.ivEmployeeDisplay.setImageURI(selectedImageUri);
+                }
+            }
+        }
+    });
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        binding = FragmentAdminAddEmployee1Binding.inflate(inflater, container, false);
+        binding = FragmentAdminEmployeeForm1Binding.inflate(inflater, container, false);
         return binding.getRoot();
 
     }
@@ -33,36 +61,18 @@ public class BasicInfoFormFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.btnEmployeeUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LocalStorage.imageChooser(selectImage);
+            }
+        });
+
         binding.btnEmployeeNext.setOnClickListener(view1 ->
                 NavHostFragment.findNavController(BasicInfoFormFragment.this)
                 .navigate(R.id.action_FirstFragment_to_Second2Fragment));
 
-//        int year = mCalendar.get(Calendar.YEAR);
-//        int month = mCalendar.get(Calendar.MONTH);
-//        int dayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH);
-//
-//        DatePickerDialog datePickerDialog = new DatePickerDialog(
-//                requireContext(),
-//                R.style.MySpinnerDatePickerStyle,
-//                new DatePickerDialog.OnDateSetListener() {
-//                    @Override
-//                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-//                        binding.tvEmployeeMonth.setText(UIUtil.getMonthName(month+1));
-//                        binding.tvEmployeeDay.setText(String.valueOf(day));
-//                        binding.tvEmployeeYear.setText(String.valueOf(year));
-//
-//                        binding.etEmployeeAge.setText(UIUtil.getAge(year, month, day));
-//                    }
-//                },
-//                year, month, dayOfMonth
-//        );
-//
-//        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-
-        binding.ibEmployeeCalendar.setOnClickListener(v ->
-//                showDatePickerDialog("Select Date of Birth",
-//                UIUtil.getMonthNumber(binding.tvEmployeeMonth.getText().toString()))
-                showDatePickerDialog());
+        binding.ibEmployeeCalendar.setOnClickListener(v -> showDatePickerDialog());
     }
 
     private void showDatePickerDialog() {

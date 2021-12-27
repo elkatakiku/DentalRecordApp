@@ -9,7 +9,7 @@
         android:id="@+id/FirstFragment"
         android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.employees.employee_form.BasicInfoFormFragment"
         android:label="New Employee"
-        tools:layout="@layout/fragment_admin_add_employee1">
+        tools:layout="@layout/fragment_admin_employee_form1">
 
         <action
             android:id="@+id/action_FirstFragment_to_Second2Fragment"
@@ -20,5 +20,5 @@
         android:id="@+id/Second2Fragment"
         android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.employees.employee_form.EmergencyContactFormFragment"
         android:label="Emergency Contact"
-        tools:layout="@layout/fragment_admin_add_employee2" />
+        tools:layout="@layout/fragment_admin_employee_form2" />
 </navigation>

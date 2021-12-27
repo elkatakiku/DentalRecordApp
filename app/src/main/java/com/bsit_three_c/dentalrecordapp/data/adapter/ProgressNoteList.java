@@ -1,6 +1,7 @@
 package com.bsit_three_c.dentalrecordapp.data.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -9,44 +10,49 @@ import androidx.cardview.widget.CardView;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
-import com.bsit_three_c.dentalrecordapp.data.model.Payment;
+import com.bsit_three_c.dentalrecordapp.data.model.ProgressNote;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
-import com.bsit_three_c.dentalrecordapp.ui.dialog.BottomPaymentDialog;
+import com.bsit_three_c.dentalrecordapp.ui.dialog.BottomProgressNoteFormDialog;
 import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info.PatientInfoFragment;
+import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 
-public class PaymentList {
-    private static final String TAG = PaymentList.class.getSimpleName();
+public class ProgressNoteList {
+    private static final String TAG = ProgressNoteList.class.getSimpleName();
 
     private final LinearLayout linearLayout;
     private final LayoutInflater layoutInflater;
     private final PatientInfoFragment lifecycleOwner;
     private final BottomSheetDialog operationsDialog;
-    private BottomPaymentDialog paymentDialog;
+    private BottomProgressNoteFormDialog paymentDialog;
     private Procedure procedure;
     private boolean isOnlyOne;
     private Patient patient;
 
-    public PaymentList(LinearLayout linearLayout, LayoutInflater layoutInflater,
-                       PatientInfoFragment lifecycleOwner, BottomSheetDialog operationsDialog) {
+    public ProgressNoteList(LinearLayout linearLayout, LayoutInflater layoutInflater,
+                            PatientInfoFragment lifecycleOwner, BottomSheetDialog operationsDialog) {
         this.linearLayout = linearLayout;
         this.layoutInflater = layoutInflater;
         this.lifecycleOwner = lifecycleOwner;
         this.operationsDialog = operationsDialog;
     }
 
-    private void addItem(Payment payment) {
+    public void addItem(ProgressNote progressNote) {
+        initializeProgressNote(progressNote);
+
+        Log.d(TAG, "addItem: progress note after initializing: " + progressNote);
+
         ViewHolder viewHolder = new ViewHolder(layoutInflater);
 
-        String amount = payment.getAmount().toString();
+        String amount = progressNote.getAmount().toString();
+        viewHolder.paymentDate.setText(progressNote.getDate());
+        viewHolder.desciption.setText(progressNote.getDescription());
         viewHolder.paymentAmount.setText(amount);
-//        viewHolder.modeOfPayment.setText(UIUtil.getModeOfPayment(lifecycleOwner.getResources(), payment.getModeOfPayment()));
-        viewHolder.paymentDate.setText(payment.getPaymentDate());
 
         viewHolder.cardView.setOnClickListener(v -> {
-            createDialog(layoutInflater, layoutInflater.getContext(), lifecycleOwner, payment);
+            createDialog(layoutInflater, layoutInflater.getContext(), lifecycleOwner, progressNote);
             paymentDialog.showDialog();
             operationsDialog.dismiss();
         });
@@ -55,14 +61,14 @@ public class PaymentList {
     }
 
     public void createDialog(LayoutInflater layoutInflater, Context context,
-                             PatientInfoFragment lifecycleOwner, Payment payment) {
+                             PatientInfoFragment lifecycleOwner, ProgressNote progressNote) {
 
-        //  Create payment dialog edit/delete style
-        this.paymentDialog = new BottomPaymentDialog(layoutInflater, context, lifecycleOwner, true);
+        //  Create progressNote dialog edit/delete style
+        this.paymentDialog = new BottomProgressNoteFormDialog(layoutInflater, context, lifecycleOwner, true);
         paymentDialog.setProcedure(procedure);
         paymentDialog.setOnlyOne(isOnlyOne);
         paymentDialog.setPatient(patient);
-        paymentDialog.createDialog(payment);
+        paymentDialog.createDialog(progressNote);
     }
 
     public void setProcedure(Procedure procedure) {
@@ -77,24 +83,29 @@ public class PaymentList {
         this.patient = patient;
     }
 
-    public void addItems(ArrayList<Payment> payments) {
-        for (Payment item : payments) {
+    public void addItems(ArrayList<ProgressNote> progressNotes) {
+        for (ProgressNote item : progressNotes) {
             addItem(item);
         }
+    }
+
+    private void initializeProgressNote(ProgressNote progressNote) {
+        if (!Checker.isDataAvailable(progressNote.getDate())) progressNote.setDate(Checker.NOT_AVAILABLE);
+        if (!Checker.isDataAvailable(progressNote.getDescription())) progressNote.setDescription(Checker.NOT_AVAILABLE);
     }
 
     private static class ViewHolder {
 
         final CardView cardView;
         final TextView paymentAmount;
-        final TextView modeOfPayment;
+        final TextView desciption;
         final TextView paymentDate;
 
         public ViewHolder(LayoutInflater layoutInflater) {
-            this.cardView = (CardView) layoutInflater.inflate(R.layout.item_payment_card, null);
-            this.paymentAmount = cardView.findViewById(R.id.txtViewPaymentAmount);
-            this.modeOfPayment = cardView.findViewById(R.id.txtViewPaymentMOD);
-            this.paymentDate = cardView.findViewById(R.id.textViewPaymentDate);
+            this.cardView = (CardView) layoutInflater.inflate(R.layout.item_progress_card, null);
+            this.paymentAmount = cardView.findViewById(R.id.tvProgressAmount);
+            this.desciption = cardView.findViewById(R.id.tvProgressDesc);
+            this.paymentDate = cardView.findViewById(R.id.tvProgressDate);
         }
     }
 }

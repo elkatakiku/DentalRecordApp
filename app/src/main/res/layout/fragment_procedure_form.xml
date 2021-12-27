@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:fillViewport="true"
     tools:context=".ui.users.admin.patients.patient_info.PatientActivity">
 
     <LinearLayout
@@ -29,7 +30,7 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Enter the operation done and the mode of payment."
+            android:text="Enter the operation done and the mode of progressNote."
             android:textColor="@color/data" />
 
         <TextView
@@ -46,16 +47,49 @@
             android:layout_height="wrap_content"
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
-            android:spinnersShown="true" />
+            android:spinnersShown="true"
+            android:theme="@style/MySpinnerDatePicker" />
 
 
-        <TextView
-            android:id="@+id/tvServicesLabel"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Services"
-            android:textColor="@color/label" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvServicesLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Services"
+                android:textColor="@color/label" />
+
+            <LinearLayout
+                android:id="@+id/procedureServiceError"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/imageView17"
+                    android:layout_width="15dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    app:srcCompat="@drawable/ic_baseline_error_24"
+                    app:tint="@color/design_default_color_error" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Please choose a service."
+                    android:textColor="@color/button_delete" />
+            </LinearLayout>
+
+        </LinearLayout>
 
         <Spinner
             android:id="@+id/snprProcedureChoices"
@@ -63,12 +97,15 @@
             android:layout_height="wrap_content"
             android:entries="@array/services_array"
             android:minHeight="48dp"
+            android:visibility="gone"
             tools:ignore="SpeakableTextPresentCheck" />
 
         <Spinner
-            android:id="@+id/sprTry"
+            android:id="@+id/spnr_procedure_services"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/blue_green"
+            android:dropDownWidth="match_parent"
             android:minHeight="48dp" />
 
         <TextView
@@ -83,30 +120,14 @@
             android:id="@+id/editTxtDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/blue_green"
             android:ems="10"
             android:gravity="start|center_horizontal"
             android:hint="Description"
             android:inputType="textMultiLine|textPersonName"
             android:minHeight="48dp"
-            android:textColor="@color/data" />
-
-        <TextView
-            android:id="@+id/tvModeOfPaymentLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Mode of Payment"
-            android:textColor="@color/label"
-            android:visibility="gone" />
-
-        <Spinner
-            android:id="@+id/spnrModeOfPayment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/mop_array"
-            android:minHeight="48dp"
-            android:visibility="gone"
-            tools:ignore="SpeakableTextPresentCheck" />
+            android:textColor="@color/data"
+            android:textColorHint="@color/field_hint" />
 
         <TextView
             android:id="@+id/txtViewAmountLabel"
@@ -121,11 +142,13 @@
             android:id="@+id/editTxtAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/blue_green"
             android:ems="10"
             android:hint="Amount"
             android:inputType="numberDecimal"
             android:minHeight="48dp"
-            android:textColor="@color/data" />
+            android:textColor="@color/data"
+            android:textColorHint="@color/field_hint" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -137,16 +160,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Downpayment"
+                android:textColor="@color/data"
                 tools:ignore="TouchTargetSizeCheck" />
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:labelFor="@id/checkBoxDownpayment"
-                android:text="Downpayment"
-                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout
@@ -176,11 +192,13 @@
                     android:id="@+id/editTxtAPPayment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@color/blue_green"
                     android:ems="10"
                     android:hint="Payment"
                     android:inputType="numberDecimal"
                     android:minHeight="48dp"
-                    android:textColor="@color/data" />
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
             </LinearLayout>
 
             <LinearLayout
@@ -202,36 +220,32 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="0.0"
+                    android:hint="0.0"
                     android:textColor="@color/data"
-                    android:textSize="18sp"
-                    tools:text="BalanceAmount" />
+                    android:textColorHint="@color/field_hint"
+                    android:textSize="18sp" />
             </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <Button
                 android:id="@+id/btnAddOperation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:backgroundTint="@color/button_patient_info"
-                android:enabled="false"
+                android:backgroundTint="@color/blue_green"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="Add Procedure"
-                app:cornerRadius="50dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-        </LinearLayout>
+                app:cornerRadius="50dp" />
+        </FrameLayout>
 
     </LinearLayout>
 

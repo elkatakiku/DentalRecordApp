@@ -16,11 +16,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.data.adapter.PaymentList;
+import com.bsit_three_c.dentalrecordapp.data.adapter.ProgressNoteList;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
-import com.bsit_three_c.dentalrecordapp.data.model.Payment;
+import com.bsit_three_c.dentalrecordapp.data.model.ProgressNote;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
-import com.bsit_three_c.dentalrecordapp.data.repository.PaymentRepository;
+import com.bsit_three_c.dentalrecordapp.data.repository.ProgressNoteRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProcedureRepository;
 import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
@@ -39,7 +39,7 @@ public class BottomOperationsDialog {
     private final Context context;
     private BottomSheetDialog procedureDialog;
 
-    private final PaymentRepository paymentRepository;
+    private final ProgressNoteRepository progressNoteRepository;
     private final ProcedureRepository procedureRepository;
     private Procedure operation;
 
@@ -67,9 +67,9 @@ public class BottomOperationsDialog {
                                   PatientInfoFragment lifecycleOwner) {
         this.layoutInflater = layoutInflater;
         this.context = context;
-        this.paymentRepository = PaymentRepository.getInstance();
+        this.progressNoteRepository = ProgressNoteRepository.getInstance();
         this.procedureRepository = ProcedureRepository.getInstance();
-        this.view = layoutInflater.inflate(R.layout.bottom_operation_details, null, false);
+        this.view = layoutInflater.inflate(R.layout.bottom_procedure_details, null, false);
         this.operationLayout = view.findViewById(R.id.linearLayoutOperation);
         this.lifecycleOwner = lifecycleOwner;
     }
@@ -86,7 +86,7 @@ public class BottomOperationsDialog {
         dialogDismissListener(procedureDialog);
 
         viewHolder.btnAddPayment.setOnClickListener(v -> {
-            BottomPaymentDialog paymentDialog = new BottomPaymentDialog(layoutInflater, context, lifecycleOwner);
+            BottomProgressNoteFormDialog paymentDialog = new BottomProgressNoteFormDialog(layoutInflater, context, lifecycleOwner);
             paymentDialog.createDialog(procedure);
             paymentDialog.setPatient(patient);
 
@@ -98,7 +98,7 @@ public class BottomOperationsDialog {
 
         String totalAmount = String.valueOf(procedure.getDentalTotalAmount());
 
-        viewHolder.title.setText(UIUtil.getService(lifecycleOwner.getResources(), procedure.getService()));
+        viewHolder.title.setText(UIUtil.getServiceTitle(lifecycleOwner.getResources(), procedure.getService()));
         viewHolder.operationDesc.setText(procedure.getDentalDesc());
         viewHolder.operationDate.setText(procedure.getDentalDate());
         viewHolder.operationTotalAmount.setText(totalAmount);
@@ -131,7 +131,7 @@ public class BottomOperationsDialog {
 
                 builder
                         .setTitle(R.string.delete_title)
-                        .setMessage(context.getString(R.string.delete_message) + " " + UIUtil.getService(context.getResources(), procedure.getService()))
+                        .setMessage(context.getString(R.string.delete_message) + " procedure: " + UIUtil.getServiceTitle(context.getResources(), procedure.getService()))
                         .setPositiveButton("Yes", (dialog, which) -> {
                             Snackbar.make(v, "Delete procedure", Snackbar.LENGTH_SHORT).show();
                             removeProcedure();
@@ -143,7 +143,7 @@ public class BottomOperationsDialog {
         });
 
         viewHolder.btnEdit.setOnClickListener(v -> {
-            BottomEditOperationDialog editOperationDialog = new BottomEditOperationDialog(layoutInflater, context, lifecycleOwner);
+            BottomEditProcedureDialog editOperationDialog = new BottomEditProcedureDialog(layoutInflater, context, lifecycleOwner);
             editOperationDialog.createOperationDialog(procedure);
             editOperationDialog.setPatient(patient);
             editOperationDialog.setProcedure(procedure);
@@ -161,15 +161,15 @@ public class BottomOperationsDialog {
         ArrayList<String> paymentKeys = operation.getPaymentKeys();
         totalPayments = paymentKeys.size();
 
-        ArrayList<Payment> paymentArrayList = new ArrayList<>();
-        PaymentList paymentList = new PaymentList(paymentLayout, layoutInflater, lifecycleOwner, procedureDialog);
-        paymentList.setProcedure(operation);
-        paymentList.setPatient(patient);
+        ArrayList<ProgressNote> progressNoteArrayList = new ArrayList<>();
+        ProgressNoteList progressNoteList = new ProgressNoteList(paymentLayout, layoutInflater, lifecycleOwner, procedureDialog);
+        progressNoteList.setProcedure(operation);
+        progressNoteList.setPatient(patient);
 
         isOnlyOnePayment.observe(lifecycleOwner.getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                paymentList.setOnlyOne(aBoolean);
+                progressNoteList.setOnlyOne(aBoolean);
             }
         });
 
@@ -179,20 +179,20 @@ public class BottomOperationsDialog {
 
         for (int position = 0; position < paymentKeys.size(); position++) {
             int finalPosition = position;
-            paymentRepository.getPayments(paymentKeys.get(position)).addListenerForSingleValueEvent(new ValueEventListener() {
+            progressNoteRepository.getProgressNote(paymentKeys.get(position)).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                     isOnlyOnePayment.setValue(paymentKeys.size() == 1);
 
-                    Payment payment = snapshot.getValue(Payment.class);
+                    ProgressNote progressNote = snapshot.getValue(ProgressNote.class);
 
-                    if (payment != null) {
-                        Log.d(TAG, "onDataChange: payment: " + payment);
-                        paymentArrayList.add(payment);
+                    if (progressNote != null) {
+                        Log.d(TAG, "onDataChange: progressNote: " + progressNote);
+                        progressNoteArrayList.add(progressNote);
                         paymentsCounter.setValue(finalPosition +1);
 
-                        totalPaid += payment.getAmount();
+                        totalPaid += progressNote.getAmount();
                         mBalance.setValue(totalAmount - totalPaid);
 
                         if (mBalance.getValue() != null)
@@ -213,11 +213,15 @@ public class BottomOperationsDialog {
             Log.d(TAG, "loadPayments: integer: " + integer);
             Log.d(TAG, "loadPayments: total payments: " + totalPayments);
             if (integer == totalPayments) {
-                paymentList.addItems(paymentArrayList);
+                Log.d(TAG, "loadPayments: adding item");
+                for (ProgressNote item : progressNoteArrayList) {
+                    progressNoteList.addItem(item);
+                }
+//                progressNoteList.addItems(progressNoteArrayList);
             }
             isDoneLoading.setValue(true);
 
-            Log.d(TAG, "loadPayments: paymentArray: " + paymentArrayList);
+            Log.d(TAG, "loadPayments: paymentArray: " + progressNoteArrayList);
         });
     }
 
@@ -266,7 +270,7 @@ public class BottomOperationsDialog {
             this.fullyPaid = view.findViewById(R.id.tvOperationFullyPaid);
             this.btnAddPayment = view.findViewById(R.id.btnOperationAddPayment);
             this.iconClose = view.findViewById(R.id.iconCloseEP);
-            this.paymentsLayout = view.findViewById(R.id.paymentsList);
+            this.paymentsLayout = view.findViewById(R.id.progressNotesList);
             this.balance = view.findViewById(R.id.tvBalance);
             this.btnDelete = view.findViewById(R.id.btnOperationDelete);
             this.btnEdit = view.findViewById(R.id.btnOperationEdit);

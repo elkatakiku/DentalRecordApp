@@ -13,6 +13,7 @@ import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.BottomOperationsDialog;
 import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info.PatientInfoFragment;
+import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 import java.util.List;
@@ -21,29 +22,28 @@ public class OperationsList {
     private static final String TAG = OperationsList.class.getSimpleName();
 
     private final LinearLayout linearLayout;
-    private final LayoutInflater layoutInflater;
 
     private List<Procedure> procedures;
     private final Patient patient;
 
     private final PatientInfoFragment lifecycleOwner;
 
-    public OperationsList(LinearLayout linearLayout, LayoutInflater layoutInflater, Patient patient,
+    public OperationsList(LinearLayout linearLayout, Patient patient,
                           PatientInfoFragment lifecycleOwner) {
         this.linearLayout = linearLayout;
-        this.layoutInflater = layoutInflater;
         this.patient = patient;
         this.lifecycleOwner = lifecycleOwner;
     }
 
-    private void addItem(Procedure operation, int position) {
-        ViewHolder viewHolder = new ViewHolder(layoutInflater);
+    private void addItem(Procedure procedure, int position) {
+        ViewHolder viewHolder = new ViewHolder(lifecycleOwner.getLayoutInflater());
+        initializeProcedure(procedure);
 
-        viewHolder.txtDentalService.setText(UIUtil.getService(lifecycleOwner.getResources(), operation.getService()));
-        viewHolder.txtDentalDate.setText(UIUtil.getReadableDate(UIUtil.stringToDate(operation.getDentalDate())));
-        viewHolder.txtDentalAmount.setText(String.valueOf(operation.getDentalTotalAmount()));
-        viewHolder.txtDentalFullyPaid.setText(UIUtil.getPaymentStatus(operation.getDentalBalance()));
-        viewHolder.txtDentalFullyPaid.setTextColor(UIUtil.getCheckBoxColor(operation.getDentalBalance()));
+        viewHolder.txtDentalService.setText(UIUtil.getServiceTitle(lifecycleOwner.getResources(), procedure.getService()));
+        viewHolder.txtDentalDate.setText(UIUtil.getReadableDate(UIUtil.stringToDate(procedure.getDentalDate())));
+        viewHolder.txtDentalAmount.setText(String.valueOf(procedure.getDentalTotalAmount()));
+        viewHolder.txtDentalFullyPaid.setText(UIUtil.getPaymentStatus(procedure.getDentalBalance()));
+        viewHolder.txtDentalFullyPaid.setTextColor(UIUtil.getCheckBoxColor(procedure.getDentalBalance()));
 
         viewHolder.cardView.setOnClickListener(this::onItemClick);
 
@@ -65,6 +65,11 @@ public class OperationsList {
             }
         }
 
+    }
+
+    private void initializeProcedure(Procedure procedure) {
+        if (!Checker.isDataAvailable(procedure.getDentalDesc())) procedure.setDentalDesc(Checker.NOT_AVAILABLE);
+        if (!Checker.isDataAvailable(procedure.getDentalDate())) procedure.setDentalDate(Checker.NOT_AVAILABLE);
     }
 
     public void clearItems() {
@@ -108,8 +113,8 @@ public class OperationsList {
         if (procedure != null) {
 
             // Get payments transaction of selected operation
-            BottomOperationsDialog bottomOperationsDialog = new BottomOperationsDialog(layoutInflater,
-                    layoutInflater.getContext(), lifecycleOwner);
+            BottomOperationsDialog bottomOperationsDialog = new BottomOperationsDialog(lifecycleOwner.getLayoutInflater(),
+                    lifecycleOwner.getContext(), lifecycleOwner);
             bottomOperationsDialog.setPatient(patient);
             bottomOperationsDialog.createOperationDialog(procedure);
             bottomOperationsDialog.showDialog();

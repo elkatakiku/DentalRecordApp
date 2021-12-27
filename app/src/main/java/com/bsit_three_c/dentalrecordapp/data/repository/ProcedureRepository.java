@@ -5,7 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
-import com.bsit_three_c.dentalrecordapp.data.model.Payment;
+import com.bsit_three_c.dentalrecordapp.data.model.ProgressNote;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.firebase.database.DataSnapshot;
@@ -61,17 +61,15 @@ public class ProcedureRepository {
         }
     }
     public void addProcedure(Patient patient,
-                             int service,
+                             ArrayList<Integer> service,
                              String dentalDesc,
                              Date dentalDate,
-//                             int modeOfPayment,
                              String dentalAmount,
                              boolean isDownpayment,
                              String dentalPayment,
                              String dentalBalance) {
 
         Procedure procedure = createProcedure(patient, service, dentalDesc, dentalDate,
-//                modeOfPayment,
                 dentalAmount, isDownpayment, dentalPayment, dentalBalance);
         databaseReference.child(procedure.getUid()).setValue(procedure);
     }
@@ -79,7 +77,7 @@ public class ProcedureRepository {
     public void removeProcedure(Patient patient, String operationUID, ArrayList<String> paymentKeys) {
         databaseReference.child(operationUID).removeValue();
         PatientRepository.getInstance().removeProcedureKey(patient, operationUID);
-        PaymentRepository.getInstance().removePayments(paymentKeys);
+        ProgressNoteRepository.getInstance().removeProgressNote(paymentKeys);
     }
 
     public void removeProcedure(String procedureUID) {
@@ -99,16 +97,15 @@ public class ProcedureRepository {
     }
 
     private Procedure createProcedure(Patient patient,
-                                      int service,
+                                      ArrayList<Integer> service,
                                       String dentalDesc,
                                       Date dentalDate,
-//                                      int modeOfPayment,
                                       String dentalAmount,
                                       boolean isDownpayment,
                                       String dentalPayment,
                                       String dentalBalance) {
 
-        //  Create operation and payment UID
+        //  Create operation and progressNote UID
         String operationUID = databaseReference.push().getKey();
         String paymentUID = databaseReference.push().getKey();
 
@@ -118,20 +115,20 @@ public class ProcedureRepository {
                 service,
                 dentalDesc,
                 UIUtil.getDate(dentalDate),
-                Double.parseDouble(dentalAmount),
+                UIUtil.convertToDouble(dentalAmount),
                 isDownpayment,
-                Double.parseDouble(dentalBalance)
+                UIUtil.convertToDouble(dentalBalance)
         );
 
-        Payment payment = new Payment(
+        ProgressNote progressNote = new ProgressNote(
                 paymentUID,
-                Double.parseDouble(dentalPayment),
-//                modeOfPayment,
-                UIUtil.getDate(dentalDate)
+                UIUtil.getDate(dentalDate),
+                dentalDesc,
+                UIUtil.convertToDouble(dentalPayment)
         );
 
-        procedure.addPaymentKey(payment.getUid());
-        PaymentRepository.getInstance().addPayment(procedure, payment);
+        procedure.addPaymentKey(progressNote.getUid());
+        ProgressNoteRepository.getInstance().addProgressNote(procedure, progressNote);
         PatientRepository.getInstance().addProcedureKey(patient, procedure.getUid());
 
         return procedure;
@@ -161,12 +158,12 @@ public class ProcedureRepository {
             keys.remove(index);
         }
 
-        PaymentRepository.getInstance().removePayment(paymentUID);
+        ProgressNoteRepository.getInstance().removeProgressNote(paymentUID);
         databaseReference.child(procedure.getUid()).child(FirebaseHelper.PAYMENT_KEYS).setValue(keys);
     }
 
-    public void updateBalance(Procedure procedure, Payment payment) {
-        double newBalance = procedure.getDentalBalance() - payment.getAmount();
+    public void updateBalance(Procedure procedure, ProgressNote progressNote) {
+        double newBalance = procedure.getDentalBalance() - progressNote.getAmount();
         procedure.setDentalBalance(newBalance);
         databaseReference.child(procedure.getUid()).child(FirebaseHelper.BALANCE).setValue(procedure.getDentalBalance());
     }
@@ -185,7 +182,7 @@ public class ProcedureRepository {
 
     public void removePaymentKeys(String procedureUID) {
 
-        PaymentRepository paymentRepository = PaymentRepository.getInstance();
+        ProgressNoteRepository progressNoteRepository = ProgressNoteRepository.getInstance();
 
         //  Remove payments of procedure
         databaseReference.child(procedureUID).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -199,7 +196,7 @@ public class ProcedureRepository {
                     int keySize = keys.size();
 
                     for (int pos = 0; pos <keySize; pos++) {
-                        paymentRepository.removePayment(keys.get(pos));
+                        progressNoteRepository.removeProgressNote(keys.get(pos));
                     }
 
                     removeProcedure(procedure.getUid());

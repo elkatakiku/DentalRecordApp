@@ -15,6 +15,7 @@
         android:layout_weight="1"
         android:ellipsize="marquee"
         android:gravity="center_vertical"
+        android:minHeight="45dp"
         android:paddingStart="0dp"
         android:paddingEnd="10dp"
         android:text="Services"

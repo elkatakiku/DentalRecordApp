@@ -10,21 +10,21 @@ public class Procedure {
     private double dentalTotalAmount;
     private boolean isDownpayment;
     private double dentalBalance;
-    private int service;
+    private ArrayList<Integer> service;
 
     private ArrayList<String> paymentKeys;
 
     public Procedure() { }
 
     //  This constructor is used in getting dental operations
-    public Procedure(String uid, int service, String dentalDesc, String dentalDate, double dentalTotalAmount,
+    public Procedure(String uid, ArrayList<Integer> service, String dentalDesc, String dentalDate, double dentalTotalAmount,
                      boolean isDownpayment, double dentalBalance, ArrayList<String> paymentKeys) {
         this(uid, service, dentalDesc, dentalDate, dentalTotalAmount, isDownpayment, dentalBalance);
         this.paymentKeys = paymentKeys;
     }
 
     //  This constructor is used in creating new dental operations
-    public Procedure(String uid, int service, String dentalDesc, String dentalDate, double dentalTotalAmount,
+    public Procedure(String uid, ArrayList<Integer> service, String dentalDesc, String dentalDate, double dentalTotalAmount,
                      boolean isDownpayment, double dentalBalance) {
         this.uid = uid;
         this.service = service;
@@ -87,11 +87,11 @@ public class Procedure {
         return paymentKeys;
     }
 
-    public int getService() {
+    public ArrayList<Integer> getService() {
         return service;
     }
 
-    public void setService(int service) {
+    public void setService(ArrayList<Integer> service) {
         this.service = service;
     }
 

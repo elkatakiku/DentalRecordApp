@@ -180,8 +180,84 @@ public class UIUtil {
         return balance <= 0d ? ColorStateList.valueOf(0xFF01bb64) : ColorStateList.valueOf(0xFFFF5252);
     }
 
+    public static ArrayList<Integer> getServices(ArrayList<DentalServiceOption> serviceOptions) {
+        ArrayList<Integer> selected = new ArrayList<>();
+
+        for (DentalServiceOption service : serviceOptions) {
+            if (service.isSelected()) selected.add(service.getServicePosition());
+        }
+
+        Log.d(TAG, "getServices: service options size: " + selected.size());
+
+        if (selected.size() == 0) {
+            Log.e(TAG, "getServices: no services selected");
+            selected.add(0);
+        }
+
+        return selected;
+    }
+
     public static String getService(Resources resources, int position) {
         return resources.getStringArray(R.array.services_array)[position];
+    }
+
+    public static String getServiceTitle(Resources resources, ArrayList<Integer> servicesIndex) {
+        StringBuilder services = new StringBuilder();
+
+        for (Integer serviceIndex : servicesIndex) {
+            services.append(getService(resources, serviceIndex)).append(" | ");
+        }
+
+        services.delete(services.lastIndexOf(" | "), services.capacity());
+
+        return services.toString();
+    }
+
+    public static String getServiceTitle(String selectedTitles, String selectedTitle, ArrayList<DentalServiceOption> serviceOptions, String defaultTitle, String[] strings) {
+        if (selectedTitles.equals(defaultTitle)) {
+            Log.d(TAG, "getServiceTitle: this is true");
+            return selectedTitle;
+        }
+
+        Log.d(TAG, "getServiceTitle: selected titles: " + selectedTitles);
+        Log.d(TAG, "getServiceTitle: selected title: " + selectedTitle);
+
+        StringBuilder newTitle = new StringBuilder();
+
+        String[] titles = selectedTitles.split(" \\| ");
+        boolean inTitle = false;
+
+        for (String title : titles) {
+            if (selectedTitle.equals(title)) {
+                inTitle = true;
+
+                //  This is wrong
+                int titlePos = getPosition(strings, selectedTitle);
+                if (titlePos != -1)
+                    serviceOptions.get(titlePos).setSelected(false);
+                continue;
+            }
+
+            newTitle.append(title).append(" | ");
+        }
+
+        if (!inTitle) {
+            newTitle.append(selectedTitle);
+        }
+        else {
+            int index = newTitle.lastIndexOf(" | ");
+            newTitle.delete(index, newTitle.capacity());
+        }
+
+        return newTitle.toString();
+    }
+
+    private static int getPosition(String[] titles, String selectedTitle) {
+        for (int pos = 0; pos < titles.length; pos++) {
+            if (titles[pos].equals(selectedTitle)) return pos;
+        }
+
+        return -1;
     }
 
     public static String getModeOfPayment(Resources resources, int position) {
@@ -225,54 +301,5 @@ public class UIUtil {
 
         return capitalize.toString();
     }
-
-    public static String getServiceTitle(String selectedTitles, String selectedTitle, ArrayList<DentalServiceOption> serviceOptions, String defaultTitle, String[] strings) {
-        if (selectedTitles.equals(defaultTitle)) {
-            Log.d(TAG, "getServiceTitle: this is true");
-            return selectedTitle;
-        }
-
-        Log.d(TAG, "getServiceTitle: selected titles: " + selectedTitles);
-        Log.d(TAG, "getServiceTitle: selected title: " + selectedTitle);
-
-        StringBuilder newTitle = new StringBuilder();
-
-        String[] titles = selectedTitles.split(" \\| ");
-        boolean inTitle = false;
-
-        for (int pos = 0; pos < titles.length; pos++) {
-            String title = titles[pos];
-            if (selectedTitle.equals(title)) {
-                inTitle = true;
-
-                //  This is wrong
-                int titlePos = getPosition(strings, selectedTitle);
-                if (titlePos != -1)
-                    serviceOptions.get(titlePos).setSelected(false);
-                continue;
-            }
-
-            newTitle.append(title).append(" | ");
-        }
-
-        if (!inTitle) {
-            newTitle.append(selectedTitle);
-        }
-        else {
-            int index = newTitle.lastIndexOf(" | ");
-            newTitle.delete(index, newTitle.capacity());
-        }
-
-        return newTitle.toString();
-    }
-
-    private static int getPosition(String[] titles, String selectedTitle) {
-        for (int pos = 0; pos < titles.length; pos++) {
-            if (titles[pos].equals(selectedTitle)) return pos;
-        }
-
-        return -1;
-    }
-
 
 }

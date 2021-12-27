@@ -20,9 +20,9 @@
         <item>Widowed</item>
     </string-array>
 
-    <!-- Spinner Mode of Payment -->
+    <!-- Spinner Mode of ProgressNote -->
     <string-array name="mop_array">
-        <item>Choose mode of payment…</item>
+        <item>Choose mode of progressNote…</item>
         <item>Debit</item>
         <item>Credit</item>
     </string-array>

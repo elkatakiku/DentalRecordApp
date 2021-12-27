@@ -14,7 +14,7 @@ public class Checker {
 
     private static final String TAG = Checker.class.getSimpleName();
 
-    private static String NOT_AVAILABLE = "N/A";
+    public static final String NOT_AVAILABLE = "N/A";
 
     private static boolean isNullOrError(LiveData<FormState> liveData) {
         return liveData.getValue() == null || liveData.getValue().getMsgError() != null;

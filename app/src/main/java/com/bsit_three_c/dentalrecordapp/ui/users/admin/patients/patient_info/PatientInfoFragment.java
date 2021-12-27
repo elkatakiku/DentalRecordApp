@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -15,12 +16,14 @@ import androidx.navigation.Navigation;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.adapter.OperationsList;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
+import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentPatientInfoBinding;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class PatientInfoFragment extends Fragment {
     private static final String TAG = PatientInfoFragment.class.getSimpleName();
@@ -44,17 +47,9 @@ public class PatientInfoFragment extends Fragment {
             patient = activity.getIntent().getParcelableExtra(getString(R.string.PATIENT));
             viewModel.setPatient(patient);
         }
-        else requireActivity().finish();
+//        else requireActivity().finish();
 
         return binding.getRoot();
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        Log.d(TAG, "onStart: called");
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -66,7 +61,6 @@ public class PatientInfoFragment extends Fragment {
             PatientInfoFragmentDirections.ActionFirst2FragmentToSecondFragment action =
                     PatientInfoFragmentDirections.actionFirst2FragmentToSecondFragment(patient);
             Navigation.findNavController(view1).navigate(action);
-            onPause();
         });
 
         viewModel.getmBalance().observe(getViewLifecycleOwner(), aDouble -> {
@@ -86,12 +80,13 @@ public class PatientInfoFragment extends Fragment {
     }
 
     public void loadProcedures() {
-        operationsList = new OperationsList(binding.tryList, getLayoutInflater(), patient, this);
+        Log.d(TAG, "loadProcedures: called");
+        operationsList = new OperationsList(binding.tryList, patient, this);
         viewModel.loadOperations(patient, this);
 
         viewModel.getmProceduresCounter().observe(getViewLifecycleOwner(), integer -> {
 
-            //  Checks if there are no procedure
+            //  Checks if there are no procedure.
             if (integer <= 0) {
                 binding.textViewEmptyProcedures.setVisibility(View.VISIBLE);
                 binding.proceduresLoading.setVisibility(View.INVISIBLE);
@@ -101,18 +96,11 @@ public class PatientInfoFragment extends Fragment {
                 binding.proceduresLoading.setVisibility(View.GONE);
             }
 
-            //  Checks if procedures has been loaded from the firebase
+            //  Checks if procedures has been loaded from the firebase.
             if (integer == viewModel.getProcedureSize()) {
                 operationsList.addItems(Arrays.asList(viewModel.getProcedures()));
             } else operationsList.clearItems();
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        Log.d(TAG, "onResume: patient info resumed");
     }
 
     @Override
@@ -126,34 +114,27 @@ public class PatientInfoFragment extends Fragment {
     private void displayInfo() {
         String notAvailable = "N/A";
 
-        if (Checker.isDataAvailable(patient.getFirstname()))
-            binding.txtViewPIFirstname.setText(patient.getFirstname());
-        else
-            binding.txtViewPIFirstname.setText(notAvailable);
+        setText(patient.getFirstname(), binding.txtViewPIFirstname);
+        setText(patient.getLastname(), binding.txtViewPILastname);
+        setText(patient.getMiddleInitial(), binding.txtViewPIMiddleInitial);
+        setText(patient.getSuffix(), binding.tvPatientSuffix);
+//        setText(patient.birr(), binding.tvPatientBirthdate);
+        setText(patient.getAddress(), binding.txtViewPIAddress);
+        setText(patient.getOccupation(), binding.txtViewPIOccupation);
 
-        if (Checker.isDataAvailable(patient.getLastname()))
-            binding.txtViewPILastname.setText(patient.getLastname());
-        else
-            binding.txtViewPILastname.setText(notAvailable);
-
-        if (Checker.isDataAvailable(patient.getMiddleInitial()))
-            binding.txtViewPIMiddleInitial.setText(patient.getMiddleInitial());
-        else
-            binding.txtViewPIMiddleInitial.setText(notAvailable);
-
-        if (Checker.isDataAvailable(patient.getAddress()))
-            binding.txtViewPIAddress.setText(patient.getAddress());
-        else
-            binding.txtViewPIAddress.setText(notAvailable);
-
-        if (patient.getPhoneNumber().size() > 0) {
+        List<String > contactNumber = patient.getPhoneNumber();
+        if (contactNumber.size() > 0) {
             StringBuilder builder = new StringBuilder();
 
-            for (String number : patient.getPhoneNumber()) {
-                builder.append(number).append("\n");
+            if (contactNumber.get(0).equals(FirebaseHelper.NEW_PATIENT)) {
+                builder.append(Checker.NOT_AVAILABLE);
+            } else {
+                for (String number : contactNumber) {
+                    builder.append(number).append("\n");
+                }
+                builder.deleteCharAt(builder.length()-1);
             }
 
-            builder.deleteCharAt(builder.length()-1);
             binding.txtViewPITelephoneNumber.setText(builder.toString());
         }
         else
@@ -163,16 +144,19 @@ public class PatientInfoFragment extends Fragment {
         else
             binding.txtViewPIAge.setText(notAvailable);
 
-        Log.d(TAG, "displayInfo: civil: " + patient.getCivilStatus());
         if (Checker.isNotDefault(patient.getCivilStatus()))
             binding.txtViewPICivilStatus.setText(UIUtil.getCivilStatus(getResources(), patient.getCivilStatus()));
         else
             binding.txtViewPICivilStatus.setText(notAvailable);
+    }
 
-        if (Checker.isDataAvailable(patient.getOccupation()))
-            binding.txtViewPIOccupation.setText(patient.getOccupation());
+    private void setText(String data, TextView textView) {
+        String notAvailable = "N/A";
+
+        if (Checker.isDataAvailable(data))
+            textView.setText(data);
         else
-            binding.txtViewPIOccupation.setText(notAvailable);
+            textView.setText(notAvailable);
     }
 
 }

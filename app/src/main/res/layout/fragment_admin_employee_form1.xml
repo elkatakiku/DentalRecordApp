@@ -35,6 +35,7 @@
                     android:id="@+id/ivEmployeeDisplay"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/ic_baseline_person_24"
                     app:tint="#8000B6BC" />
 

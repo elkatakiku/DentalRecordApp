@@ -130,7 +130,7 @@ public class PatientsFragment extends Fragment {
             startActivity(
                     new Intent(requireActivity(), PatientActivity.class)
                             .putExtra(getString(R.string.PATIENT), patient));
-            requireActivity().finish();
+            requireActivity();
         }
     });
 

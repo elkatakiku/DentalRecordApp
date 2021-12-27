@@ -3,8 +3,11 @@ package com.bsit_three_c.dentalrecordapp.util;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+
+import androidx.activity.result.ActivityResultLauncher;
 
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.google.gson.Gson;
@@ -59,5 +62,19 @@ public class LocalStorage {
         Log.i(TAG, "clearSavedUser: Start clearing user info");
         saveLoggedInUser(context, null);
         Log.i(TAG, "clearSavedUser: Done clearing user info");
+    }
+
+
+    public static void imageChooser(ActivityResultLauncher<Intent> selectImage) {
+
+        // create an instance of the
+        // intent of the type image
+        Intent i = new Intent();
+        i.setType("image/*");
+        i.setAction(Intent.ACTION_GET_CONTENT);
+
+        // pass the constant to compare it
+        // with the returned requestCode
+        selectImage.launch(Intent.createChooser(i, "Select Picture"));
     }
 }

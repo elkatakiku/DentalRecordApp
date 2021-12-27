@@ -10,6 +10,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.data.adapter.ServiceOptionsAdapter;
+import com.bsit_three_c.dentalrecordapp.data.model.DentalServiceOption;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProcedureRepository;
@@ -17,9 +19,11 @@ import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info.Pat
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.util.ArrayList;
 import java.util.Date;
 
-public class BottomEditOperationDialog {
+public class BottomEditProcedureDialog {
+    private static final String TAG = BottomEditProcedureDialog.class.getSimpleName();
 
     private final LayoutInflater layoutInflater;
     private final Context context;
@@ -33,12 +37,12 @@ public class BottomEditOperationDialog {
     private Patient patient;
     private Procedure procedure;
 
-    public BottomEditOperationDialog(LayoutInflater layoutInflater, Context context, PatientInfoFragment lifecycleOwner) {
+    public BottomEditProcedureDialog(LayoutInflater layoutInflater, Context context, PatientInfoFragment lifecycleOwner) {
         this.layoutInflater = layoutInflater;
         this.context = context;
         this.lifecycleOwner = lifecycleOwner;
 
-        this.view = layoutInflater.inflate(R.layout.bottom_edit_operation, null);
+        this.view = layoutInflater.inflate(R.layout.bottom_procedure_edit, null);
         this.procedureRepository = ProcedureRepository.getInstance();
     }
 
@@ -57,7 +61,8 @@ public class BottomEditOperationDialog {
         String oldAmount = String.valueOf(procedure.getDentalTotalAmount());
 
         viewHolder.date.updateDate(year, month, day);
-        viewHolder.service.setSelection(procedure.getService());
+//        viewHolder.service.setSelection(procedure.getService());
+        initializeServices(viewHolder, procedure.getService());
         viewHolder.description.setText(procedure.getDentalDesc());
         viewHolder.amount.setText(oldAmount);
 
@@ -69,7 +74,7 @@ public class BottomEditOperationDialog {
 
 
                 procedure.setDentalDate(newDate);
-                procedure.setService(viewHolder.service.getSelectedItemPosition());
+                procedure.setService(UIUtil.getServices(serviceOptions));
                 procedure.setDentalDesc(viewHolder.description.getText().toString());
                 procedure.setDentalTotalAmount(newAmount);
 
@@ -81,6 +86,24 @@ public class BottomEditOperationDialog {
         viewHolder.colse.setOnClickListener(v -> editOperationDialog.dismiss());
 
         editOperationDialog.setContentView(view);
+    }
+
+    private ArrayList<DentalServiceOption> serviceOptions = new ArrayList<>();
+
+    private void initializeServices(ViewHolder viewHolder, ArrayList<Integer> servicesIndex) {
+        final String[] servicesArray = lifecycleOwner.getResources().getStringArray(R.array.services_array);
+
+        for (int i = 0; i < servicesArray.length; i++) {
+            serviceOptions.add(new DentalServiceOption(servicesArray[i], i, false));
+        }
+
+        for (Integer index : servicesIndex) {
+            serviceOptions.get(index).setSelected(true);
+        }
+
+        ServiceOptionsAdapter serviceOptionsAdapter = new ServiceOptionsAdapter(lifecycleOwner.getContext(), 0, serviceOptions,
+                servicesArray, viewHolder.service);
+        viewHolder.service.setAdapter(serviceOptionsAdapter);
     }
 
     private void dialogDismissListener(BottomSheetDialog editOperationDialog) {

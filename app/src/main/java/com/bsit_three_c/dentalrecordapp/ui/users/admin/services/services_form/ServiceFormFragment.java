@@ -93,7 +93,7 @@ public class ServiceFormFragment extends Fragment {
         binding.btnAddServiceImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imageChooser();
+                LocalStorage.imageChooser(selectImage);
             }
         });
 
@@ -131,19 +131,18 @@ public class ServiceFormFragment extends Fragment {
         });
     }
 
-    private void imageChooser() {
-
-        // create an instance of the
-        // intent of the type image
-        Intent i = new Intent();
-        i.setType("image/*");
-        i.setAction(Intent.ACTION_GET_CONTENT);
-
-        // pass the constant to compare it
-        // with the returned requestCode
-        selectImage.launch(Intent.createChooser(i, "Select Picture"));
-
-    }
+//    private void imageChooser() {
+//
+//        // create an instance of the
+//        // intent of the type image
+//        Intent i = new Intent();
+//        i.setType("image/*");
+//        i.setAction(Intent.ACTION_GET_CONTENT);
+//
+//        // pass the constant to compare it
+//        // with the returned requestCode
+//        selectImage.launch(Intent.createChooser(i, "Select Picture"));
+//    }
 
     private void addCategory(final String categoryInput) {
 

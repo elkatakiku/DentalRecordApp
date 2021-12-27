@@ -201,7 +201,7 @@ public class PatientRepository {
 
     private void initialize(Patient patient) {
 
-        String notAvailable = "N/A";
+        final String notAvailable = "N/A";
 
         if (!Checker.isDataAvailable(patient.getFirstname()))
             patient.setFirstname(notAvailable);

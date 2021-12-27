@@ -129,8 +129,9 @@ public class AddPatientFragment extends Fragment {
                 binding.eTxtLastname.setError(getString(R.string.invalid_empty_input));
                 isInputValid = false;
             }
-
-            if (!isInputValid) return;
+            Log.d(TAG, "onViewCreated: is input valid reverse: " + !isInputValid);
+            Log.d(TAG, "onViewCreated: is input valid: " + isInputValid);
+            if (!isInputValid || !basicViewModel.isStateValid()) return;
             Log.d(TAG, "onViewCreated: valid: " + basicViewModel.isStateValid());
 
             Intent intentResult = new Intent(requireActivity(), PatientActivity.class);

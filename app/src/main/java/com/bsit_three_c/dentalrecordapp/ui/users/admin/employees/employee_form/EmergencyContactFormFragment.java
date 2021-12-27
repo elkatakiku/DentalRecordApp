@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.bsit_three_c.dentalrecordapp.databinding.FragmentAdminAddEmployee2Binding;
+import com.bsit_three_c.dentalrecordapp.databinding.FragmentAdminEmployeeForm2Binding;
 
 public class EmergencyContactFormFragment extends Fragment {
 
-    private FragmentAdminAddEmployee2Binding binding;
+    private FragmentAdminEmployeeForm2Binding binding;
 
     @Override
     public View onCreateView(
@@ -20,7 +20,7 @@ public class EmergencyContactFormFragment extends Fragment {
             Bundle savedInstanceState
     ) {
 
-        binding = FragmentAdminAddEmployee2Binding.inflate(inflater, container, false);
+        binding = FragmentAdminEmployeeForm2Binding.inflate(inflater, container, false);
         return binding.getRoot();
 
     }

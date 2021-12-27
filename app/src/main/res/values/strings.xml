@@ -90,7 +90,7 @@
     <string name="MiddleInitial">Middle Initial</string>
     <string name="Age">Age</string>
     <string name="Address">Address</string>
-    <string name="TelephoneNumber">Telephone Number</string>
+    <string name="ContactNumber">Contact Number</string>
     <string name="Occupation">Occupation</string>
     <string name="CivilStatus">Civil Status</string>
 
