@@ -31,10 +31,13 @@ public class CustomViewModelFactory implements ViewModelProvider.Factory {
             return (T) new ProcedureFormViewModel(ProcedureRepository.getInstance());
         }
         else if (aClass.isAssignableFrom(PatientInfoViewModel.class)) {
-            return (T) new PatientInfoViewModel(ProcedureRepository.getInstance());
+            return (T) new PatientInfoViewModel(PatientRepository.getInstance(), ProcedureRepository.getInstance());
         }
         else if (aClass.isAssignableFrom(AdminDashboardViewModel.class)) {
-            return (T) new AdminDashboardViewModel(PatientRepository.getInstance());
+            return (T) new AdminDashboardViewModel(
+                    PatientRepository.getInstance(),
+                    ServiceRepository.getInstance()
+            );
         }
         else if (aClass.isAssignableFrom(ServiceFormViewModel.class)) {
             return (T) new ServiceFormViewModel(ServiceRepository.getInstance());

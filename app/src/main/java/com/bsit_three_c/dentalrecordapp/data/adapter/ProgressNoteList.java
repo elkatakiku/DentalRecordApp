@@ -46,7 +46,8 @@ public class ProgressNoteList {
 
         ViewHolder viewHolder = new ViewHolder(layoutInflater);
 
-        String amount = progressNote.getAmount().toString();
+        String amount = progressNote.getAmount() < 0 ? Checker.NOT_AVAILABLE : progressNote.getAmount().toString();
+
         viewHolder.paymentDate.setText(progressNote.getDate());
         viewHolder.desciption.setText(progressNote.getDescription());
         viewHolder.paymentAmount.setText(amount);

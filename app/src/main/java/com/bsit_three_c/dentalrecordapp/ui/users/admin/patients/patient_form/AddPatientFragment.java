@@ -18,6 +18,7 @@ import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ListWithRemoveItemAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.FormState;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
+import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentAddPatientBinding;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.DatePickerFragment;
@@ -26,6 +27,7 @@ import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.CustomItemSelectedListener;
 import com.bsit_three_c.dentalrecordapp.util.CustomObserver;
 import com.bsit_three_c.dentalrecordapp.util.CustomTextWatcher;
+import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 public class AddPatientFragment extends Fragment {
@@ -137,7 +139,7 @@ public class AddPatientFragment extends Fragment {
             Intent intentResult = new Intent(requireActivity(), PatientActivity.class);
 
             if (isEdit) {
-                intentResult.putExtra(getString(R.string.PATIENT), basicViewModel.updatePatient(
+                intentResult.putExtra(LocalStorage.UPDATED_PATIENT_KEY, basicViewModel.updatePatient(
                         patient,
                         firstname,
                         lastname,
@@ -151,7 +153,7 @@ public class AddPatientFragment extends Fragment {
                 ));
             }
             else {
-                intentResult.putExtra(getString(R.string.PATIENT), basicViewModel.addPatient(
+                intentResult.putExtra(LocalStorage.UPDATED_PATIENT_KEY, basicViewModel.addPatient(
                         firstname,
                         lastname,
                         middleInitial,
@@ -164,6 +166,10 @@ public class AddPatientFragment extends Fragment {
                 ));
             }
 
+            Log.d(TAG, "onViewCreated: intent: " + intentResult);
+            Log.d(TAG, "onViewCreated: intent patient: " + intentResult.getParcelableExtra(LocalStorage.UPDATED_PATIENT_KEY));
+            Log.d(TAG, "onViewCreated: intent patient key: " + LocalStorage.UPDATED_PATIENT_KEY);
+
             requireActivity().setResult(Activity.RESULT_OK, intentResult);
             requireActivity().finish();
 
@@ -171,6 +177,20 @@ public class AddPatientFragment extends Fragment {
 
         setListeners();
         setObservers();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        patient = requireActivity().getIntent().getParcelableExtra(requireContext().getString(R.string.PATIENT));
+
+        if (patient != null) {
+            isEdit = true;
+            initializeFields(patient);
+        }
+        else
+            isEdit = false;
     }
 
     private void showDatePickerDialog() {
@@ -260,20 +280,6 @@ public class AddPatientFragment extends Fragment {
         binding.spnrCivilStatus.setOnItemSelectedListener(new CustomItemSelectedListener((String) binding.spnrCivilStatus.getTag(), basicViewModel));
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        patient = requireActivity().getIntent().getParcelableExtra(requireContext().getString(R.string.PATIENT));
-
-        if (patient != null) {
-            isEdit = true;
-            initializeFields(patient);
-        }
-        else
-            isEdit = false;
-    }
-
     private void initializeFields(Patient patient) {
         binding.eTxtFirstname.setText(patient.getFirstname());
         binding.eTxtLastname.setText(patient.getLastname());
@@ -295,6 +301,9 @@ public class AddPatientFragment extends Fragment {
 
         if (patient.getPhoneNumber() != null) {
             for (String number : patient.getPhoneNumber()) {
+                if (patient.getPhoneNumber().get(0).equals(FirebaseHelper.NEW_PATIENT)) {
+                    break;
+                }
                 addMobileNumber(number);
             }
         }

@@ -35,11 +35,17 @@
     <group>
         <item
             android:id="@+id/nav_logout"
-            android:icon="@mipmap/menu_logout"
+            android:icon="@drawable/ic_baseline_power_settings_new_24"
             android:title="@string/menu_logout" />
 
         <item
             android:id="@+id/nav_user_create_account"
+            android:icon="@drawable/ic_baseline_account_box_24"
             android:title="Create Account" />
+        <item
+            android:id="@+id/nav_login"
+            android:icon="@drawable/ic_baseline_login_24"
+            android:title="Login" />
+
     </group>
 </menu>

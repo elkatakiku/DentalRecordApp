@@ -16,7 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
+import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentClientMenuBinding;
 import com.bsit_three_c.dentalrecordapp.ui.login.LoginActivity;
@@ -71,23 +73,28 @@ public class MenuClientFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.btnUserRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                registerActivty.launch(new Intent(requireActivity(), RegisterActivity.class));
+            }
+        });
+
+        binding.cvViewServices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(MenuClientFragment.this)
+                        .navigate(R.id.nav_user_service);
+            }
+        });
+
         binding.btnUserLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loginActivity.launch(new Intent(requireActivity(), LoginActivity.class));
             }
         });
-
-        binding.btnUserRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(v, "Register user", Snackbar.LENGTH_SHORT).show();
-                registerActivty.launch(new Intent(requireActivity(), RegisterActivity.class));
-            }
-        });
     }
-
-
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

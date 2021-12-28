@@ -2,7 +2,9 @@ package com.bsit_three_c.dentalrecordapp.ui.dialog;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,23 +57,51 @@ public class BottomProgressNoteFormDialog {
     private AlertDialog alertDialog;
 
     private final boolean isEdit;
+    private boolean isFullyPaid;
     private boolean isOnlyOne;
     private double balance;
+    private double totalBalanceBefore;
+
+    private class BalanceObserver implements Observer<FormState> {
+        private final ViewHolder viewHolder;
+        private final Resources resources;
+
+        public BalanceObserver(ViewHolder viewHolder, Resources resources) {
+            this.viewHolder = viewHolder;
+            this.resources = resources;
+        }
+
+        @Override
+        public void onChanged(FormState formState) {
+            if (formState == null) return;
+            Log.d(TAG, "onChanged: balance: " + BottomProgressNoteFormDialog.this.balance);
+            if (formState.getMsgError() != null) {
+                viewHolder.balance.setText(resources.getString(formState.getMsgError()));
+            } else {
+                Log.d(TAG, "onChanged: setting balance text");
+                Log.d(TAG, "onChanged: balance: " + balance);
+                Log.d(TAG, "onChanged: string of balance: " + String.valueOf(balance));
+                viewHolder.balance.setText(String.valueOf(balance));
+            }
+        }
+    };
 
     //  Used to create dialog to add payment
-    public BottomProgressNoteFormDialog(LayoutInflater layoutInflater, Context context, PatientInfoFragment lifecycleOwner) {
-       this(layoutInflater, context, lifecycleOwner, false);
+    public BottomProgressNoteFormDialog(LayoutInflater layoutInflater, Context context, PatientInfoFragment lifecycleOwner, boolean isFullyPaid) {
+       this(layoutInflater, context, lifecycleOwner, false, isFullyPaid);
     }
 
     //  Used to create dialog to edit payment
-    public BottomProgressNoteFormDialog(LayoutInflater layoutInflater, Context context, PatientInfoFragment lifecycleOwner, boolean isEditPayment) {
+    public BottomProgressNoteFormDialog(LayoutInflater layoutInflater, Context context, PatientInfoFragment lifecycleOwner,
+                                        boolean isEditPayment, boolean isFullyPaid) {
 
         this.layoutInflater = layoutInflater;
         this.context = context;
         this.lifecycleOwner = lifecycleOwner;
         this.isEdit = isEditPayment;
+        this.isFullyPaid = isFullyPaid;
 
-        this.view = layoutInflater.inflate(R.layout.bottom_payment_form, null, false);
+        this.view = layoutInflater.inflate(R.layout.bottom_progress_note_form, null, false);
         this.progressNoteRepository = ProgressNoteRepository.getInstance();
         this.procedureRepository = ProcedureRepository.getInstance();
     }
@@ -79,12 +109,23 @@ public class BottomProgressNoteFormDialog {
     //  Used to create a dialog to add payment
     public void createDialog(Procedure operation) {
         this.procedure = operation;
+        this.totalBalanceBefore = operation.getDentalBalance();
 
         ViewHolder viewHolder = new ViewHolder(view);
         paymentDialog = new BottomSheetDialog(context);
         BottomDialog.setBackgroundColorTransparent(paymentDialog);
 
-        viewHolder.btnConfirm.setEnabled(false);
+        if (totalBalanceBefore > 0) {
+            viewHolder.balance.setText(String.valueOf(totalBalanceBefore));
+        }
+
+        if (isFullyPaid) {
+            viewHolder.amount.setInputType(InputType.TYPE_NULL);
+            viewHolder.amount.setFocusable(false);
+            viewHolder.amount.setFocusableInTouchMode(false);
+            viewHolder.amount.setHint("Fully Paid");
+            viewHolder.balance.setHint("Fully Paid");
+        }
 
         viewHolder.btnConfirm.setOnClickListener(v -> {
 
@@ -112,15 +153,21 @@ public class BottomProgressNoteFormDialog {
 
     //  Used to create a dialog to edit progressNote
     public void createDialog(ProgressNote progressNote) {
+
+
         ViewHolder viewHolder = new ViewHolder(view);
         paymentDialog = new BottomSheetDialog(context);
         BottomDialog.setBackgroundColorTransparent(paymentDialog);
 
         Date oldDate = UIUtil.stringToDate(progressNote.getDate());
-        int day = Integer.parseInt(UIUtil.getDateUnits(oldDate)[0]);
-        int month = Integer.parseInt(UIUtil.getDateUnits(oldDate)[1]) - 1;
-        int year = Integer.parseInt(UIUtil.getDateUnits(oldDate)[2]);
+        int day = UIUtil.convertToInteger(UIUtil.getDateUnits(oldDate)[0]);
+        int month = UIUtil.convertToInteger(UIUtil.getDateUnits(oldDate)[1]) - 1;
+        int year = UIUtil.convertToInteger(UIUtil.getDateUnits(oldDate)[2]);
         String oldAmount = String.valueOf(progressNote.getAmount());
+
+        this.totalBalanceBefore = procedure.getDentalBalance() + UIUtil.convertToDouble(oldAmount);
+
+        Log.d(TAG, "createDialog: total balance: " + totalBalanceBefore);
 
         viewHolder.amount.addTextChangedListener(textWatcher);
 
@@ -129,16 +176,20 @@ public class BottomProgressNoteFormDialog {
         viewHolder.date.updateDate(year, month, day);
         viewHolder.amount.setText(oldAmount);
 
-        mBalanceState.observe(lifecycleOwner.getViewLifecycleOwner(), new Observer<FormState>() {
-            @Override
-            public void onChanged(FormState formState) {
-                if (formState == null) return;
 
-                if (formState.getMsgError() != null) {
-                    viewHolder.balance.setText(oldAmount);
-                }
-            }
-        });
+//        mBalanceState.observe(lifecycleOwner.getViewLifecycleOwner(), new Observer<FormState>() {
+//            @Override
+//            public void onChanged(FormState formState) {
+//                if (formState == null) return;
+//                Log.d(TAG, "onChanged: oldAmount: " + oldAmount);
+//                Log.d(TAG, "onChanged: balance: " + BottomProgressNoteFormDialog.this.balance);
+//                if (formState.getMsgError() != null) {
+//                    viewHolder.balance.setText(context.getResources().getString(formState.getMsgError()));
+//                } else {
+//                    viewHolder.balance.setText(String.valueOf(balance));
+//                }
+//            }
+//        });
 
         setObservers(viewHolder);
         setBtnConfirm(viewHolder, progressNote);
@@ -178,9 +229,9 @@ public class BottomProgressNoteFormDialog {
             Log.d(TAG, "setBtnConfirm: progress note: " + progressNote);
 
             //  Update progressNote
-//            progressNoteRepository.updateProgressNote(progressNote, procedure);
-//
-//            paymentDialog.dismiss();
+            progressNoteRepository.updateProgressNote(progressNote, procedure);
+
+            paymentDialog.dismiss();
 
         });
     }
@@ -243,29 +294,6 @@ public class BottomProgressNoteFormDialog {
         });
     }
 
-    private void dataChanged(String input) {
-
-        if (input == null || input.isEmpty())
-            mAmountState.setValue(new FormState(R.string.invalid_empty_input));
-        else if (Checker.isRepeated(input, "."))
-            mAmountState.setValue(new FormState(R.string.invalid_contains_two_or_more_dots));
-        else if (UIUtil.convertToDouble(input) == -1)
-            mAmountState.setValue(new FormState(R.string.invalid_input));
-        else if (procedure.getPaymentKeys().size() <= 1 && (procedure.getDentalTotalAmount() - UIUtil.convertToDouble(input) >= 0))
-            mAmountState.setValue(new FormState(true));
-        else if (Checker.isFullyPaid(input, procedure.getDentalBalance()))
-            mAmountState.setValue(new FormState(R.string.invalid_fully_paid));
-        else mAmountState.setValue(new FormState(true));
-
-        setBalance(input);
-
-    }
-
-    private void setButtonState() {
-        if (Checker.isComplete(mAmountState)) mState.setValue(new FormState(true));
-        else mState.setValue(new FormState(R.string.invalid_input));
-    }
-
     private final TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -280,9 +308,27 @@ public class BottomProgressNoteFormDialog {
         @Override
         public void afterTextChanged(Editable s) {
             dataChanged(s.toString());
-            setButtonState();
+//            setButtonState();
         }
     };
+
+    private void dataChanged(String input) {
+
+        if (input == null || input.isEmpty())
+            mAmountState.setValue(new FormState(R.string.invalid_empty_input));
+        else if (Checker.isRepeated(input, "."))
+            mAmountState.setValue(new FormState(R.string.invalid_contains_two_or_more_dots));
+        else if (UIUtil.convertToDouble(input) == -1)
+            mAmountState.setValue(new FormState(R.string.invalid_input));
+        else if (procedure.getPaymentKeys().size() <= 1 && (procedure.getDentalTotalAmount() - UIUtil.convertToDouble(input) >= 0))
+            mAmountState.setValue(new FormState(true));
+        else if (Checker.isFullyPaid(input, totalBalanceBefore))
+            mAmountState.setValue(new FormState(R.string.invalid_fully_paid));
+        else mAmountState.setValue(new FormState(true));
+
+        setBalance(input);
+
+    }
 
     private void setBalance(String input) {
         boolean hasAmount = Checker.isNotNullAndValid(mAmountState);
@@ -291,14 +337,21 @@ public class BottomProgressNoteFormDialog {
 
         //  Balance - Amount
         double amount = UIUtil.convertToDouble(input);
-        double balance = procedure.getDentalBalance();
+
+        if (amount == -1) amount = 0;
 
         //  Update balance output
+        Log.d(TAG, "setBalance: amount: " + amount);
+        Log.d(TAG, "setBalance: old balance: " + totalBalanceBefore);
+        this.balance = totalBalanceBefore - amount;
 
-        this.balance = balance - amount;
+        Log.d(TAG, "setBalance: balance: " + this.balance);
 
+        Log.d(TAG, "setBalance: balance is less than 0: " + (this.balance < 0));
         if (this.balance < 0) {
             mBalanceState.setValue(new FormState(R.string.invalid_input));
+        } else {
+            mBalanceState.setValue(new FormState(true));
         }
     }
 
@@ -307,6 +360,10 @@ public class BottomProgressNoteFormDialog {
                 new CustomObserver(viewHolder.amount, lifecycleOwner.getResources()));
         mState.observe(lifecycleOwner.getViewLifecycleOwner(),
                 new CustomObserver.ObserverButton(viewHolder.btnConfirm));
+
+        Log.d(TAG, "setObservers: balance: " + balance);
+        mBalanceState.observe(lifecycleOwner.getViewLifecycleOwner(),
+                new BalanceObserver(viewHolder, context.getResources()));
     }
 
     public void showDialog() {

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.FormState;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
+import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
 import com.bsit_three_c.dentalrecordapp.data.repository.PatientRepository;
 import com.bsit_three_c.dentalrecordapp.interfaces.SpinnerState;
 import com.bsit_three_c.dentalrecordapp.interfaces.TextChange;
@@ -128,10 +129,12 @@ public class AddPatientViewModel extends ViewModel implements TextChange, Spinne
 
         patient.setFirstname(UIUtil.capitalize(firstname.trim()));
         patient.setLastname(UIUtil.capitalize(lastname.trim()));
+        Log.d(TAG, "updatePatient: new MI: " + middleInitial);
         patient.setMiddleInitial(UIUtil.capitalize(middleInitial.trim()));
         patient.setSuffix(UIUtil.capitalize(suffix.trim()));
         patient.setAddress(UIUtil.capitalize(address.trim()));
         patient.setPhoneNumber(contact);
+        if (contact.size() <= 0) contact.add(FirebaseHelper.NEW_PATIENT);
         patient.setCivilStatus(civilStatus);
         patient.setAge(age);
         patient.setOccupation(occupation);

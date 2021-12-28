@@ -20,6 +20,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityMainBinding;
+import com.bsit_three_c.dentalrecordapp.ui.login_signup.LoginOrRegisterActivity;
 import com.bsit_three_c.dentalrecordapp.ui.users.admin.MainAdminActivity;
 import com.bsit_three_c.dentalrecordapp.ui.login.LoginViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.ui.search.SearchActivity;
@@ -162,7 +163,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        Log.d(TAG, "onOptionsItemSelected: this is called ");
+        Log.d(TAG, "onOptionsItemSelected: this is called");
+        Log.d(TAG, "onOptionsItemSelected: menu item: " + item.getItemId());
+        Log.d(TAG, "onOptionsItemSelected: menu id: " + R.id.home);
+        Log.d(TAG, "onOptionsItemSelected: profile id: " + R.id.menu_profile);
 
         Intent intent = null;
         int id = item.getItemId();
@@ -172,6 +176,9 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.home) {
             Snackbar.make(binding.getRoot(), "Menu clicked", Snackbar.LENGTH_SHORT).show();
             Log.d(TAG, "onOptionsItemSelected: hamburger menu clicked");
+        } else if (id == R.id.menu_profile) {
+            //  Start activity on result
+            startActivity(new Intent(MainActivity.this, LoginOrRegisterActivity.class));
         }
 
 //        else if (id == R.id.nav_settings) {

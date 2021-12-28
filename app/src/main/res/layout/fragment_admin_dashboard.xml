@@ -383,7 +383,7 @@
                             android:paddingTop="30dp">
 
                             <TextView
-                                android:id="@+id/textView39"
+                                android:id="@+id/tvServicesCount"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:layout_weight="3"
@@ -394,7 +394,6 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/textView40"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:layout_weight="1"

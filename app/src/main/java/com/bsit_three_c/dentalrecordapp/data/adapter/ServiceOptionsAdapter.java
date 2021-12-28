@@ -24,13 +24,13 @@ import java.util.List;
 public class ServiceOptionsAdapter extends ArrayAdapter<DentalServiceOption> {
     private static final String TAG = ServiceOptionsAdapter.class.getSimpleName();
 
-    private Context mContext;
-    private ArrayList<DentalServiceOption> serviceOptionArrayList;
-    private ServiceOptionsAdapter myAdapter;
+    private final Context mContext;
+    private final ArrayList<DentalServiceOption> serviceOptionArrayList;
+    private final ServiceOptionsAdapter myAdapter;
     private boolean isFromView = false;
-    private String[] servicesArray;
-    private Spinner spinner;
-    private DentalServiceOption titleServiceOptionItem;
+    private final String[] servicesArray;
+    private final Spinner spinner;
+    private final DentalServiceOption titleServiceOptionItem;
 
     public ServiceOptionsAdapter(Context context, int resource, List<DentalServiceOption> objects, String[] servicesArray, Spinner spinner) {
         super(context, resource, objects);
@@ -91,7 +91,10 @@ public class ServiceOptionsAdapter extends ArrayAdapter<DentalServiceOption> {
             int getPosition = (Integer) buttonView.getTag();
 
             if (!isFromView) {
-                serviceOptionArrayList.get(position).setSelected(isChecked);
+                Log.d(TAG, "getCustomView: selected service: " + serviceOptionArrayList.get(position));
+                if (position != 0) {
+                    serviceOptionArrayList.get(position).setSelected(isChecked);
+                }
 
                 if (!Checker.hasItemChecked(serviceOptionArrayList)) {
                     Log.d(TAG, "getCustomView: has no item chekces");

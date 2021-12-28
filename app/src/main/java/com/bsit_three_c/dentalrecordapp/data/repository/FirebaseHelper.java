@@ -39,15 +39,17 @@ public class FirebaseHelper {
 
     public static class CountChildren implements ValueEventListener {
 
-        private final MutableLiveData<Long> count = new MutableLiveData<>();
+        private final MutableLiveData<Long> count = new MutableLiveData<>(0L);
 
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
+
             Log.d(TAG, "onDataChange: setting coount");
             Log.d(TAG, "onDataChange: path: " + snapshot.getRef());
 
             Log.d(TAG, "onDataChange: snapshot: " + snapshot);
             Log.d(TAG, "onDataChange: snapshot count: " + snapshot.getChildrenCount());
+
             count.setValue(snapshot.getChildrenCount());
             Log.d(TAG, "onDataChange: count: " + count);
         }
@@ -57,9 +59,10 @@ public class FirebaseHelper {
 
         }
 
-        public boolean hasNoChildren() {
+        public boolean hasChildren() {
             Log.d(TAG, "hasChildren: checking count");
-            return count.getValue() == null || count.getValue() <= 0L;
+            Log.d(TAG, "hasChildren: count: " + count);
+            return !(count.getValue() == null || count.getValue() <= 0L);
         }
 
         public LiveData<Long> getCount() {

@@ -31,7 +31,7 @@ public class AdminDashboardFragment extends Fragment {
         mViewModel = new ViewModelProvider(this, new CustomViewModelFactory()).get(AdminDashboardViewModel.class);
         binding = FragmentAdminDashboardBinding.inflate(inflater, container, false);
 
-        mViewModel.countPatients();
+        mViewModel.startCount();
 
         binding.adminDashboardPatientsHeader.setOnClickListener(sendUserToPatients);
         binding.adminDashboardAppointmentHeader.setOnClickListener(sendUserToAppointments);
@@ -47,8 +47,15 @@ public class AdminDashboardFragment extends Fragment {
 
         mViewModel.getPatientsCount().observe(getViewLifecycleOwner(), new Observer<Long>() {
             @Override
-            public void onChanged(Long aLong) {
-                binding.tvTotalPatient.setText(String.valueOf(aLong));
+            public void onChanged(Long num) {
+                binding.tvTotalPatient.setText(String.valueOf(num));
+            }
+        });
+
+        mViewModel.getServicesCount().observe(getViewLifecycleOwner(), new Observer<Long>() {
+            @Override
+            public void onChanged(Long num) {
+                binding.tvServicesCount.setText(String.valueOf(num));
             }
         });
 
@@ -87,10 +94,10 @@ public class AdminDashboardFragment extends Fragment {
     };
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onDestroyView() {
+        super.onDestroyView();
 
-        // TODO: Use the ViewModel
+        binding = null;
+        mViewModel.removeListeners();
     }
-
 }

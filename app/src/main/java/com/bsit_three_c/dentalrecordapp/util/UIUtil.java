@@ -228,8 +228,11 @@ public class UIUtil {
         boolean inTitle = false;
 
         for (String title : titles) {
-            if (selectedTitle.equals(title)) {
+            Log.d(TAG, "getServiceTitle: selected title is default: " + selectedTitle.equals(title));
+            if (selectedTitle.equals(title) && !(selectedTitle.equals(strings[0]))) {
                 inTitle = true;
+
+                Log.d(TAG, "getServiceTitle: title: " + title);
 
                 //  This is wrong
                 int titlePos = getPosition(strings, selectedTitle);
@@ -241,13 +244,22 @@ public class UIUtil {
             newTitle.append(title).append(" | ");
         }
 
-        if (!inTitle) {
+        Log.d(TAG, "getServiceTitle: new title: " + newTitle.toString());
+        Log.d(TAG, "getServiceTitle: new title length: " + newTitle.length());
+
+        if (newTitle.length() == 0) {
+            newTitle.append(strings[0]);
+            serviceOptions.get(0).setSelected(false);
+        }
+        else if (!inTitle) {
             newTitle.append(selectedTitle);
         }
         else {
             int index = newTitle.lastIndexOf(" | ");
             newTitle.delete(index, newTitle.capacity());
         }
+
+        Log.d(TAG, "getServiceTitle: new title: " + newTitle.toString());
 
         return newTitle.toString();
     }

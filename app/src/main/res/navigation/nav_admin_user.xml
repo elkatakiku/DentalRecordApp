@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/nav_appointments"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.employees.AdminEmployeesFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.appointments.AppointmentsFragment"
         android:label="Appointments"
-        tools:layout="@layout/fragment_admin_employees"/>
+        tools:layout="@layout/fragment_appointments"/>
 </navigation>

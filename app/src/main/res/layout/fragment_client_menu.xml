@@ -11,6 +11,32 @@
 
     <FrameLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textView77"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_bold"
+            android:text="Hello,"
+            android:textColor="@color/tiffany_blue"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView78"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/open_sans_bold"
+            android:text="Guest!"
+            android:textColor="@color/blue_green"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@drawable/bg_header">
 
@@ -35,6 +61,7 @@
                 android:id="@+id/textView15"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_bold"
                 android:text="@string/welcome"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
@@ -45,6 +72,7 @@
                 android:id="@+id/textView16"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans"
                 android:text="We provide the dental \n care you are looking for."
                 android:textColor="@color/white"
                 android:textSize="16sp" />
@@ -55,9 +83,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:backgroundTint="@color/white"
+                android:fontFamily="@font/open_sans_bold"
                 android:text="Register Now"
                 android:textColor="@color/blue_green"
                 android:textStyle="bold" />
+
         </LinearLayout>
 
     </FrameLayout>
@@ -75,10 +105,49 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="160dp"
         android:divider="@drawable/divider_admin_home"
         android:orientation="horizontal"
+        android:padding="20dp"
         android:showDividers="middle">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvViewServices"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            app:cardElevation="5dp"
+            app:cardMaxElevation="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
+
+                <ImageView
+                    android:id="@+id/imageView16"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_baseline_medical_services_24" />
+
+                <TextView
+                    android:id="@+id/textView75"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:gravity="center"
+                    android:text="Services"
+                    android:textColor="@color/blue_green"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
         <Button
             android:id="@+id/button4"
@@ -91,9 +160,47 @@
             android:textColor="@color/blue_green"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:visibility="gone"
             app:icon="@drawable/ic_baseline_medical_services_24"
             app:iconGravity="textTop"
             app:iconTint="@color/blue_green" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            app:cardElevation="5dp"
+            app:cardMaxElevation="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
+
+                <ImageView
+                    android:id="@+id/imageView18"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_baseline_help_outline_24" />
+
+                <TextView
+                    android:id="@+id/textView76"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:text="Inquiry"
+                    android:textAlignment="center"
+                    android:textColor="@color/blue_green"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
         <Button
             android:id="@+id/button5"
@@ -106,6 +213,7 @@
             android:textColor="@color/blue_green"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:visibility="gone"
             app:icon="@drawable/ic_baseline_help_outline_24"
             app:iconGravity="textTop"
             app:iconTint="@color/blue_green" />
@@ -115,6 +223,7 @@
         android:id="@+id/btnUserLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/open_sans_bold"
         android:text="Login" />
 
 </LinearLayout>

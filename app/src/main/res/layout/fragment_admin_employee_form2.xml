@@ -17,9 +17,84 @@
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Account"
+            android:textAlignment="center"
+            android:textColor="@color/label"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView57"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Email"
+            android:textColor="@color/label" />
+
+        <EditText
+            android:id="@+id/etEmployeeAccountEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/bg_field"
+            android:ems="10"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Email"
+            android:minHeight="48dp"
+            android:padding="10dp"
+            android:textColor="@color/data"
+            android:textColorHint="@color/field_hint" />
+
+        <TextView
+            android:id="@+id/textView53"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Password"
+            android:textColor="@color/label" />
+
+        <EditText
+            android:id="@+id/etEmployeeAccountPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/bg_field"
+            android:clickable="false"
+            android:ems="10"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Password"
+            android:minHeight="48dp"
+            android:padding="10dp"
+            android:textColor="@color/data"
+            android:textColorHint="@color/field_hint" />
+
+        <View
+            android:id="@+id/divider15"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/textView64"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Emergency Contact"
+            android:textAlignment="center"
+            android:textColor="@color/label"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@+id/textView61"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="Fullname"
             android:textColor="@color/label" />
 
@@ -167,51 +242,6 @@
                 android:gravity="center"
                 android:text="City" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/textView64"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Account"
-            android:textColor="@color/label"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/editTextTextPersonName6"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:background="#99FFFFFF"
-            android:editable="false"
-            android:ems="10"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:hint="Username"
-            android:inputType="textPersonName"
-            android:minHeight="48dp"
-            android:padding="10dp"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/editTextTextPersonName7"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="#99FFFFFF"
-            android:clickable="false"
-            android:editable="false"
-            android:ems="10"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:hint="Password"
-            android:inputType="textPersonName"
-            android:minHeight="48dp"
-            android:padding="10dp"
-            android:visibility="gone" />
 
         <View
             android:id="@+id/divider9"

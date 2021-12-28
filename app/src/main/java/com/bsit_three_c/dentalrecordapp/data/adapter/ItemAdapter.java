@@ -14,6 +14,7 @@ import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Person;
+import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
 import com.bsit_three_c.dentalrecordapp.data.repository.PatientRepository;
 import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_form.AddPatientActivity;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
@@ -75,7 +76,10 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             String lastUpdated = context.getString(R.string.last_update) + " " + UIUtil.getDate(patient.getLastUpdated());
 
             itemViewHolder.text2.setText(address);
-            itemViewHolder.text3.setText(patient.getPhoneNumber().get(0));
+
+            String contactNumber = patient.getPhoneNumber().get(0);
+            itemViewHolder.text3.setText(contactNumber.equals(FirebaseHelper.NEW_PATIENT) ? "N/A" : contactNumber);
+
             itemViewHolder.text4.setText(lastUpdated);
 
 

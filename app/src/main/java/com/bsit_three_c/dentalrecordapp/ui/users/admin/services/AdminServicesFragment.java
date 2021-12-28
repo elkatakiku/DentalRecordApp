@@ -4,6 +4,7 @@ import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.bsit_three_c.dentalrecordapp.MainActivity;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ServiceDisplaysAdapter;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ServicesViewHolder;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
@@ -27,11 +29,10 @@ import com.bsit_three_c.dentalrecordapp.ui.users.admin.services.services_form.Se
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 
 public class AdminServicesFragment extends Fragment {
+    private static final String TAG = AdminServicesFragment.class.getSimpleName();
 
     private AdminServicesViewModel mViewModel;
     private FragmentAdminServicesBinding binding;
-
-    private ServiceDisplaysAdapter adapter;
 
     public static AdminServicesFragment newInstance() {
         return new AdminServicesFragment();
@@ -49,7 +50,9 @@ public class AdminServicesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adapter = new ServiceDisplaysAdapter(requireActivity());
+        Log.d(TAG, "onViewCreated: called");
+
+        ServiceDisplaysAdapter adapter = new ServiceDisplaysAdapter(requireActivity());
 
         binding.rvServices.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(requireActivity());
@@ -70,6 +73,16 @@ public class AdminServicesFragment extends Fragment {
                 startActivity(toAddPatient);
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+
+        if (requireActivity() instanceof MainActivity) {
+            binding.fabAddService.setVisibility(View.GONE);
+        }
     }
 
     private final ActivityResultLauncher<Intent> toAddPatientResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {

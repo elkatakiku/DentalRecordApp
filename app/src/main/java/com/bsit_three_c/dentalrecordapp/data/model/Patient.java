@@ -133,6 +133,12 @@ public class Patient extends Person implements Parcelable {
     @Override
     public String toString() {
         return "Patient{" +
+                "\nuid='" + uid + '\'' +
+                "\nfirstname='" + firstname + '\'' +
+                "\nlastname='" + lastname + '\'' +
+                "\nmiddleInitial='" + middleInitial + '\'' +
+                "\nsuffix='" + suffix + '\'' +
+                "\nphoneNumber='" + phoneNumber + '\'' +
                 "\naddress='" + address + '\'' +
                 "\ncivilStatus='" + civilStatus + '\'' +
                 "\nage=" + age +

@@ -21,7 +21,7 @@ import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ListWithRemoveItemAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalService;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
-import com.bsit_three_c.dentalrecordapp.databinding.FragmentAdminAddServiceBinding;
+import com.bsit_three_c.dentalrecordapp.databinding.FragmentAdminServiceFormBinding;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
 public class ServiceFormFragment extends Fragment {
     private static final String TAG = ServiceFormFragment.class.getSimpleName();
 
-    private FragmentAdminAddServiceBinding binding;
+    private FragmentAdminServiceFormBinding binding;
     private ServiceFormViewModel viewModel;
     private ListWithRemoveItemAdapter listWithRemoveItemAdapter;
 
@@ -43,7 +43,7 @@ public class ServiceFormFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        binding = FragmentAdminAddServiceBinding.inflate(inflater, container, false);
+        binding = FragmentAdminServiceFormBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this, new CustomViewModelFactory()).get(ServiceFormViewModel.class);
         listWithRemoveItemAdapter = new ListWithRemoveItemAdapter(requireContext(), R.layout.item_category);
 

@@ -18,14 +18,13 @@ import androidx.lifecycle.Observer;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ProgressNoteList;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
-import com.bsit_three_c.dentalrecordapp.data.model.ProgressNote;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
-import com.bsit_three_c.dentalrecordapp.data.repository.ProgressNoteRepository;
+import com.bsit_three_c.dentalrecordapp.data.model.ProgressNote;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProcedureRepository;
+import com.bsit_three_c.dentalrecordapp.data.repository.ProgressNoteRepository;
 import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -56,6 +55,7 @@ public class BottomOperationsDialog {
     private int totalPayments;
     private double totalPaid;
     private double totalAmount;
+    private boolean isFullyPaid;
 
     private AlertDialog alertDialog;
 
@@ -85,8 +85,8 @@ public class BottomOperationsDialog {
         BottomDialog.setBackgroundColorTransparent(procedureDialog);
         dialogDismissListener(procedureDialog);
 
-        viewHolder.btnAddPayment.setOnClickListener(v -> {
-            BottomProgressNoteFormDialog paymentDialog = new BottomProgressNoteFormDialog(layoutInflater, context, lifecycleOwner);
+        viewHolder.btnNewNote.setOnClickListener(v -> {
+            BottomProgressNoteFormDialog paymentDialog = new BottomProgressNoteFormDialog(layoutInflater, context, lifecycleOwner, isFullyPaid);
             paymentDialog.createDialog(procedure);
             paymentDialog.setPatient(patient);
 
@@ -110,10 +110,13 @@ public class BottomOperationsDialog {
             viewHolder.fullyPaid.setText(status);
 
             if (FULLY_PAID.equals(status)) {
-                viewHolder.btnAddPayment.setVisibility(View.GONE);
+                isFullyPaid = true;
                 viewHolder.balanceLayout.setVisibility(View.GONE);
             }
-            else viewHolder.btnAddPayment.setVisibility(View.VISIBLE);
+            else {
+                isFullyPaid = false;
+                viewHolder.btnNewNote.setVisibility(View.VISIBLE);
+            }
         });
 
         mBalance.observe(lifecycleOwner.getViewLifecycleOwner(), aDouble -> {
@@ -133,7 +136,7 @@ public class BottomOperationsDialog {
                         .setTitle(R.string.delete_title)
                         .setMessage(context.getString(R.string.delete_message) + " procedure: " + UIUtil.getServiceTitle(context.getResources(), procedure.getService()))
                         .setPositiveButton("Yes", (dialog, which) -> {
-                            Snackbar.make(v, "Delete procedure", Snackbar.LENGTH_SHORT).show();
+//                            Snackbar.make(v, "Delete procedure", Snackbar.LENGTH_SHORT).show();
                             removeProcedure();
                         })
                         .setNegativeButton("No", (dialog, which) -> alertDialog.dismiss());
@@ -258,7 +261,7 @@ public class BottomOperationsDialog {
         final TextView balance;
         final Button btnDelete;
         final Button btnEdit;
-        final Button btnAddPayment;
+        final Button btnNewNote;
         final LinearLayout balanceLayout;
 
 
@@ -268,7 +271,7 @@ public class BottomOperationsDialog {
             this.operationTotalAmount = view.findViewById(R.id.tvOperationTotalAmount);
             this.operationDate = view.findViewById(R.id.tvOperationDate);
             this.fullyPaid = view.findViewById(R.id.tvOperationFullyPaid);
-            this.btnAddPayment = view.findViewById(R.id.btnOperationAddPayment);
+            this.btnNewNote = view.findViewById(R.id.btnOperationNewNote);
             this.iconClose = view.findViewById(R.id.iconCloseEP);
             this.paymentsLayout = view.findViewById(R.id.progressNotesList);
             this.balance = view.findViewById(R.id.tvBalance);

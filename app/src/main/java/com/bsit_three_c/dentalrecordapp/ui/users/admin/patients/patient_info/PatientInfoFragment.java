@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
@@ -42,12 +43,12 @@ public class PatientInfoFragment extends Fragment {
 
         Log.d(TAG, "onCreateView: on create views");
 
-        FragmentActivity activity = getActivity();
-        if (activity != null && viewModel.isPatientNull()) {
+        FragmentActivity activity = requireActivity();
+        if (viewModel.isPatientNull()) {
+            Log.d(TAG, "onCreateView: has patient");
             patient = activity.getIntent().getParcelableExtra(getString(R.string.PATIENT));
             viewModel.setPatient(patient);
         }
-//        else requireActivity().finish();
 
         return binding.getRoot();
     }
@@ -75,8 +76,43 @@ public class PatientInfoFragment extends Fragment {
 
         });
 
-        displayInfo();
+        displayInfo(patient);
         loadProcedures();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        for (String key : requireActivity().getIntent().getExtras().keySet()) {
+            Log.d(TAG, "onResume: key: " + key);
+        }
+
+        String patientUId = requireActivity().getIntent().getStringExtra(FirebaseHelper.PATIENT_UID);
+        if (patientUId != null) {
+            Log.d(TAG, "onResume: patient uid: " + patientUId);
+            viewModel.loadPatient(patient.getUid());
+        }
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Log.d(TAG, "onStart: called");
+
+        viewModel.getPatientDB().observe(getViewLifecycleOwner(), new Observer<Patient>() {
+            @Override
+            public void onChanged(Patient patient) {
+                Log.d(TAG, "onStart: live data changed in patient info");
+                if (patient != null) {
+                    Log.d(TAG, "onStart: updated patient not null");
+                    displayInfo(patient);
+                    Log.d(TAG, "onStart: updated patient: " + patient);
+                }
+            }
+        });
     }
 
     public void loadProcedures() {
@@ -111,7 +147,7 @@ public class PatientInfoFragment extends Fragment {
         Log.d(TAG, "onDestroyView: patient info destroyed called");
     }
 
-    private void displayInfo() {
+    private void displayInfo(Patient patient) {
         String notAvailable = "N/A";
 
         setText(patient.getFirstname(), binding.txtViewPIFirstname);

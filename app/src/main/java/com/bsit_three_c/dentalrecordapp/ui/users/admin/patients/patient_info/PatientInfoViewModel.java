@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
+import com.bsit_three_c.dentalrecordapp.data.repository.PatientRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProcedureRepository;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,7 +21,8 @@ import java.util.ArrayList;
 public class PatientInfoViewModel extends ViewModel {
     private static final String TAG = PatientInfoViewModel.class.getSimpleName();
 
-    private ProcedureRepository repository;
+    private final PatientRepository patientRepository;
+    private final ProcedureRepository procedureRepository;
     private Patient patient;
 
     private final MutableLiveData<Double> mBalance = new MutableLiveData<>();
@@ -28,14 +30,13 @@ public class PatientInfoViewModel extends ViewModel {
 
     private final MutableLiveData<Integer> mProceduresCounter = new MutableLiveData<>();
 
-
     private int procedureSize;
     private int totalCount;
-//    private ArrayList<Procedure> procedureList;
     private Procedure[] procedures;
 
-    public PatientInfoViewModel(ProcedureRepository repository) {
-        this.repository = repository;
+    public PatientInfoViewModel(PatientRepository patientRepository, ProcedureRepository procedureRepository) {
+        this.patientRepository = patientRepository;
+        this.procedureRepository = procedureRepository;
     }
 
     public void loadOperations(Patient patient, LifecycleOwner lifecycleOwner) {
@@ -54,7 +55,7 @@ public class PatientInfoViewModel extends ViewModel {
         for (int position = 0; position < operationKeys.size(); position++) {
 
             int finalPosition = position;
-            repository.getProcedures(operationKeys.get(position))
+            procedureRepository.getProcedures(operationKeys.get(position))
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -88,6 +89,15 @@ public class PatientInfoViewModel extends ViewModel {
                 isLoaded.setValue(true);
             else isLoaded.setValue(false);
         });
+    }
+
+    public void loadPatient(String patientUID) {
+        Log.d(TAG, "loadPatient: called");
+        patientRepository.loadPatient(patientUID);
+    }
+
+    public LiveData<Patient> getPatientDB() {
+        return patientRepository.getPatient();
     }
 
     public LiveData<Double> getmBalance() {

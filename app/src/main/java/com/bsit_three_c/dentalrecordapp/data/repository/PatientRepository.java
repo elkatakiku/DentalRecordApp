@@ -33,10 +33,11 @@ public class PatientRepository {
     private ArrayList<Person> personArrayList;
     private boolean isPatientsLoaded = false;
     private final MutableLiveData<Boolean> isGettingPatientsDone = new MutableLiveData<>();
+    private final MutableLiveData<Patient> mPatient = new MutableLiveData<>();
 
+    private final FirebaseHelper.CountChildren countedChildren = new FirebaseHelper.CountChildren();;
     private ItemAdapter adapter;
     private long count;
-    private FirebaseHelper.CountChildren countedChildren;
 
     private PatientRepository() {
         this.database = FirebaseDatabase.getInstance(FirebaseHelper.FIREBASE_URL);
@@ -48,6 +49,28 @@ public class PatientRepository {
             instance = new PatientRepository();
         }
         return instance;
+    }
+
+    public void loadPatient(String patientUID) {
+        Log.d(TAG, "loadPatient: adding listener");
+        databaseReference.child(patientUID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d(TAG, "onDataChange: data changed in patient");
+
+                Patient gotPatient = snapshot.getValue(Patient.class);
+
+                if (gotPatient != null) {
+                    Log.d(TAG, "onDataChange: has patient");
+                    mPatient.setValue(gotPatient);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void getPatients(DataSnapshot dataSnapshot) {
@@ -80,6 +103,11 @@ public class PatientRepository {
         isPatientsLoaded = true;
     }
 
+    public LiveData<Patient> getPatient() {
+        Log.d(TAG, "getPatient: called");
+        return mPatient;
+    }
+
     public void getPatients() {
         databaseReference.orderByChild("lastname").addValueEventListener(valueEventListener);
     }
@@ -92,7 +120,7 @@ public class PatientRepository {
 
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
-            Log.d(TAG, "onDataChange: data changed");
+            Log.d(TAG, "onDataChange: data changed in all patient list");
             isGettingPatientsDone.setValue(false);
 
             getPatients(snapshot);
@@ -183,20 +211,16 @@ public class PatientRepository {
             }
 
             keys.remove(index);
-//        }
 
         databaseReference.child(patient.getUid()).child(FirebaseHelper.DENTAL_PROCEDURES).setValue(keys);
     }
 
     public void countPatients() {
-        countedChildren = new FirebaseHelper.CountChildren();
-        databaseReference.addListenerForSingleValueEvent(countedChildren);
+        databaseReference.addValueEventListener(countedChildren);
     }
 
     public LiveData<Long> getPatientCount() {
-        if (countedChildren.hasNoChildren())
-            return countedChildren.getCount();
-        return null;
+        return countedChildren.getCount();
     }
 
     private void initialize(Patient patient) {
@@ -218,8 +242,11 @@ public class PatientRepository {
         if (!Checker.isDataAvailable(patient.getAddress()))
             patient.setAddress(notAvailable);
 
-        if (patient.getPhoneNumber() == null)
-            patient.setPhoneNumber(new ArrayList<>());
+        if (patient.getPhoneNumber() == null) {
+            ArrayList<String> contact = new ArrayList<>();
+            contact.add(FirebaseHelper.NEW_PATIENT);
+            patient.setPhoneNumber(contact);
+        }
 
         if (!Checker.isDataAvailable(patient.getOccupation()))
             patient.setOccupation(notAvailable);
@@ -233,6 +260,7 @@ public class PatientRepository {
 
     public void removeValueEventListener() {
         databaseReference.removeEventListener(valueEventListener);
+        databaseReference.removeEventListener(countedChildren);
     }
 
     private boolean isDuplicate(Patient patient) {

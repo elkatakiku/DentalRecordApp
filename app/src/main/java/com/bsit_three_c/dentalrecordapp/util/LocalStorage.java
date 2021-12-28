@@ -26,6 +26,8 @@ public class LocalStorage {
     public static final String DIALOG_APPOINTMENT = "APPOINTMENT";
     public static final String DIALOG_SERVICE = "SERVICE";
 
+    public static final String UPDATED_PATIENT_KEY = "UPDATED_PATIENT";
+
     public static final String PARCEL_KEY = "parcel";
 
 

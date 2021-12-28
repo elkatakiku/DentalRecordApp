@@ -3,7 +3,7 @@
     <!-- Strings related to btnLogin -->
 
     <string name="system">ELL DENTAL RECORD SYSTEM</string>
-    <string name="systemName">ELL Record</string>
+    <string name="systemName">Dental Record\nSystem</string>
 
     <!-- Login Strings -->
     <string name="logo_content_desc">ELL Logo</string>
@@ -32,6 +32,10 @@
     <string name="next">Next</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
+
+    <!--    Frame Labels    -->
+    <string name="title_activity_view_service">ViewServiceActivity</string>
+    <string name="title_activity_login_or_register">LogInOrRegisterActivity</string>
 
     <!-- Constants -->
     <string name="TODO">TODO</string>
@@ -113,7 +117,6 @@
     <string name="btn_employee_list">EMPLOYEE LIST</string>
     <string name="btn_create_appointment">CREATE APPOINTMENT</string>
     <string name="btn_appointment_lsit">APPOINTMENT LIST</string>
-    <string name="title_activity_view_service">ViewServiceActivity</string>
     <string name="btn_view_service">View</string>
     <string name="btn_remove_service">Delete</string>
 

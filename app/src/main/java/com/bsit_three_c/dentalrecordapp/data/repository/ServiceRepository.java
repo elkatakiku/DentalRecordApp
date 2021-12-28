@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.bsit_three_c.dentalrecordapp.data.adapter.ServiceDisplaysAdapter;
@@ -143,7 +144,7 @@ public class ServiceRepository {
         databaseReference.orderByChild("title").addValueEventListener(servicesEventListener);
     }
 
-    private ValueEventListener servicesEventListener = new ValueEventListener() {
+    private final ValueEventListener servicesEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             ServiceRepository.this.dentalServices = new ArrayList<>();
@@ -222,6 +223,7 @@ public class ServiceRepository {
 
     public void removeListeners() {
         databaseReference.removeEventListener(servicesEventListener);
+        databaseReference.removeEventListener(countServices);
     }
 
     private void initializeService(DentalService service) {
@@ -229,11 +231,17 @@ public class ServiceRepository {
             service.setTitle("N/A");
         if (!Checker.isDataAvailable(service.getDescription()))
             service.setDescription("N/A");
-//        if (!Checker.isDataAvailable(service.getDisplayImage()))
-//            service.set
-
         if (service.getCategories() == null)
             service.setCategories(new ArrayList<>());
+    }
 
+    private final FirebaseHelper.CountChildren countServices = new FirebaseHelper.CountChildren();;
+
+    public void countServices() {
+        databaseReference.addListenerForSingleValueEvent(countServices);
+    }
+
+    public LiveData<Long> getServicesCount() {
+        return countServices.getCount();
     }
 }

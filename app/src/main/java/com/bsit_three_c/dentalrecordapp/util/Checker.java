@@ -85,8 +85,10 @@ public class Checker {
 
     public static boolean hasItemChecked(ArrayList<DentalServiceOption> serviceOptions) {
         for (DentalServiceOption serviceOption : serviceOptions) {
-            if (serviceOption.isSelected())
+            if (serviceOption.isSelected()) {
+                Log.d(TAG, "hasItemChecked: service option: " + serviceOption);
                 return true;
+            }
         }
 
         return false;

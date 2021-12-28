@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/CreatePatientAccount"
         android:name="com.bsit_three_c.dentalrecordapp.ui.register.CreateAccountFragment"
-        android:label="fragment_create_account"
-        tools:layout="@layout/fragment_create_account" >
+        android:label="Create Account"
+        tools:layout="@layout/fragment_create_account">
         <action
             android:id="@+id/action_CreateAcountFragment_to_VerifyFragment"
             app:destination="@id/VerifyFragment" />
