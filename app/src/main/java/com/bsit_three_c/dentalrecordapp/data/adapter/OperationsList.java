@@ -12,8 +12,9 @@ import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.BottomOperationsDialog;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info.PatientInfoFragment;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.view_patient.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
+import com.bsit_three_c.dentalrecordapp.util.DateUtil;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 import java.util.List;
@@ -40,7 +41,7 @@ public class OperationsList {
         initializeProcedure(procedure);
 
         viewHolder.txtDentalService.setText(UIUtil.getServiceTitle(lifecycleOwner.getResources(), procedure.getService()));
-        viewHolder.txtDentalDate.setText(UIUtil.getReadableDate(UIUtil.stringToDate(procedure.getDentalDate())));
+        viewHolder.txtDentalDate.setText(DateUtil.getReadableDate(DateUtil.convertToDate(procedure.getDentalDate())));
         viewHolder.txtDentalAmount.setText(String.valueOf(procedure.getDentalTotalAmount()));
         viewHolder.txtDentalFullyPaid.setText(UIUtil.getPaymentStatus(procedure.getDentalBalance()));
         viewHolder.txtDentalFullyPaid.setTextColor(UIUtil.getCheckBoxColor(procedure.getDentalBalance()));

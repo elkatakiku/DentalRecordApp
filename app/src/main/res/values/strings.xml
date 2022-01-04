@@ -40,6 +40,9 @@
     <!-- Constants -->
     <string name="TODO">TODO</string>
     <string name="PATIENT">Patient</string>
+    <string name="EMPLOYEE">Employee</string>
+    <string name="BUNDLE_KEY">Bundle</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
 
@@ -79,6 +82,9 @@
     <string name="invalid_contains_two_or_more_dots">This field cannot contain two or more dots.</string>
     <string name="invalid_too_old">This field can only contain numbers from 1 -150</string>
     <string name="invalid_fully_paid">Amount exceeded the balance amount</string>
+    <string name="an_error_occurred">An error occurred</string>
+    <string name="weak_password">The given password is invalid. Password should be at least 6 characters.</string>
+    <string name="email_taken">The email address is already in use by another account.</string>
 
     <string name="title_activity_patient">PatientActivity</string>
     <!-- Strings used for fragments for navigation -->
@@ -122,4 +128,9 @@
 
     <!--    Greetings   -->
     <string name="greet_admin">Welcome, %1$s!</string>
+    <string name="title_activity_view_employee">ViewEmployeeActivity</string>
+    <string name="tab_text_1">Employee</string>
+    <string name="tab_text_2">Account Activity</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -23,13 +23,14 @@ import androidx.lifecycle.Observer;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.FormState;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
-import com.bsit_three_c.dentalrecordapp.data.model.ProgressNote;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
-import com.bsit_three_c.dentalrecordapp.data.repository.ProgressNoteRepository;
+import com.bsit_three_c.dentalrecordapp.data.model.ProgressNote;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProcedureRepository;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info.PatientInfoFragment;
+import com.bsit_three_c.dentalrecordapp.data.repository.ProgressNoteRepository;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.view_patient.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.CustomObserver;
+import com.bsit_three_c.dentalrecordapp.util.DateUtil;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
@@ -130,7 +131,7 @@ public class BottomProgressNoteFormDialog {
         viewHolder.btnConfirm.setOnClickListener(v -> {
 
             // Add payment to operation
-            String date = UIUtil.getDate(UIUtil.getDate(viewHolder.date));
+            String date = DateUtil.getDate(DateUtil.getDate(viewHolder.date));
             String description = viewHolder.description.getText().toString().trim();
             String amount = viewHolder.amount.getText().toString().trim();
 
@@ -159,10 +160,10 @@ public class BottomProgressNoteFormDialog {
         paymentDialog = new BottomSheetDialog(context);
         BottomDialog.setBackgroundColorTransparent(paymentDialog);
 
-        Date oldDate = UIUtil.stringToDate(progressNote.getDate());
-        int day = UIUtil.convertToInteger(UIUtil.getDateUnits(oldDate)[0]);
-        int month = UIUtil.convertToInteger(UIUtil.getDateUnits(oldDate)[1]) - 1;
-        int year = UIUtil.convertToInteger(UIUtil.getDateUnits(oldDate)[2]);
+        Date oldDate = DateUtil.convertToDate(progressNote.getDate());
+        int day = UIUtil.convertToInteger(DateUtil.toStringArray(oldDate)[0]);
+        int month = UIUtil.convertToInteger(DateUtil.toStringArray(oldDate)[1]) - 1;
+        int year = UIUtil.convertToInteger(DateUtil.toStringArray(oldDate)[2]);
         String oldAmount = String.valueOf(progressNote.getAmount());
 
         this.totalBalanceBefore = procedure.getDentalBalance() + UIUtil.convertToDouble(oldAmount);
@@ -205,7 +206,7 @@ public class BottomProgressNoteFormDialog {
         viewHolder.btnConfirm.setOnClickListener(v -> {
 
             // Update progressNote
-            String date = UIUtil.getDate(UIUtil.getDate(viewHolder.date));
+            String date = DateUtil.getDate(DateUtil.getDate(viewHolder.date));
             String amount = viewHolder.amount.getText().toString();
             double convertedAmount = UIUtil.convertToDouble(amount);
 

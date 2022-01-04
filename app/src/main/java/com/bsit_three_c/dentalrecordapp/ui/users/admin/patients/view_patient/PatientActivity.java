@@ -1,4 +1,4 @@
-package com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info;
+package com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.view_patient;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,15 +20,15 @@ import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityPatientBinding;
 import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_form.AddPatientActivity;
-import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class PatientActivity extends AppCompatActivity {
     private static final String TAG = PatientActivity.class.getSimpleName();
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityPatientBinding binding;
+
+    private Patient patient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,17 +38,17 @@ public class PatientActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarPatient.toolbar);
-//        AppBarLayout actionBar = binding.appBarPatient.appbar;
-//        if (actionBar != null) {
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//        }
+
+        binding.appBarPatient.appbar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+            float range = (float) -appBarLayout.getTotalScrollRange();
+            binding.appBarPatient.appBarImage.setImageAlpha((int) (255 * (1.0f - (float) verticalOffset / range)));
+        });
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_patient);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        Patient patient = getIntent().getParcelableExtra(getString(R.string.PATIENT));
+        this.patient = getIntent().getParcelableExtra(getString(R.string.PATIENT));
 
         binding.appBarPatient.floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,48 +58,34 @@ public class PatientActivity extends AppCompatActivity {
                 toEditPatientResult.launch(toEditPatient);
             }
         });
+    }
 
-        String fullname = patient.getLastname() + ", " + patient.getFirstname();
-        if (Checker.isDataAvailable(patient.getMiddleInitial())) fullname  += " " + patient.getMiddleInitial() + ".";
-        binding.appBarPatient.collapsingToolbar.setTitle(fullname);
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Log.d(TAG, "onResume: called");
+        Log.d(TAG, "onResume: patient: " + patient);
+        initializeTitle();
+    }
+
+
+    private void initializeTitle() {
+        binding.appBarPatient.collapsingToolbar.setTitle(patient.getFullName());
     }
 
     private final ActivityResultLauncher<Intent> toEditPatientResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                Log.d(TAG, "onActivityResult: result data: " + result.getData());
-//                getIntent().putExtra(getString(R.string.PATIENT), result.getData());
-
-                for (String key : result.getData().getExtras().keySet()) {
-                    Log.d(TAG, "onActivityResult: key: " + key);
-                }
-
                 Patient returnedPatient = result.getData().getParcelableExtra(LocalStorage.UPDATED_PATIENT_KEY);
                 if (returnedPatient != null) {
-                    Log.d(TAG, "onActivityResult: got patient: " + returnedPatient);
-//                    getIntent().putExtra(FirebaseHelper.PATIENT_UID, returnedPatient.getUid());
-//                    Log.d(TAG, "onCreateView: patient uid in intent: " + getIntent().getStringExtra(FirebaseHelper.PATIENT_UID));
-                    Log.d(TAG, "onActivityResult: intent: " + result.getData());
-
+                    PatientActivity.this.patient = returnedPatient;
                     getIntent().putExtra(FirebaseHelper.PATIENT_UID, returnedPatient.getUid());
-                    Log.d(TAG, "onActivityResult: patient uid in orig intent: " + getIntent().getStringExtra(FirebaseHelper.PATIENT_UID));
-
-
-                    for (String key : getIntent().getExtras().keySet()) {
-                        Log.d(TAG, "onActivityResult: orig intent key: " + key);
-                    }
-
                 }
-//                getIntent().putExtra(FirebaseHelper.PATIENT_UID, result.getData().getParcelableExtra(getString(R.string.PATIENT, null)));
-
             }
         }
     });
-
-    public FloatingActionButton getFloatingButton() {
-        return binding.appBarPatient.floatingActionButton;
-    }
 
     @Override
     public boolean onSupportNavigateUp() {

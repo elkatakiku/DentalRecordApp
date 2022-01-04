@@ -9,16 +9,24 @@
         android:id="@+id/FirstFragment"
         android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.employees.employee_form.BasicInfoFormFragment"
         android:label="New Employee"
-        tools:layout="@layout/fragment_admin_employee_form1">
+        tools:layout="@layout/fragment_form_employee1">
 
         <action
             android:id="@+id/action_FirstFragment_to_Second2Fragment"
             app:destination="@id/Second2Fragment" />
+        <argument
+            android:name="employee"
+            app:argType="com.bsit_three_c.dentalrecordapp.data.model.Employee" />
+        <argument android:name="image" />
     </fragment>
 
     <fragment
         android:id="@+id/Second2Fragment"
         android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.employees.employee_form.EmergencyContactFormFragment"
         android:label="New Employee"
-        tools:layout="@layout/fragment_admin_employee_form2" />
+        tools:layout="@layout/fragment_form_employee2" >
+        <argument
+            android:name="employee"
+            app:argType="android.os.Bundle" />
+    </fragment>
 </navigation>

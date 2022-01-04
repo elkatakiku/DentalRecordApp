@@ -42,7 +42,7 @@
     <!--    Job Titles  -->
     <string-array name="job_titles">
         <item>Choose job title…</item>
-        <item>Dentist Associates</item>
+        <item>Dentist Associate</item>
         <item>Secretary</item>
     </string-array>
 

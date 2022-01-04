@@ -22,7 +22,7 @@ import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.model.ProgressNote;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProcedureRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProgressNoteRepository;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info.PatientInfoFragment;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.view_patient.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DataSnapshot;

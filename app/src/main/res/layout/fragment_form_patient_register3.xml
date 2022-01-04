@@ -13,12 +13,12 @@
         android:text="Only one step away to be our patient!"
         android:textAlignment="textStart"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@id/button_second"
+        app:layout_constraintBottom_toTopOf="@id/btnEmployeeConfirm"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button_second"
+        android:id="@+id/btnEmployeeConfirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/previous"

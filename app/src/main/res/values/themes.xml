@@ -19,7 +19,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.DentalRecordApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.DentalRecordApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+
+    </style>
 
     <style name="Theme.DentalRecordApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 

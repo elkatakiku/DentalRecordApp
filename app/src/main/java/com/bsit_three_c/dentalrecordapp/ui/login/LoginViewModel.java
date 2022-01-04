@@ -49,7 +49,7 @@ public class LoginViewModel extends ViewModel {
 
     // Get user details to be displayed in the UI
     private LoggedInUserView createLoggedInUserView(LoggedInUser loggedInUser) {
-        return new LoggedInUserView(loggedInUser.getDisplayName());
+        return new LoggedInUserView(loggedInUser.getLastname());
     }
 
     public void loginDataChanged(String username, String password) {
@@ -97,6 +97,9 @@ public class LoginViewModel extends ViewModel {
                         // LoggedInUserView isn't public
                         loggedInUser = loginRepository.loginSuccess(authResult);
 
+//                        Account account = new Account("new@email.com", "123456", Account.TYPE_ADMIN, "uid");
+//
+//                        AccountRepository.getInstance().createNewAccount(loggedInUser, account);
                         LoggedInUserView loggedInUserView = createLoggedInUserView(loggedInUser);
                         loginResult.setValue(new LoginResult(loggedInUserView));
                     })

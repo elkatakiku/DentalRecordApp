@@ -67,7 +67,7 @@ public class ServiceDisplaysAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 .into(servicesViewHolder.display);
 
         servicesViewHolder.name.setText(service.getTitle());
-        servicesViewHolder.display.setImageURI(Uri.parse(service.getDisplayImage()));
+//        servicesViewHolder.display.setImageURI(Uri.parse(service.getDisplayImage()));
 
         servicesViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

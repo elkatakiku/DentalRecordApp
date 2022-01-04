@@ -17,22 +17,21 @@ public class LocalStorage {
     private static final String TAG = "LocalStorage";
     private static final String SP_KEY = "LoggedInUser Object";
 
-    private static final String ADMIN = "ELL_Admin";
-    private static final String EMPLOYEE = "ELL_Employee";
-    private static final String CLIENT = "ELL_Patient";
-
-    public static final String DIALOG_PATIENT = "PATIENT";
-    public static final String DIALOG_EMPLOYEE = "EMPLOYEE";
-    public static final String DIALOG_APPOINTMENT = "APPOINTMENT";
-    public static final String DIALOG_SERVICE = "SERVICE";
+    public static final String PATIENT_KEY = "PATIENT";
+    public static final String EMPLOYEE_KEY = "EMPLOYEE";
+    public static final String APPOINTMENT_KEY = "APPOINTMENT";
+    public static final String SERVICE_KEY = "SERVICE";
 
     public static final String UPDATED_PATIENT_KEY = "UPDATED_PATIENT";
+    public static final String IMAGE_BYTE_KEY = "COMPRESS_IMAGE";
+    public static final String IMAGE_URI_KEY = "IMAGE_URI_KEY";
 
     public static final String PARCEL_KEY = "parcel";
 
 
     public static void saveLoggedInUser(Context context, LoggedInUser loggedInUser) {
         String jsonLoggedInUser = new Gson().toJson(loggedInUser);
+        Log.d(TAG, "saveLoggedInUser: json loggedinuser: " + jsonLoggedInUser);
 
         Log.d(TAG, "saveLoggedInUser: Saving user info");
 
@@ -50,6 +49,8 @@ public class LocalStorage {
 
         SharedPreferences spUser = context.getSharedPreferences(SP_KEY, MODE_PRIVATE);
         String loggedInUser = spUser.getString(LOGGED_IN_USER_KEY, null);
+
+        Log.d(TAG, "getLoggedInUser: loggedInUser string: " + loggedInUser);
 
         if (loggedInUser == null || loggedInUser.isEmpty()) {
             Log.d(TAG, "getuserInfo: No Person Saved");

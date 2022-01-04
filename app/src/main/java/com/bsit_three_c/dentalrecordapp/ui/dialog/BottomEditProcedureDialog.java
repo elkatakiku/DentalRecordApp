@@ -15,7 +15,8 @@ import com.bsit_three_c.dentalrecordapp.data.model.DentalServiceOption;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProcedureRepository;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info.PatientInfoFragment;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.view_patient.PatientInfoFragment;
+import com.bsit_three_c.dentalrecordapp.util.DateUtil;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -53,10 +54,10 @@ public class BottomEditProcedureDialog {
         BottomDialog.setBackgroundColorTransparent(editOperationDialog);
         dialogDismissListener(editOperationDialog);
 
-        Date oldDate = UIUtil.stringToDate(procedure.getDentalDate());
-        int day = Integer.parseInt(UIUtil.getDateUnits(oldDate)[0]);
-        int month = Integer.parseInt(UIUtil.getDateUnits(oldDate)[1]) - 1;
-        int year = Integer.parseInt(UIUtil.getDateUnits(oldDate)[2]);
+        Date oldDate = DateUtil.convertToDate(procedure.getDentalDate());
+        int day = Integer.parseInt(DateUtil.toStringArray(oldDate)[0]);
+        int month = Integer.parseInt(DateUtil.toStringArray(oldDate)[1]) - 1;
+        int year = Integer.parseInt(DateUtil.toStringArray(oldDate)[2]);
 
         String oldAmount = String.valueOf(procedure.getDentalTotalAmount());
 
@@ -69,7 +70,7 @@ public class BottomEditProcedureDialog {
         viewHolder.btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String newDate = UIUtil.getDate(UIUtil.getDate(viewHolder.date));
+                String newDate = DateUtil.getDate(DateUtil.getDate(viewHolder.date));
                 double newAmount = UIUtil.convertToDouble(viewHolder.amount.getText().toString());
 
 

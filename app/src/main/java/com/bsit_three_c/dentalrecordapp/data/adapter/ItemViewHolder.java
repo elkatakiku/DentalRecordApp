@@ -13,7 +13,6 @@ import com.bsit_three_c.dentalrecordapp.data.model.Person;
 public class ItemViewHolder extends RecyclerView.ViewHolder{
 
     final TextView name;
-    final TextView text2;
     final TextView text3;
     final TextView text4;
     final ImageView imageView;
@@ -24,7 +23,6 @@ public class ItemViewHolder extends RecyclerView.ViewHolder{
         super(itemView);
 
         this.name = itemView.findViewById(R.id.txtViewName);
-        this.text2 = itemView.findViewById(R.id.txtView2);
         this.text3 = itemView.findViewById(R.id.txtView3);
         this.text4 = itemView.findViewById(R.id.txtView4);
         this.imageView = itemView.findViewById(R.id.imgViewPicture);

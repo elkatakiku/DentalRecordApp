@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
+import com.bsit_three_c.dentalrecordapp.util.DateUtil;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class HistoryItemAdapter extends ArrayAdapter {
         Log.d(TAG, "getView: viewholder: " + viewHolder.toString());
         Log.d(TAG, "getView: txtView: " + viewHolder.txtDentalDesc);
         viewHolder.txtDentalDesc.setText(currentRecord.getDentalDesc());
-        viewHolder.txtDentalDate.setText(UIUtil.getReadableDate(UIUtil.stringToDate(currentRecord.getDentalDate())));
+        viewHolder.txtDentalDate.setText(DateUtil.getReadableDate(DateUtil.convertToDate(currentRecord.getDentalDate())));
         viewHolder.txtDentalAmount.setText(String.valueOf(currentRecord.getDentalTotalAmount()));
         viewHolder.txtFullyPaid.setTextColor(UIUtil.getCheckBoxColor(!currentRecord.isDownpayment()));
 

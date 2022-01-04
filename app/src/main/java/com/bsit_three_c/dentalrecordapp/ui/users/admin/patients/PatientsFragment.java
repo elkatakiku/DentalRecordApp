@@ -22,23 +22,24 @@ import com.bsit_three_c.dentalrecordapp.data.adapter.ItemAdapter;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ItemViewHolder;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
-import com.bsit_three_c.dentalrecordapp.databinding.FragmentPatientsBinding;
+import com.bsit_three_c.dentalrecordapp.databinding.FragmentListPatientsBinding;
 import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_form.AddPatientActivity;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info.PatientActivity;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.view_patient.PatientActivity;
 import com.bsit_three_c.dentalrecordapp.util.Internet;
+import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 
 public class PatientsFragment extends Fragment {
     private static final String TAG = "PatientsFragment";
 
     private PatientsViewModel patientsViewModel;
-    private FragmentPatientsBinding binding;
+    private FragmentListPatientsBinding binding;
     private ItemAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         patientsViewModel = new ViewModelProvider(this, new CustomViewModelFactory()).get(PatientsViewModel.class);
-        binding = FragmentPatientsBinding.inflate(inflater, container, false);
+        binding = FragmentListPatientsBinding.inflate(inflater, container, false);
 
-        adapter = new ItemAdapter(getActivity(), true);
+        adapter = new ItemAdapter(getActivity(), ItemAdapter.TYPE_PATIENT);
         patientsViewModel.initializeEventListener(adapter);
 
         if (Internet.getOldInternet().isDone()) {
@@ -96,6 +97,14 @@ public class PatientsFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: called");
+        patientsViewModel.runInternetTest();
+        patientsViewModel.loadPatients();
+    }
+
     public void showRecyclerView() {
         Log.d(TAG, "showRecyclerView: showing recyclerview");
         binding.errorMsg.setVisibility(View.GONE);
@@ -125,22 +134,14 @@ public class PatientsFragment extends Fragment {
         Log.d(TAG, "onActivityResult: data: " + result.getData());
 
         if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-            Patient patient  = result.getData().getParcelableExtra(getString(R.string.PATIENT));
+            Patient patient  = result.getData().getParcelableExtra(LocalStorage.UPDATED_PATIENT_KEY);
+            Log.d(TAG, "patient: : " + patient);
 
             startActivity(
                     new Intent(requireActivity(), PatientActivity.class)
                             .putExtra(getString(R.string.PATIENT), patient));
-            requireActivity();
         }
     });
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: called");
-        patientsViewModel.runInternetTest();
-        patientsViewModel.loadPatients();
-    }
 
     @Override
     public void onPause() {
@@ -156,17 +157,8 @@ public class PatientsFragment extends Fragment {
 
         binding = null;
         Log.d(TAG, "onDestroyView: destroying view");
-        if (Internet.getIsOnline().getValue() != null && Internet.getIsOnline().getValue())
+        if (Internet.getIsOnline().getValue() != null && Internet.getIsOnline().getValue()) {
             patientsViewModel.removeEventListener();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        Log.d(TAG, "onDestroyView: destroying view");
-        if (Internet.getIsOnline().getValue() != null && Internet.getIsOnline().getValue())
-            patientsViewModel.removeEventListener();
-
+        }
     }
 }

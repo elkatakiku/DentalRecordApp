@@ -21,8 +21,9 @@ import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ListWithRemoveItemAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalService;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
-import com.bsit_three_c.dentalrecordapp.databinding.FragmentAdminServiceFormBinding;
+import com.bsit_three_c.dentalrecordapp.databinding.FragmentFormServiceBinding;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
+import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 public class ServiceFormFragment extends Fragment {
     private static final String TAG = ServiceFormFragment.class.getSimpleName();
 
-    private FragmentAdminServiceFormBinding binding;
+    private FragmentFormServiceBinding binding;
     private ServiceFormViewModel viewModel;
     private ListWithRemoveItemAdapter listWithRemoveItemAdapter;
 
@@ -43,9 +44,9 @@ public class ServiceFormFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        binding = FragmentAdminServiceFormBinding.inflate(inflater, container, false);
+        binding = FragmentFormServiceBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this, new CustomViewModelFactory()).get(ServiceFormViewModel.class);
-        listWithRemoveItemAdapter = new ListWithRemoveItemAdapter(requireContext(), R.layout.item_category);
+        listWithRemoveItemAdapter = new ListWithRemoveItemAdapter(requireContext(), R.layout.item_list_with_remove);
 
         binding.lvServiceCategory.setAdapter(listWithRemoveItemAdapter);
 
@@ -90,21 +91,17 @@ public class ServiceFormFragment extends Fragment {
 
         // handle the Choose Image button to trigger
         // the image chooser function
-        binding.btnAddServiceImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LocalStorage.imageChooser(selectImage);
-            }
-        });
+        binding.btnAddServiceImage.setOnClickListener(v ->
+                LocalStorage.imageChooser(selectImage));
 
-        binding.btnAddServiceCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addCategory(binding.etAddServiceCategory.getText().toString().trim());
-            }
-        });
+        binding.btnAddServiceCategory.setOnClickListener(v ->
+                addCategory(binding.etAddServiceCategory.getText().toString().trim()));
 
         binding.btnAddService.setOnClickListener(view1 -> {
+
+            String name = binding.etAddServiceName.getText().toString().trim();
+            String desc = binding.etAddServiceDescription.getText().toString().trim();
+            ArrayList<String> categories = (ArrayList<String>) listWithRemoveItemAdapter.getList();
 
             Intent result = new Intent();
 
@@ -112,17 +109,17 @@ public class ServiceFormFragment extends Fragment {
                 viewModel.editService(
                         service,
                         binding.imgDisplayPreview,
-                        binding.etAddServiceName.getText().toString(),
-                        binding.etAddServiceDescription.getText().toString(),
-                        (ArrayList<String>) listWithRemoveItemAdapter.getList(),
+                        name,
+                        desc,
+                        categories,
                         isImageChanged);
             }
             else {
                 viewModel.addService(
                         binding.imgDisplayPreview,
-                        binding.etAddServiceName.getText().toString(),
-                        binding.etAddServiceDescription.getText().toString(),
-                        (ArrayList<String>) listWithRemoveItemAdapter.getList());
+                        name,
+                        desc,
+                        categories);
             }
 
             // If successful, return to list or view the service
@@ -131,19 +128,6 @@ public class ServiceFormFragment extends Fragment {
         });
     }
 
-//    private void imageChooser() {
-//
-//        // create an instance of the
-//        // intent of the type image
-//        Intent i = new Intent();
-//        i.setType("image/*");
-//        i.setAction(Intent.ACTION_GET_CONTENT);
-//
-//        // pass the constant to compare it
-//        // with the returned requestCode
-//        selectImage.launch(Intent.createChooser(i, "Select Picture"));
-//    }
-
     private void addCategory(final String categoryInput) {
 
         if (categoryInput.trim().isEmpty()) {
@@ -151,7 +135,7 @@ public class ServiceFormFragment extends Fragment {
             return;
         }
 
-        listWithRemoveItemAdapter.add(categoryInput);
+        listWithRemoveItemAdapter.add(UIUtil.capitalize(categoryInput));
         listWithRemoveItemAdapter.notifyDataSetChanged();
 
         binding.etAddServiceCategory.setText("");

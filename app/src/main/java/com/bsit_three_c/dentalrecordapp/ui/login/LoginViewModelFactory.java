@@ -8,6 +8,7 @@ import com.bsit_three_c.dentalrecordapp.MainViewModel;
 import com.bsit_three_c.dentalrecordapp.data.login.LoginDataSource;
 import com.bsit_three_c.dentalrecordapp.data.login.LoginRepository;
 import com.bsit_three_c.dentalrecordapp.ui.users.admin.MainAdminViewModel;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.menu.MenuAdminViewModel;
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.
@@ -27,6 +28,9 @@ public class LoginViewModelFactory implements ViewModelProvider.Factory {
             return (T) new MainViewModel(LoginRepository.getInstance(loginDataSource));
         } else if (modelClass.isAssignableFrom(MainAdminViewModel.class)) {
             return (T) new MainAdminViewModel(LoginRepository.getInstance(loginDataSource));
+        }
+        else if ((modelClass.isAssignableFrom(MenuAdminViewModel.class))) {
+            return (T) new MenuAdminViewModel(LoginRepository.getInstance(loginDataSource));
         }
         else {
             throw new IllegalArgumentException("Unknown ViewModel class");

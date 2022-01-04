@@ -1,11 +1,10 @@
-package com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info;
+package com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.view_patient;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -20,11 +19,9 @@ import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentPatientInfoBinding;
-import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class PatientInfoFragment extends Fragment {
     private static final String TAG = PatientInfoFragment.class.getSimpleName();
@@ -84,9 +81,9 @@ public class PatientInfoFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        for (String key : requireActivity().getIntent().getExtras().keySet()) {
-            Log.d(TAG, "onResume: key: " + key);
-        }
+//        for (String key : requireActivity().getIntent().getExtras().keySet()) {
+//            Log.d(TAG, "onResume: key: " + key);
+//        }
 
         String patientUId = requireActivity().getIntent().getStringExtra(FirebaseHelper.PATIENT_UID);
         if (patientUId != null) {
@@ -107,6 +104,7 @@ public class PatientInfoFragment extends Fragment {
             public void onChanged(Patient patient) {
                 Log.d(TAG, "onStart: live data changed in patient info");
                 if (patient != null) {
+                    PatientInfoFragment.this.patient = patient;
                     Log.d(TAG, "onStart: updated patient not null");
                     displayInfo(patient);
                     Log.d(TAG, "onStart: updated patient: " + patient);
@@ -148,51 +146,48 @@ public class PatientInfoFragment extends Fragment {
     }
 
     private void displayInfo(Patient patient) {
+        Log.d(TAG, "displayInfo: displaying info: " + patient);
         String notAvailable = "N/A";
 
-        setText(patient.getFirstname(), binding.txtViewPIFirstname);
-        setText(patient.getLastname(), binding.txtViewPILastname);
-        setText(patient.getMiddleInitial(), binding.txtViewPIMiddleInitial);
-        setText(patient.getSuffix(), binding.tvPatientSuffix);
-//        setText(patient.birr(), binding.tvPatientBirthdate);
-        setText(patient.getAddress(), binding.txtViewPIAddress);
-        setText(patient.getOccupation(), binding.txtViewPIOccupation);
+        Log.d(TAG, "displayInfo: firstname: " + patient.getFirstname());
+        UIUtil.setText(patient.getFirstname(), binding.txtViewPIFirstname);
+        UIUtil.setText(patient.getLastname(), binding.txtViewPILastname);
+        UIUtil.setText(patient.getMiddleInitial(), binding.txtViewPIMiddleInitial);
+        UIUtil.setText(patient.getSuffix(), binding.tvPatientSuffix);
+        UIUtil.setText(patient.getAddress(), binding.txtViewPIAddress);
+        UIUtil.setText(patient.getOccupation(), binding.txtViewPIOccupation);
 
-        List<String > contactNumber = patient.getPhoneNumber();
-        if (contactNumber.size() > 0) {
-            StringBuilder builder = new StringBuilder();
+        binding.tvPatientBirthdate.setText(patient.getBirthdate());
+        binding.txtViewPITelephoneNumber.setText(patient.getContactNumber());
 
-            if (contactNumber.get(0).equals(FirebaseHelper.NEW_PATIENT)) {
-                builder.append(Checker.NOT_AVAILABLE);
-            } else {
-                for (String number : contactNumber) {
-                    builder.append(number).append("\n");
-                }
-                builder.deleteCharAt(builder.length()-1);
-            }
-
-            binding.txtViewPITelephoneNumber.setText(builder.toString());
-        }
-        else
-            binding.txtViewPITelephoneNumber.setText(notAvailable);
+//        List<String > contactNumber = patient.getPhoneNumber();
+//        if (contactNumber.size() > 0) {
+//            StringBuilder builder = new StringBuilder();
+//
+//            if (contactNumber.get(0).equals(FirebaseHelper.NEW_PATIENT)) {
+//                builder.append(Checker.NOT_AVAILABLE);
+//            } else {
+//                for (String number : contactNumber) {
+//                    builder.append(number).append("\n");
+//                }
+//                builder.deleteCharAt(builder.length()-1);
+//            }
+//
+//            binding.txtViewPITelephoneNumber.setText(builder.toString());
+//        }
+//        else
+//            binding.txtViewPITelephoneNumber.setText(notAvailable);
 
         if (patient.getAge() > 0) binding.txtViewPIAge.setText(String.valueOf(patient.getAge()));
         else
             binding.txtViewPIAge.setText(notAvailable);
 
-        if (Checker.isNotDefault(patient.getCivilStatus()))
-            binding.txtViewPICivilStatus.setText(UIUtil.getCivilStatus(getResources(), patient.getCivilStatus()));
-        else
-            binding.txtViewPICivilStatus.setText(notAvailable);
-    }
+        binding.txtViewPICivilStatus.setText(patient.getCivilStatus(getResources()));
 
-    private void setText(String data, TextView textView) {
-        String notAvailable = "N/A";
-
-        if (Checker.isDataAvailable(data))
-            textView.setText(data);
-        else
-            textView.setText(notAvailable);
+//        if (Checker.isNotDefault(patient.getCivilStatus()))
+//            binding.txtViewPICivilStatus.setText(patient.getCivilStatus(getResources()));
+//        else
+//            binding.txtViewPICivilStatus.setText(notAvailable);
     }
 
 }

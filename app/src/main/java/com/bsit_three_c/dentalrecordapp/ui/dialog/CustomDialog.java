@@ -1,6 +1,7 @@
 package com.bsit_three_c.dentalrecordapp.ui.dialog;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -29,7 +30,12 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
 
     private static final String TAG = CustomDialog.class.getSimpleName();
 
-    private final Context activity;
+    public static final int DIALOG_PATIENT = 0x001ED7B5;
+    public static final int DIALOG_EMPLOYEE = 0x001ED7B6;
+    public static final int DIALOG_APPOINTMENT = 0x001ED7B7;
+    public static final int DIALOG_SERVICE = 0x001ED7B8;
+
+    private final Context context;
     private final NavController navController;
 
     private TextView tvTitle;
@@ -41,17 +47,19 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
     private Intent intent;
     private Object parcel;
 
-    public CustomDialog(@NonNull Activity activity, NavController navController) {
-        super(activity);
+    AlertDialog alertDialog;
+
+    public CustomDialog(@NonNull Activity context, NavController navController) {
+        super(context);
 
         Log.d(TAG, "CustomDialog: object created");
 
-        this.activity = activity;
+        this.context = context;
         this.navController = navController;
     }
 
-    public CustomDialog(@NonNull Activity activity) {
-        this(activity, null);
+    public CustomDialog(@NonNull Activity context) {
+        this(context, null);
     }
 
     @Override
@@ -114,7 +122,6 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
             case closeID:
                 dismiss();
                 break;
-
         }
 
         dismiss();
@@ -126,16 +133,16 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
         final String sTitle = this.tvTitle.getText().toString();
 
         switch (sTitle) {
-            case LocalStorage.DIALOG_PATIENT:
+            case LocalStorage.PATIENT_KEY:
                 setButtonText(R.string.btn_add_patient, R.string.btn_patient_list);
                 break;
-            case LocalStorage.DIALOG_EMPLOYEE:
+            case LocalStorage.EMPLOYEE_KEY:
                 setButtonText(R.string.btn_add_employee, R.string.btn_employee_list);
                 break;
-            case LocalStorage.DIALOG_APPOINTMENT:
+            case LocalStorage.APPOINTMENT_KEY:
                 setButtonText(R.string.btn_create_appointment, R.string.btn_appointment_lsit);
                 break;
-            case LocalStorage.DIALOG_SERVICE:
+            case LocalStorage.SERVICE_KEY:
                 setButtonText(R.string.btn_view_service, R.string.btn_remove_service);
                 break;
         }
@@ -152,22 +159,22 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
         final String sTitle = this.tvTitle.getText().toString();
 
         switch (sTitle) {
-            case LocalStorage.DIALOG_PATIENT:
-                intent = new Intent(activity, AddPatientActivity.class);
+            case LocalStorage.PATIENT_KEY:
+                intent = new Intent(context, AddPatientActivity.class);
                 break;
-            case LocalStorage.DIALOG_EMPLOYEE:
-                intent = new Intent(activity, EmployeeFormActivity.class);
+            case LocalStorage.EMPLOYEE_KEY:
+                intent = new Intent(context, EmployeeFormActivity.class);
                 break;
-            case LocalStorage.DIALOG_APPOINTMENT:
-                intent = new Intent(activity, AddPatientActivity.class);
+            case LocalStorage.APPOINTMENT_KEY:
+                intent = new Intent(context, AddPatientActivity.class);
                 break;
-            case LocalStorage.DIALOG_SERVICE:
-                intent = new Intent(activity, ViewServiceActivity.class);
+            case LocalStorage.SERVICE_KEY:
+                intent = new Intent(context, ViewServiceActivity.class);
                 break;
         }
 
         if (parcel != null) intent.putExtra(LocalStorage.PARCEL_KEY, (Parcelable) parcel);
-        activity.startActivity(intent);
+        context.startActivity(intent);
     }
 
 
@@ -176,17 +183,29 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
         final String sTitle = this.tvTitle.getText().toString();
 
         switch (sTitle) {
-            case LocalStorage.DIALOG_PATIENT:
+            case LocalStorage.PATIENT_KEY:
                 navController.navigate(R.id.nav_patients);
                 break;
-            case LocalStorage.DIALOG_EMPLOYEE:
+            case LocalStorage.EMPLOYEE_KEY:
                 navController.navigate(R.id.nav_employees);
                 break;
-            case LocalStorage.DIALOG_APPOINTMENT:
+            case LocalStorage.APPOINTMENT_KEY:
                 navController.navigate(R.id.nav_appointments);
                 break;
-            case LocalStorage.DIALOG_SERVICE:
-                ServiceRepository.getInstance().removeService((DentalService) parcel);
+            case LocalStorage.SERVICE_KEY:
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+                builder
+                        .setTitle(R.string.delete_title)
+                        .setMessage(context.getString(R.string.delete_message) + " this service?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            ServiceRepository.getInstance().removeService((DentalService) parcel);
+                        })
+                        .setNegativeButton("No", (dialog, which) -> alertDialog.dismiss());
+                alertDialog = builder.create();
+                alertDialog.show();
+
                 break;
         }
     }

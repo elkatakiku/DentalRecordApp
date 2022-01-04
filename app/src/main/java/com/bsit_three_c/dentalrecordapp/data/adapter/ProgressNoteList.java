@@ -13,7 +13,7 @@ import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.ProgressNote;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.BottomProgressNoteFormDialog;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info.PatientInfoFragment;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.view_patient.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 

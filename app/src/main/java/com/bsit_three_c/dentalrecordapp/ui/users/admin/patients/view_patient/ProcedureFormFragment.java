@@ -1,4 +1,4 @@
-package com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info;
+package com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.view_patient;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -22,6 +22,7 @@ import com.bsit_three_c.dentalrecordapp.databinding.FragmentProcedureFormBinding
 import com.bsit_three_c.dentalrecordapp.util.CustomItemSelectedListener;
 import com.bsit_three_c.dentalrecordapp.util.CustomObserver;
 import com.bsit_three_c.dentalrecordapp.util.CustomTextWatcher;
+import com.bsit_three_c.dentalrecordapp.util.DateUtil;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 import java.util.ArrayList;
@@ -100,7 +101,7 @@ public class ProcedureFormFragment extends Fragment {
 
     private void addProcedure() {
         //  Get data from user input.
-        Date date = UIUtil.getDate(binding.datePicker);
+        Date date = DateUtil.getDate(binding.datePicker);
         ArrayList<Integer> service = UIUtil.getServices(serviceOptions);
         String dentalDesc = binding.editTxtDesc.getText().toString().trim();
         String dentalAmount = binding.editTxtAmount.getText().toString().trim();

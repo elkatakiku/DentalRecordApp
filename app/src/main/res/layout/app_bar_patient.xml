@@ -18,66 +18,69 @@
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleTextAppearance="@style/CollapsingBar.TextApperance"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:title="Patient"
             app:titleEnabled="true"
             app:toolbarId="@+id/toolbar">
-            <!--            app:layout_scrollInterpolator="@android:interpolator/decelerate_cubic"-->
-            <ImageView
-                android:id="@+id/app_bar_image"
-                android:layout_width="170dp"
-                android:layout_height="203dp"
 
-                android:layout_gravity="bottom|end"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/doc_bg_cropped"
-                android:contentDescription="@string/collapsing_toolbar_background"
-                android:scaleType="center"
-                android:src="@android:color/transparent"
-                app:layout_collapseMode="parallax" />
+                        <ImageView
+                            android:id="@+id/app_bar_image"
+                            android:layout_width="170dp"
+                            android:layout_height="203dp"
+                            android:layout_gravity="bottom|end"
+                            android:layout_marginEnd="20dp"
+                            android:scaleType="centerCrop"
+                            android:fitsSystemWindows="true"
+                            android:src="@drawable/doc_bg_cropped"
+                            app:layout_collapseMode="parallax"
+                            app:layout_collapseParallaxMultiplier="0.7"
+                            android:contentDescription="@string/collapsing_toolbar_background" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin" />
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+                        <androidx.appcompat.widget.Toolbar
+                            android:id="@+id/toolbar"
+                            android:layout_width="match_parent"
+                            android:layout_height="?attr/actionBarSize"
+                            app:layout_collapseMode="pin"
+                            app:popupTheme="@style/Theme.DentalRecordApp.PopupOverlay" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+                    </com.google.android.material.appbar.CollapsingToolbarLayout>
+                </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/layout_bg"
-        android:fillViewport="true"
-        android:paddingStart="20dp"
-        android:paddingTop="20dp"
-        android:paddingEnd="20dp"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <include
-            layout="@layout/content_patient"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/layout_bg"
+                    android:fillViewport="true"
+                    android:paddingStart="20dp"
+                    android:paddingTop="20dp"
+                    android:paddingEnd="20dp"
+                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-    </androidx.core.widget.NestedScrollView>
+                    <include
+                        layout="@layout/content_patient"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        android:backgroundTint="@color/blue_green"
-        android:clickable="true"
-        android:contentDescription="TODO"
-        android:focusable="true"
-        app:fabSize="normal"
-        app:layout_anchor="@id/appbar"
-        app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/ic_baseline_edit_24"
-        app:tint="@color/white"
-        tools:ignore="ImageContrastCheck" />
+                </androidx.core.widget.NestedScrollView>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/floatingActionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="30dp"
+                    android:backgroundTint="@color/blue_green"
+                    android:clickable="true"
+                    android:contentDescription="TODO"
+                    android:focusable="true"
+                    app:fabSize="normal"
+                    app:layout_anchor="@id/appbar"
+                    app:layout_anchorGravity="bottom|end"
+                    app:srcCompat="@drawable/ic_baseline_edit_24"
+                    app:tint="@color/white"
+                    tools:ignore="ImageContrastCheck" />
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>

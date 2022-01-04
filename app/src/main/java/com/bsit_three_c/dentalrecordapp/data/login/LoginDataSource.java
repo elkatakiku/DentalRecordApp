@@ -32,10 +32,6 @@ public class LoginDataSource {
 //        });
     }
 
-    public FirebaseAuth getMFirebaseAuth() {
-        return mFirebaseAuth;
-    }
-
     public Task<AuthResult> login(String username, String password) {
         return mFirebaseAuth.signInWithEmailAndPassword(username, password);
     }

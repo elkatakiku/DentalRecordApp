@@ -22,7 +22,9 @@ public class FirebaseHelper {
     public static final String USERS_REFERENCE = "users";
     public static final String ADMINS_REFERENCE = "admins";
     public static final String EMPLOYEES_REFERENCE = "employees";
+    public static final String EMERGENCY_CONTACT_REFERENCE = "emergency_contacts";
     public static final String CLIENTS_REFERENCE = "clients";
+    public static final String ACCOUNTS_REFERENCE = "accounts";
 
     public static final String PATIENT_UID = "patient_uid";
     public static final String DENTAL_PROCEDURES = "dentalProcedures";
@@ -36,6 +38,13 @@ public class FirebaseHelper {
     public static final String TYPE_ADMIN = "Admin";
     public static final String TYPE_EMPLOYEE = "Employee";
     public static final String TYPE_CLIENT = "Client";
+
+    public static final String FIREBASE_STORAGE_URL = "gs://dental-record-app.appspot.com";
+    public static final String SERVICES_DISPLAY_IMAGE_LOCATION = "services_display_image/";
+    public static final String EMPLOYEE_DISPLAY_IMAGE_LOCATION = "employee_display_image/";
+
+    public static final String IMAGE_EXTENSION = ".png";
+
 
     public static class CountChildren implements ValueEventListener {
 

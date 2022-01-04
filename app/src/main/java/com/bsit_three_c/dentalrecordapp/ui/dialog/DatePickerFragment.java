@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.bsit_three_c.dentalrecordapp.util.UIUtil;
+import com.bsit_three_c.dentalrecordapp.util.DateUtil;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -84,11 +84,11 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Log.d(TAG, "onDateSet: entering onDateSet");
 
-        tvMonth.setText(UIUtil.getMonthName(month+1));
+        tvMonth.setText(DateUtil.getMonthName(month+1));
         tvDay.setText(String.valueOf(dayOfMonth));
         tvYear.setText(String.valueOf(year));
 
-        etAge.setText(UIUtil.getAge(year, month, dayOfMonth));
+        etAge.setText(DateUtil.getAge(year, month, dayOfMonth));
 
         Log.d(TAG, "onDateSet: Exiting onDateSet");
     }
@@ -100,7 +100,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
         if (month != -1) {
             String[] dateArray = {tvDay.getText().toString(), String.valueOf(month), tvYear.getText().toString()};
-            Date date = UIUtil.stringToDate(TextUtils.join("/", dateArray));
+            Date date = DateUtil.convertToDate(TextUtils.join("/", dateArray));
 
             arguments.putSerializable(DatePickerFragment.DATE_PICKER_DATE, date);
         }

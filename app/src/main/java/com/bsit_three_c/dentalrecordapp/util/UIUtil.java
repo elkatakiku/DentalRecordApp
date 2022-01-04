@@ -1,29 +1,35 @@
 package com.bsit_three_c.dentalrecordapp.util;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalServiceOption;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.MainAdminActivity;
 
-import java.text.DateFormatSymbols;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 public class UIUtil {
 
     private static final String TAG = UIUtil.class.getSimpleName();
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
 
     /**
      * Sets ListView height dynamically based on the height of the items.
@@ -65,102 +71,6 @@ public class UIUtil {
         } else {
             return false;
         }
-    }
-
-    // Return Date format from date picker
-    public static Date getDate(DatePicker datePicker) {
-        Date date = null;
-        if (datePicker != null) {
-            int day = datePicker.getDayOfMonth();
-            int month = datePicker.getMonth() + 1;
-            int year = datePicker.getYear();
-
-            Log.d(TAG, "getDate: day: " + day);
-            Log.d(TAG, "getDate: month: " + month);
-            Log.d(TAG, "getDate: year: " + year);
-
-            try {
-                Log.d(TAG, "getDate: parsing date");
-                Log.d(TAG, "getDate: date format: " + ("" + day + "/" + month + "/" + year));
-                date = dateFormat.parse("" + day + "/" + month + "/" + year);
-            } catch (ParseException e) {
-                Log.d(TAG, "getDate: error in parsing");
-                Log.d(TAG, "getDate: setting date to null");
-                date = null;
-            }
-        }
-        
-        return date;
-    }
-
-    public static int getMonthNumber(String monthName) {
-        final String[] months = {"January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"};
-
-        for (int pos = 0; pos < months.length; pos++) {
-            if (months[pos].equalsIgnoreCase(monthName)) return pos + 1;
-        }
-
-        return -1;
-    }
-
-    // Return month name
-    public static String getMonthName(int month) {
-        return DateFormatSymbols.getInstance().getMonths()[month-1];
-    }
-
-    // Return the arrays of units in strings type: dd/mm/yyyy
-    public static String[] getDateUnits(Date date) {
-        return dateFormat.format(date).split("/");
-    }
-
-    // Return date in a readable format (Month ddd, yyyy)
-    public static String getReadableDate(Date date) {
-        String[] units = getDateUnits(date);
-        return getMonthName(Integer.parseInt(units[1])) + " " + units[0] + ", " + units[2];
-    }
-
-    // Return date in numbers: dd/mm/yyyy
-    public static String getDate(Date date) {
-        return dateFormat.format(date);
-    }
-
-    // Converts date in string type to Date type: dd/mm/yyyy
-    public static Date stringToDate(String dateString) {
-        try {
-            return dateFormat.parse(dateString);
-        } catch (ParseException e) {
-            Log.e(TAG, "stringToDate: Error parsing", e);
-            return null;
-        }
-    }
-
-    public static String getAge(int year, int month, int day){
-        Calendar dob = Calendar.getInstance();
-        Calendar today = Calendar.getInstance();
-
-        int currentYear = today.get(Calendar.YEAR);
-
-        dob.set(year, month, day);
-
-        int age = currentYear - dob.get(Calendar.YEAR);
-
-        int dobDayOfYear = dob.get(Calendar.DAY_OF_YEAR);
-
-        if (!isLeapYear(currentYear) && isLeapYear(year)) dobDayOfYear --;
-
-        if (today.get(Calendar.DAY_OF_YEAR) < dobDayOfYear) age--;
-
-        return Integer.toString(age);
-    }
-
-    private static boolean isLeapYear(int year) {
-        return year % 4 == 0;
-    }
-
-    // Get the current date in String type
-    public static String getCurrentDate() {
-        return dateFormat.format(new Date());
     }
 
     public static String getPaymentStatus(boolean isDownpayment) {
@@ -239,7 +149,7 @@ public class UIUtil {
                 if (titlePos != -1)
                     serviceOptions.get(titlePos).setSelected(false);
                 continue;
-            }
+            } 
 
             newTitle.append(title).append(" | ");
         }
@@ -270,14 +180,6 @@ public class UIUtil {
         }
 
         return -1;
-    }
-
-    public static String getModeOfPayment(Resources resources, int position) {
-        return resources.getStringArray(R.array.mop_array)[position];
-    }
-
-    public static String getCivilStatus(Resources resources, int position) {
-        return resources.getStringArray(R.array.civil_status_array)[position];
     }
 
     public static double convertToDouble(String input) {
@@ -312,6 +214,129 @@ public class UIUtil {
         }
 
         return capitalize.toString();
+    }
+
+    //  Formats string to telephone number format
+    public static String formatTelephoneNumber(final String number) {
+        String firstPart = number.substring(0, 3);
+        String contactNumber = number;
+
+        if (number.length() == 10) {
+            String secondPart = number.substring(3, 6);
+            String lastPart = number.substring(5, 10);
+
+            contactNumber = firstPart + "-" + secondPart + "-" + lastPart;
+        }
+        else if (number.length() == 7) {
+            contactNumber =  firstPart + "-" + number.substring(3, 7);
+        }
+
+        return contactNumber;
+    }
+
+    //  Formats string to philippine mobile number format
+    public static String formatMobileNumber(String code, String number) {
+        String firstPart = number.substring(0, 3);
+        String secondPart = number.substring(3, 6);
+        String lastPart = number.substring(5, 10);
+
+        return "(" + code + ") " + firstPart + "-" + secondPart + "-" + lastPart;
+    }
+
+    //  Get formatted contact number.
+    public static String getFormattedContactNumber(EditText etNumber, Spinner spnrCode, Resources resources) {
+        final int mode = spnrCode.getSelectedItemPosition();
+        String inputNumber = etNumber.getText().toString().trim();
+
+        switch (mode) {
+            case 0:
+                if (inputNumber.length() != 10 && inputNumber.length() != 7) {
+                    etNumber.setError(resources.getString(R.string.invalid_tel_limit_number));
+                    return null;
+                }
+
+                inputNumber = UIUtil.formatTelephoneNumber(inputNumber);
+                break;
+
+            case 1:
+                if (inputNumber.length() != 10) {
+                    etNumber.setError(resources.getString(R.string.invalid_cel_limit_number));
+                    return null;
+                }
+
+                String code = spnrCode.getSelectedItem().toString();
+                inputNumber = UIUtil.formatMobileNumber(code, inputNumber);
+
+                break;
+        }
+
+        return inputNumber;
+    }
+
+    public static ByteArrayOutputStream getOutputStreamImage(ImageView imageView) {
+        Drawable drawable = imageView.getDrawable();
+        Bitmap capture;
+        if (drawable instanceof VectorDrawable) {
+            capture = convertVectorToBitmap(drawable);
+        } else {
+            capture = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        }
+
+        ByteArrayOutputStream outputStream;
+        if (capture != null) {
+            outputStream = new ByteArrayOutputStream();
+            capture.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+        }
+        else outputStream = null;
+
+        return outputStream;
+    }
+
+    public static Bitmap convertVectorToBitmap(Drawable drawable) {
+        try {
+            Bitmap bitmap;
+
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+            return bitmap;
+        } catch (OutOfMemoryError e) {
+            // Handle the error
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Intent redirectUser(Context context, final int type) {
+        Intent redirectUser = null;
+        switch (type) {
+            case Account.TYPE_ADMIN:
+                redirectUser = new Intent(context, MainAdminActivity.class);
+                break;
+            case Account.TYPE_EMPLOYEE:
+                break;
+            case Account.TYPE_PATIENT:
+                break;
+        }
+
+        return redirectUser;
+    }
+
+    public static void setText(String data, TextView textView) {
+        String notAvailable = "N/A";
+
+        if (Checker.isDataAvailable(data))
+            textView.setText(data);
+        else
+            textView.setText(notAvailable);
+    }
+
+    public static void setField(String data, TextView textView) {
+        if (Checker.isDataAvailable(data)) {
+            textView.setText(data);
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package com.bsit_three_c.dentalrecordapp.ui.users.admin.dashboard;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelF
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentAdminDashboardBinding;
 
 public class AdminDashboardFragment extends Fragment {
+    private static final String TAG = AdminDashboardFragment.class.getSimpleName();
 
     private AdminDashboardViewModel mViewModel;
     private FragmentAdminDashboardBinding binding;
@@ -31,19 +33,17 @@ public class AdminDashboardFragment extends Fragment {
         mViewModel = new ViewModelProvider(this, new CustomViewModelFactory()).get(AdminDashboardViewModel.class);
         binding = FragmentAdminDashboardBinding.inflate(inflater, container, false);
 
-        mViewModel.startCount();
-
-        binding.adminDashboardPatientsHeader.setOnClickListener(sendUserToPatients);
-        binding.adminDashboardAppointmentHeader.setOnClickListener(sendUserToAppointments);
-        binding.adminDashboardServicesCard.setOnClickListener(sendUserToServices);
-        binding.adminDashboardEmployeesCard.setOnClickListener(sendUserToEmployees);
-
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        binding.adminDashboardPatientsHeader.setOnClickListener(sendUserToPatients);
+        binding.adminDashboardAppointmentHeader.setOnClickListener(sendUserToAppointments);
+        binding.adminDashboardServicesCard.setOnClickListener(sendUserToServices);
+        binding.adminDashboardEmployeesCard.setOnClickListener(sendUserToEmployees);
 
         mViewModel.getPatientsCount().observe(getViewLifecycleOwner(), new Observer<Long>() {
             @Override
@@ -59,6 +59,21 @@ public class AdminDashboardFragment extends Fragment {
             }
         });
 
+        mViewModel.getEmployeesCount().observe(getViewLifecycleOwner(), new Observer<Long>() {
+            @Override
+            public void onChanged(Long aLong) {
+                binding.tvEmployeesCount.setText(String.valueOf(aLong));
+            }
+        });
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Log.d(TAG, "onResume: called");
+        mViewModel.startCount();
     }
 
     private final View.OnClickListener sendUserToPatients = new View.OnClickListener() {

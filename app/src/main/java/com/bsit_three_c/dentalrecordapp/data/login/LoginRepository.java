@@ -1,9 +1,16 @@
 package com.bsit_three_c.dentalrecordapp.data.login;
 
+import android.util.Log;
+
+import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
+import com.bsit_three_c.dentalrecordapp.data.model.Person;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -51,9 +58,6 @@ public class LoginRepository {
         return dataSource.login(username, password);
     }
 
-    private LoggedInUser createLoggedInUser(String uid, String displayName, String email, String type) {
-        return new LoggedInUser(uid, displayName, email, type);
-    }
 
     public LoggedInUser loginSuccess(AuthResult authResult) {
         FirebaseUser loggedUser = authResult.getUser();
@@ -65,8 +69,31 @@ public class LoginRepository {
         String type = "Admin";
 
         // Change display name when login database is set
-        LoggedInUser newUser = createLoggedInUser(uid, "Eli Lamzon", email, type);
+        LoggedInUser newUser = new LoggedInUser(
+                new Person(
+                        "uid",
+                        "firstname",
+                        "lastname",
+                        "middleInitial",
+                        "suffix",
+                        "dateOfBirth",
+                        new ArrayList<>(),
+                        "address",
+                        1,
+                        0,
+                        new Date(),
+                        email),
+                new Account(
+                        uid,
+                        email,
+                        "123456",
+                        Account.TYPE_ADMIN,
+                        "uid"),
+                Account.TYPE_ADMIN
+        );
+
         setLoggedInUser(newUser);
+        Log.d(TAG, "loginSuccess: new user: " + newUser);
 
         return newUser;
     }

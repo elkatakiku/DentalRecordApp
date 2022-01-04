@@ -23,7 +23,7 @@ import com.bsit_three_c.dentalrecordapp.MainActivity;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ServiceDisplaysAdapter;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ServicesViewHolder;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
-import com.bsit_three_c.dentalrecordapp.databinding.FragmentAdminServicesBinding;
+import com.bsit_three_c.dentalrecordapp.databinding.FragmentListServicesBinding;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.CustomDialog;
 import com.bsit_three_c.dentalrecordapp.ui.users.admin.services.services_form.ServiceFormActivity;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
@@ -32,7 +32,7 @@ public class AdminServicesFragment extends Fragment {
     private static final String TAG = AdminServicesFragment.class.getSimpleName();
 
     private AdminServicesViewModel mViewModel;
-    private FragmentAdminServicesBinding binding;
+    private FragmentListServicesBinding binding;
 
     public static AdminServicesFragment newInstance() {
         return new AdminServicesFragment();
@@ -41,7 +41,7 @@ public class AdminServicesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentAdminServicesBinding.inflate(inflater, container, false);
+        binding = FragmentListServicesBinding.inflate(inflater, container, false);
         mViewModel = new ViewModelProvider(this, new CustomViewModelFactory()).get(AdminServicesViewModel.class);
         return binding.getRoot();
     }
@@ -100,7 +100,7 @@ public class AdminServicesFragment extends Fragment {
 
     private final ServicesViewHolder.ItemOnClickListener itemOnClickListener = service -> {
         CustomDialog customDialog = new CustomDialog(requireActivity());
-        customDialog.setTitle(LocalStorage.DIALOG_SERVICE);
+        customDialog.setTitle(LocalStorage.SERVICE_KEY);
         customDialog.setParcel(service);
         customDialog.show();
     };

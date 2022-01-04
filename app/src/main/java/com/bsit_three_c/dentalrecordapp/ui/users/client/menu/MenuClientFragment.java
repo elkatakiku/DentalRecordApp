@@ -4,6 +4,7 @@ import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +25,11 @@ import com.bsit_three_c.dentalrecordapp.databinding.FragmentClientMenuBinding;
 import com.bsit_three_c.dentalrecordapp.ui.login.LoginActivity;
 import com.bsit_three_c.dentalrecordapp.ui.register.RegisterActivity;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
+import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.snackbar.Snackbar;
 
 public class MenuClientFragment extends Fragment {
+    private static final String TAG = MenuClientFragment.class.getSimpleName();
 
     private MenuClientViewModel mViewModel;
     private FragmentClientMenuBinding binding;
@@ -41,10 +44,13 @@ public class MenuClientFragment extends Fragment {
             if (result.getResultCode() == RESULT_OK) {
                 if (result.getData() != null) {
                     Intent getIntent = result.getData();
-                    LoggedInUser loggedInUser = (LoggedInUser) getIntent.getSerializableExtra(LocalStorage.LOGGED_IN_USER_KEY);
+                    LoggedInUser loggedInUser = getIntent.getParcelableExtra(LocalStorage.LOGGED_IN_USER_KEY);
+                    Log.d(TAG, "onActivityResult: logged in user: " + loggedInUser);
+                    Log.d(TAG, "onActivityResult: is logged in user null: " + (loggedInUser != null));
                     if (loggedInUser != null) {
+                        Log.d(TAG, "onActivityResult: user logged in");
                         Snackbar.make(binding.getRoot(), "User logged in" + loggedInUser.getDisplayName(), Snackbar.LENGTH_SHORT).show();
-                        startActivity(getIntent);
+                        startActivity(UIUtil.redirectUser(requireActivity(), loggedInUser.getType()));
                         requireActivity().finish();
                     }
                 }

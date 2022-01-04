@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".ui.users.admin.patients.patient_info.PatientActivity">
+    tools:context=".ui.users.admin.patients.view_patient.PatientActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -323,6 +323,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/layer_list_border_top"
             android:clickable="true"
+            android:minHeight="150dp"
             android:orientation="vertical"
             android:paddingTop="5dp"
             android:paddingBottom="5dp">

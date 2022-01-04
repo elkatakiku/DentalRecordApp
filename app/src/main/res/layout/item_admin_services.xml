@@ -26,10 +26,11 @@
 
             <ImageView
                 android:id="@+id/imgServiceImage"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_gravity="bottom|end"
                 android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
                 android:src="@mipmap/ic_launcher_round" />
         </FrameLayout>
 

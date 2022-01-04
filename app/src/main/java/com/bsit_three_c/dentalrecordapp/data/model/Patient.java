@@ -2,21 +2,15 @@ package com.bsit_three_c.dentalrecordapp.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Patient extends Person implements Parcelable {
-    private static final String TAG = Parcelable.class.getSimpleName();
+    private static final String TAG = Patient.class.getSimpleName();
 
-    private String address;
-    private int civilStatus;
-    private int age;
     private String occupation;
-    private Date lastUpdated;
-
     private ArrayList<String> dentalProcedures;
 
     private static final String NEW_PATIENT = "New patient";
@@ -29,21 +23,32 @@ public class Patient extends Person implements Parcelable {
                    String lastname,
                    String middleInitial,
                    String suffix,
+                   String dateOfBirth,
                    List<String> phoneNumber,
                    String address,
                    int civilStatus,
                    int age,
                    String occupation,
                    Date lastUpdated,
-                   ArrayList<String> dentalProcedures) {
+                   ArrayList<String> dentalProcedures,
+                   String email) {
 
-        super(uid, firstname, lastname, middleInitial, suffix, phoneNumber);
-        this.address = address;
-        this.civilStatus = civilStatus;
-        this.age = age;
+        super(
+                uid,
+                firstname,
+                lastname,
+                middleInitial,
+                suffix,
+                dateOfBirth,
+                phoneNumber,
+                address,
+                civilStatus,
+                age,
+                lastUpdated,
+                email
+        );
+
         this.occupation = occupation;
-        this.lastUpdated = lastUpdated;
-        if (dentalProcedures == null) Log.d(TAG, "Patient: dentalProcedures is null");
         this.dentalProcedures = dentalProcedures;
     }
 
@@ -53,12 +58,14 @@ public class Patient extends Person implements Parcelable {
         lastname = in.readString();
         middleInitial = in.readString();
         suffix = in.readString();
+        dateOfBirth = in.readString();
         phoneNumber = in.createStringArrayList();
         address = in.readString();
         civilStatus = in.readInt();
         age = in.readInt();
         occupation = in.readString();
         dentalProcedures = in.createStringArrayList();
+        email = in.readString();
     }
 
     public static final Creator<Patient> CREATOR = new Creator<Patient>() {
@@ -73,30 +80,6 @@ public class Patient extends Person implements Parcelable {
         }
     };
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public int getCivilStatus() {
-        return civilStatus;
-    }
-
-    public void setCivilStatus(int civilStatus) {
-        this.civilStatus = civilStatus;
-    }
-
     public String getOccupation() {
         return occupation;
     }
@@ -105,24 +88,12 @@ public class Patient extends Person implements Parcelable {
         this.occupation = occupation;
     }
 
-    public Date getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
-
     public ArrayList<String> getDentalProcedures() {
         return dentalProcedures;
     }
 
     public void setDentalProcedures(ArrayList<String> dentalProcedures) {
         this.dentalProcedures = dentalProcedures;
-    }
-
-    public static Creator<Patient> getCREATOR() {
-        return CREATOR;
     }
 
     public void addProcedure(String procedureKey) {
@@ -138,13 +109,15 @@ public class Patient extends Person implements Parcelable {
                 "\nlastname='" + lastname + '\'' +
                 "\nmiddleInitial='" + middleInitial + '\'' +
                 "\nsuffix='" + suffix + '\'' +
-                "\nphoneNumber='" + phoneNumber + '\'' +
+                "\ndateOfBirth='" + dateOfBirth + '\'' +
+                "\nphoneNumber=" + phoneNumber +
                 "\naddress='" + address + '\'' +
                 "\ncivilStatus='" + civilStatus + '\'' +
                 "\nage=" + age +
                 "\noccupation='" + occupation + '\'' +
                 "\nlastUpdated=" + lastUpdated +
                 "\ndentalProcedures=" + dentalProcedures +
+                "\nemail= " + email +
                 '}';
     }
 
@@ -160,11 +133,13 @@ public class Patient extends Person implements Parcelable {
         dest.writeString(lastname);
         dest.writeString(middleInitial);
         dest.writeString(suffix);
+        dest.writeString(dateOfBirth);
         dest.writeStringList(phoneNumber);
         dest.writeString(address);
         dest.writeInt(civilStatus);
         dest.writeInt(age);
         dest.writeString(occupation);
         dest.writeStringList(dentalProcedures);
+        dest.writeString(email);
     }
 }

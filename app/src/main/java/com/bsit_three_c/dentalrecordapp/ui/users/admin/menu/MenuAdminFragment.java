@@ -1,6 +1,8 @@
 package com.bsit_three_c.dentalrecordapp.ui.users.admin.menu;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +15,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.bsit_three_c.dentalrecordapp.MainActivity;
 import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
-import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentAdminMenuBinding;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.CustomDialog;
+import com.bsit_three_c.dentalrecordapp.ui.login.LoginViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 
 public class MenuAdminFragment extends Fragment {
@@ -41,6 +45,7 @@ public class MenuAdminFragment extends Fragment {
 
         binding = FragmentAdminMenuBinding.inflate(inflater, container, false);
         fragmentTransaction = getChildFragmentManager().beginTransaction();
+        mViewModel = new ViewModelProvider(this, new LoginViewModelFactory()).get(MenuAdminViewModel.class);
 
         return binding.getRoot();
     }
@@ -61,7 +66,7 @@ public class MenuAdminFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 customDialog = new CustomDialog(requireActivity(), NavHostFragment.findNavController(MenuAdminFragment.this));
-                customDialog.setTitle(LocalStorage.DIALOG_PATIENT);
+                customDialog.setTitle(LocalStorage.PATIENT_KEY);
                 customDialog.show();
             }
         });
@@ -78,7 +83,7 @@ public class MenuAdminFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 customDialog = new CustomDialog(requireActivity(), NavHostFragment.findNavController(MenuAdminFragment.this));
-                customDialog.setTitle(LocalStorage.DIALOG_EMPLOYEE);
+                customDialog.setTitle(LocalStorage.EMPLOYEE_KEY);
                 customDialog.show();
             }
         });
@@ -87,7 +92,7 @@ public class MenuAdminFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 customDialog = new CustomDialog(requireActivity(), NavHostFragment.findNavController(MenuAdminFragment.this));
-                customDialog.setTitle(LocalStorage.DIALOG_APPOINTMENT);
+                customDialog.setTitle(LocalStorage.APPOINTMENT_KEY);
                 customDialog.show();
             }
         });
@@ -98,22 +103,23 @@ public class MenuAdminFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+        Log.d(TAG, "onStart: starting admin menu");
+
         LoggedInUser loggedInUser = LocalStorage.getLoggedInUser(requireContext());
 
-        if (loggedInUser == null || !FirebaseHelper.TYPE_ADMIN.equals(loggedInUser.getType())) {
-//            logout();
-//            sendUserToGuestHome();
+        if (loggedInUser == null || loggedInUser.getType() != Account.TYPE_ADMIN) {
+            logout();
             return;
         }
 
-        binding.tvAdminGreet.setText(getString(R.string.greet_admin, loggedInUser.getDisplayName()));
+        binding.tvAdminGreet.setText(getString(R.string.greet_admin, loggedInUser.getLastname()));
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(MenuAdminViewModel.class);
-        // TODO: Use the ViewModel
+    private void logout() {
+        mViewModel.logout(requireContext());
+
+        startActivity(new Intent(requireContext(), MainActivity.class));
+        requireActivity().finish();
     }
 
 }

@@ -8,20 +8,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.bsit_three_c.dentalrecordapp.databinding.FragmentPatientFormBinding;
+import com.bsit_three_c.dentalrecordapp.databinding.FragmentFormPatientRegister3Binding;
 import com.google.android.material.snackbar.Snackbar;
 
 public class PatientFormFragment extends Fragment {
 
-    private FragmentPatientFormBinding binding;
+    private FragmentFormPatientRegister3Binding binding;
 
     @Override
-    public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState
-    ) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        binding = FragmentPatientFormBinding.inflate(inflater, container, false);
+        binding = FragmentFormPatientRegister3Binding.inflate(inflater, container, false);
         return binding.getRoot();
 
     }
@@ -29,7 +26,7 @@ public class PatientFormFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
+        binding.btnEmployeeConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                NavHostFragment.findNavController(PatientFormFragment.this)

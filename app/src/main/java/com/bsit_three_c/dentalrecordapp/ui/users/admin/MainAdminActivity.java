@@ -19,8 +19,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.bsit_three_c.dentalrecordapp.MainActivity;
 import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
-import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityMainAdminBinding;
 import com.bsit_three_c.dentalrecordapp.ui.login.LoginViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.ui.search.SearchActivity;
@@ -118,15 +118,18 @@ public class MainAdminActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        Log.d(TAG, "onStart: getting logged in user");
+
         LoggedInUser loggedInUser = LocalStorage.getLoggedInUser(this);
 
-        if (loggedInUser == null || !FirebaseHelper.TYPE_ADMIN.equals(loggedInUser.getType())) {
+        Log.d(TAG, "onStart: logged user: " + loggedInUser);
+
+        if (loggedInUser == null || loggedInUser.getType() != Account.TYPE_ADMIN) {
             logout();
-//            sendUserToGuestHome();
             return;
         }
 
-        //  Set loggedInUser lccally if it will be only used once
+        //  Set loggedInUser locally if it will be only used once
         this.loggedInUser = loggedInUser;
         updateHeader(binding.navAdminMainView);
 

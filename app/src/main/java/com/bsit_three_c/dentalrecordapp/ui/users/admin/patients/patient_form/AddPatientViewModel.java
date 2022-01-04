@@ -14,6 +14,7 @@ import com.bsit_three_c.dentalrecordapp.data.repository.PatientRepository;
 import com.bsit_three_c.dentalrecordapp.interfaces.SpinnerState;
 import com.bsit_three_c.dentalrecordapp.interfaces.TextChange;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
+import com.bsit_three_c.dentalrecordapp.util.DateUtil;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 import java.util.Date;
@@ -98,6 +99,7 @@ public class AddPatientViewModel extends ViewModel implements TextChange, Spinne
                               String lastname,
                               String middleInitial,
                               String suffix,
+                              String dateOfBirth,
                               String address,
                               List<String> contact,
                               int civilStatus,
@@ -109,6 +111,7 @@ public class AddPatientViewModel extends ViewModel implements TextChange, Spinne
                 UIUtil.capitalize(lastname.trim()),
                 UIUtil.capitalize(middleInitial.trim()),
                 UIUtil.capitalize(suffix.trim()),
+                DateUtil.getDate(dateOfBirth),
                 address.trim(),
                 contact,
                 civilStatus,
@@ -117,21 +120,23 @@ public class AddPatientViewModel extends ViewModel implements TextChange, Spinne
     }
 
     public Patient updatePatient(Patient patient,
-                              String firstname,
-                              String lastname,
-                              String middleInitial,
-                              String suffix,
-                              String address,
-                              List<String> contact,
-                              int civilStatus,
-                              int age,
-                              String occupation) {
+                                 String firstname,
+                                 String lastname,
+                                 String middleInitial,
+                                 String suffix,
+                                 String dateOfBirth,
+                                 String address,
+                                 List<String> contact,
+                                 int civilStatus,
+                                 int age,
+                                 String occupation) {
 
         patient.setFirstname(UIUtil.capitalize(firstname.trim()));
         patient.setLastname(UIUtil.capitalize(lastname.trim()));
         Log.d(TAG, "updatePatient: new MI: " + middleInitial);
         patient.setMiddleInitial(UIUtil.capitalize(middleInitial.trim()));
         patient.setSuffix(UIUtil.capitalize(suffix.trim()));
+        patient.setDateOfBirth(DateUtil.getDate(dateOfBirth));
         patient.setAddress(UIUtil.capitalize(address.trim()));
         patient.setPhoneNumber(contact);
         if (contact.size() <= 0) contact.add(FirebaseHelper.NEW_PATIENT);
@@ -158,12 +163,6 @@ public class AddPatientViewModel extends ViewModel implements TextChange, Spinne
 
         return result;
     }
-
-//    private void setButtonState() {
-//        if (Checker.isComplete(mFirstname, mlastname))
-//            addPatientFormState.setValue(new FormState(true));
-//        else addPatientFormState.setValue(new FormState(false));
-//    }
 
     public boolean isStateValid() {
         return !(

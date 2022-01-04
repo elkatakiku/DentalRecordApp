@@ -17,8 +17,15 @@ public class Procedure {
     public Procedure() { }
 
     //  This constructor is used in getting dental operations
-    public Procedure(String uid, ArrayList<Integer> service, String dentalDesc, String dentalDate, double dentalTotalAmount,
-                     boolean isDownpayment, double dentalBalance, ArrayList<String> paymentKeys) {
+    public Procedure(String uid,
+                     ArrayList<Integer> service,
+                     String dentalDesc,
+                     String dentalDate,
+                     double dentalTotalAmount,
+                     boolean isDownpayment,
+                     double dentalBalance,
+                     ArrayList<String> paymentKeys) {
+
         this(uid, service, dentalDesc, dentalDate, dentalTotalAmount, isDownpayment, dentalBalance);
         this.paymentKeys = paymentKeys;
     }

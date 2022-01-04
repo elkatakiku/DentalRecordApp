@@ -23,26 +23,23 @@
 
         <ImageView
             android:id="@+id/imgViewPicture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:adjustViewBounds="true"
             android:contentDescription="@string/logo_content_desc"
-            android:scaleType="fitStart"
-            android:visibility="gone"
-            app:srcCompat="@mipmap/icon_profile" />
+            android:scaleType="centerCrop"
+            android:visibility="visible"
+            app:srcCompat="@drawable/ic_baseline_account_circle_24" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
-            android:layout_weight="9"
-            android:gravity="center_vertical"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
@@ -54,66 +51,75 @@
                 android:textStyle="bold"
                 tools:text="Display Name" />
 
-            <TextView
-                android:id="@+id/txtView2"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/label"
-                android:textSize="12sp"
-                android:visibility="gone"
-                tools:text="Address" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/txtView3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/label"
-                android:textSize="12sp"
-                tools:text="Telephone" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="9"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/txtView4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/ellipces"
-                android:textColor="@color/label"
-                android:textSize="12sp" />
+                    <TextView
+                        android:id="@+id/txtView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="bottom"
+                        android:textColor="@color/label"
+                        android:textColorHint="@color/field_hint"
+                        android:textSize="12sp"
+                        tools:text="Telephone" />
+
+                    <TextView
+                        android:id="@+id/txtView4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="bottom"
+                        android:hint="@string/last_update"
+                        android:textColor="@color/label"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|end"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/btnPatientDelete"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginEnd="5dp"
+                        android:background="@drawable/shape_button"
+                        android:backgroundTint="@color/button_delete"
+                        android:padding="10dp"
+                        app:srcCompat="@drawable/ic_baseline_delete_outline_24"
+                        app:tint="#FFFFFF" />
+
+                    <ImageView
+                        android:id="@+id/btnPatientEdit"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/shape_button"
+                        android:backgroundTint="@color/blue_green"
+                        android:padding="11dp"
+                        app:srcCompat="@drawable/ic_baseline_edit_24"
+                        app:tint="#FFFFFF" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical|end"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/btnPatientDelete"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/shape_button"
-                android:backgroundTint="@color/button_delete"
-                android:padding="10dp"
-                app:srcCompat="@drawable/ic_baseline_delete_outline_24"
-                app:tint="#FFFFFF" />
-
-            <ImageView
-                android:id="@+id/btnPatientEdit"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/shape_button"
-                android:backgroundTint="@color/blue_green"
-                android:padding="11dp"
-                app:srcCompat="@drawable/ic_baseline_edit_24"
-                app:tint="#FFFFFF" />
-
-        </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -271,20 +271,53 @@
             android:padding="10dp"
             android:textColorHint="@color/field_hint" />
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:minHeight="100dp">
 
             <Button
-                android:id="@+id/button_second"
+                android:id="@+id/btnEmployeeConfirm"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center"
                 android:backgroundTint="@color/blue_green"
+                android:fontFamily="@font/open_sans_bold"
                 android:text="Confirm"
-                app:cornerRadius="50dp" />
-        </FrameLayout>
+                app:cornerRadius="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/pbEmployee2Loading"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="16dp"
+                android:indeterminateTint="@color/white"
+                android:translationZ="3dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/btnEmployeeConfirm"
+                app:layout_constraintEnd_toEndOf="@+id/btnEmployeeConfirm"
+                app:layout_constraintTop_toTopOf="@+id/btnEmployeeConfirm"
+                tools:visibility="visible" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--        <FrameLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:minHeight="100dp">-->
+
+<!--            <Button-->
+<!--                android:id="@+id/btnEmployeeConfirm"-->
+<!--                android:layout_width="200dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="bottom|center"-->
+<!--                android:backgroundTint="@color/blue_green"-->
+<!--                android:text="Confirm"-->
+<!--                app:cornerRadius="50dp" />-->
+<!--        </FrameLayout>-->
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

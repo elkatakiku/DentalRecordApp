@@ -13,6 +13,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ServiceDisplaysAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalService;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
+import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -40,8 +41,6 @@ public class ServiceRepository {
     private final FirebaseStorage firebaseStorage;
     private final StorageReference storageReference;
 
-    private final String IMAGE_EXTENSION = ".png";
-
     private static volatile ServiceRepository instance;
 
     private ArrayList<DentalService> dentalServices;
@@ -51,8 +50,8 @@ public class ServiceRepository {
         this.database = FirebaseDatabase.getInstance(FirebaseHelper.FIREBASE_URL);
         this.databaseReference = database.getReference(FirebaseHelper.SERVICES_REFERENCE);
 
-        firebaseStorage = FirebaseStorage.getInstance("gs://dental-record-app.appspot.com");
-        storageReference = firebaseStorage.getReference("services_display_image/");
+        firebaseStorage = FirebaseStorage.getInstance(FirebaseHelper.FIREBASE_STORAGE_URL);
+        storageReference = firebaseStorage.getReference(FirebaseHelper.SERVICES_DISPLAY_IMAGE_LOCATION);
     }
 
     public static ServiceRepository getInstance() {
@@ -101,10 +100,10 @@ public class ServiceRepository {
 
             byte[] data = outputStream.toByteArray();
 
-            String child = service.getServiceUID() + IMAGE_EXTENSION;
+            String child = service.getServiceUID() + FirebaseHelper.IMAGE_EXTENSION;
 
             StorageMetadata metadata = new StorageMetadata.Builder()
-                    .setCustomMetadata("caption", service.getTitle())
+                    .setCustomMetadata("caption", service.getTitle() + " display image")
                     .build();
 
             UploadTask uploadTask = storageReference.child(child).putBytes(data, metadata);
@@ -177,15 +176,17 @@ public class ServiceRepository {
     public void addService(ImageView displayImage, MutableLiveData<Boolean> isUploadDone, DentalService service) {
         isUploadDone.setValue(false);
 
-        Bitmap capture = ((BitmapDrawable) displayImage.getDrawable()).getBitmap();
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//        Bitmap capture = ((BitmapDrawable) displayImage.getDrawable()).getBitmap();
+//        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//
+//        capture.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+//
+//        byte[] data = outputStream.toByteArray();
 
-        capture.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-
-        byte[] data = outputStream.toByteArray();
+        byte[] data = UIUtil.getOutputStreamImage(displayImage).toByteArray();
 
         String serviceUID = UUID.randomUUID().toString();
-        String child = serviceUID + IMAGE_EXTENSION;
+        String child = serviceUID + FirebaseHelper.IMAGE_EXTENSION;
 
         StorageMetadata metadata = new StorageMetadata.Builder()
                 .setCustomMetadata("caption", "TITLE HERE")
@@ -235,7 +236,7 @@ public class ServiceRepository {
             service.setCategories(new ArrayList<>());
     }
 
-    private final FirebaseHelper.CountChildren countServices = new FirebaseHelper.CountChildren();;
+    private final FirebaseHelper.CountChildren countServices = new FirebaseHelper.CountChildren();
 
     public void countServices() {
         databaseReference.addListenerForSingleValueEvent(countServices);

@@ -71,6 +71,8 @@ public class LoginActivity extends AppCompatActivity {
             isOnline = Internet.isOnline();
 //            new Internet().execute();
 
+//            Log.d(TAG, "onCreate: login success: " + loginResult.getSuccess());
+
             loadingProgressBar.setVisibility(View.GONE);
             if (LocalStorage.getLoggedInUser(this) != null) {
                 returnResult();
@@ -84,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e(TAG, "onCreate: login result is error");
                 showLoginFailed(loginResult.getError());
             } else if (loginResult.getSuccess() != null) {
+                Log.d(TAG, "onCreate: login result is sucess");
                 updateUiWithUser(loginResult.getSuccess());
                 returnResult();
             }
@@ -147,21 +150,21 @@ public class LoginActivity extends AppCompatActivity {
         //  TODO: checks if account is admin, staff or client
 
         // Checks if logged in user is already saved
-        if (LocalStorage.getLoggedInUser(this) == null)
+        if (LocalStorage.getLoggedInUser(this) == null) {
             LocalStorage.saveLoggedInUser(this, loginViewModel.getLoggedInUser());
+        }
 
         // Passing loggedInUser object
         intent.putExtra(LocalStorage.LOGGED_IN_USER_KEY, loginViewModel.getLoggedInUser());
 
         // Redirect user to main activity
-//        startActivity(intent);
         setResult(RESULT_OK, intent);
         finish();
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
         // TODO : initiate successful logged in experience
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
+        String welcome = getString(R.string.welcome) + ' ' + model.getDisplayName();
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 

@@ -30,5 +30,5 @@
         android:id="@+id/PatientFormFragment"
         android:name="com.bsit_three_c.dentalrecordapp.ui.register.PatientFormFragment"
         android:label="Patient Form"
-        tools:layout="@layout/fragment_patient_form"/>
+        tools:layout="@layout/fragment_form_patient_register3"/>
 </navigation>

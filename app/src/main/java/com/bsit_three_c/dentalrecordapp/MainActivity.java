@@ -17,14 +17,14 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
-import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityMainBinding;
-import com.bsit_three_c.dentalrecordapp.ui.login_signup.LoginOrRegisterActivity;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.MainAdminActivity;
 import com.bsit_three_c.dentalrecordapp.ui.login.LoginViewModelFactory;
+import com.bsit_three_c.dentalrecordapp.ui.login_signup.LoginOrRegisterActivity;
 import com.bsit_three_c.dentalrecordapp.ui.search.SearchActivity;
 import com.bsit_three_c.dentalrecordapp.ui.settings.SettingsActivity;
+import com.bsit_three_c.dentalrecordapp.ui.users.admin.MainAdminActivity;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -212,12 +212,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        Log.d(TAG, "onStart: starting main activity");
+
         LoggedInUser loggedInUser = LocalStorage.getLoggedInUser(this);
 
         if (loggedInUser != null) {
-            if (FirebaseHelper.TYPE_ADMIN.equals(loggedInUser.getType())) {
-                sendUserToAdminHome();
-                return;
+            switch (loggedInUser.getType()) {
+                case Account.TYPE_ADMIN:
+                    sendUserToAdminHome();
+                    break;
+                case Account.TYPE_EMPLOYEE:
+
+                    break;
+                case Account.TYPE_PATIENT:
+
+                    break;
             }
         }
 

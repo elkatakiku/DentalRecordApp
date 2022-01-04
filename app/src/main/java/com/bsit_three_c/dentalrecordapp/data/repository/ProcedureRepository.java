@@ -5,8 +5,9 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
-import com.bsit_three_c.dentalrecordapp.data.model.ProgressNote;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
+import com.bsit_three_c.dentalrecordapp.data.model.ProgressNote;
+import com.bsit_three_c.dentalrecordapp.util.DateUtil;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -114,7 +115,7 @@ public class ProcedureRepository {
                 operationUID,
                 service,
                 dentalDesc,
-                UIUtil.getDate(dentalDate),
+                DateUtil.getDate(dentalDate),
                 UIUtil.convertToDouble(dentalAmount),
                 isDownpayment,
                 UIUtil.convertToDouble(dentalBalance)
@@ -122,7 +123,7 @@ public class ProcedureRepository {
 
         ProgressNote progressNote = new ProgressNote(
                 paymentUID,
-                UIUtil.getDate(dentalDate),
+                DateUtil.getDate(dentalDate),
                 dentalDesc,
                 UIUtil.convertToDouble(dentalPayment)
         );

@@ -34,6 +34,11 @@ public class ViewServiceActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.serviceToolbar);
 
+        binding.serviceAppbar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+            float range = (float) -appBarLayout.getTotalScrollRange();
+            binding.serviceAppBarImage.setImageAlpha((int) (255 * (1.0f - (float) verticalOffset / range)));
+        });
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_view_service);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);

@@ -10,7 +10,7 @@ import com.bsit_three_c.dentalrecordapp.data.adapter.ItemAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Person;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
-import com.bsit_three_c.dentalrecordapp.util.UIUtil;
+import com.bsit_three_c.dentalrecordapp.util.DateUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -108,12 +108,12 @@ public class PatientRepository {
         return mPatient;
     }
 
-    public void getPatients() {
-        databaseReference.orderByChild("lastname").addValueEventListener(valueEventListener);
-    }
-
     public void setAdapter(ItemAdapter adapter) {
         this.adapter = adapter;
+    }
+
+    public void getPatients() {
+        databaseReference.orderByChild("lastname").addValueEventListener(valueEventListener);
     }
 
     private final ValueEventListener valueEventListener = new ValueEventListener() {
@@ -140,6 +140,7 @@ public class PatientRepository {
                     String lastname,
                     String middleInitial,
                     String suffix,
+                    String dateOfBirth,
                     String address,
                     List<String> phoneNumber,
                     int civilStatus,
@@ -158,13 +159,15 @@ public class PatientRepository {
                 lastname,
                 middleInitial,
                 suffix,
+                dateOfBirth,
                 phoneNumber,
                 address,
                 civilStatus,
                 age,
                 occupation,
-                UIUtil.stringToDate(UIUtil.getDate(new Date())),
-                operationKeys
+                DateUtil.convertToDate(DateUtil.getDate(new Date())),
+                operationKeys,
+                "email"
         );
 
         if (patientUID != null) {
@@ -225,6 +228,8 @@ public class PatientRepository {
 
     private void initialize(Patient patient) {
 
+        Log.d(TAG, "initialize: initializing patient: " + patient);
+
         final String notAvailable = "N/A";
 
         if (!Checker.isDataAvailable(patient.getFirstname()))
@@ -238,6 +243,10 @@ public class PatientRepository {
 
         if (!Checker.isDataAvailable(patient.getSuffix()))
             patient.setSuffix(notAvailable);
+
+        if (!Checker.isDataAvailable(patient.getDateOfBirth())) {
+            patient.setDateOfBirth(notAvailable);
+        }
 
         if (!Checker.isDataAvailable(patient.getAddress()))
             patient.setAddress(notAvailable);
@@ -256,6 +265,10 @@ public class PatientRepository {
 
         if (patient.getLastUpdated() == null)
             patient.setLastUpdated(new Date());
+
+        if (!Checker.isDataAvailable(patient.getEmail())) {
+            patient.setEmail(Person.NOT_AVAILABLE);
+        }
     }
 
     public void removeValueEventListener() {

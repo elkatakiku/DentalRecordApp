@@ -19,7 +19,7 @@
         android:id="@+id/editServiceFragment"
         android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.services.services_form.ServiceFormFragment"
         android:label="Edit Service"
-        tools:layout="@layout/fragment_admin_service_form">
+        tools:layout="@layout/fragment_form_service">
 
         <action
             android:id="@+id/action_Second2Fragment_to_FirstFragment"

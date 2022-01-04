@@ -19,11 +19,19 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="225dp"
+            android:layout_height="0dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_weight="2"
             android:background="@drawable/bg_header">
+
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/home_header" />
 
             <TextView
                 android:id="@+id/tvAdminGreet"
@@ -35,13 +43,6 @@
                 android:textColor="@color/white"
                 android:textSize="30sp"
                 android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/imageView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:src="@drawable/home_header" />
         </FrameLayout>
 
         <ImageView
@@ -58,10 +59,11 @@
         <TextView
             android:id="@+id/textView24"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_weight=".1"
             android:gravity="center_vertical"
             android:text="What do you need today?"
             android:textColor="@color/blue_green"
@@ -70,8 +72,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_marginBottom="16dp"
+            android:layout_weight="4"
             android:divider="@drawable/divider_admin_home"
             android:orientation="vertical"
             android:showDividers="middle">

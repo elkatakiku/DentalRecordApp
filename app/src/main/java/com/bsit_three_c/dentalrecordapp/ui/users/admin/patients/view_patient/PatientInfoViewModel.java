@@ -1,4 +1,4 @@
-package com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_info;
+package com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.view_patient;
 
 import android.util.Log;
 

@@ -14,6 +14,6 @@
         android:id="@+id/nav_user_service"
         android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.services.AdminServicesFragment"
         android:label="Services"
-        tools:layout="@layout/fragment_admin_services" />
+        tools:layout="@layout/fragment_list_services" />
 
 </navigation>
