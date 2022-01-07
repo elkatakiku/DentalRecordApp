@@ -1,24 +1,12 @@
 package com.bsit_three_c.dentalrecordapp.data.model;
 
-import androidx.annotation.NonNull;
-
 public class DentalServiceOption extends DentalService {
 
-    private int servicePosition;
     private boolean isSelected;
 
-    public DentalServiceOption(String title, int servicePosition, boolean isSelected) {
-        super(title);
-        this.servicePosition = servicePosition;
+    public DentalServiceOption(final String serviceIud, String title, boolean isSelected) {
+        super(serviceIud, title);
         this.isSelected = isSelected;
-    }
-
-    public int getServicePosition() {
-        return servicePosition;
-    }
-
-    public void setServicePosition(int servicePosition) {
-        this.servicePosition = servicePosition;
     }
 
     public boolean isSelected() {
@@ -29,12 +17,13 @@ public class DentalServiceOption extends DentalService {
         isSelected = selected;
     }
 
-    @NonNull
+
     @Override
     public String toString() {
         return "\nDentalServiceOption{" +
-                "\n\t\tservicePosition=" + servicePosition +
-                "\n\t\tisSelected=" + isSelected +
-                "}\n";
+                "\ntitle='" + title + '\'' +
+                "\ndescription='" + description + '\'' +
+                "\nisSelected=" + isSelected +
+                "\n}";
     }
 }

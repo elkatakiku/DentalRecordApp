@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/nav_user_home"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.users.client.menu.MenuClientFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.menu.MenuClientFragment"
         android:label="Home"
         tools:layout="@layout/fragment_client_menu" />
     <fragment
         android:id="@+id/nav_user_service"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.services.AdminServicesFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.services.AdminServicesFragment"
         android:label="Services"
         tools:layout="@layout/fragment_list_services" />
 

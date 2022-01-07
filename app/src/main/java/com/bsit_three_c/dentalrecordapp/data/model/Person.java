@@ -8,12 +8,12 @@ import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.DateUtil;
+import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 import java.util.Date;
 import java.util.List;
 
 public class Person implements Parcelable {
-    public static final String NOT_AVAILABLE = "N/A";
 
     protected String uid;
     protected String firstname;
@@ -48,13 +48,13 @@ public class Person implements Parcelable {
                   String email) {
 
         this.uid = uid;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.middleInitial = middleInitial;
-        this.suffix = suffix;
+        this.firstname = UIUtil.capitalize(firstname);
+        this.lastname = UIUtil.capitalize(lastname);
+        this.middleInitial = UIUtil.capitalize(middleInitial);
+        this.suffix = UIUtil.capitalize(suffix);
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
-        this.address = address;
+        this.address = UIUtil.capitalize(address);
         this.civilStatus = civilStatus;
         this.age = age;
         this.lastUpdated = lastUpdated;
@@ -163,7 +163,7 @@ public class Person implements Parcelable {
             return builder.toString();
         }
         else
-            return NOT_AVAILABLE;
+            return Checker.NOT_AVAILABLE;
     }
 
     public void setPhoneNumber(List<String> phoneNumber) {
@@ -211,7 +211,10 @@ public class Person implements Parcelable {
     }
 
     public String getCivilStatus(Resources resources) {
-        return resources.getStringArray(R.array.civil_status_array)[civilStatus];
+        if (Checker.isNotDefault(civilStatus)) {
+            return resources.getStringArray(R.array.civil_status_array)[civilStatus];
+        }
+        return Checker.NOT_AVAILABLE;
     }
 
     public int getAge() {
@@ -231,19 +234,33 @@ public class Person implements Parcelable {
     }
 
     public String getFullName() {
-        String fullname = lastname + ", " + firstname;
+        StringBuilder fullName = new StringBuilder();
+
+        if (Checker.isDataAvailable(lastname)) {
+            fullName.append(lastname).append(", ");
+        }
+
+        if (Checker.isDataAvailable(firstname)) {
+            fullName.append(firstname).append(" ");
+        } else {
+            int index = fullName.lastIndexOf(",");
+            if (index != -1) {
+                fullName.deleteCharAt(index);
+            }
+        }
+
         if (Checker.isDataAvailable(middleInitial)) {
-            fullname  += " " + middleInitial + ".";
+            fullName.append(middleInitial).append(". ");
         }
 
         if ((Checker.isDataAvailable(suffix))) {
             if (!suffix.contains(".")) {    //  Checks if the suffix already contained period.
                 suffix += '.';
             }
-            fullname += " " + suffix;
+            fullName.append(suffix);
         }
 
-        return fullname;
+        return fullName.toString();
     }
 
     public String getEmail() {

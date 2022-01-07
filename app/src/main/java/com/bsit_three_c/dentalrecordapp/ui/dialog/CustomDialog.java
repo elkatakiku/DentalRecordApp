@@ -21,9 +21,9 @@ import androidx.navigation.NavController;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalService;
 import com.bsit_three_c.dentalrecordapp.data.repository.ServiceRepository;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.employees.employee_form.EmployeeFormActivity;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_form.AddPatientActivity;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.services.view_service.ViewServiceActivity;
+import com.bsit_three_c.dentalrecordapp.ui.employees.employee_form.EmployeeFormActivity;
+import com.bsit_three_c.dentalrecordapp.ui.patients.patient_form.AddPatientActivity;
+import com.bsit_three_c.dentalrecordapp.ui.services.view_service.ViewServiceActivity;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 
 public class CustomDialog extends Dialog implements View.OnClickListener {
@@ -197,7 +197,7 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
                 builder
-                        .setTitle(R.string.delete_title)
+                        .setTitle(context.getString(R.string.delete_title, "Service"))
                         .setMessage(context.getString(R.string.delete_message) + " this service?")
                         .setPositiveButton("Yes", (dialog, which) -> {
                             ServiceRepository.getInstance().removeService((DentalService) parcel);

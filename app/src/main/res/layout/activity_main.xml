@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
+        android:fitsSystemWindows="false"
         app:headerLayout="@layout/nav_header_main"
         app:insetForeground="@color/bg_home_color"
         app:itemIconTint="@drawable/selector_nav_item"
@@ -29,5 +29,5 @@
         app:itemShapeInsetStart="0dp"
         app:itemShapeInsetTop="0dp"
         app:itemTextColor="@drawable/selector_nav_item"
-        app:menu="@menu/user_drawer" />
+        app:menu="@menu/drawer_user" />
 </androidx.drawerlayout.widget.DrawerLayout>

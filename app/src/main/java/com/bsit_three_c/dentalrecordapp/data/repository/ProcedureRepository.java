@@ -17,6 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ProcedureRepository {
 
@@ -24,7 +25,6 @@ public class ProcedureRepository {
 
     private final FirebaseDatabase database;
     private final DatabaseReference databaseReference;
-
 
     private static volatile ProcedureRepository instance;
     private ArrayList<Procedure> procedures;
@@ -61,8 +61,9 @@ public class ProcedureRepository {
             }
         }
     }
+
     public void addProcedure(Patient patient,
-                             ArrayList<Integer> service,
+                             List<String> service,
                              String dentalDesc,
                              Date dentalDate,
                              String dentalAmount,
@@ -75,7 +76,7 @@ public class ProcedureRepository {
         databaseReference.child(procedure.getUid()).setValue(procedure);
     }
 
-    public void removeProcedure(Patient patient, String operationUID, ArrayList<String> paymentKeys) {
+    public void removeProcedure(Patient patient, String operationUID, List<String> paymentKeys) {
         databaseReference.child(operationUID).removeValue();
         PatientRepository.getInstance().removeProcedureKey(patient, operationUID);
         ProgressNoteRepository.getInstance().removeProgressNote(paymentKeys);
@@ -93,12 +94,19 @@ public class ProcedureRepository {
         return databaseReference.child(operationUID);
     }
 
+    public void initializeProcedure(Procedure procedure) {
+
+        if (procedure.getServiceIds() == null || procedure.getServiceIds().size() == 0) {
+            procedure.setServiceIds(new ArrayList<>());
+        }
+    }
+
     private boolean isDuplicate(Procedure procedure) {
         return this.procedures.contains(procedure);
     }
 
     private Procedure createProcedure(Patient patient,
-                                      ArrayList<Integer> service,
+                                      List<String> service,
                                       String dentalDesc,
                                       Date dentalDate,
                                       String dentalAmount,
@@ -140,7 +148,7 @@ public class ProcedureRepository {
     }
 
     public void updatePaymentKeys(Procedure procedure, String paymentUID) {
-        ArrayList<String> keys = procedure.getPaymentKeys();
+        ArrayList<String> keys = (ArrayList<String>) procedure.getPaymentKeys();
 
         if (keys.size() == 1) {
 
@@ -193,7 +201,7 @@ public class ProcedureRepository {
                 Procedure procedure = snapshot.getValue(Procedure.class);
 
                 if (procedure != null) {
-                    ArrayList<String> keys = procedure.getPaymentKeys();
+                    ArrayList<String> keys = (ArrayList<String>) procedure.getPaymentKeys();
                     int keySize = keys.size();
 
                     for (int pos = 0; pos <keySize; pos++) {

@@ -21,10 +21,11 @@ public class LocalStorage {
     public static final String EMPLOYEE_KEY = "EMPLOYEE";
     public static final String APPOINTMENT_KEY = "APPOINTMENT";
     public static final String SERVICE_KEY = "SERVICE";
+    public static final String IS_EDIT = "IS_EDIT";
+    public static final String IS_ADMIN = "IS_ADMIN";
 
     public static final String UPDATED_PATIENT_KEY = "UPDATED_PATIENT";
     public static final String IMAGE_BYTE_KEY = "COMPRESS_IMAGE";
-    public static final String IMAGE_URI_KEY = "IMAGE_URI_KEY";
 
     public static final String PARCEL_KEY = "parcel";
 

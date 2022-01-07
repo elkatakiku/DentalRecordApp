@@ -73,11 +73,16 @@ public class PatientRepository {
         });
     }
 
+    public DatabaseReference getPatientPath(String patientUID) {
+        return databaseReference.child(patientUID);
+    }
+
     private void getPatients(DataSnapshot dataSnapshot) {
 
         int counter = 0;
 
         if (adapter.getItemCount() != 0 && adapter.getItemCount() == count){
+            Log.d(TAG, "getPatients: true");
             adapter.clearAll();
         }
 
@@ -96,6 +101,8 @@ public class PatientRepository {
 
                 }
             }
+
+            adapter.initializeOrigList();
         }
 
 
@@ -226,7 +233,7 @@ public class PatientRepository {
         return countedChildren.getCount();
     }
 
-    private void initialize(Patient patient) {
+    public static void initialize(Patient patient) {
 
         Log.d(TAG, "initialize: initializing patient: " + patient);
 
@@ -267,7 +274,7 @@ public class PatientRepository {
             patient.setLastUpdated(new Date());
 
         if (!Checker.isDataAvailable(patient.getEmail())) {
-            patient.setEmail(Person.NOT_AVAILABLE);
+            patient.setEmail(Checker.NOT_AVAILABLE);
         }
     }
 

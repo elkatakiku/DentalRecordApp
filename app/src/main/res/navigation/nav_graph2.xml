@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph2"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/EmployeeBasicInfo">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.services.services_form.ServiceFormFragment"
+        android:id="@+id/EmployeeBasicInfo"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.services.services_form.ServiceFormFragment"
         tools:layout="@layout/fragment_form_service"/>
 </navigation>

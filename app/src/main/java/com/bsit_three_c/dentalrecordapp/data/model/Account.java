@@ -82,6 +82,10 @@ public class Account implements Parcelable {
     }
 
     public static String getDefaultPassword(String name) {
+        if (name == null) {
+            return null;
+        }
+
         return name + 123;
     }
 

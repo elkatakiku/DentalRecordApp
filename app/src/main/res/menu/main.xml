@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/app_bar_search"
+        android:id="@+id/menu_search"
         android:icon="?android:attr/actionModeWebSearchDrawable"
         android:title="Search"
         app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="ifRoom|collapseActionView|withText" />
+        app:showAsAction="ifRoom|collapseActionView" />
     <item
         android:id="@+id/menu_profile"
         android:icon="@drawable/ic_baseline_account_circle_24"

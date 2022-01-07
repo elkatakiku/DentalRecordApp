@@ -3,6 +3,8 @@ package com.bsit_three_c.dentalrecordapp.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.bsit_three_c.dentalrecordapp.util.UIUtil;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,7 +50,7 @@ public class Patient extends Person implements Parcelable {
                 email
         );
 
-        this.occupation = occupation;
+        this.occupation = UIUtil.capitalize(occupation);
         this.dentalProcedures = dentalProcedures;
     }
 

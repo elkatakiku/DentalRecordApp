@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:backgroundTint="@color/bg_home_color"
-    tools:context=".ui.users.admin.menu.MenuAdminFragment">
+    tools:context=".ui.menu.MenuAdminFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
 
             <TextView
                 android:id="@+id/tvAdminGreet"
-                android:layout_width="150dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="20dp"
@@ -44,17 +44,6 @@
                 android:textSize="30sp"
                 android:textStyle="bold" />
         </FrameLayout>
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:adjustViewBounds="true"
-            android:src="@drawable/home_header_wtext"
-            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textView24"

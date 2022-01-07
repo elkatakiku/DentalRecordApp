@@ -9,15 +9,17 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 
 import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.data.model.DentalServiceOption;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
-import com.bsit_three_c.dentalrecordapp.data.model.ProgressNote;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
+import com.bsit_three_c.dentalrecordapp.data.model.ProgressNote;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.BottomProgressNoteFormDialog;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.view_patient.PatientInfoFragment;
+import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProgressNoteList {
     private static final String TAG = ProgressNoteList.class.getSimpleName();
@@ -26,17 +28,21 @@ public class ProgressNoteList {
     private final LayoutInflater layoutInflater;
     private final PatientInfoFragment lifecycleOwner;
     private final BottomSheetDialog operationsDialog;
+    private final List<DentalServiceOption> dentalServiceOptions;
+
     private BottomProgressNoteFormDialog paymentDialog;
     private Procedure procedure;
     private boolean isOnlyOne;
     private Patient patient;
 
     public ProgressNoteList(LinearLayout linearLayout, LayoutInflater layoutInflater,
-                            PatientInfoFragment lifecycleOwner, BottomSheetDialog operationsDialog) {
+                            PatientInfoFragment lifecycleOwner, BottomSheetDialog operationsDialog,
+                            List<DentalServiceOption> dentalServiceOptions) {
         this.linearLayout = linearLayout;
         this.layoutInflater = layoutInflater;
         this.lifecycleOwner = lifecycleOwner;
         this.operationsDialog = operationsDialog;
+        this.dentalServiceOptions = dentalServiceOptions;
     }
 
     public void addItem(ProgressNote progressNote) {
@@ -65,7 +71,7 @@ public class ProgressNoteList {
                              PatientInfoFragment lifecycleOwner, ProgressNote progressNote) {
 
         //  Create progressNote dialog edit/delete style
-        this.paymentDialog = new BottomProgressNoteFormDialog(layoutInflater, context, lifecycleOwner, true);
+        this.paymentDialog = new BottomProgressNoteFormDialog(layoutInflater, context, lifecycleOwner, true, dentalServiceOptions);
         paymentDialog.setProcedure(procedure);
         paymentDialog.setOnlyOne(isOnlyOne);
         paymentDialog.setPatient(patient);

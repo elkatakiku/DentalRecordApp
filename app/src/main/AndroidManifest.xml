@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bsit_three_c.dentalrecordapp" >
+    package="com.bsit_three_c.dentalrecordapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -11,9 +11,18 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/logo_final2_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.DentalRecordApp" >
+        android:theme="@style/Theme.DentalRecordApp">
         <activity
-            android:name=".ui.users.admin.employees.view_employee.ViewEmployeeActivity"
+            android:name=".ui.accounts.AccountsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_accounts"
+            android:theme="@style/Theme.DentalRecordApp.NoActionBar" />
+        <activity
+            android:name=".ui.appointments.appointment_form.AppointmentActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DentalRecordApp.NoActionBar"/>
+        <activity
+            android:name=".ui.employees.view_employee.ViewEmployeeActivity"
             android:exported="false"
             android:label="@string/title_activity_view_employee"
             android:theme="@style/Theme.DentalRecordApp.NoActionBar" />
@@ -23,16 +32,16 @@
             android:label="@string/title_activity_login_or_register"
             android:theme="@style/Theme.DentalRecordApp.NoActionBar" />
         <activity
-            android:name=".ui.users.admin.services.view_service.ViewServiceActivity"
+            android:name=".ui.services.view_service.ViewServiceActivity"
             android:exported="false"
             android:label="@string/title_activity_view_service"
             android:theme="@style/Theme.DentalRecordApp.NoActionBar" />
         <activity
-            android:name=".ui.users.admin.MainAdminActivity"
+            android:name=".ui.main.MainAdminActivity"
             android:exported="false"
             android:theme="@style/Theme.DentalRecordApp.NoActionBar" />
         <activity
-            android:name=".ui.users.admin.services.services_form.ServiceFormActivity"
+            android:name=".ui.services.services_form.ServiceFormActivity"
             android:exported="false"
             android:label="@string/title_activity_add_service"
             android:theme="@style/Theme.DentalRecordApp.NoActionBar"
@@ -43,7 +52,7 @@
             android:label="@string/title_activity_register"
             android:theme="@style/Theme.DentalRecordApp.NoActionBar" />
         <activity
-            android:name=".ui.users.admin.patients.view_patient.PatientActivity"
+            android:name=".ui.patients.view_patient.PatientActivity"
             android:exported="false"
             android:label="@string/title_activity_patient"
             android:screenOrientation="portrait"
@@ -58,25 +67,25 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.users.admin.patients.patient_form.AddPatientActivity"
+            android:name=".ui.patients.patient_form.AddPatientActivity"
             android:exported="false"
             android:label="@string/title_activity_add_patient"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.DentalRecordApp.NoActionBar"
             android:windowSoftInputMode="stateVisible|adjustPan" />
         <activity
-            android:name=".ui.users.admin.employees.employee_form.EmployeeFormActivity"
+            android:name=".ui.employees.employee_form.EmployeeFormActivity"
             android:exported="false"
             android:label="New Employee"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.DentalRecordApp.NoActionBar"
             android:windowSoftInputMode="stateVisible|adjustPan" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" >
+            android:theme="@style/Theme.DentalRecordApp.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -88,7 +97,7 @@
             android:exported="false"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
+            android:theme="@style/Theme.DentalRecordApp.NoActionBar" />
 
         <meta-data
             android:name="preloaded_fonts"

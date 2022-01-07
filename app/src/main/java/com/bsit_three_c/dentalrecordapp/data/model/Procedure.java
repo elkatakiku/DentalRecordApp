@@ -1,6 +1,7 @@
 package com.bsit_three_c.dentalrecordapp.data.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Procedure {
 
@@ -10,31 +11,31 @@ public class Procedure {
     private double dentalTotalAmount;
     private boolean isDownpayment;
     private double dentalBalance;
-    private ArrayList<Integer> service;
+    private List<String> serviceIds;
 
-    private ArrayList<String> paymentKeys;
+    private List<String> paymentKeys;
 
     public Procedure() { }
 
     //  This constructor is used in getting dental operations
     public Procedure(String uid,
-                     ArrayList<Integer> service,
+                     List<String> serviceIds,
                      String dentalDesc,
                      String dentalDate,
                      double dentalTotalAmount,
                      boolean isDownpayment,
                      double dentalBalance,
-                     ArrayList<String> paymentKeys) {
+                     List<String> paymentKeys) {
 
-        this(uid, service, dentalDesc, dentalDate, dentalTotalAmount, isDownpayment, dentalBalance);
+        this(uid, serviceIds, dentalDesc, dentalDate, dentalTotalAmount, isDownpayment, dentalBalance);
         this.paymentKeys = paymentKeys;
     }
 
     //  This constructor is used in creating new dental operations
-    public Procedure(String uid, ArrayList<Integer> service, String dentalDesc, String dentalDate, double dentalTotalAmount,
+    public Procedure(String uid, List<String> serviceIds, String dentalDesc, String dentalDate, double dentalTotalAmount,
                      boolean isDownpayment, double dentalBalance) {
         this.uid = uid;
-        this.service = service;
+        this.serviceIds = serviceIds;
         this.dentalDesc = dentalDesc;
         this.dentalDate = dentalDate;
         this.dentalTotalAmount = dentalTotalAmount;
@@ -90,16 +91,16 @@ public class Procedure {
         this.dentalBalance = dentalBalance;
     }
 
-    public ArrayList<String> getPaymentKeys() {
+    public List<String> getPaymentKeys() {
         return paymentKeys;
     }
 
-    public ArrayList<Integer> getService() {
-        return service;
+    public List<String> getServiceIds() {
+        return serviceIds;
     }
 
-    public void setService(ArrayList<Integer> service) {
-        this.service = service;
+    public void setServiceIds(ArrayList<String> serviceIds) {
+        this.serviceIds = serviceIds;
     }
 
     public void setPaymentKeys(ArrayList<String> paymentKeys) {

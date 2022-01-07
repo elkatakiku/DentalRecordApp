@@ -4,9 +4,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,22 +21,23 @@ import com.bsit_three_c.dentalrecordapp.data.model.Person;
 import com.bsit_three_c.dentalrecordapp.data.repository.EmployeeRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
 import com.bsit_three_c.dentalrecordapp.data.repository.PatientRepository;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.employees.employee_form.EmployeeFormActivity;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.patient_form.AddPatientActivity;
+import com.bsit_three_c.dentalrecordapp.ui.employees.employee_form.EmployeeFormActivity;
+import com.bsit_three_c.dentalrecordapp.ui.patients.patient_form.AddPatientActivity;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.DateUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     private static final String TAG = ItemAdapter.class.getSimpleName();
 
     public static final int TYPE_PATIENT = 0x001ED6ED;
     public static final int TYPE_EMPLOYEE = 0x001ED6EE;
 
-    ArrayList<Person> personArrayList;
+    private List<Person> personList;
     private final Context context;
     private final int type;
 
@@ -43,22 +47,28 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ItemViewHolder.ItemOnClickListener mItemOnClickListener;
     private AlertDialog alertDialog;
 
+    private List<Person> personListFiltered;
+
+    private String title;
+
     public ItemAdapter(Context context, int isPatient) {
         this.context = context;
-        this.personArrayList = new ArrayList<>();
+        this.personList = new ArrayList<>();
         this.type = isPatient;
 
         this.patientRepository = PatientRepository.getInstance();
         this.employeeRepository = EmployeeRepository.getInstance();
+
+        this.personListFiltered =  new ArrayList<>();
     }
 
-    public void setItems(ArrayList<Person> list) {
-        personArrayList.clear();
-        personArrayList.addAll(list);
+    public void setItems(List<Person> list) {
+        personList.clear();
+        personList.addAll(list);
     }
 
     public void addItem(Person person) {
-        personArrayList.add(person);
+        personList.add(person);
     }
 
     @NonNull
@@ -68,11 +78,10 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return new ItemViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
-        Person person = personArrayList.get(position);
+        Person person = personList.get(position);
 
         initializeView(itemViewHolder, person);
 
@@ -81,8 +90,8 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
             builder
-                    .setTitle(R.string.delete_title)
-                    .setMessage(context.getString(R.string.delete_message) + " " + person.getLastname())
+                    .setTitle(context.getString(R.string.delete_title, title))
+                    .setMessage(context.getString(R.string.delete_message) + " " + title.toLowerCase() + ": " + person.getLastname() + "?")
                     .setPositiveButton("Yes", (dialog, which) -> {
                         switch (type) {
                             case TYPE_PATIENT:
@@ -103,7 +112,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             switch (type) {
                 case TYPE_PATIENT:
                     context.startActivity(new Intent(context, AddPatientActivity.class)
-                            .putExtra(context.getString(R.string.PATIENT), personArrayList.get(holder.getAdapterPosition())));
+                            .putExtra(context.getString(R.string.PATIENT), personList.get(holder.getAdapterPosition())));
                     break;
 
                 case TYPE_EMPLOYEE:
@@ -111,7 +120,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             new Intent(context, EmployeeFormActivity.class)
                             .putExtra(
                                     context.getString(R.string.EMPLOYEE),
-                                    personArrayList.get(holder.getAdapterPosition()))
+                                    personList.get(holder.getAdapterPosition()))
                     );
                     break;
             }
@@ -119,32 +128,18 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         // Sets item on click listener
         itemViewHolder.itemView.setOnClickListener(v -> {
-            mItemOnClickListener.onItemClick(personArrayList.get(holder.getAdapterPosition()));
+            mItemOnClickListener.onItemClick(personList.get(holder.getAdapterPosition()));
         });
 
     }
 
     private void initializeView(ItemViewHolder itemViewHolder, Person person) {
 
-        String name = person.getLastname() + ", " + person.getFirstname();
-
-        //  Adds middle initial to the name.
-        if (!Checker.isNotAvailable(person.getMiddleInitial())) {
-            name += " " + person.getMiddleInitial() + '.';
-        }
-
-        //  Adds suffix to the name.
-        if (Checker.isDataAvailable(person.getSuffix()) ) {
-            if (!person.getSuffix().contains(".")) {    //  Checks if the suffix already contained period.
-                person.setSuffix(person.getSuffix() + '.');
-            }
-            name += " " + person.getSuffix();
-        }
-
-        itemViewHolder.name.setText(name);
+        itemViewHolder.name.setText(person.getFullName());
 
         switch (type) {
             case TYPE_PATIENT:
+                title = "Patient";
                 itemViewHolder.imageView.setVisibility(View.GONE);
 
                 Patient patient = (Patient) person;
@@ -157,13 +152,14 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 break;
 
             case TYPE_EMPLOYEE:
+                title = "Employee";
                 itemViewHolder.imageView.setVisibility(View.VISIBLE);
 
                 Employee employee = (Employee) person;
 
                 Glide
                         .with(context)
-                        .load(Uri.parse(employee.getDisplayImage()))
+                        .load(Checker.isDataAvailable(employee.getDisplayImage()) ? Uri.parse(employee.getDisplayImage()) : R.drawable.ic_baseline_person_24)
                         .circleCrop()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(itemViewHolder.imageView);
@@ -179,14 +175,82 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return personArrayList.size();
+        return personList.size();
+    }
+
+    public List<Person> getPersonList() {
+        return personList;
     }
 
     public void clearAll() {
-        personArrayList.clear();
+        personList.clear();
     }
 
     public void setmItemOnClickListener(ItemViewHolder.ItemOnClickListener mItemOnClickListener) {
         this.mItemOnClickListener = mItemOnClickListener;
     }
+
+    private List<Person> origList;
+
+    public void initializeOrigList() {
+        this.origList = personList;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                Log.d(TAG, "performFiltering: perform filtering");
+                String charString = charSequence.toString();
+                Log.d(TAG, "performFiltering: looking for string: " + charString);
+
+                if (charString.isEmpty()) {
+                    Log.d(TAG, "performFiltering: string is empty");
+                    personListFiltered = origList;
+                } else {
+                    Log.d(TAG, "performFiltering: string is not empty");
+                    List<Person> filteredList = new ArrayList<>();
+                    for (Person row : origList) {
+                        Log.d(TAG, "performFiltering: iterating through list");
+                        Log.d(TAG, "performFiltering: person: " + row);
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        Log.d(TAG, "performFiltering: has string in name: " + row.getFullName().toLowerCase().contains(charString.toLowerCase()));
+                        Log.d(TAG, "performFiltering: has string in number: " + row.getContactNumber().contains(charSequence));
+                        if (row.getFullName().toLowerCase().contains(charString.toLowerCase()) ||
+                                row.getContactNumber().contains(charSequence)) {
+                            Log.d(TAG, "performFiltering: adding person to filtered list");
+                            filteredList.add(row);
+                        }
+                    }
+
+                    Log.d(TAG, "performFiltering: initializing filtered list");
+                    Log.d(TAG, "performFiltering: filtered list: " + filteredList);
+                    personListFiltered = filteredList;
+                    Log.d(TAG, "performFiltering: field filtered list: " + personListFiltered);
+                }
+
+                Log.d(TAG, "performFiltering: creating filter results");
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = personListFiltered;
+                Log.d(TAG, "performFiltering: results value: " + filterResults.values);
+                Log.d(TAG, "performFiltering: returning results");
+                return filterResults;
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                Log.d(TAG, "publishResults: publishing results");
+                Log.d(TAG, "publishResults: results: " + filterResults);
+                personList = (List<Person>) filterResults.values;
+                Log.d(TAG, "publishResults: setting list to filtered list");
+                Log.d(TAG, "publishResults: updated list: " + personList);
+                notifyDataSetChanged();
+            }
+        };
+    }
+
+//    public static void set
 }

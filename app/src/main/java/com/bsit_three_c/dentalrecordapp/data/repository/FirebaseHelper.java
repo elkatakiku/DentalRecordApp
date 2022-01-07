@@ -25,6 +25,7 @@ public class FirebaseHelper {
     public static final String EMERGENCY_CONTACT_REFERENCE = "emergency_contacts";
     public static final String CLIENTS_REFERENCE = "clients";
     public static final String ACCOUNTS_REFERENCE = "accounts";
+    public static final String DENTAL_CHART_REFERENCE = "dental_chart";
 
     public static final String PATIENT_UID = "patient_uid";
     public static final String DENTAL_PROCEDURES = "dentalProcedures";
@@ -42,13 +43,24 @@ public class FirebaseHelper {
     public static final String FIREBASE_STORAGE_URL = "gs://dental-record-app.appspot.com";
     public static final String SERVICES_DISPLAY_IMAGE_LOCATION = "services_display_image/";
     public static final String EMPLOYEE_DISPLAY_IMAGE_LOCATION = "employee_display_image/";
+    public static final String DENTAL_CHART_IMAGE_LOCATION = "dental_chart_image/";
 
     public static final String IMAGE_EXTENSION = ".png";
 
 
     public static class CountChildren implements ValueEventListener {
 
+        private final MutableLiveData<Long> counter;
+
+        public CountChildren(MutableLiveData<Long> counter) {
+            this.counter = counter;
+        }
+
         private final MutableLiveData<Long> count = new MutableLiveData<>(0L);
+
+        public CountChildren() {
+            this.counter = count;
+        }
 
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {

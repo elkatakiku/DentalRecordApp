@@ -10,7 +10,6 @@ public class LoggedInUser implements Parcelable {
 
     private final Person person;
     private final Account account;
-    private final int type;
 //    private final String userId;
 //    private final String displayName;
 //    private final String email;
@@ -23,10 +22,9 @@ public class LoggedInUser implements Parcelable {
 //        this.type = type;
 //    }
 
-    public LoggedInUser(Person person, Account account, int type) {
+    public LoggedInUser(Person person, Account account) {
         this.person = person;
         this.account = account;
-        this.type = type;
 //        this.userId = userId;
 //        this.displayName = displayName;
 //        this.email = email;
@@ -36,7 +34,6 @@ public class LoggedInUser implements Parcelable {
     protected LoggedInUser(Parcel in) {
         person = in.readParcelable(Person.class.getClassLoader());
         account = in.readParcelable(Account.class.getClassLoader());
-        type = in.readInt();
     }
 
     public static final Creator<LoggedInUser> CREATOR = new Creator<LoggedInUser>() {
@@ -73,7 +70,7 @@ public class LoggedInUser implements Parcelable {
 
     //  Error here
     public int getType() {
-        return type;
+        return account.getUserType();
     }
 
 //    public void logout() {
@@ -98,7 +95,6 @@ public class LoggedInUser implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(person, flags);
         dest.writeParcelable(account, flags);
-        dest.writeInt(type);
     }
 
     @Override
@@ -106,7 +102,6 @@ public class LoggedInUser implements Parcelable {
         return "\nLoggedInUser{" +
                 "\nperson=" + person +
                 "\naccount=" + account +
-                "\ntype=" + type +
                 "\n}";
     }
 }

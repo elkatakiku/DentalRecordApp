@@ -9,6 +9,7 @@ import android.os.Parcelable;
 import android.widget.ImageView;
 
 import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -48,13 +49,13 @@ public class Employee extends Person implements Parcelable {
 
         super(
                 uid,
-                UIUtil.capitalize(firstname),
-                UIUtil.capitalize(lastname),
-                UIUtil.capitalize(middleInitial),
-                UIUtil.capitalize(suffix),
+                firstname,
+                lastname,
+                middleInitial,
+                suffix,
                 dateOfBirth,
                 phoneNumber,
-                UIUtil.capitalize(address1stPart),
+                address1stPart,
                 civilStatus,
                 age,
                 lastUpdated,
@@ -229,7 +230,11 @@ public class Employee extends Person implements Parcelable {
     }
 
     public String getJobTitle(Resources resources){
-        return resources.getStringArray(R.array.job_titles)[jobTitle];
+        if (Checker.isNotDefault(civilStatus)) {
+            return resources.getStringArray(R.array.job_titles)[jobTitle];
+        }
+
+        return Checker.NOT_AVAILABLE;
     }
 
     public void setJobTitle(int jobTitle) {

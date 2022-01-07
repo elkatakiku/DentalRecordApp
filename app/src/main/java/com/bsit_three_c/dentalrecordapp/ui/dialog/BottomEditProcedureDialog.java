@@ -1,6 +1,7 @@
 package com.bsit_three_c.dentalrecordapp.ui.dialog;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -15,13 +16,14 @@ import com.bsit_three_c.dentalrecordapp.data.model.DentalServiceOption;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProcedureRepository;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.view_patient.PatientInfoFragment;
+import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.DateUtil;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class BottomEditProcedureDialog {
     private static final String TAG = BottomEditProcedureDialog.class.getSimpleName();
@@ -29,6 +31,7 @@ public class BottomEditProcedureDialog {
     private final LayoutInflater layoutInflater;
     private final Context context;
     private BottomSheetDialog editOperationDialog;
+    private final List<DentalServiceOption> dentalServiceOptions;
 
     private final View view;
 
@@ -38,13 +41,19 @@ public class BottomEditProcedureDialog {
     private Patient patient;
     private Procedure procedure;
 
-    public BottomEditProcedureDialog(LayoutInflater layoutInflater, Context context, PatientInfoFragment lifecycleOwner) {
+    private List<DentalServiceOption> serviceOptions = new ArrayList<>();
+
+    public BottomEditProcedureDialog(LayoutInflater layoutInflater, Context context,
+                                     PatientInfoFragment lifecycleOwner, List<DentalServiceOption> dentalServiceOptions) {
         this.layoutInflater = layoutInflater;
         this.context = context;
         this.lifecycleOwner = lifecycleOwner;
+        this.dentalServiceOptions = dentalServiceOptions;
 
         this.view = layoutInflater.inflate(R.layout.bottom_procedure_edit, null);
         this.procedureRepository = ProcedureRepository.getInstance();
+
+        serviceOptions.add(new DentalServiceOption(ServiceOptionsAdapter.DEFAULT_OPTION, ServiceOptionsAdapter.DEFAULT_OPTION, false));
     }
 
     public void createOperationDialog(Procedure procedure){
@@ -62,26 +71,22 @@ public class BottomEditProcedureDialog {
         String oldAmount = String.valueOf(procedure.getDentalTotalAmount());
 
         viewHolder.date.updateDate(year, month, day);
-//        viewHolder.service.setSelection(procedure.getService());
-        initializeServices(viewHolder, procedure.getService());
+        initializeServices(viewHolder, procedure.getServiceIds());
         viewHolder.description.setText(procedure.getDentalDesc());
         viewHolder.amount.setText(oldAmount);
 
-        viewHolder.btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String newDate = DateUtil.getDate(DateUtil.getDate(viewHolder.date));
-                double newAmount = UIUtil.convertToDouble(viewHolder.amount.getText().toString());
+        viewHolder.btnConfirm.setOnClickListener(v -> {
+            String newDate = DateUtil.getDate(DateUtil.getDate(viewHolder.date));
+            double newAmount = UIUtil.convertToDouble(viewHolder.amount.getText().toString());
 
 
-                procedure.setDentalDate(newDate);
-                procedure.setService(UIUtil.getServices(serviceOptions));
-                procedure.setDentalDesc(viewHolder.description.getText().toString());
-                procedure.setDentalTotalAmount(newAmount);
+            procedure.setDentalDate(newDate);
+            procedure.setServiceIds(UIUtil.getServices(serviceOptions));
+            procedure.setDentalDesc(viewHolder.description.getText().toString());
+            procedure.setDentalTotalAmount(newAmount);
 
-                procedureRepository.updateProcedure(procedure);
-                editOperationDialog.dismiss();
-            }
+            procedureRepository.updateProcedure(procedure);
+            editOperationDialog.dismiss();
         });
 
         viewHolder.colse.setOnClickListener(v -> editOperationDialog.dismiss());
@@ -89,29 +94,53 @@ public class BottomEditProcedureDialog {
         editOperationDialog.setContentView(view);
     }
 
-    private ArrayList<DentalServiceOption> serviceOptions = new ArrayList<>();
+    private void initializeServices(ViewHolder viewHolder, List<String> services) {
+        Log.d(TAG, "initializeServices: services: " + services);
 
-    private void initializeServices(ViewHolder viewHolder, ArrayList<Integer> servicesIndex) {
-        final String[] servicesArray = lifecycleOwner.getResources().getStringArray(R.array.services_array);
+        for (int i = 0; i < dentalServiceOptions.size(); i++) {
 
-        for (int i = 0; i < servicesArray.length; i++) {
-            serviceOptions.add(new DentalServiceOption(servicesArray[i], i, false));
+            serviceOptions.add(new DentalServiceOption(
+                    dentalServiceOptions.get(i).getServiceUID(),
+                    dentalServiceOptions.get(i).getTitle(),
+                    false)
+            );
         }
 
-        for (Integer index : servicesIndex) {
-            serviceOptions.get(index).setSelected(true);
+        Log.d(TAG, "initializeServices: service options: " + serviceOptions);
+
+        for (String serviceUid : services) {
+            DentalServiceOption currentService = getSelectedServices(serviceOptions, serviceUid);
+            if (currentService != null) {
+                currentService.setSelected(true);
+            }
         }
 
-        ServiceOptionsAdapter serviceOptionsAdapter = new ServiceOptionsAdapter(lifecycleOwner.getContext(), 0, serviceOptions,
-                servicesArray, viewHolder.service);
+        Log.d(TAG, "initializeServices: services presented: " + serviceOptions);
+
+        ServiceOptionsAdapter serviceOptionsAdapter = new ServiceOptionsAdapter(lifecycleOwner.getContext(),
+                0, serviceOptions, viewHolder.service);
+        serviceOptionsAdapter.initializeSpinner();
         viewHolder.service.setAdapter(serviceOptionsAdapter);
+    }
+
+    private DentalServiceOption getSelectedServices(List<DentalServiceOption> dentalServiceOptions, String serviceUid) {
+        DentalServiceOption service = null;
+
+        for (DentalServiceOption option : dentalServiceOptions) {
+            if (option.getServiceUID().equals(serviceUid)) {
+                service = option;
+                break;
+            }
+        }
+
+        return service;
     }
 
     private void dialogDismissListener(BottomSheetDialog editOperationDialog) {
         editOperationDialog.setOnDismissListener(dialog -> {
             lifecycleOwner.loadProcedures();
 
-            BottomOperationsDialog operationsDialog = new BottomOperationsDialog(layoutInflater, context, lifecycleOwner);
+            BottomOperationsDialog operationsDialog = new BottomOperationsDialog(layoutInflater, context, lifecycleOwner, dentalServiceOptions);
             operationsDialog.setPatient(patient);
             operationsDialog.createOperationDialog(procedure);
             operationsDialog.showDialog();

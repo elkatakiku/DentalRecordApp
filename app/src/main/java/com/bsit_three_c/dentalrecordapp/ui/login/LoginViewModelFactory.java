@@ -4,11 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bsit_three_c.dentalrecordapp.MainViewModel;
+import com.bsit_three_c.dentalrecordapp.ui.main.MainViewModel;
 import com.bsit_three_c.dentalrecordapp.data.login.LoginDataSource;
 import com.bsit_three_c.dentalrecordapp.data.login.LoginRepository;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.MainAdminViewModel;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.menu.MenuAdminViewModel;
+import com.bsit_three_c.dentalrecordapp.ui.main.MainAdminViewModel;
+import com.bsit_three_c.dentalrecordapp.ui.menu.MenuAdminViewModel;
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

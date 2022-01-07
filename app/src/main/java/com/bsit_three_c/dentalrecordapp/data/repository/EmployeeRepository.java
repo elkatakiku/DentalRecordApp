@@ -2,7 +2,6 @@ package com.bsit_three_c.dentalrecordapp.data.repository;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -14,20 +13,18 @@ import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.EmergencyContact;
 import com.bsit_three_c.dentalrecordapp.data.model.Employee;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
-import com.bsit_three_c.dentalrecordapp.data.model.Person;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,12 +40,12 @@ public class EmployeeRepository {
     private final FirebaseStorage firebaseStorage;
     private final StorageReference storageReference;
 
+    private static final String LASTNAME_PATH = "lastname";
+    private static final String ACCOUNT_UID_PATH = "accountUid";
+
     private static volatile EmployeeRepository instance;
 
-    private ArrayList<Person> personArrayList;
-    private boolean isEmployeesLoaded = false;
     private final MutableLiveData<Boolean> isGettingEmployeesDone = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> isDoneAddingEmployee = new MutableLiveData<>();
     private final MutableLiveData<Employee> mEmployee = new MutableLiveData<>();
     private final MutableLiveData<Account> mAccount = new MutableLiveData<>();
     private final MutableLiveData<EmergencyContact> mEmergencyContact = new MutableLiveData<>();
@@ -84,32 +81,14 @@ public class EmployeeRepository {
         databaseReferenceEmergencyContact.child(emergencyContact.getUid()).setValue(emergencyContact);
     }
 
-
-    public void addEmployee(Bundle employeeBundle) {
-        isDoneAddingEmployee.setValue(false);
-//        isUploadDone.setValue(false);
-
-        Employee employee = employeeBundle.getParcelable(LocalStorage.EMPLOYEE_KEY);
-
-        String employeeUid = getNewUid();
-        String child = employeeUid + FirebaseHelper.IMAGE_EXTENSION;
+    public Task<Uri> uploadDisplayImage(Employee employee, byte[] imageByte) {
+        String child = employee.getUid() + FirebaseHelper.IMAGE_EXTENSION;
 
         StorageMetadata metadata = new StorageMetadata.Builder()
                 .setCustomMetadata("caption", employee.getLastname() + " display image")
                 .build();
 
-        byte[] data = employeeBundle.getByteArray(LocalStorage.IMAGE_BYTE_KEY);
-        UploadTask uploadTask = storageReference.child(child).putBytes(data, metadata);
-
-        uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                Log.d(TAG, "onComplete: done uploading");
-//                isUploadDone.setValue(true);
-            }
-        });
-
-        Task<Uri> getDownloadUriTask = uploadTask.continueWithTask(task -> {
+        return storageReference.child(child).putBytes(imageByte, metadata).continueWithTask(task -> {
             if (!task.isSuccessful()) {
                 throw Objects.requireNonNull(task.getException());
             }
@@ -117,50 +96,27 @@ public class EmployeeRepository {
             Log.d(TAG, "then: got URI");
             return storageReference.child(child).getDownloadUrl();
         });
-
-        getDownloadUriTask.addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                String emergencyContactUid = getNewUid();
-                String accountUid = getNewUid();
-
-                LoggedInUser loggedInAccount = employeeBundle.getParcelable(Account.LOGGED_ID);
-                Account account = employeeBundle.getParcelable(Account.ACCOUNT_KEY);
-                if (account != null && loggedInAccount != null) {
-                    account.setUid(accountUid);
-                    AccountRepository.getInstance().createNewAccount(loggedInAccount, account).addOnSuccessListener(authResult -> {
-
-                        Log.d(TAG, "onSuccess: called");
-                        employee.setUid(employeeUid);
-                        employee.setDisplayImage(task.getResult().toString());
-                        employee.setEmergencyContactUid(emergencyContactUid);
-                        employee.setAccountUid(accountUid);
-                        addEmployee(employee);
-
-                        EmergencyContact emergencyContact = employeeBundle.getParcelable(EmergencyContact.EMERGENCY_CONTACT_KEY);
-                        if (emergencyContact != null) {
-                            emergencyContact.setUid(emergencyContactUid);
-                            addEmergencyContact(emergencyContact);
-
-                            isDoneAddingEmployee.setValue(true);
-                        }
-                    });
-                }
-            }
-        });
-    }
-
-    public LiveData<Boolean> getIsDoneAddingEmployee() {
-        return isDoneAddingEmployee;
     }
 
     //  Retrieving employees from firebase
-
     public void setAdapter(ItemAdapter adapter) {
         this.adapter = adapter;
     }
 
     public void loadEmployee(String employeeUid) {
         databaseReferenceEmployee.child(employeeUid).addValueEventListener(employeeListener);
+    }
+
+    public DatabaseReference getEmployeePath(String employeeUid) {
+        return databaseReferenceEmployee.child(employeeUid);
+    }
+
+    public Query getEmployeePathThroughAccount(String accountUid) {
+        return databaseReferenceEmployee.orderByChild(ACCOUNT_UID_PATH).equalTo(accountUid);
+    }
+
+    public DatabaseReference getContactPath(String emergencyContactUid) {
+        return databaseReferenceEmergencyContact.child(emergencyContactUid);
     }
 
     public LiveData<Employee> getmEmployee() {
@@ -180,18 +136,24 @@ public class EmployeeRepository {
         databaseReferenceEmployee.orderByChild("lastname").addValueEventListener(employeesListener);
     }
 
-    private boolean isDuplicate(Employee employee) {
-        return personArrayList.contains(employee);
+    public Query getEmployeesPath() {
+        isGettingEmployeesDone.setValue(false);
+        return databaseReferenceEmployee.orderByChild("lastname");
     }
 
-    private void initialize(Employee employee) {
+    public static void initialize(Employee employee) {
 
-        Log.d(TAG, "initialize: initializing patient: " + employee);
+        Log.d(TAG, "initialize: initializing employee: " + employee);
 
-        final String notAvailable = "N/A";
+        final String notAvailable = Checker.NOT_AVAILABLE;
 
-        if (!Checker.isDataAvailable(employee.getFirstname()))
+        if (!Checker.isDataAvailable(employee.getDisplayImage())) {
+            employee.setDisplayImage(notAvailable);
+        }
+
+        if (!Checker.isDataAvailable(employee.getFirstname())) {
             employee.setFirstname(notAvailable);
+        }
 
         if (!Checker.isDataAvailable(employee.getLastname()))
             employee.setLastname(notAvailable);
@@ -255,7 +217,6 @@ public class EmployeeRepository {
         });
     }
 
-
     private final FirebaseHelper.CountChildren countEmployees = new FirebaseHelper.CountChildren();
 
     public void countEmployees() {
@@ -269,7 +230,7 @@ public class EmployeeRepository {
     //  Listeners
     private String contactUid = "";
 
-    //  Initialize the LiveDatas
+    //  Initialize the LiveData
     private final ValueEventListener employeeListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -321,12 +282,12 @@ public class EmployeeRepository {
                 adapter.clearAll();
             }
 
-            EmployeeRepository.this.personArrayList = new ArrayList<>();
             for (DataSnapshot data : snapshot.getChildren()) {
                 Employee employee = data.getValue(Employee.class);
 
-                if (employee != null && !isDuplicate(employee)) {
+                if (employee != null) {
 
+                    Log.d(TAG, "onDataChange: data key: " + data.getKey());
                     employee.setUid(data.getKey());
                     initialize(employee);
                     adapter.addItem(employee);
@@ -347,6 +308,10 @@ public class EmployeeRepository {
 
         }
     };
+
+    public ValueEventListener getEmployeesListener() {
+        return employeesListener;
+    }
 
     public LiveData<Boolean> getIsGettingEmployeesDone() {
         return isGettingEmployeesDone;

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/viewServiceFragment"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.services.view_service.ViewServiceFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.services.view_service.ViewServiceFragment"
         android:label="Service"
         tools:layout="@layout/fragment_admin_view_service">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/editServiceFragment"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.users.admin.services.services_form.ServiceFormFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.services.services_form.ServiceFormFragment"
         android:label="Edit Service"
         tools:layout="@layout/fragment_form_service">
 

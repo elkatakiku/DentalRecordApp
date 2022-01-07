@@ -1,8 +1,6 @@
 package com.bsit_three_c.dentalrecordapp.data.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalService;
-import com.bsit_three_c.dentalrecordapp.data.repository.ServiceRepository;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 import java.util.ArrayList;
 
@@ -25,29 +21,32 @@ public class ServiceDisplaysAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     ArrayList<DentalService> dentalServices;
     private final Context context;
 
-    private final ServiceRepository serviceRepository;
     private ServicesViewHolder.ItemOnClickListener mItemOnClickListener;
 
-    private final Activity activity;
+    private final boolean isMenu;
 
-    public ServiceDisplaysAdapter(Context context) {
-        this(context, null);
-    }
-
-    public ServiceDisplaysAdapter(Context context, Activity activity) {
+    public ServiceDisplaysAdapter(Context context, boolean isMenu) {
         this.context = context;
-
-        this.serviceRepository = ServiceRepository.getInstance();
+        this.isMenu = isMenu;
         this.dentalServices = new ArrayList<>();
-        this.activity = activity;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.d(TAG, "onCreateViewHolder: creating view holder");
-        View view = LayoutInflater.from(context).inflate(R.layout.item_admin_services, parent, false);
-        return new ServicesViewHolder(view);
+        View view;
+
+        if (isMenu) {
+            view = LayoutInflater.from(context).inflate(R.layout.item_service_display_card, parent, false);
+        }
+        else {
+            view = LayoutInflater.from(context).inflate(R.layout.item_admin_services, parent, false);
+        }
+
+        Log.d(TAG, "onCreateViewHolder: view: " + view);
+
+        return new ServicesViewHolder(view, isMenu);
     }
 
     @Override
@@ -60,23 +59,17 @@ public class ServiceDisplaysAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         Log.d(TAG, "onBindViewHolder: current service: " + service);
 
-        Glide
-                .with(context)
-                .load(Uri.parse(service.getDisplayImage()))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(servicesViewHolder.display);
+        UIUtil.loadDisplayImage(
+                context,
+                servicesViewHolder.display,
+                service.getDisplayImage(),
+                R.drawable.ic_baseline_image_24
+        );
 
         servicesViewHolder.name.setText(service.getTitle());
-//        servicesViewHolder.display.setImageURI(Uri.parse(service.getDisplayImage()));
 
-        servicesViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mItemOnClickListener.onItemClick(dentalServices.get(holder.getAdapterPosition()));
-            }
-        });
-
-        Log.d(TAG, "onBindViewHolder: uri: " + Uri.parse(service.getDisplayImage()));
+        servicesViewHolder.itemView.setOnClickListener(v ->
+                mItemOnClickListener.onItemClick(dentalServices.get(holder.getAdapterPosition())));
     }
 
     @Override

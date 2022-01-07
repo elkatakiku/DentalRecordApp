@@ -6,9 +6,11 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +21,23 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
+
 import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.data.adapter.ServiceOptionsAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalServiceOption;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.MainAdminActivity;
+import com.bsit_three_c.dentalrecordapp.ui.main.MainAdminActivity;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UIUtil {
 
@@ -73,6 +85,18 @@ public class UIUtil {
         }
     }
 
+    public static void setMargins (View v, int l, int t, int r, int b) {
+        if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            p.setMargins(l, t, r, b);
+            v.requestLayout();
+        }
+    }
+
+    public static void setMargins (View v, int m) {
+        setMargins(v, m, m, m, m);
+    }
+
     public static String getPaymentStatus(boolean isDownpayment) {
         return isDownpayment ? "Incomplete" : "Fully Paid";
     }
@@ -90,88 +114,61 @@ public class UIUtil {
         return balance <= 0d ? ColorStateList.valueOf(0xFF01bb64) : ColorStateList.valueOf(0xFFFF5252);
     }
 
-    public static ArrayList<Integer> getServices(ArrayList<DentalServiceOption> serviceOptions) {
-        ArrayList<Integer> selected = new ArrayList<>();
+    public static ArrayList<String> getServices(List<DentalServiceOption> serviceOptions) {
+        ArrayList<String> selected = new ArrayList<>();
 
         for (DentalServiceOption service : serviceOptions) {
-            if (service.isSelected()) selected.add(service.getServicePosition());
+            if (service.isSelected()) selected.add(service.getServiceUID());
         }
 
         Log.d(TAG, "getServices: service options size: " + selected.size());
 
         if (selected.size() == 0) {
             Log.e(TAG, "getServices: no services selected");
-            selected.add(0);
+            selected.add(ServiceOptionsAdapter.DEFAULT_OPTION);
         }
 
         return selected;
     }
 
-    public static String getService(Resources resources, int position) {
-        return resources.getStringArray(R.array.services_array)[position];
+    public static boolean isServiceDefault(List<String> dentalServiceOptions) {
+        return ServiceOptionsAdapter.DEFAULT_OPTION.equals(dentalServiceOptions.get(0));
     }
 
-    public static String getServiceTitle(Resources resources, ArrayList<Integer> servicesIndex) {
-        StringBuilder services = new StringBuilder();
+    public static String getServiceTitle(List<DentalServiceOption> dentalServiceOptions, String serviceUid) {
+        String title = null;
 
-        for (Integer serviceIndex : servicesIndex) {
-            services.append(getService(resources, serviceIndex)).append(" | ");
+        for (DentalServiceOption service : dentalServiceOptions) {
+            if (service.getServiceUID().equals(serviceUid)){
+                title = service.getTitle();
+                break;
+            }
         }
 
+        return title;
+    }
+
+    public static String getServiceTitle(List<String> servicesProcedure, List<DentalServiceOption> dentalServiceOptions) {
+        Log.d(TAG, "getServiceTitle: services prrocedure: " + servicesProcedure);
+
+        if (servicesProcedure == null || servicesProcedure.size() == 0) {
+            return "Procedure";
+        }
+
+        StringBuilder services = new StringBuilder();
+
+        for (String service : servicesProcedure) {
+            String title = getServiceTitle(dentalServiceOptions, service);
+            if (title != null) {
+                services.append(title).append(" | ");
+            }
+        }
+
+        Log.d(TAG, "getServiceTitle: capacity: " + services.capacity());
+        Log.d(TAG, "getServiceTitle: last index: " + services.lastIndexOf(" | "));
         services.delete(services.lastIndexOf(" | "), services.capacity());
 
         return services.toString();
-    }
-
-    public static String getServiceTitle(String selectedTitles, String selectedTitle, ArrayList<DentalServiceOption> serviceOptions, String defaultTitle, String[] strings) {
-        if (selectedTitles.equals(defaultTitle)) {
-            Log.d(TAG, "getServiceTitle: this is true");
-            return selectedTitle;
-        }
-
-        Log.d(TAG, "getServiceTitle: selected titles: " + selectedTitles);
-        Log.d(TAG, "getServiceTitle: selected title: " + selectedTitle);
-
-        StringBuilder newTitle = new StringBuilder();
-
-        String[] titles = selectedTitles.split(" \\| ");
-        boolean inTitle = false;
-
-        for (String title : titles) {
-            Log.d(TAG, "getServiceTitle: selected title is default: " + selectedTitle.equals(title));
-            if (selectedTitle.equals(title) && !(selectedTitle.equals(strings[0]))) {
-                inTitle = true;
-
-                Log.d(TAG, "getServiceTitle: title: " + title);
-
-                //  This is wrong
-                int titlePos = getPosition(strings, selectedTitle);
-                if (titlePos != -1)
-                    serviceOptions.get(titlePos).setSelected(false);
-                continue;
-            } 
-
-            newTitle.append(title).append(" | ");
-        }
-
-        Log.d(TAG, "getServiceTitle: new title: " + newTitle.toString());
-        Log.d(TAG, "getServiceTitle: new title length: " + newTitle.length());
-
-        if (newTitle.length() == 0) {
-            newTitle.append(strings[0]);
-            serviceOptions.get(0).setSelected(false);
-        }
-        else if (!inTitle) {
-            newTitle.append(selectedTitle);
-        }
-        else {
-            int index = newTitle.lastIndexOf(" | ");
-            newTitle.delete(index, newTitle.capacity());
-        }
-
-        Log.d(TAG, "getServiceTitle: new title: " + newTitle.toString());
-
-        return newTitle.toString();
     }
 
     private static int getPosition(String[] titles, String selectedTitle) {
@@ -223,7 +220,7 @@ public class UIUtil {
 
         if (number.length() == 10) {
             String secondPart = number.substring(3, 6);
-            String lastPart = number.substring(5, 10);
+            String lastPart = number.substring(6, 10);
 
             contactNumber = firstPart + "-" + secondPart + "-" + lastPart;
         }
@@ -238,7 +235,7 @@ public class UIUtil {
     public static String formatMobileNumber(String code, String number) {
         String firstPart = number.substring(0, 3);
         String secondPart = number.substring(3, 6);
-        String lastPart = number.substring(5, 10);
+        String lastPart = number.substring(6, 10);
 
         return "(" + code + ") " + firstPart + "-" + secondPart + "-" + lastPart;
     }
@@ -285,7 +282,7 @@ public class UIUtil {
         ByteArrayOutputStream outputStream;
         if (capture != null) {
             outputStream = new ByteArrayOutputStream();
-            capture.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+            capture.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
         }
         else outputStream = null;
 
@@ -294,6 +291,7 @@ public class UIUtil {
 
     public static Bitmap convertVectorToBitmap(Drawable drawable) {
         try {
+            Log.d(TAG, "convertVectorToBitmap: trying to convert drawable");
             Bitmap bitmap;
 
             bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
@@ -303,10 +301,37 @@ public class UIUtil {
             drawable.draw(canvas);
             return bitmap;
         } catch (OutOfMemoryError e) {
+            Log.d(TAG, "convertVectorToBitmap: error");
             // Handle the error
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static Bitmap getBitmapFromResource(Context context, int path) {
+        final MutableLiveData<Bitmap> result = new MutableLiveData<>();
+        Glide.with(context)
+                .asBitmap()
+                .load(path)
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        result.setValue(resource);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                    }
+                });
+
+        return result.getValue();
+    }
+
+    public static byte[] getByteArray(Bitmap resource) {
+        ByteArrayOutputStream outputStream;
+        outputStream = new ByteArrayOutputStream();
+        resource.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+        return outputStream.toByteArray();
     }
 
     public static Intent redirectUser(Context context, final int type) {
@@ -316,6 +341,7 @@ public class UIUtil {
                 redirectUser = new Intent(context, MainAdminActivity.class);
                 break;
             case Account.TYPE_EMPLOYEE:
+                redirectUser = new Intent(context, MainAdminActivity.class);
                 break;
             case Account.TYPE_PATIENT:
                 break;
@@ -327,8 +353,17 @@ public class UIUtil {
     public static void setText(String data, TextView textView) {
         String notAvailable = "N/A";
 
-        if (Checker.isDataAvailable(data))
-            textView.setText(data);
+        if (Checker.isDataAvailable(data.trim()))
+            textView.setText(data.trim());
+        else
+            textView.setText(notAvailable);
+    }
+
+    public static void setText(int data, TextView textView) {
+        String notAvailable = "N/A";
+
+        if (data >= 0)
+            textView.setText(String.valueOf(data));
         else
             textView.setText(notAvailable);
     }
@@ -337,6 +372,29 @@ public class UIUtil {
         if (Checker.isDataAvailable(data)) {
             textView.setText(data);
         }
+    }
+
+    public static String getPasswordText(String password) {
+        StringBuilder pass = new StringBuilder();
+
+        if (Checker.isDataAvailable(password)) {
+            for (char c : password.toCharArray()) {
+                pass.append('*');
+            }
+        }
+
+        return pass.toString();
+    }
+
+    public static void loadDisplayImage(Context context, ImageView imageView, String stringUri, int drawable) {
+        Glide
+                .with(context)
+                .load(Checker.isDataAvailable(stringUri) ? Uri.parse(stringUri) : drawable)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imageView);
+
+        imageView.setImageTintList(null);
+        imageView.setBackgroundColor(Color.TRANSPARENT);
     }
 
 }

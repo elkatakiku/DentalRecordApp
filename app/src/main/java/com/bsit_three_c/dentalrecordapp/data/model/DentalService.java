@@ -30,8 +30,8 @@ public class DentalService implements Parcelable {
         this.categories = categories;
     }
 
-    public DentalService(String title) {
-        this(null, null, title, null, null);
+    public DentalService(String serviceUID, String title) {
+        this(serviceUID, null, title, null, null);
     }
 
     protected DentalService(Parcel in) {

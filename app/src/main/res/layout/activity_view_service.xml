@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_service_info"
-    tools:context=".ui.users.admin.services.view_service.ViewServiceActivity">
+    tools:context=".ui.services.view_service.ViewServiceActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/service_appbar"

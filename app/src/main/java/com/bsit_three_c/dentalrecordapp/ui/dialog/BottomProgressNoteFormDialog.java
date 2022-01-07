@@ -21,13 +21,14 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.data.model.DentalServiceOption;
 import com.bsit_three_c.dentalrecordapp.data.model.FormState;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.model.ProgressNote;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProcedureRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProgressNoteRepository;
-import com.bsit_three_c.dentalrecordapp.ui.users.admin.patients.view_patient.PatientInfoFragment;
+import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.CustomObserver;
 import com.bsit_three_c.dentalrecordapp.util.DateUtil;
@@ -36,6 +37,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Date;
+import java.util.List;
 
 public class BottomProgressNoteFormDialog {
     private static final String TAG = BottomProgressNoteFormDialog.class.getSimpleName();
@@ -44,6 +46,7 @@ public class BottomProgressNoteFormDialog {
     private final Context context;
     private final View view;
     private final PatientInfoFragment lifecycleOwner;
+    private final List<DentalServiceOption> dentalServiceOptions;
     private BottomSheetDialog paymentDialog;
 
     private final ProgressNoteRepository progressNoteRepository;
@@ -88,19 +91,20 @@ public class BottomProgressNoteFormDialog {
     };
 
     //  Used to create dialog to add payment
-    public BottomProgressNoteFormDialog(LayoutInflater layoutInflater, Context context, PatientInfoFragment lifecycleOwner, boolean isFullyPaid) {
-       this(layoutInflater, context, lifecycleOwner, false, isFullyPaid);
+    public BottomProgressNoteFormDialog(LayoutInflater layoutInflater, Context context, PatientInfoFragment lifecycleOwner, boolean isFullyPaid, List<DentalServiceOption> dentalServiceOptions) {
+       this(layoutInflater, context, lifecycleOwner, dentalServiceOptions, false, isFullyPaid);
     }
 
     //  Used to create dialog to edit payment
     public BottomProgressNoteFormDialog(LayoutInflater layoutInflater, Context context, PatientInfoFragment lifecycleOwner,
-                                        boolean isEditPayment, boolean isFullyPaid) {
+                                        List<DentalServiceOption> dentalServiceOptions, boolean isEditPayment, boolean isFullyPaid) {
 
         this.layoutInflater = layoutInflater;
         this.context = context;
         this.lifecycleOwner = lifecycleOwner;
         this.isEdit = isEditPayment;
         this.isFullyPaid = isFullyPaid;
+        this.dentalServiceOptions = dentalServiceOptions;
 
         this.view = layoutInflater.inflate(R.layout.bottom_progress_note_form, null, false);
         this.progressNoteRepository = ProgressNoteRepository.getInstance();
@@ -172,25 +176,10 @@ public class BottomProgressNoteFormDialog {
 
         viewHolder.amount.addTextChangedListener(textWatcher);
 
-        viewHolder.title.setText(isEdit ? "Edit ProgressNote" : "Add ProgressNote");
+        viewHolder.title.setText(isEdit ? "Edit Progress Note" : "Add Progress Note");
         viewHolder.description.setText(progressNote.getDescription());
         viewHolder.date.updateDate(year, month, day);
         viewHolder.amount.setText(oldAmount);
-
-
-//        mBalanceState.observe(lifecycleOwner.getViewLifecycleOwner(), new Observer<FormState>() {
-//            @Override
-//            public void onChanged(FormState formState) {
-//                if (formState == null) return;
-//                Log.d(TAG, "onChanged: oldAmount: " + oldAmount);
-//                Log.d(TAG, "onChanged: balance: " + BottomProgressNoteFormDialog.this.balance);
-//                if (formState.getMsgError() != null) {
-//                    viewHolder.balance.setText(context.getResources().getString(formState.getMsgError()));
-//                } else {
-//                    viewHolder.balance.setText(String.valueOf(balance));
-//                }
-//            }
-//        });
 
         setObservers(viewHolder);
         setBtnConfirm(viewHolder, progressNote);
@@ -288,7 +277,7 @@ public class BottomProgressNoteFormDialog {
         dialog.setOnDismissListener(dialog1 -> {
             lifecycleOwner.loadProcedures();
 
-            BottomOperationsDialog operationsDialog = new BottomOperationsDialog(layoutInflater, context, lifecycleOwner);
+            BottomOperationsDialog operationsDialog = new BottomOperationsDialog(layoutInflater, context, lifecycleOwner, dentalServiceOptions);
             operationsDialog.setPatient(patient);
             operationsDialog.createOperationDialog(procedure);
             operationsDialog.showDialog();

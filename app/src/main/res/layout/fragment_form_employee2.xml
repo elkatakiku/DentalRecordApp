@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_home_color"
     android:fillViewport="true"
-    tools:context=".ui.users.admin.employees.employee_form.EmployeeFormActivity">
+    tools:context=".ui.employees.employee_form.EmployeeFormActivity">
 
 
     <LinearLayout

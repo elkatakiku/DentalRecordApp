@@ -24,7 +24,7 @@ public class HistoryItemAdapter extends ArrayAdapter {
 
     private final int layoutResource;
     private final LayoutInflater layoutInflater;
-    private List<Procedure> denstalHistory;
+    private final List<Procedure> denstalHistory;
 
     public HistoryItemAdapter(@NonNull Context context, int resource, List<Procedure> dentalHistory) {
         super(context, resource);

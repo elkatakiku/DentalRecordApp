@@ -41,6 +41,10 @@
     <string name="TODO">TODO</string>
     <string name="PATIENT">Patient</string>
     <string name="EMPLOYEE">Employee</string>
+    <string name="ADMIN">Admin</string>
+    <string name="EMPLOYEE_UID_KEY">EMPLOYEE_KEY</string>
+    <string name="IS_EDIT">IS_EDIT</string>
+    <string name="IS_ADMIN">-IS_ADMIN</string>
     <string name="BUNDLE_KEY">Bundle</string>
 
 
@@ -107,8 +111,8 @@
     <string name="add_dental_operation">New Procedure</string>
     <string name="fully_paid">Fully Paid</string>
 
-    <string name="delete_title">Delete Patient</string>
-    <string name="delete_message">Are you sure you want to delete </string>
+    <string name="delete_title">Delete %1$s</string>
+    <string name="delete_message">Are you sure you want to remove </string>
     <!-- Strings used for fragments for navigation -->
     <string name="title_activity_register">RegisterActivity</string>
     <!-- Strings used for fragments for navigation -->
@@ -127,10 +131,13 @@
     <string name="btn_remove_service">Delete</string>
 
     <!--    Greetings   -->
-    <string name="greet_admin">Welcome, %1$s!</string>
+    <string name="greet_admin">Welcome,\n%1$s!</string>
     <string name="title_activity_view_employee">ViewEmployeeActivity</string>
-    <string name="tab_text_1">Employee</string>
-    <string name="tab_text_2">Account Activity</string>
+    <string name="employee_tab">Employee</string>
+    <string name="account_activity_tab">Account Activity</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_accounts">AccountsActivity</string>
 </resources>

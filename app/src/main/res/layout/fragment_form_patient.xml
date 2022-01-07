@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_home_color"
+    android:fillViewport="true"
     android:orientation="vertical"
-    tools:context=".ui.users.admin.patients.patient_form.AddPatientActivity">
+    tools:context=".ui.patients.patient_form.AddPatientActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,7 +25,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:divider="@drawable/empty_tall_divider"
             android:showDividers="middle">
@@ -59,7 +60,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:divider="@drawable/empty_tall_divider"
             android:showDividers="middle">
@@ -107,14 +108,19 @@
             android:textColor="@color/label" />
 
         <LinearLayout
+            android:id="@+id/layoutPatientDatePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="8dp"
+            android:background="@color/bg_field"
+            android:orientation="horizontal"
+            android:paddingStart="0dp"
+            android:paddingEnd="2dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="4"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:padding="10dp">
@@ -128,7 +134,8 @@
                     android:hint="Month"
                     android:textAlignment="center"
                     android:textColor="@color/data"
-                    android:textColorHint="@color/field_hint" />
+                    android:textColorHint="@color/field_hint"
+                    android:textSize="18sp" />
 
                 <View
                     android:id="@+id/divider11"
@@ -145,7 +152,8 @@
                     android:hint="Day"
                     android:textAlignment="center"
                     android:textColor="@color/data"
-                    android:textColorHint="@color/field_hint" />
+                    android:textColorHint="@color/field_hint"
+                    android:textSize="18sp" />
 
                 <View
                     android:id="@+id/divider12"
@@ -162,7 +170,8 @@
                     android:hint="Year"
                     android:textAlignment="center"
                     android:textColor="@color/data"
-                    android:textColorHint="@color/field_hint" />
+                    android:textColorHint="@color/field_hint"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <ImageButton
@@ -181,6 +190,7 @@
             android:id="@+id/tvPatientAgeLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="Age"
             android:textColor="@color/label" />
 
@@ -271,7 +281,7 @@
             android:id="@+id/lvPatientMobileNumbers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" >
+            android:layout_marginTop="8dp">
 
         </ListView>
 

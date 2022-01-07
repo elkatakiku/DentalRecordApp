@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_home_color"
     android:fillViewport="true"
-    tools:context=".ui.users.admin.dashboard.AdminDashboardFragment">
+    tools:context=".ui.dashboard.AdminDashboardFragment">
 
 
     <LinearLayout

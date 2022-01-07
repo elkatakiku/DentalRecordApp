@@ -9,13 +9,13 @@ import androidx.lifecycle.MutableLiveData;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
+import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,7 +32,6 @@ public class AccountRepository {
     private static volatile AccountRepository instance;
 
     private final MutableLiveData<Account> mAccount = new MutableLiveData<>();
-    private final MutableLiveData<Integer> mError = new MutableLiveData<>();
 
     public AccountRepository() {
         this.database = FirebaseDatabase.getInstance(FirebaseHelper.FIREBASE_URL);
@@ -47,52 +46,38 @@ public class AccountRepository {
         return instance;
     }
 
-    public LiveData<Integer> getmError() {
-        return mError;
-    }
-
-    public void resetmError() {
-        mError.setValue(0);
-    }
-
     public void addAccount(Account account) {
         databaseReference.child(account.getUid()).setValue(account);
     }
 
-    public Task<AuthResult> createNewAccount(LoggedInUser loggedInAccount, Account newAccount) {
+    public Task<AuthResult> createNewAccount(Account newAccount) {
 
-        return mFirebaseAuth.createUserWithEmailAndPassword(newAccount.getEmail(), newAccount.getPassword()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d(TAG, "onComplete: attempting to create account");
+        if (!(Checker.isDataAvailable(newAccount.getEmail()) && Checker.isDataAvailable(newAccount.getPassword()))) {
+            return null;
+        }
 
-                if (!task.isSuccessful() && task.getException() != null) {
-                    task.getException().printStackTrace();
-                    if (task.getException() instanceof FirebaseAuthWeakPasswordException) {
-                        mError.setValue(R.string.weak_password);
-                    } else if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-                        mError.setValue(R.string.email_taken);
-                    } else {
-                        mError.setValue(R.string.an_error_occurred);
-                    }
-                    Log.d(TAG, "onComplete: task is unsuccessful");
-                    return;
-                }
+        return mFirebaseAuth.createUserWithEmailAndPassword(newAccount.getEmail(), newAccount.getPassword());
+    }
 
-                mError.setValue(-1);
-                FirebaseUser user = task.getResult().getUser();
-                if (user != null) {
-//                    newAccount.setUid(user.getUid());
-                    addAccount(newAccount);
-                    logout();
-                }
+    public int getCreateAccountError(Task<AuthResult> task) {
+        int error;
+        if (task.getException() instanceof FirebaseAuthWeakPasswordException) {
+            error = R.string.weak_password;
+        } else if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+            error = R.string.email_taken;
+        } else {
+            error = R.string.an_error_occurred;
+        }
 
-                mFirebaseAuth
-                        .signInWithEmailAndPassword(loggedInAccount.getEmail(), loggedInAccount.getPassword())
-                        .addOnSuccessListener(authResult -> Log.d(TAG, "onSuccess: newCurrentUID: " + mFirebaseAuth.getCurrentUser().getUid()))
-                        .addOnFailureListener(e -> Log.d(TAG, "onFailure: newCurrentUID: " + mFirebaseAuth.getCurrentUser().getUid()));
-            }
-        });
+        return error;
+    }
+
+    public void reLoginUser(LoggedInUser loggedInAccount) {
+        logout();
+        mFirebaseAuth
+                .signInWithEmailAndPassword(loggedInAccount.getEmail(), loggedInAccount.getPassword())
+                .addOnSuccessListener(authResult -> Log.d(TAG, "onSuccess: newCurrentUID: " + mFirebaseAuth.getCurrentUser().getUid()))
+                .addOnFailureListener(e -> Log.d(TAG, "onFailure: newCurrentUID: " + mFirebaseAuth.getCurrentUser().getUid()));
     }
 
     public void removeAccount(LoggedInUser loggedInUser, String accountUid) {
@@ -155,6 +140,10 @@ public class AccountRepository {
 
     public void loadAccount(String accountUid) {
         databaseReference.child(accountUid).addValueEventListener(accountListener);
+    }
+
+    public DatabaseReference getAccountPath(String accountUid) {
+        return databaseReference.child(accountUid);
     }
 
     public LiveData<Account> getmAccount() {

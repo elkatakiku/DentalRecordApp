@@ -7,7 +7,7 @@
     android:background="@color/bg_home_color"
     android:fillViewport="true"
     android:orientation="vertical"
-    tools:context=".ui.users.admin.employees.employee_form.EmployeeFormActivity">
+    tools:context=".ui.employees.employee_form.EmployeeFormActivity">
 
 
     <LinearLayout
@@ -74,7 +74,7 @@
                     android:id="@+id/etEmployeeFirstname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/bg_field"
+                    android:background="@drawable/shape_field"
                     android:ems="10"
                     android:fontFamily="@font/open_sans"
                     android:hint="@string/Firstname"
@@ -89,7 +89,7 @@
                     android:id="@+id/etEmployeeLastname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/bg_field"
+                    android:background="@drawable/shape_field"
                     android:ems="10"
                     android:fontFamily="@font/open_sans"
                     android:hint="@string/Lastname"
@@ -113,7 +113,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@color/bg_field"
+                        android:background="@drawable/shape_field"
                         android:ems="10"
                         android:fontFamily="@font/open_sans"
                         android:hint="MI"
@@ -129,7 +129,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@color/bg_field"
+                        android:background="@drawable/shape_field"
                         android:ems="10"
                         android:fontFamily="@font/open_sans"
                         android:hint="Suffix"
@@ -157,7 +157,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@color/bg_field"
+            android:background="@drawable/shape_field"
             android:entries="@array/job_titles"
             android:minHeight="48dp"
             android:padding="10dp" />
@@ -179,9 +179,14 @@
             android:textColor="@color/label" />
 
         <LinearLayout
+            android:id="@+id/employeeDatePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="8dp"
+            android:background="@drawable/shape_field"
+            android:orientation="horizontal"
+            android:paddingStart="0dp"
+            android:paddingEnd="2dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -199,7 +204,8 @@
                     android:gravity="center"
                     android:hint="Month"
                     android:textAlignment="center"
-                    android:textColor="@color/data" />
+                    android:textColor="@color/data"
+                    android:textSize="18sp" />
 
                 <View
                     android:id="@+id/divider11"
@@ -215,7 +221,8 @@
                     android:gravity="center"
                     android:hint="Day"
                     android:textAlignment="center"
-                    android:textColor="@color/data" />
+                    android:textColor="@color/data"
+                    android:textSize="18sp" />
 
                 <View
                     android:id="@+id/divider12"
@@ -231,7 +238,8 @@
                     android:gravity="center"
                     android:hint="Year"
                     android:textAlignment="center"
-                    android:textColor="@color/data" />
+                    android:textColor="@color/data"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <ImageButton
@@ -250,6 +258,7 @@
             android:id="@+id/textView74"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/open_sans"
             android:text="Age"
             android:textColor="@color/label" />
@@ -259,7 +268,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@color/bg_field"
+            android:background="@drawable/shape_field"
             android:clickable="false"
             android:ems="10"
             android:focusable="false"
@@ -298,7 +307,7 @@
             <FrameLayout
                 android:layout_width="75dp"
                 android:layout_height="match_parent"
-                android:background="@color/bg_field">
+                android:background="@drawable/shape_field">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -321,7 +330,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:background="@color/white"
+                android:background="@drawable/shape_field"
                 android:ems="10"
                 android:hint="Contact Number"
                 android:inputType="phone"
@@ -370,7 +379,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@color/bg_field"
+            android:background="@drawable/shape_field"
             android:ems="10"
             android:hint="Email Address"
             android:inputType="textEmailAddress"
@@ -400,7 +409,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@color/bg_field"
+            android:background="@drawable/shape_field"
             android:ems="10"
             android:inputType="textPersonName"
             android:minHeight="48dp"
@@ -437,7 +446,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@color/bg_field"
+            android:background="@drawable/shape_field"
             android:ems="10"
             android:inputType="textPersonName"
             android:minHeight="48dp"
@@ -490,7 +499,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@color/bg_field"
+            android:background="@drawable/shape_field"
             android:entries="@array/civil_status_array"
             android:minHeight="48dp" />
 

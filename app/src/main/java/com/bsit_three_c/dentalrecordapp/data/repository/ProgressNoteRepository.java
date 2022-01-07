@@ -2,12 +2,12 @@ package com.bsit_three_c.dentalrecordapp.data.repository;
 
 import android.util.Log;
 
-import com.bsit_three_c.dentalrecordapp.data.model.ProgressNote;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
+import com.bsit_three_c.dentalrecordapp.data.model.ProgressNote;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ProgressNoteRepository {
     private static final String TAG = ProgressNoteRepository.class.getSimpleName();
@@ -77,7 +77,7 @@ public class ProgressNoteRepository {
         databaseReference.child(paymentUID).removeValue();
     }
 
-    public void removeProgressNote(ArrayList<String> paymentKeys) {
+    public void removeProgressNote(List<String> paymentKeys) {
         for (int position = 0; position < paymentKeys.size(); position++) {
             Log.d(TAG, "removePaymets: removing payment");
             removeProgressNote(paymentKeys.get(position));

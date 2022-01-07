@@ -15,8 +15,6 @@ import androidx.annotation.Nullable;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalServiceOption;
-import com.bsit_three_c.dentalrecordapp.util.Checker;
-import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,23 +22,32 @@ import java.util.List;
 public class ServiceOptionsAdapter extends ArrayAdapter<DentalServiceOption> {
     private static final String TAG = ServiceOptionsAdapter.class.getSimpleName();
 
+    public static final String DEFAULT_OPTION = "Choose service option…";
+
     private final Context mContext;
-    private final ArrayList<DentalServiceOption> serviceOptionArrayList;
-    private final ServiceOptionsAdapter myAdapter;
+    private final List<DentalServiceOption> serviceOptionArrayList;
     private boolean isFromView = false;
-    private final String[] servicesArray;
     private final Spinner spinner;
     private final DentalServiceOption titleServiceOptionItem;
+    private boolean isEdit;
 
-    public ServiceOptionsAdapter(Context context, int resource, List<DentalServiceOption> objects, String[] servicesArray, Spinner spinner) {
+    public ServiceOptionsAdapter(Context context, int resource, List<DentalServiceOption> objects, Spinner spinner) {
         super(context, resource, objects);
         this.mContext = context;
-        this.serviceOptionArrayList = (ArrayList<DentalServiceOption>) objects;
-        this.myAdapter = this;
-        this.servicesArray = servicesArray;
+        this.serviceOptionArrayList = objects;
         this.spinner = spinner;
 
         this.titleServiceOptionItem = serviceOptionArrayList.get(0);
+    }
+
+    public ServiceOptionsAdapter(Context context, int resource, List<DentalServiceOption> objects, Spinner spinner, boolean isEdit) {
+        super(context, resource, objects);
+        this.mContext = context;
+        this.serviceOptionArrayList = objects;
+        this.spinner = spinner;
+
+        this.titleServiceOptionItem = serviceOptionArrayList.get(0);
+        this.isEdit = isEdit;
     }
 
     @Override
@@ -59,8 +66,8 @@ public class ServiceOptionsAdapter extends ArrayAdapter<DentalServiceOption> {
 
         final ViewHolder holder;
         if (convertView == null) {
-            LayoutInflater layoutInflator = LayoutInflater.from(mContext);
-            convertView = layoutInflator.inflate(R.layout.item_spinner_services, parent, false);
+            LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+            convertView = layoutInflater.inflate(R.layout.item_spinner_services, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
@@ -69,7 +76,7 @@ public class ServiceOptionsAdapter extends ArrayAdapter<DentalServiceOption> {
 
         holder.mTextView.setText(serviceOptionArrayList.get(position).getTitle());
 
-        // To check weather checked event fire from getview() or user input
+        // To check weather checked event fire from getView() or user input
         isFromView = true;
         holder.mCheckBox.setChecked(serviceOptionArrayList.get(position).isSelected());
         isFromView = false;
@@ -86,9 +93,10 @@ public class ServiceOptionsAdapter extends ArrayAdapter<DentalServiceOption> {
             spinner.performClick();
         });
 
+
+
         holder.mCheckBox.setTag(position);
         holder.mCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            int getPosition = (Integer) buttonView.getTag();
 
             if (!isFromView) {
                 Log.d(TAG, "getCustomView: selected service: " + serviceOptionArrayList.get(position));
@@ -96,21 +104,19 @@ public class ServiceOptionsAdapter extends ArrayAdapter<DentalServiceOption> {
                     serviceOptionArrayList.get(position).setSelected(isChecked);
                 }
 
-                if (!Checker.hasItemChecked(serviceOptionArrayList)) {
-                    Log.d(TAG, "getCustomView: has no item chekces");
-                    titleServiceOptionItem.setTitle(servicesArray[0]);
-                    Log.d(TAG, "getCustomView: default title: " + servicesArray[0]);
+                if (!hasItemChecked(serviceOptionArrayList)) {
+                    Log.d(TAG, "getCustomView: has no item checks");
+                    titleServiceOptionItem.setTitle(DEFAULT_OPTION);
+                    Log.d(TAG, "getCustomView: default title: " + DEFAULT_OPTION);
                 }
                 else {
                     if (!getItem(position).equals(titleServiceOptionItem)) {
                         Log.d(TAG, "getCustomView: changing title");
-                        DentalServiceOption currentServiceOption = getItem(position);
-                        titleServiceOptionItem.setTitle(UIUtil.getServiceTitle(
+                        Log.d(TAG, "getCustomView: item position of selected service: " + position);
+                        titleServiceOptionItem.setTitle(getServiceTitle(
                                 titleServiceOptionItem.getTitle(),
-                                currentServiceOption.getTitle(),
-                                serviceOptionArrayList,
-                                servicesArray[0],
-                                servicesArray
+                                getItem(position),
+                                serviceOptionArrayList
                         ));
                     }
                 }
@@ -121,8 +127,126 @@ public class ServiceOptionsAdapter extends ArrayAdapter<DentalServiceOption> {
             }
         });
 
-
         return convertView;
+    }
+
+    public void initializeSpinner() {
+        if (serviceOptionArrayList != null && serviceOptionArrayList.size() > 0) {
+            Log.d(TAG, "initializeSpinner: services: " + serviceOptionArrayList);
+
+            StringBuilder newTitle = new StringBuilder();
+
+            for (DentalServiceOption option : serviceOptionArrayList) {
+                Log.d(TAG, "initializeSpinner: service: " + option);
+                if (option.isSelected()) {
+                    newTitle.append(option.getTitle()).append(" | ");
+                }
+            }
+
+            int index = newTitle.lastIndexOf(" | ");
+            if (index != -1) {
+                newTitle.delete(index, newTitle.capacity());
+                titleServiceOptionItem.setTitle(newTitle.toString());
+            }
+        }
+    }
+
+    private boolean hasItemChecked(List<DentalServiceOption> serviceOptions) {
+        for (DentalServiceOption serviceOption : serviceOptions) {
+            if (serviceOption.isSelected()) {
+                Log.d(TAG, "hasItemChecked: service option: " + serviceOption);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private String getServiceTitle(String selectedTitles,
+                                   DentalServiceOption selectedServiceOption,
+                                   List<DentalServiceOption> serviceOptions) {
+        final String selectedTitle = selectedServiceOption.getTitle();
+        if (selectedTitles.equals(DEFAULT_OPTION)) {
+            Log.d(TAG, "getServiceTitle: title is default");
+            return selectedTitle;
+        }
+
+        Log.d(TAG, "getServiceTitle: selected titles: " + selectedTitles);
+        Log.d(TAG, "getServiceTitle: selected title: " + selectedTitle);
+
+        StringBuilder newTitle = new StringBuilder();
+
+        String[] titles = selectedTitles.split(" \\| ");
+        boolean inTitle = false;
+
+        for (String title : titles) {
+            Log.d(TAG, "getServiceTitle: selected title is default: " + selectedTitle.equals(title));
+            if (selectedTitle.equals(title) && !(selectedTitle.equals(DEFAULT_OPTION))) {
+                inTitle = true;
+
+                Log.d(TAG, "getServiceTitle: title: " + title);
+
+                DentalServiceOption gotSelectedService = getServiceOption(selectedServiceOption.getServiceUID(), serviceOptions);
+                if (gotSelectedService != null) {
+                    gotSelectedService.setSelected(false);
+                }
+
+                continue;
+
+            }
+
+            newTitle.append(title).append(" | ");
+        }
+
+        Log.d(TAG, "getServiceTitle: new title: " + newTitle.toString());
+        Log.d(TAG, "getServiceTitle: new title length: " + newTitle.length());
+
+        if (newTitle.length() == 0) {
+            newTitle.append(DEFAULT_OPTION);
+            serviceOptions.get(0).setSelected(false);
+        }
+        else if (!inTitle) {
+            newTitle.append(selectedTitle);
+        }
+        else {
+            int index = newTitle.lastIndexOf(" | ");
+            if (index != -1) {
+                newTitle.delete(index, newTitle.capacity());
+            }
+        }
+
+        Log.d(TAG, "getServiceTitle: new title: " + newTitle.toString());
+
+        return newTitle.toString();
+    }
+
+    private DentalServiceOption getServiceOption(String serviceUid, List<DentalServiceOption> dentalServiceOptions) {
+        for (DentalServiceOption service :
+                dentalServiceOptions) {
+            if (serviceUid.equals(service.getServiceUID())){
+                return service;
+            }
+        }
+
+        return null;
+    }
+
+    public void clearAll() {
+        serviceOptionArrayList.clear();
+    }
+
+    public void addItem(DentalServiceOption service) {
+        serviceOptionArrayList.add(service);
+    }
+
+    public void addItems(ArrayList<DentalServiceOption> services) {
+        clearAll();
+
+        for (DentalServiceOption service : services) {
+            Log.d(TAG, "addItems: service: " + service);
+        }
+
+        serviceOptionArrayList.addAll(services);
     }
 
     private static class ViewHolder {

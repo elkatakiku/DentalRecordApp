@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
+    android:id="@+id/formAppointmentContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login_bg_final"
@@ -13,7 +13,7 @@
     tools:context=".ui.login.LoginActivity">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/ivHeaderDisplayImage"
         android:layout_width="115dp"
         android:layout_height="115dp"
         android:contentDescription="@string/logo_content_desc"
@@ -37,7 +37,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/ivHeaderDisplayImage"
         tools:ignore="TextContrastCheck" />
 
     <TextView
@@ -47,14 +47,13 @@
         android:layout_marginTop="16dp"
         android:fontFamily="@font/open_sans_semibold"
         android:labelFor="@id/username"
-        android:text="@string/login_username"
+        android:text="Email"
         android:textColor="@color/label"
         android:textSize="16sp"
         android:typeface="sans"
         app:layout_constraintStart_toStartOf="@+id/username"
         app:layout_constraintTop_toTopOf="@+id/guideline2"
-        tools:ignore="TextContrastCheck"
-        tools:text="Username" />
+        tools:ignore="TextContrastCheck" />
 
     <EditText
         android:id="@+id/username"

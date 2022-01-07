@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_home_color"
-    tools:context=".ui.users.admin.employees.AdminEmployeesFragment">
+    tools:context=".ui.employees.EmployeesFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayoutEmployee"
@@ -36,6 +36,7 @@
                 android:clipToPadding="false"
                 android:paddingTop="6dp"
                 android:paddingBottom="100dp"
+                android:scrollbars="vertical"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

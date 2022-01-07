@@ -13,6 +13,10 @@
     <color name="aquamarine">#A1DBF1</color>
     <color name="tiffany_blue">#71D5E4</color>
     <color name="blue_green">#00B6BC</color>
+    <color name="pallete_dark">#107f70</color>
+    <color name="tint_blue_green">#80007377</color>
+    <color name="bg_image">#8000B6BC</color>
+
 
     <!-- Login -->
     <color name="text_color">#17130c</color>
@@ -25,7 +29,6 @@
     <color name="header">#1B7D7F</color>
     <color name="label">#01B5BB</color>
     <color name="data">#295859</color>
-
 
     <!-- Buttons Color -->
     <color name="login_button_tint">#00B6BC</color>

@@ -17,7 +17,6 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bsit_three_c.dentalrecordapp.MainActivity;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityLoginBinding;
@@ -52,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.btnLogin;
         final ProgressBar loadingProgressBar = binding.loading;
-        intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent = new Intent();
 
         loginViewModel.getLoginFormState().observe(this, loginFormState -> {
             if (loginFormState == null) {
@@ -69,9 +68,6 @@ public class LoginActivity extends AppCompatActivity {
 
         loginViewModel.getLoginResult().observe(this, loginResult -> {
             isOnline = Internet.isOnline();
-//            new Internet().execute();
-
-//            Log.d(TAG, "onCreate: login success: " + loginResult.getSuccess());
 
             loadingProgressBar.setVisibility(View.GONE);
             if (LocalStorage.getLoggedInUser(this) != null) {
@@ -151,6 +147,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Checks if logged in user is already saved
         if (LocalStorage.getLoggedInUser(this) == null) {
+            Log.d(TAG, "returnResult: saving logged in user");
             LocalStorage.saveLoggedInUser(this, loginViewModel.getLoggedInUser());
         }
 
