@@ -7,28 +7,24 @@
 
     <fragment
         android:id="@+id/CreatePatientAccount"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.register.CreateAccountFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.patients.registration_form.RegisterFormFragment"
         android:label="Create Account"
-        tools:layout="@layout/fragment_create_account">
+        tools:layout="@layout/fragment_form_register">
         <action
-            android:id="@+id/action_CreateAcountFragment_to_VerifyFragment"
-            app:destination="@id/VerifyFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/VerifyFragment"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.register.VerifyFragment"
-        android:label="Verify"
-        tools:layout="@layout/fragment_verify">
-
-        <action
-            android:id="@+id/action_FirstFragment_to_Second2Fragment"
+            android:id="@+id/action_CreatePatientAccount_to_PatientFormFragment"
             app:destination="@id/PatientFormFragment" />
+        <argument
+            android:name="account"
+            app:argType="com.bsit_three_c.dentalrecordapp.data.model.Account" />
     </fragment>
 
     <fragment
         android:id="@+id/PatientFormFragment"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.register.PatientFormFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.patients.patient_form.PatientFormFragment"
         android:label="Patient Form"
-        tools:layout="@layout/fragment_form_patient_register3"/>
+        tools:layout="@layout/fragment_form_patient">
+        <argument
+            android:name="account"
+            app:argType="com.bsit_three_c.dentalrecordapp.data.model.Account" />
+    </fragment>
 </navigation>

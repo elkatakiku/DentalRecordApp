@@ -5,9 +5,11 @@
     android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_home_color"
     tools:context=".ui.appointments.AppointmentsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvAppointmentList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
@@ -27,7 +29,7 @@
         android:backgroundTint="@color/blue_green"
         android:clickable="true"
         android:src="@drawable/ic_baseline_add_card_24"
-        app:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white" />
 </androidx.constraintlayout.widget.ConstraintLayout>

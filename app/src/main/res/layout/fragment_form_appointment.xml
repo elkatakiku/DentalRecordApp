@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_home_color"
     android:fillViewport="true"
-    tools:context=".ui.appointments.appointment_form.AppointmentActivity">
+    tools:context=".ui.appointments.appointment_form.AppointmentFormActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:background="@color/white"
+                android:background="@drawable/shape_field"
                 android:ems="10"
                 android:fontFamily="@font/open_sans"
                 android:hint="Firstname"
@@ -50,7 +50,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/white"
+                android:background="@drawable/shape_field"
                 android:ems="10"
                 android:fontFamily="@font/open_sans"
                 android:hint="MI"
@@ -73,7 +73,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:background="@color/white"
+                android:background="@drawable/shape_field"
                 android:ems="10"
                 android:fontFamily="@font/open_sans"
                 android:hint="Lastname"
@@ -87,7 +87,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/white"
+                android:background="@drawable/shape_field"
                 android:ems="10"
                 android:fontFamily="@font/open_sans"
                 android:hint="Suffix"
@@ -96,29 +96,6 @@
                 android:padding="10dp"
                 android:textColorHint="@color/field_hint" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/textView52"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/open_sans_semibold"
-            android:text="Email"
-            android:textColor="@color/label" />
-
-        <EditText
-            android:id="@+id/editTextTextEmailAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/shape_field"
-            android:ems="10"
-            android:fontFamily="@font/open_sans"
-            android:hint="Email Address"
-            android:inputType="textEmailAddress"
-            android:minHeight="48dp"
-            android:padding="10dp"
-            android:textColorHint="@color/field_hint" />
 
         <TextView
             android:id="@+id/textView92"
@@ -130,7 +107,7 @@
             android:textColor="@color/label" />
 
         <EditText
-            android:id="@+id/editTextNumber"
+            android:id="@+id/etAppointmentContact"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -143,16 +120,47 @@
             android:padding="10dp"
             android:textColorHint="@color/field_hint" />
 
-        <TextView
-            android:id="@+id/textView93"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:fontFamily="@font/open_sans_semibold"
-            android:text="Appointment Date"
-            android:textColor="@color/label" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView93"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_semibold"
+                android:text="Appointment Date"
+                android:textColor="@color/label" />
+
+            <LinearLayout
+                android:id="@+id/appointmentDateError"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    app:srcCompat="@drawable/ic_baseline_error_24"
+                    app:tint="@color/button_delete" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Please choose a date."
+                    android:textColor="@color/button_delete" />
+            </LinearLayout>
+        </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layoutAppointmentDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -171,12 +179,14 @@
 
                 <TextView
                     android:id="@+id/tvAppointmentCalendarMonth"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:fontFamily="@font/open_sans"
                     android:gravity="center"
                     android:hint="Month"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="5dp"
                     android:textAlignment="center"
                     android:textColor="@color/data"
                     android:textSize="18sp" />
@@ -194,6 +204,8 @@
                     android:fontFamily="@font/open_sans"
                     android:gravity="center"
                     android:hint="Day"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
                     android:textAlignment="center"
                     android:textColor="@color/data"
                     android:textSize="18sp" />
@@ -211,6 +223,8 @@
                     android:fontFamily="@font/open_sans"
                     android:gravity="center"
                     android:hint="Year"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="0dp"
                     android:textAlignment="center"
                     android:textColor="@color/data"
                     android:textSize="18sp" />
@@ -228,15 +242,47 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView94"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Appointment Time"
-            android:textColor="@color/label" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView94"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_semibold"
+                android:text="Appointment Time"
+                android:textColor="@color/label" />
+
+            <LinearLayout
+                android:id="@+id/appointmentTimeError"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    app:srcCompat="@drawable/ic_baseline_error_24"
+                    app:tint="@color/button_delete" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Please choose a time."
+                    android:textColor="@color/button_delete" />
+            </LinearLayout>
+        </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layoutAppointmentTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -257,12 +303,13 @@
 
                 <TextView
                     android:id="@+id/tvAppointmentTimeHour"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:fontFamily="@font/open_sans"
                     android:gravity="center"
                     android:hint="Hour"
-                    android:textAlignment="textEnd"
+                    android:textAlignment="center"
                     android:textColor="@color/data"
                     android:textColorHint="@color/field_hint"
                     android:textSize="18sp" />
@@ -279,23 +326,25 @@
 
                 <TextView
                     android:id="@+id/tvAppointmentTimeMinutes"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:fontFamily="@font/open_sans"
                     android:gravity="center"
                     android:hint="Minutes"
-                    android:textAlignment="textStart"
+                    android:textAlignment="center"
                     android:textColor="@color/data"
                     android:textColorHint="@color/field_hint"
                     android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tvAppointmentTimePeriod"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:fontFamily="@font/open_sans"
                     android:gravity="center"
-                    android:hint="AM/PM"
+                    android:hint="AM"
                     android:textAlignment="center"
                     android:textColor="@color/data"
                     android:textColorHint="@color/field_hint"
@@ -314,21 +363,64 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView90"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/open_sans_semibold"
-            android:text="Service"
-            android:textColor="@color/label"
-            android:layout_marginTop="8dp" />
-
-        <Spinner
-            android:id="@+id/spinner2"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:minHeight="48dp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView90"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_semibold"
+                android:text="Service"
+                android:textColor="@color/label" />
+
+
+            <LinearLayout
+                android:id="@+id/appointmentServiceError"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    app:srcCompat="@drawable/ic_baseline_error_24"
+                    app:tint="@color/button_delete" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Please choose a service."
+                    android:textColor="@color/button_delete" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/shape_field">
+
+            <Spinner
+                android:id="@+id/spnrAppointmentServices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/blue_green"
+                android:dropDownWidth="match_parent"
+                android:minHeight="48dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp" />
+        </FrameLayout>
+
+
 
         <TextView
             android:id="@+id/textView91"
@@ -340,7 +432,7 @@
             android:textColor="@color/label" />
 
         <EditText
-            android:id="@+id/editTextTextMultiLine"
+            android:id="@+id/etAppointmentComments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -349,21 +441,39 @@
             android:fontFamily="@font/open_sans"
             android:gravity="start|top"
             android:inputType="textMultiLine"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:padding="10dp" />
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/frameLayout4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:minHeight="100dp">
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/btnAppointmentConfirm"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center"
                 android:backgroundTint="@color/blue_green"
-                android:text="Confirm" />
-        </FrameLayout>
+                android:text="Confirm"
+                app:cornerRadius="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/pbAppoitnmentLoading"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="16dp"
+                android:indeterminateTint="@color/white"
+                android:translationZ="3dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/btnAppointmentConfirm"
+                app:layout_constraintEnd_toEndOf="@+id/btnAppointmentConfirm"
+                app:layout_constraintTop_toTopOf="@+id/btnAppointmentConfirm" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

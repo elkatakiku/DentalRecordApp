@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityLoginOrRegisterBinding;
 import com.bsit_three_c.dentalrecordapp.ui.login.LoginActivity;
-import com.bsit_three_c.dentalrecordapp.ui.register.RegisterActivity;
+import com.bsit_three_c.dentalrecordapp.ui.patients.registration_form.RegisterActivity;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 import com.google.android.material.snackbar.Snackbar;
 

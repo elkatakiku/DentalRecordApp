@@ -16,9 +16,8 @@ import com.bsit_three_c.dentalrecordapp.ui.employees.EmployeesViewModel;
 import com.bsit_three_c.dentalrecordapp.ui.employees.employee_form.EmergencyContactFormViewModel;
 import com.bsit_three_c.dentalrecordapp.ui.employees.view_employee.EmployeeInfoViewModel;
 import com.bsit_three_c.dentalrecordapp.ui.patients.PatientsViewModel;
-import com.bsit_three_c.dentalrecordapp.ui.patients.patient_form.AddPatientViewModel;
-import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.PatientInfoViewModel;
-import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.ProcedureFormViewModel;
+import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.ui.patientinfo.PatientInfoViewModel;
+import com.bsit_three_c.dentalrecordapp.ui.patients.procedure_form.ui.procedureform.ProcedureFormViewModel;
 import com.bsit_three_c.dentalrecordapp.ui.services.AdminServicesViewModel;
 import com.bsit_three_c.dentalrecordapp.ui.services.services_form.ServiceFormViewModel;
 
@@ -30,9 +29,6 @@ public class CustomViewModelFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> T create(@NonNull Class<T> aClass) {
         if (aClass.isAssignableFrom(PatientsViewModel.class)) {
             return (T) new PatientsViewModel(PatientRepository.getInstance());
-        }
-        else if (aClass.isAssignableFrom(AddPatientViewModel.class)) {
-            return (T) new AddPatientViewModel(PatientRepository.getInstance());
         }
         else if (aClass.isAssignableFrom(ProcedureFormViewModel.class)) {
             return (T) new ProcedureFormViewModel(

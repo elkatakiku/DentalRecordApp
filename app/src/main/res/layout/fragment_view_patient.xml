@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -317,7 +318,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/tryList"
+            android:id="@+id/llProceduresList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/layer_list_border_top"

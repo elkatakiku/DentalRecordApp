@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/bg_home_color"/>
+        </shape>
+    </item>
+    <item>
+        <rotate
+            android:fromDegrees="90"
+            android:toDegrees="90"
+            android:pivotX="15%"
+            android:pivotY="70%"
+            >
+            <shape
+                android:shape="oval" >
+<!--                <stroke android:color="@color/white" android:width="10dp"/>-->
+                <solid android:color="@color/blue_green" />
+<!--                <size android:width="300dp"-->
+<!--                    android:height="500dp"/>-->
+            </shape>
+        </rotate>
+    </item>
+</layer-list>

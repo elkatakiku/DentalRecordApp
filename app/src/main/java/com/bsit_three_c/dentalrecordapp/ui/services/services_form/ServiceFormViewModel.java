@@ -48,7 +48,7 @@ public class ServiceFormViewModel extends ViewModel {
 
                         Log.d(TAG, "onComplete: success getting URI");
                         dentalService.setDisplayImage(task.getResult().toString());
-                        serviceRepository.addService(dentalService);
+                        serviceRepository.upload(dentalService);
 
                         mError.setValue(VALID);
                     }
@@ -60,7 +60,7 @@ public class ServiceFormViewModel extends ViewModel {
                 }
             });
         } else {
-            serviceRepository.addService(dentalService);
+            serviceRepository.upload(dentalService);
         }
 
         mUploadAttempt.setValue(true);

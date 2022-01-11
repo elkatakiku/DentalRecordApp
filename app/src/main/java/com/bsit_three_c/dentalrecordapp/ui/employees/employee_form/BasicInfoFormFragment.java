@@ -3,6 +3,7 @@ package com.bsit_three_c.dentalrecordapp.ui.employees.employee_form;
 import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -29,6 +31,8 @@ import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentFormEmployee1Binding;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.DatePickerFragment;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
+import com.bsit_three_c.dentalrecordapp.util.CustomObserver;
+import com.bsit_three_c.dentalrecordapp.util.CustomTextWatcher;
 import com.bsit_three_c.dentalrecordapp.util.DateUtil;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
@@ -115,6 +119,18 @@ public class BasicInfoFormFragment extends Fragment {
         sharedViewModel.getmEdit().observe(getViewLifecycleOwner(), aBoolean ->
                 isEdit = aBoolean);
 
+        binding.spnrEmployeePosition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                binding.positionError.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         binding.btnEmployeeUpload.setOnClickListener(v ->
                 LocalStorage.imageChooser(selectImage));
 
@@ -134,9 +150,6 @@ public class BasicInfoFormFragment extends Fragment {
         });
 
         binding.btnEmployeeNext.setOnClickListener(v -> {
-
-            binding.pbEmployee1Loading.setVisibility(View.VISIBLE);
-            binding.btnEmployeeNext.setEnabled(false);
 
             // Imageview for display image: binding.displayImage
             String firstname = binding.etEmployeeFirstname.getText().toString().trim();
@@ -171,6 +184,13 @@ public class BasicInfoFormFragment extends Fragment {
                     "\naddress: " + (address1 + " " + address2) +
                     "\ncivis status: " + civilStatus
             );
+
+            if (!isValid(firstname, lastname, email, jobTitle)) {
+                return;
+            }
+
+            binding.pbEmployee1Loading.setVisibility(View.VISIBLE);
+            binding.btnEmployeeNext.setEnabled(false);
 
             if (isEdit) {
                 employee = sharedViewModel.createEmployee(
@@ -209,6 +229,9 @@ public class BasicInfoFormFragment extends Fragment {
             navigateToContactForm(employee);
 
         });
+
+        setListeners();
+        setObservers();
     }
 
     @Override
@@ -237,47 +260,33 @@ public class BasicInfoFormFragment extends Fragment {
     }
 
     private void initializeFields(Employee employee) {
-        Log.d(TAG, "initializeFields: initializing fields");
-        Log.d(TAG, "initializeFields: employee: " + employee);
 
-        if (Checker.isDataAvailable(employee.getDisplayImage())) {
-            employee.loadDisplayImage(requireContext(), binding.ivEmployeeDisplay);
-        }
-        else if (sharedViewModel.getmStringUri().getValue() != null) {
-            UIUtil.loadDisplayImage(
-                    requireContext(),
-                    binding.ivEmployeeDisplay,
-                    sharedViewModel.getmStringUri().getValue(),
-                    R.drawable.ic_baseline_person_24
-            );
-        }
+        UIUtil.loadDisplayImage(
+                requireContext(),
+                binding.ivEmployeeDisplay,
+                sharedViewModel.getmStringUri().getValue(),
+                R.drawable.ic_baseline_person_24
+        );
+        UIUtil.setField(employee.getFirstname(), binding.etEmployeeFirstname);
+        UIUtil.setField(employee.getLastname(), binding.etEmployeeLastname);
+        UIUtil.setField(employee.getMiddleInitial(), binding.etEmployeeMI);
+        UIUtil.setField(employee.getSuffix(), binding.etEmployeeSuffix);
+        UIUtil.setField(employee.getMiddleInitial(), binding.etEmployeeMI);
 
-        if (Checker.isDataAvailable(employee.getFirstname())) {
-            binding.etEmployeeFirstname.setText(employee.getFirstname());
-        }
-
-        if (Checker.isDataAvailable(employee.getLastname())) {
-            binding.etEmployeeLastname.setText(employee.getLastname());
-        }
-
-        if (Checker.isDataAvailable(employee.getMiddleInitial())) {
-            binding.etEmployeeMI.setText(employee.getMiddleInitial());
-        }
-
-        if (Checker.isDataAvailable(employee.getSuffix())) {
-            binding.etEmployeeSuffix.setText(employee.getSuffix());
-        }
+        UIUtil.setField(employee.getEmail(), binding.etEmployeeEmail);
+        UIUtil.setField(employee.getAddress(), binding.etEmergencyAddress1);
+        UIUtil.setField(employee.getAddress2ndPart(), binding.etEmergencyAddress2);
 
         if (Checker.isNotDefault(employee.getJobTitle())) {
             binding.spnrEmployeePosition.setSelection(employee.getJobTitle());
         }
 
-        if (Checker.isDataAvailable(employee.getDateOfBirth()) && !employee.getDateOfBirth().equals(Checker.NOT_AVAILABLE)) {
-            String[] dateUnits = DateUtil.toStringArray(employee.getDateOfBirth());
-            binding.tvEmployeeDay.setText(dateUnits[0]);
-            binding.tvEmployeeMonth.setText(DateUtil.getMonthName(UIUtil.convertToInteger(dateUnits[1])));
-            binding.tvEmployeeYear.setText(dateUnits[2]);
-        }
+        UIUtil.setDateFields(
+                employee.getDateOfBirth(),
+                binding.tvEmployeeDay,
+                binding.tvEmployeeMonth,
+                binding.tvEmployeeYear
+        );
 
         if (employee.getAge() >= 0)
             binding.etEmployeeAge.setText(String.valueOf(employee.getAge()));
@@ -292,16 +301,6 @@ public class BasicInfoFormFragment extends Fragment {
                 addMobileNumber(number);
             }
         }
-
-        if (Checker.isDataAvailable(employee.getEmail())) {
-            binding.etEmployeeEmail.setText(employee.getEmail());
-        }
-
-        if (Checker.isDataAvailable(employee.getAddress()))
-            binding.etEmergencyAddress1.setText(employee.getAddress());
-
-        if (Checker.isDataAvailable(employee.getAddress2ndPart()))
-            binding.etEmergencyAddress2.setText(employee.getAddress2ndPart());
 
         if (employee.getCivilStatus() > 0)
             binding.spnrEmployeeCivilStatus.setSelection(employee.getCivilStatus());
@@ -333,10 +332,12 @@ public class BasicInfoFormFragment extends Fragment {
                 binding.etEmployeeAge
         );
 
+        datePickerFragment.setMaxDateToday();
         datePickerFragment.showDatePickerDialog(
                 datePickerFragment,
                 DateUtil.getMonthNumber(binding.tvEmployeeMonth.getText().toString()),
-                getChildFragmentManager()
+                getChildFragmentManager(),
+                DatePickerFragment.BIRTH_DATE_TITLE
         );
     }
 
@@ -361,6 +362,58 @@ public class BasicInfoFormFragment extends Fragment {
 //        binding.etEmergencyAddress1.addTextChangedListener(new CustomTextWatcher(viewModel, binding.etEmergencyAddress1.getHint().toString()));
 //        binding.spnrEmployeeCivilStatus.setOnItemSelectedListener(new CustomItemSelectedListener((String) binding.spnrEmployeeCivilStatus.getTag(), viewModel));
 //    }
+
+    private void setListeners() {
+        binding.etEmployeeFirstname.addTextChangedListener(
+                new CustomTextWatcher(sharedViewModel, binding.etEmployeeFirstname.getHint().toString().trim()));
+        binding.etEmployeeLastname.addTextChangedListener(
+                new CustomTextWatcher(sharedViewModel, binding.etEmployeeLastname.getHint().toString().trim()));
+        binding.etEmployeeMI.addTextChangedListener(
+                new CustomTextWatcher(sharedViewModel, binding.etEmployeeMI.getHint().toString().trim()));
+        binding.etEmployeeSuffix.addTextChangedListener(
+                new CustomTextWatcher(sharedViewModel, binding.etEmployeeSuffix.getHint().toString().trim()));
+        binding.etEmployeeNumber.addTextChangedListener(
+                new CustomTextWatcher(sharedViewModel, binding.etEmployeeNumber.getHint().toString().trim()));
+        binding.etEmployeeEmail.addTextChangedListener(
+                new CustomTextWatcher(sharedViewModel, binding.etEmployeeEmail.getText().toString().trim()));
+    }
+
+    private void setObservers() {
+        Resources resources = getResources();
+        sharedViewModel.getmFirstname().observe(getViewLifecycleOwner(), new CustomObserver(binding.etEmployeeFirstname, resources));
+        sharedViewModel.getMlastname().observe(getViewLifecycleOwner(), new CustomObserver(binding.etEmployeeLastname, resources));
+        sharedViewModel.getmMiddleInitial().observe(getViewLifecycleOwner(), new CustomObserver(binding.etEmployeeMI, resources));
+        sharedViewModel.getmSuffix().observe(getViewLifecycleOwner(), new CustomObserver(binding.etEmployeeSuffix, resources));
+        sharedViewModel.getmContact().observe(getViewLifecycleOwner(), new CustomObserver(binding.etEmployeeNumber, resources));
+        sharedViewModel.getmEmail().observe(getViewLifecycleOwner(), new CustomObserver(
+                binding.etEmployeeEmail, resources));
+    }
+
+    private boolean isValid(String firstname, String lastname, String email, int jobTitle) {
+        boolean isValid = true;
+
+        if (firstname.isEmpty()) {
+            binding.etEmployeeFirstname.setError(getString(R.string.invalid_empty_input));
+            isValid = false;
+        }
+
+        if (lastname.isEmpty()) {
+            binding.etEmployeeLastname.setError(getString(R.string.invalid_empty_input));
+            isValid  = false;
+        }
+
+        if (email.isEmpty()) {
+            binding.etEmployeeEmail.setError(getString(R.string.invalid_empty_input));
+            isValid  = false;
+        }
+
+        if (jobTitle == 0) {
+            binding.positionError.setVisibility(View.VISIBLE);
+            isValid = false;
+        }
+
+        return isValid;
+    }
 
     @Override
     public void onDestroyView() {

@@ -4,9 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bsit_three_c.dentalrecordapp.ui.main.MainViewModel;
-import com.bsit_three_c.dentalrecordapp.data.login.LoginDataSource;
-import com.bsit_three_c.dentalrecordapp.data.login.LoginRepository;
+import com.bsit_three_c.dentalrecordapp.data.repository.LoginRepository;
 import com.bsit_three_c.dentalrecordapp.ui.main.MainAdminViewModel;
 import com.bsit_three_c.dentalrecordapp.ui.menu.MenuAdminViewModel;
 
@@ -16,21 +14,17 @@ import com.bsit_three_c.dentalrecordapp.ui.menu.MenuAdminViewModel;
  */
 public class LoginViewModelFactory implements ViewModelProvider.Factory {
 
-    private final LoginDataSource loginDataSource = new LoginDataSource();
-
     @NonNull
     @Override
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(LoginViewModel.class)) {
-            return (T) new LoginViewModel(LoginRepository.getInstance(loginDataSource));
-        } else if (modelClass.isAssignableFrom(MainViewModel.class)) {
-            return (T) new MainViewModel(LoginRepository.getInstance(loginDataSource));
+            return (T) new LoginViewModel(LoginRepository.getInstance());
         } else if (modelClass.isAssignableFrom(MainAdminViewModel.class)) {
-            return (T) new MainAdminViewModel(LoginRepository.getInstance(loginDataSource));
+            return (T) new MainAdminViewModel(LoginRepository.getInstance());
         }
         else if ((modelClass.isAssignableFrom(MenuAdminViewModel.class))) {
-            return (T) new MenuAdminViewModel(LoginRepository.getInstance(loginDataSource));
+            return (T) new MenuAdminViewModel(LoginRepository.getInstance());
         }
         else {
             throw new IllegalArgumentException("Unknown ViewModel class");

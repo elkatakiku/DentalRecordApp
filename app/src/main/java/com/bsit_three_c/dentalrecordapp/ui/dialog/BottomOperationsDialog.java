@@ -23,7 +23,7 @@ import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.model.ProgressNote;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProcedureRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProgressNoteRepository;
-import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.PatientInfoFragment;
+import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.ui.patientinfo.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DataSnapshot;
@@ -101,7 +101,7 @@ public class BottomOperationsDialog {
         viewHolder.iconClose.setOnClickListener(v -> procedureDialog.dismiss());
 
         String totalAmount = String.valueOf(procedure.getDentalTotalAmount());
-        viewHolder.title.setText(UIUtil.getServiceTitle(procedure.getServiceIds(), dentalServiceOptions));
+        viewHolder.title.setText(UIUtil.getServiceOptionsTitle(procedure.getServiceIds(), dentalServiceOptions));
         viewHolder.operationDesc.setText(procedure.getDentalDesc());
         viewHolder.operationDate.setText(procedure.getDentalDate());
         viewHolder.operationTotalAmount.setText(totalAmount);
@@ -137,7 +137,7 @@ public class BottomOperationsDialog {
 
                 builder
                         .setTitle(R.string.delete_title)
-                        .setMessage(context.getString(R.string.delete_message) + " procedure: " + UIUtil.getServiceTitle(procedure.getServiceIds(), dentalServiceOptions))
+                        .setMessage(context.getString(R.string.delete_message) + " procedure: " + UIUtil.getServiceOptionsTitle(procedure.getServiceIds(), dentalServiceOptions))
                         .setPositiveButton("Yes", (dialog, which) -> {
                             removeProcedure();
                         })
@@ -184,7 +184,7 @@ public class BottomOperationsDialog {
 
         for (int position = 0; position < paymentKeys.size(); position++) {
             int finalPosition = position;
-            progressNoteRepository.getProgressNote(paymentKeys.get(position)).addListenerForSingleValueEvent(new ValueEventListener() {
+            progressNoteRepository.getPath(paymentKeys.get(position)).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -200,8 +200,11 @@ public class BottomOperationsDialog {
                         totalPaid += progressNote.getAmount();
                         mBalance.setValue(totalAmount - totalPaid);
 
-                        if (mBalance.getValue() != null)
-                            procedureRepository.updateBalance(procedure, mBalance.getValue());
+                        if (mBalance.getValue() != null){
+                            procedure.setDentalBalance(mBalance.getValue());
+                            procedureRepository.upload(procedure);
+//                            procedureRepository.updateBalance(procedure, mBalance.getValue());
+                        }
                     }
                 }
 

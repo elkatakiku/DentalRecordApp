@@ -19,6 +19,7 @@ import com.bsit_three_c.dentalrecordapp.data.model.EmergencyContact;
 import com.bsit_three_c.dentalrecordapp.data.model.Employee;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentFormEmployee2Binding;
+import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.snackbar.Snackbar;
@@ -43,7 +44,7 @@ public class EmergencyContactFormFragment extends Fragment {
         @Override
         public void onChanged(Integer integer) {
             Log.d(TAG, "onChanged: data changed");
-            if (integer != EmergencyContactFormViewModel.VALID && integer != 0) {
+            if (integer != Checker.VALID && integer != 0) {
                 Snackbar
                         .make(binding.btnEmployeeConfirm, integer, Snackbar.LENGTH_SHORT)
                         .show();
@@ -56,7 +57,7 @@ public class EmergencyContactFormFragment extends Fragment {
         public void onChanged(Boolean aBoolean) {
 
             if (aBoolean) {
-                if (viewModel.getmError().getValue() != null && viewModel.getmError().getValue() == EmergencyContactFormViewModel.VALID) {
+                if (viewModel.getmError().getValue() != null && viewModel.getmError().getValue() == Checker.VALID) {
                     requireActivity()
                             .setResult(
                                     Activity.RESULT_OK,

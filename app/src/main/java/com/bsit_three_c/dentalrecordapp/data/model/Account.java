@@ -28,6 +28,7 @@ public class Account implements Parcelable {
         this.email = email;
         this.password = password;
         this.userType = userType;
+        this.userUid = userUid;
     }
 
     protected Account(Parcel in) {

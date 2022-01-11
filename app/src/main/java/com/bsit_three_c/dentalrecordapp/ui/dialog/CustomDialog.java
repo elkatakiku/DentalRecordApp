@@ -21,8 +21,9 @@ import androidx.navigation.NavController;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalService;
 import com.bsit_three_c.dentalrecordapp.data.repository.ServiceRepository;
+import com.bsit_three_c.dentalrecordapp.ui.appointments.appointment_form.AppointmentFormActivity;
 import com.bsit_three_c.dentalrecordapp.ui.employees.employee_form.EmployeeFormActivity;
-import com.bsit_three_c.dentalrecordapp.ui.patients.patient_form.AddPatientActivity;
+import com.bsit_three_c.dentalrecordapp.ui.patients.patient_form.PatientFormActivity;
 import com.bsit_three_c.dentalrecordapp.ui.services.view_service.ViewServiceActivity;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 
@@ -82,7 +83,6 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_admin_pop_up);
 
-
         tvTitle = findViewById(R.id.tvDialogTitle);
         button1 = findViewById(R.id.btnDialog1);
         button2 = findViewById(R.id.btnDialog2);
@@ -125,7 +125,6 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
         }
 
         dismiss();
-
     }
 
     private void initializeButton() {
@@ -160,13 +159,13 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
 
         switch (sTitle) {
             case LocalStorage.PATIENT_KEY:
-                intent = new Intent(context, AddPatientActivity.class);
+                intent = new Intent(context, PatientFormActivity.class);
                 break;
             case LocalStorage.EMPLOYEE_KEY:
                 intent = new Intent(context, EmployeeFormActivity.class);
                 break;
             case LocalStorage.APPOINTMENT_KEY:
-                intent = new Intent(context, AddPatientActivity.class);
+                intent = new Intent(context, AppointmentFormActivity.class);
                 break;
             case LocalStorage.SERVICE_KEY:
                 intent = new Intent(context, ViewServiceActivity.class);

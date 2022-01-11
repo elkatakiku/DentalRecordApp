@@ -29,6 +29,7 @@ public class Person implements Parcelable {
     protected Date lastUpdated;
 
     protected String email;
+    protected String accountUid;
 
     public Person() {
     }
@@ -85,6 +86,29 @@ public class Person implements Parcelable {
         );
     }
 
+    public Person(String uid,
+                  String firstname,
+                  String lastname,
+                  String middleInitial,
+                  String suffix,
+                  List<String> phoneNumber) {
+
+        this(
+                uid,
+                firstname,
+                lastname,
+                middleInitial,
+                suffix,
+                null,
+                phoneNumber,
+                "",
+                -1,
+                -1,
+                new Date(),
+                null
+        );
+    }
+
     protected Person(Parcel in) {
         uid = in.readString();
         firstname = in.readString();
@@ -97,6 +121,7 @@ public class Person implements Parcelable {
         civilStatus = in.readInt();
         age = in.readInt();
         email = in.readString();
+        accountUid = in.readString();
     }
 
     public static final Creator<Person> CREATOR = new Creator<Person>() {
@@ -271,6 +296,14 @@ public class Person implements Parcelable {
         this.email = email;
     }
 
+    public String getAccountUid() {
+        return accountUid;
+    }
+
+    public void setAccountUid(String accountUid) {
+        this.accountUid = accountUid;
+    }
+
     @Override
     public String toString() {
         return "\nPerson{" +
@@ -286,6 +319,7 @@ public class Person implements Parcelable {
                 "\nage=" + age +
                 "\nlastUpdated=" + lastUpdated +
                 "\nemail='" + email + '\'' +
+                "\naccount uid= " + accountUid +
                 "\n}";
     }
 
@@ -307,5 +341,6 @@ public class Person implements Parcelable {
         dest.writeInt(civilStatus);
         dest.writeInt(age);
         dest.writeString(email);
+        dest.writeString(accountUid);
     }
 }

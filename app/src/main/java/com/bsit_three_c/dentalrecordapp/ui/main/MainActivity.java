@@ -1,12 +1,12 @@
 package com.bsit_three_c.dentalrecordapp.ui.main;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -22,15 +22,15 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.Account;
-import com.bsit_three_c.dentalrecordapp.data.model.Employee;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityMainBinding;
-import com.bsit_three_c.dentalrecordapp.ui.employees.view_employee.ViewEmployeeActivity;
-import com.bsit_three_c.dentalrecordapp.ui.login.LoginViewModelFactory;
+import com.bsit_three_c.dentalrecordapp.ui.login.LoginActivity;
 import com.bsit_three_c.dentalrecordapp.ui.login_signup.LoginOrRegisterActivity;
+import com.bsit_three_c.dentalrecordapp.ui.patients.registration_form.RegisterActivity;
 import com.bsit_three_c.dentalrecordapp.ui.search.SearchActivity;
 import com.bsit_three_c.dentalrecordapp.ui.settings.SettingsActivity;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
+import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -43,23 +43,36 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private MainViewModel mainViewModel;
     private ActivityMainBinding binding;
-    private LoggedInUser loggedInUser;
-    private NavController navController;
+    private Menu menu;
 
     private final ActivityResultLauncher<Intent> toLoginResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
 
         Log.d(TAG, "onActivityResult: success code: " + RESULT_OK);
-        Log.d(TAG, "onActivityResult: resultcode: " + result.getResultCode());
+        Log.d(TAG, "onActivityResult: result code: " + result.getResultCode());
         Log.d(TAG, "onActivityResult: data: " + result.getData());
 
         if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-            Employee returnedData = result.getData().getParcelableExtra(getString(R.string.EMPLOYEE));
+            LoggedInUser resultUser = result.getData().getParcelableExtra(LocalStorage.LOGGED_IN_USER_KEY);
+            Log.d(TAG, "got result: " + resultUser);
 
-            Log.d(TAG, "onActivityResult: returned data: " + returnedData);
-
-            startActivity(
-                    new Intent(this, ViewEmployeeActivity.class)
-                            .putExtra(getString(R.string.EMPLOYEE), returnedData));
+            if (resultUser != null) {
+                switch (resultUser.getType()) {
+                    case Account.TYPE_ADMIN:
+                        sendUserToAdminHome();
+                        break;
+                    case Account.TYPE_EMPLOYEE:
+                        sendUserToAdminHome();
+                        break;
+                    case Account.TYPE_PATIENT:
+                        mainViewModel.setmLoggedInUser(resultUser);
+                        break;
+                }
+            }
+            else {
+                Snackbar
+                        .make(binding.getRoot(), "Failed to logged in.", Snackbar.LENGTH_SHORT)
+                        .show();
+            }
         }
     });
 
@@ -67,171 +80,43 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d(TAG, "onCreate: start of oncreate");
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        mainViewModel = new ViewModelProvider(this, new LoginViewModelFactory()).get(MainViewModel.class);
-
-        setSupportActionBar(binding.appBarMainUser.toolbar);
-
-//        LoggedInUser hasLoggedInUser = LocalStorage.getLoggedInUser(this);
-//        if (hasLoggedInUser != null) {
-//            Log.d(TAG, "onCreate: user already logged in");
-//            mainViewModel.setLoggedInUser(hasLoggedInUser);
-//        }
-
-//        mainViewModel.getmLoggedInUser().observe(this, new Observer<LoggedInUser>() {
-//            @Override
-//            public void onChanged(LoggedInUser loggedInUser) {
-//                if (loggedInUser != null && !mainViewModel.isLogged()) {
-//                    Log.d(TAG, "onChanged: logged: " + mainViewModel.isLogged());
-//                    startActivity(new Intent(MainActivity.this, MainActivity.class));
-//                    finish();
-//                }
-//            }
-//        });
-//
-//        loggedInUser = (LoggedInUser) getIntent().getSerializableExtra(LocalStorage.LOGGED_IN_USER_KEY);
-//        if (loggedInUser == null) {
-//            loggedInUser = new LoggedInUser("N/A", "Guest", "guest@email.com", "User");
-//            Log.d(TAG, "onStart: getIntent is null");
-//        } else Log.d(TAG, "onStart: getIntent isn't null");
-
-//        updateHeader(binding.navMainView);
-
-
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navUserMainView;
-//        navigationView.getMenu().clear();
+        setSupportActionBar(binding.appBarMainUser.toolbar);
 
-//        binding.appBarMain;
-//        View v = binding.appBarMain.contentMain.getRoot();
+        mainViewModel.setmLoggedInUser(LocalStorage.getLoggedInUser(this));
 
-//        if (loggedInUser != null) {
-//
-//            Log.d(TAG, "onCreate: type: " + loggedInUser.getType());
-//
-//            if ("Client".equals(loggedInUser.getType())) {
-//                Log.d(TAG, "onCreate: this is client");
-//            } else if ("Admin".equals(loggedInUser.getType())) {
-//                Log.d(TAG, "onCreate: this is admin");
-//            }
-//        }
-//
-//        if (loggedInUser != null && Checker.isDataAvailable(loggedInUser.getType())) {
-//
-//            if ("User".equals(loggedInUser.getType())) {
-//                Log.d(TAG, "onCreate: user is null");
-//                navigationView.inflateMenu(R.menu.home_drawer);
-                mAppBarConfiguration = new AppBarConfiguration.Builder(
-                        R.id.nav_user_home, R.id.nav_user_service)
-                        .setOpenableLayout(drawer)
-                        .build();
+        mainViewModel.getmLoggedInUser().observe(this, loggedInUser -> {
+            setUserUi(navigationView, loggedInUser);
+        });
 
-                navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_user_home, R.id.nav_user_service, R.id.nav_user_dental_history, R.id.nav_user_appointments)
+                .setOpenableLayout(drawer)
+                .build();
 
-                navController = Navigation.findNavController(this, R.id.nav_host_fragment_container_user);
-
-//                v.findViewById(R.id.nav_host_fragment_content_main).setVisibility(View.GONE);
-//                v.findViewById(R.id.nav_host_fragment_container_user).setVisibility(View.VISIBLE);
-//            }
-//
-//            else if ("Admin".equals(loggedInUser.getType())) {
-//                startActivity(new Intent(MainActivity.this, MainAdminActivity.class));
-//                finish();
-//
-//                navigationView.inflateMenu(R.menu.activity_main_drawer);
-//                mAppBarConfiguration = new AppBarConfiguration.Builder(
-//                        R.id.nav_menu, R.id.nav_dashboard, R.id.nav_patients, R.id.nav_service, R.id.nav_appointments)
-//                        .setOpenableLayout(drawer)
-//                        .build();
-//
-//                navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-//
-//                v.findViewById(R.id.nav_host_fragment_content_main).setVisibility(View.VISIBLE);
-//                v.findViewById(R.id.nav_host_fragment_container_user).setVisibility(View.GONE);
-//            }
-//        }
-
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_container_user);
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-        onNavMenuItemSelected(navigationView.getMenu());
+
+        menu = navigationView.getMenu();
+        onNavMenuItemSelected(menu);
 
         Log.d(TAG, "onCreate: ending of on create");
-
     }
-
-    private void updateHeader(NavigationView navigationView) {
-        View view = navigationView.getHeaderView(0);
-        TextView displayName = view.findViewById(R.id.navTxtViewUsername);
-        TextView email = view.findViewById(R.id.navTxtViewEmail);
-
-        displayName.setText(loggedInUser.getDisplayName());
-        email.setText(loggedInUser.getEmail());
-    }
-
-    private SearchView searchView;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        Log.d(TAG, "onOptionsItemSelected: this is called");
-        Log.d(TAG, "onOptionsItemSelected: menu item: " + item.getItemId());
-        Log.d(TAG, "onOptionsItemSelected: menu id: " + R.id.home);
-        Log.d(TAG, "onOptionsItemSelected: profile id: " + R.id.menu_profile);
-
-        Intent intent = null;
-        int id = item.getItemId();
-
-        if (id == R.id.menu_search) {
-            intent = new Intent(this, SearchActivity.class);
-        } else if (id == R.id.home) {
-            Snackbar.make(binding.getRoot(), "Menu clicked", Snackbar.LENGTH_SHORT).show();
-            Log.d(TAG, "onOptionsItemSelected: hamburger menu clicked");
-        } else if (id == R.id.menu_profile) {
-            //  Start activity on result
-            startActivity(new Intent(MainActivity.this, LoginOrRegisterActivity.class));
-        }
-
-//        else if (id == R.id.nav_settings) {
-//            intent = new Intent(this, SettingsActivity.class);
-//        }
-
-        if (intent != null) {
-            startActivity(intent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-//        MenuItem searchMenuItem = menu.findItem(R.id.app_bar_search);
-//
-//        final SearchView searchView = (SearchView) searchMenuItem.getActionView();
-//        searchView.getQueryHint("Seach patient");
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                return false;
-//            }
-//        });
     }
 
     @Override
@@ -241,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onStart: starting main activity");
 
         LoggedInUser loggedInUser = LocalStorage.getLoggedInUser(this);
+        Log.d(TAG, "onStart: loggedInUser: " + loggedInUser);
 
         if (loggedInUser != null) {
             switch (loggedInUser.getType()) {
@@ -251,20 +137,110 @@ public class MainActivity extends AppCompatActivity {
                     sendUserToAdminHome();
                     break;
                 case Account.TYPE_PATIENT:
-
+                    mainViewModel.setmLoggedInUser(loggedInUser);
                     break;
             }
         }
 
-        Log.d(TAG, "onStart: onstart called");
+        Log.d(TAG, "onStart: on start called");
     }
 
-    private void sendUserToAdminHome() {
-        Intent adminIntent = new Intent(MainActivity.this, MainAdminActivity.class);
-        startActivity(adminIntent);
-        finish();
+    private void setUserUi(NavigationView navigationView, LoggedInUser loggedInUser) {
+        if (loggedInUser != null) {
+            Log.d(TAG, "onCreate: has logged in user");
+            setVisibility(menu, true, R.id.nav_user_dental_history, R.id.nav_user_appointments, R.id.nav_logout);
+            setVisibility(menu, false, R.id.nav_login, R.id.nav_register);
+            menu.findItem(R.id.nav_user_home).setChecked(true);
+        } else {
+            Log.d(TAG, "onCreate: has no logged in user");
+            setVisibility(menu, true, R.id.nav_login, R.id.nav_register);
+            setVisibility(menu, false, R.id.nav_user_dental_history, R.id.nav_user_appointments, R.id.nav_logout);
+        }
+
+        updateHeader(navigationView, loggedInUser);
     }
 
+    private void setVisibility(Menu menu, boolean visible, int... menuIds) {
+        for (int i : menuIds) {
+            menu.findItem(i).setVisible(visible);
+        }
+    }
+
+    private void updateHeader(NavigationView navigationView, LoggedInUser loggedInUser) {
+        View view = navigationView.getHeaderView(0);
+        TextView displayName = view.findViewById(R.id.navTxtViewUsername);
+        TextView email = view.findViewById(R.id.navTxtViewEmail);
+
+        if (loggedInUser != null) {
+            view.findViewById(R.id.tvHeaderSystemName).setVisibility(View.GONE);
+            view.findViewById(R.id.headerUserDisplay).setVisibility(View.VISIBLE);
+
+            UIUtil.setText(loggedInUser.getDisplayName(), displayName);
+            UIUtil.setText(loggedInUser.getEmail(), email);
+        }
+        else {
+            view.findViewById(R.id.tvHeaderSystemName).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.headerUserDisplay).setVisibility(View.GONE);
+        }
+    }
+
+    private void onNavMenuItemSelected(Menu menu) {
+
+        menu.findItem(SETTINGS).setOnMenuItemClickListener(item -> {
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            return true;
+        });
+
+        menu.findItem(R.id.nav_register).setOnMenuItemClickListener(item -> {
+            startActivity(new Intent(MainActivity.this, RegisterActivity.class));
+            return true;
+        });
+
+        menu.findItem(R.id.nav_login).setOnMenuItemClickListener(item -> {
+            toLoginResult.launch(new Intent(MainActivity.this, LoginActivity.class));
+            return true;
+        });
+
+        menu.findItem(NAV_LOGOUT).setOnMenuItemClickListener(item -> {
+            mainViewModel.logout(this);
+            return true;
+        });
+
+
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        Log.d(TAG, "onOptionsItemSelected: this is called");
+        Log.d(TAG, "onOptionsItemSelected: menu item: " + item.getItemId());
+        Log.d(TAG, "onOptionsItemSelected: menu id: " + R.id.home);
+        Log.d(TAG, "onOptionsItemSelected: profile id: " + R.id.menu_profile);
+
+        Intent intent = null;
+        final int id = item.getItemId();
+
+        switch (id) {
+            case R.id.menu_profile:
+                startActivity(new Intent(MainActivity.this, LoginOrRegisterActivity.class));
+                break;
+        }
+
+        if (id == R.id.menu_search) {
+            intent = new Intent(this, SearchActivity.class);
+        } else if (id == R.id.home) {
+            Snackbar.make(binding.getRoot(), "Menu clicked", Snackbar.LENGTH_SHORT).show();
+            Log.d(TAG, "onOptionsItemSelected: hamburger menu clicked");
+        }
+
+        if (intent != null) {
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -276,35 +252,15 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    private void onNavMenuItemSelected(Menu menu) {
-        menu.findItem(NAV_LOGOUT).setOnMenuItemClickListener(item -> {
-            logout();
-            return true;
-        });
-
-        menu.findItem(SETTINGS).setOnMenuItemClickListener(item -> {
-            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-            return true;
-        });
-    }
-
     @Override
     public void onBackPressed() {
         if (binding.drawerLayout.isOpen()) binding.drawerLayout.close();
         else super.onBackPressed();
     }
 
-    private void logout() {
-        Log.d(TAG, "onNavigationItemSelected: Clearing saved user info");
-        LocalStorage.clearSavedUser(this);
-
-        Log.d(TAG, "onNavigationItemSelected: logout in view model called");
-        mainViewModel.logout();
-
-        Log.d(TAG, "onNavigationItemSelected: going back to login ui");
-        startActivity(new Intent(MainActivity.this, MainActivity.class));
-
-        Log.d(TAG, "onNavigationItemSelected: killing activity");
+    private void sendUserToAdminHome() {
+        Intent adminIntent = new Intent(MainActivity.this, MainAdminActivity.class);
+        startActivity(adminIntent);
         finish();
     }
 }

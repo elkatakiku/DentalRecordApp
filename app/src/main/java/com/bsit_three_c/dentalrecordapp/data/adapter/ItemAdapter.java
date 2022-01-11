@@ -16,15 +16,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.Employee;
+import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Person;
 import com.bsit_three_c.dentalrecordapp.data.repository.EmployeeRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
 import com.bsit_three_c.dentalrecordapp.data.repository.PatientRepository;
 import com.bsit_three_c.dentalrecordapp.ui.employees.employee_form.EmployeeFormActivity;
-import com.bsit_three_c.dentalrecordapp.ui.patients.patient_form.AddPatientActivity;
+import com.bsit_three_c.dentalrecordapp.ui.patients.patient_form.PatientFormActivity;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.DateUtil;
+import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -48,13 +50,12 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     private AlertDialog alertDialog;
 
     private List<Person> personListFiltered;
-
     private String title;
 
-    public ItemAdapter(Context context, int isPatient) {
+    public ItemAdapter(Context context, int type) {
         this.context = context;
         this.personList = new ArrayList<>();
-        this.type = isPatient;
+        this.type = type;
 
         this.patientRepository = PatientRepository.getInstance();
         this.employeeRepository = EmployeeRepository.getInstance();
@@ -85,45 +86,14 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
         initializeView(itemViewHolder, person);
 
-        itemViewHolder.delete.setOnClickListener(v -> {
-            //  TODO:  Show alert dialog to confirm delete
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-            builder
-                    .setTitle(context.getString(R.string.delete_title, title))
-                    .setMessage(context.getString(R.string.delete_message) + " " + title.toLowerCase() + ": " + person.getLastname() + "?")
-                    .setPositiveButton("Yes", (dialog, which) -> {
-                        switch (type) {
-                            case TYPE_PATIENT:
-                                patientRepository.remove((Patient) person);
-                                break;
-                            case TYPE_EMPLOYEE:
-                                employeeRepository.remove((Employee) person, context);
-                                break;
-                        }
-                    })
-                    .setNegativeButton("No", (dialog, which) -> alertDialog.dismiss());
-            alertDialog = builder.create();
-            alertDialog.show();
-        });
-
         itemViewHolder.edit.setOnClickListener(v -> {
             // TODO:    Show Edit Patient dialog
-            switch (type) {
-                case TYPE_PATIENT:
-                    context.startActivity(new Intent(context, AddPatientActivity.class)
-                            .putExtra(context.getString(R.string.PATIENT), personList.get(holder.getAdapterPosition())));
-                    break;
+            editPerson(holder);
+        });
 
-                case TYPE_EMPLOYEE:
-                    context.startActivity(
-                            new Intent(context, EmployeeFormActivity.class)
-                            .putExtra(
-                                    context.getString(R.string.EMPLOYEE),
-                                    personList.get(holder.getAdapterPosition()))
-                    );
-                    break;
-            }
+        itemViewHolder.delete.setOnClickListener(v -> {
+            //  TODO:  Show alert dialog to confirm delete
+            showDeleteDialog(person);
         });
 
         // Sets item on click listener
@@ -140,7 +110,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         switch (type) {
             case TYPE_PATIENT:
                 title = "Patient";
-                itemViewHolder.imageView.setVisibility(View.GONE);
+                itemViewHolder.display.setVisibility(View.GONE);
 
                 Patient patient = (Patient) person;
 
@@ -153,7 +123,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
             case TYPE_EMPLOYEE:
                 title = "Employee";
-                itemViewHolder.imageView.setVisibility(View.VISIBLE);
+                itemViewHolder.display.setVisibility(View.VISIBLE);
 
                 Employee employee = (Employee) person;
 
@@ -162,7 +132,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                         .load(Checker.isDataAvailable(employee.getDisplayImage()) ? Uri.parse(employee.getDisplayImage()) : R.drawable.ic_baseline_person_24)
                         .circleCrop()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(itemViewHolder.imageView);
+                        .into(itemViewHolder.display);
 
                 String employeePosition = employee.getJobTitle(context.getResources());
                 itemViewHolder.text3.setText(employeePosition);
@@ -173,21 +143,64 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         }
     }
 
+    private void showDeleteDialog(Person person) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder
+                .setTitle(context.getString(R.string.delete_title, title))
+                .setMessage(context.getString(R.string.delete_message) + " " + title.toLowerCase() + ": " + person.getLastname() + "?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+
+                    LoggedInUser loggedInAccount = LocalStorage.getLoggedInUser(context);
+
+                    switch (type) {
+                        case TYPE_PATIENT:
+                            Log.d(TAG, "onBindViewHolder: patient to be delete: " + person);
+                            if (Checker.isDataAvailable(person.getAccountUid())) {
+                                patientRepository.remove((Patient) person, loggedInAccount);
+                            } else {
+                                patientRepository.remove(person.getUid());
+                            }
+                            break;
+                        case TYPE_EMPLOYEE:
+                            employeeRepository.remove((Employee) person, loggedInAccount);
+                            break;
+                    }
+                })
+                .setNegativeButton("No", (dialog, which) -> alertDialog.dismiss());
+        alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void editPerson(RecyclerView.ViewHolder holder) {
+        switch (type) {
+            case TYPE_PATIENT:
+                context.startActivity(new Intent(context, PatientFormActivity.class)
+                        .putExtra(context.getString(R.string.PATIENT), personList.get(holder.getAdapterPosition())));
+                break;
+
+            case TYPE_EMPLOYEE:
+                context.startActivity(
+                        new Intent(context, EmployeeFormActivity.class)
+                                .putExtra(
+                                        context.getString(R.string.EMPLOYEE),
+                                        personList.get(holder.getAdapterPosition()))
+                );
+                break;
+        }
+    }
+
+    public void setmItemOnClickListener(ItemViewHolder.ItemOnClickListener mItemOnClickListener) {
+        this.mItemOnClickListener = mItemOnClickListener;
+    }
+
     @Override
     public int getItemCount() {
         return personList.size();
     }
 
-    public List<Person> getPersonList() {
-        return personList;
-    }
-
     public void clearAll() {
         personList.clear();
-    }
-
-    public void setmItemOnClickListener(ItemViewHolder.ItemOnClickListener mItemOnClickListener) {
-        this.mItemOnClickListener = mItemOnClickListener;
     }
 
     private List<Person> origList;
@@ -251,6 +264,4 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             }
         };
     }
-
-//    public static void set
 }

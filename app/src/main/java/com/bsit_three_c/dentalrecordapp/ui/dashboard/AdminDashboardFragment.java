@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -45,26 +44,14 @@ public class AdminDashboardFragment extends Fragment {
         binding.adminDashboardServicesCard.setOnClickListener(sendUserToServices);
         binding.adminDashboardEmployeesCard.setOnClickListener(sendUserToEmployees);
 
-        mViewModel.getPatientsCount().observe(getViewLifecycleOwner(), new Observer<Long>() {
-            @Override
-            public void onChanged(Long num) {
-                binding.tvTotalPatient.setText(String.valueOf(num));
-            }
-        });
+        mViewModel.getPatientsCount().observe(getViewLifecycleOwner(), num ->
+                binding.tvTotalPatient.setText(String.valueOf(num)));
 
-        mViewModel.getServicesCount().observe(getViewLifecycleOwner(), new Observer<Long>() {
-            @Override
-            public void onChanged(Long num) {
-                binding.tvServicesCount.setText(String.valueOf(num));
-            }
-        });
+        mViewModel.getServicesCount().observe(getViewLifecycleOwner(), num ->
+                binding.tvServicesCount.setText(String.valueOf(num)));
 
-        mViewModel.getEmployeesCount().observe(getViewLifecycleOwner(), new Observer<Long>() {
-            @Override
-            public void onChanged(Long aLong) {
-                binding.tvEmployeesCount.setText(String.valueOf(aLong));
-            }
-        });
+        mViewModel.getEmployeesCount().observe(getViewLifecycleOwner(), aLong ->
+                binding.tvEmployeesCount.setText(String.valueOf(aLong)));
 
     }
 

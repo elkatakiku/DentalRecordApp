@@ -28,7 +28,7 @@ import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.model.ProgressNote;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProcedureRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProgressNoteRepository;
-import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.PatientInfoFragment;
+import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.ui.patientinfo.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.CustomObserver;
 import com.bsit_three_c.dentalrecordapp.util.DateUtil;
@@ -143,7 +143,7 @@ public class BottomProgressNoteFormDialog {
                     "\ndate: " + date +
                     "\ndescription: " + description +
                     "\namount: " + amount);
-            progressNoteRepository.addProgressNote(operation, amount, date, description);
+            progressNoteRepository.upload(operation, amount, date, description);
             paymentDialog.dismiss();
         });
 

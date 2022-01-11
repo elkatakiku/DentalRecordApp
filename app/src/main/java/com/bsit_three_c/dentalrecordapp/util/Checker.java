@@ -1,6 +1,7 @@
 package com.bsit_three_c.dentalrecordapp.util;
 
 import android.util.Log;
+import android.util.Patterns;
 
 import androidx.lifecycle.LiveData;
 
@@ -13,6 +14,7 @@ public class Checker {
     private static final String TAG = Checker.class.getSimpleName();
 
     public static final String NOT_AVAILABLE = "N/A";
+    public static final int VALID = -1;
 
     private static boolean isNullOrError(LiveData<FormState> liveData) {
         return liveData.getValue() == null || liveData.getValue().getMsgError() != null;
@@ -52,7 +54,7 @@ public class Checker {
     }
 
     public static boolean containsSpecialCharacter(String s) {
-        return Pattern.compile("[^a-zA-Z0-9 ]").matcher(s).find();
+        return Pattern.compile("[^a-zA-Z0-9 ñ]").matcher(s).find();
     }
 
     public static boolean isDataAvailable(String data) {
@@ -83,5 +85,19 @@ public class Checker {
 
     public static boolean isNotAvailable(String data) {
         return NOT_AVAILABLE.equals(data);
+    }
+
+    public static boolean isEmailValid(String username) {
+        if (username == null) {
+            return false;
+        }
+
+        if (username.contains("@")) {
+            Log.d(TAG, "isEmailValid: is email: " + Patterns.EMAIL_ADDRESS.matcher(username).matches());
+            return Patterns.EMAIL_ADDRESS.matcher(username).matches();
+        } else {
+            Log.d(TAG, "isEmailValid: is valid: " + (!username.trim().isEmpty()));
+            return !username.trim().isEmpty();
+        }
     }
 }

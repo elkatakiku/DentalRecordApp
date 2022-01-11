@@ -16,7 +16,7 @@ import com.bsit_three_c.dentalrecordapp.data.model.DentalServiceOption;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProcedureRepository;
-import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.PatientInfoFragment;
+import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.ui.patientinfo.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.DateUtil;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -81,11 +81,11 @@ public class BottomEditProcedureDialog {
 
 
             procedure.setDentalDate(newDate);
-            procedure.setServiceIds(UIUtil.getServices(serviceOptions));
+            procedure.setServiceIds(UIUtil.getServiceUids(serviceOptions));
             procedure.setDentalDesc(viewHolder.description.getText().toString());
             procedure.setDentalTotalAmount(newAmount);
 
-            procedureRepository.updateProcedure(procedure);
+            procedureRepository.upload(procedure);
             editOperationDialog.dismiss();
         });
 

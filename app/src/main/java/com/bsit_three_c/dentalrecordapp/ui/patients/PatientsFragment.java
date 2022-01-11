@@ -30,7 +30,7 @@ import com.bsit_three_c.dentalrecordapp.data.adapter.SearchVIewAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentListPatientsBinding;
-import com.bsit_three_c.dentalrecordapp.ui.patients.patient_form.AddPatientActivity;
+import com.bsit_three_c.dentalrecordapp.ui.patients.patient_form.PatientFormActivity;
 import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.PatientActivity;
 import com.bsit_three_c.dentalrecordapp.util.Internet;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
@@ -49,7 +49,6 @@ public class PatientsFragment extends Fragment {
         binding = FragmentListPatientsBinding.inflate(inflater, container, false);
 
         adapter = new ItemAdapter(getActivity(), ItemAdapter.TYPE_PATIENT);
-        patientsViewModel.initializeEventListener(adapter);
 
         requireActivity().getActionBar();
 
@@ -60,25 +59,25 @@ public class PatientsFragment extends Fragment {
         Internet.getIsOnline().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 showRecyclerView();
-                patientsViewModel.refresh(adapter);
+                adapter.notifyDataSetChanged();
+//                patientsViewModel.refresh(adapter);
             } else {
-                if (patientsViewModel.isRecordEmpty()) showError();
+//                if (patientsViewModel.isRecordEmpty()) showError();
                 Internet.showSnackBarInternetError(binding.getRoot());
             }
         });
 
-        patientsViewModel.getIsPatientsGettingDone().observe(getViewLifecycleOwner(), isDone -> {
-            Log.d(TAG, "onCreateView: is done: " + isDone);
-
-            if (isDone) {
-                binding.progressBar.setVisibility(View.GONE);
-                binding.swipeRefreshLayout.setRefreshing(false);
+        patientsViewModel.getmPatientList().observe(getViewLifecycleOwner(), people -> {
+            binding.progressBar.setVisibility(View.GONE);
+            binding.swipeRefreshLayout.setRefreshing(false);
+            if (people != null) {
+                binding.tvPatientWillShowHere.setVisibility(View.GONE);
+                adapter.setItems(people);
+                adapter.initializeOrigList();
+                adapter.notifyDataSetChanged();
+            } else {
+                binding.tvPatientWillShowHere.setVisibility(View.VISIBLE);
             }
-            else {
-                binding.progressBar.setVisibility(View.VISIBLE);
-            }
-
-            Log.d(TAG, "onCreateView: progress bar: " + binding.progressBar.getVisibility());
         });
 
         setHasOptionsMenu(true);
@@ -86,69 +85,24 @@ public class PatientsFragment extends Fragment {
         return binding.getRoot();
     }
 
-
-//    private SearchView.OnQueryTextListener queryTextListener;
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.findItem(R.id.menu_search).setVisible(true);
-//        menu.clear();
-//        inflater.inflate(R.menu.main, menu);
-
-        Log.d(TAG, "onCreateOptionsMenu: called");
 
         MenuItem searchItem = menu.findItem(R.id.menu_search);
         SearchManager searchManager = (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
-        searchView = SearchVIewAdapter.newInstance(requireActivity(), adapter, searchItem)
+        SearchVIewAdapter searchVIewAdapter = SearchVIewAdapter.newInstance(requireActivity(), adapter, searchItem)
                 .setSearchableInfo(searchManager)
-                .setListeners()
-                .getSearchView();
-
-//        if (searchItem != null) {
-//            searchView = (SearchView) searchItem.getActionView();
-//            searchView.setQueryHint("Search patients here");
-//            searchView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.shape_field, requireActivity().getTheme()));
-//            searchView.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.tint_blue_green)));
-//        }
-//        if (searchView != null && searchItem != null) {
-//            searchView.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().getComponentName()));
-//
-//            queryTextListener = new SearchView.OnQueryTextListener() {
-//                @Override
-//                public boolean onQueryTextChange(String newText) {
-//                    adapter.getFilter().filter(newText);
-//                    Log.i("onQueryTextChange", newText);
-//
-//                    return false;
-//                }
-//                @Override
-//                public boolean onQueryTextSubmit(String query) {
-//                    Log.i("onQueryTextSubmit", query);
-//                    adapter.getFilter().filter(query);
-//                    searchView.clearFocus();
-//                    return false;
-//                }
-//            };
-//            searchView.setOnQueryTextListener(queryTextListener);
-//            searchView.setOnCloseListener(() -> {
-//                searchView.setQuery("", false);
-//                searchItem.collapseActionView();
-////                searchView.setIconified(true);
-//                return false;
-//            });
-//        }
-
+                .setListeners();
+        searchView = searchVIewAdapter.getSearchView();
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_search:
                 // Not implemented here
-//                searchView.performClick();
                 searchView.setIconified(false);
                 return false;
             case R.id.menu_profile:
@@ -177,8 +131,6 @@ public class PatientsFragment extends Fragment {
         adapter.setmItemOnClickListener(itemOnClickListener);
         binding.recyclerViewPatients.setAdapter(adapter);
 
-        if (patientsViewModel.isPatientsLoaded()) patientsViewModel.initializePatients(adapter);
-
         binding.swipeRefreshLayout.setOnRefreshListener(() -> {
 //            Log.d(TAG, "onViewCreated: is search view iconified: " + searchView.isIconified());
             if (searchView != null && searchView.isIconified()) {
@@ -190,7 +142,7 @@ public class PatientsFragment extends Fragment {
         });
 
         binding.fabAddPatients.setOnClickListener(v -> {
-            toAddPatientResult.launch(new Intent(getActivity(), AddPatientActivity.class));
+            toAddPatientResult.launch(new Intent(getActivity(), PatientFormActivity.class));
         });
     }
 
@@ -199,10 +151,13 @@ public class PatientsFragment extends Fragment {
         super.onResume();
         Log.d(TAG, "onResume: called");
         patientsViewModel.runInternetTest();
+
+        if (searchView != null && !searchView.isIconified()) {
+            return;
+        }
+
         patientsViewModel.loadPatients();
     }
-
-
 
     public void showRecyclerView() {
         Log.d(TAG, "showRecyclerView: showing recyclerview");
@@ -223,6 +178,7 @@ public class PatientsFragment extends Fragment {
         Intent toPatient = new Intent(requireActivity(), PatientActivity.class);
 
         toPatient.putExtra(getString(R.string.PATIENT), patient);
+        Log.d(TAG, "passing patient from list: " + patient);
         startActivity(toPatient);
     };
 
@@ -241,14 +197,6 @@ public class PatientsFragment extends Fragment {
                             .putExtra(getString(R.string.PATIENT), patient));
         }
     });
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        if (Internet.getIsOnline().getValue() != null && Internet.getIsOnline().getValue())
-            patientsViewModel.removeEventListener();
-    }
 
     @Override
     public void onDestroyView() {

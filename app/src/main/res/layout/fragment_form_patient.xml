@@ -7,7 +7,7 @@
     android:background="@color/bg_home_color"
     android:fillViewport="true"
     android:orientation="vertical"
-    tools:context=".ui.patients.patient_form.AddPatientActivity">
+    tools:context=".ui.patients.patient_form.PatientFormActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,6 +20,7 @@
             android:id="@+id/textView56"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_semibold"
             android:text="Name"
             android:textColor="@color/label" />
 
@@ -35,12 +36,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:background="@color/white"
+                android:background="@drawable/shape_field"
                 android:ems="10"
+                android:fontFamily="@font/open_sans"
                 android:hint="Firstname"
                 android:inputType="textPersonName"
                 android:minHeight="48dp"
                 android:padding="10dp"
+                android:textColor="@color/data"
                 android:textColorHint="@color/field_hint" />
 
             <EditText
@@ -48,13 +51,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/white"
+                android:background="@drawable/shape_field"
                 android:ems="10"
+                android:fontFamily="@font/open_sans"
                 android:hint="MI"
                 android:inputType="textPersonName"
                 android:minHeight="48dp"
                 android:padding="10dp"
                 android:shadowColor="#32ED7D"
+                android:textColor="@color/data"
                 android:textColorHint="@color/field_hint" />
         </LinearLayout>
 
@@ -70,12 +75,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:background="@color/white"
+                android:background="@drawable/shape_field"
                 android:ems="10"
+                android:fontFamily="@font/open_sans"
                 android:hint="Lastname"
                 android:inputType="textPersonName"
                 android:minHeight="48dp"
                 android:padding="10dp"
+                android:textColor="@color/data"
                 android:textColorHint="@color/field_hint" />
 
             <EditText
@@ -83,12 +90,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/white"
+                android:background="@drawable/shape_field"
                 android:ems="10"
+                android:fontFamily="@font/open_sans"
                 android:hint="Suffix"
                 android:inputType="textPersonName"
                 android:minHeight="48dp"
                 android:padding="10dp"
+                android:textColor="@color/data"
                 android:textColorHint="@color/field_hint" />
         </LinearLayout>
 
@@ -112,7 +121,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@color/bg_field"
+            android:background="@drawable/shape_field"
             android:orientation="horizontal"
             android:paddingStart="0dp"
             android:paddingEnd="2dp">
@@ -127,11 +136,14 @@
 
                 <TextView
                     android:id="@+id/tvPatientMonth"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:fontFamily="@font/open_sans"
                     android:gravity="center"
                     android:hint="Month"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="5dp"
                     android:textAlignment="center"
                     android:textColor="@color/data"
                     android:textColorHint="@color/field_hint"
@@ -148,8 +160,11 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:fontFamily="@font/open_sans"
                     android:gravity="center"
                     android:hint="Day"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
                     android:textAlignment="center"
                     android:textColor="@color/data"
                     android:textColorHint="@color/field_hint"
@@ -166,8 +181,10 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:fontFamily="@font/open_sans"
                     android:gravity="center"
                     android:hint="Year"
+                    android:paddingStart="5dp"
                     android:textAlignment="center"
                     android:textColor="@color/data"
                     android:textColorHint="@color/field_hint"
@@ -199,8 +216,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@color/bg_field"
+            android:background="@drawable/shape_field"
             android:ems="10"
+            android:fontFamily="@font/open_sans"
             android:hint="Age"
             android:inputType="number"
             android:minHeight="48dp"
@@ -235,7 +253,7 @@
             <FrameLayout
                 android:layout_width="75dp"
                 android:layout_height="match_parent"
-                android:background="@color/bg_field">
+                android:background="@drawable/shape_field">
 
                 <ImageView
                     android:id="@+id/imageView15"
@@ -259,20 +277,24 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:background="@color/white"
+                android:background="@drawable/shape_field"
                 android:ems="10"
+                android:fontFamily="@font/open_sans"
                 android:hint="Contact Number"
                 android:inputType="phone"
                 android:minHeight="48dp"
                 android:padding="10dp"
+                android:textColor="@color/data"
                 android:textColorHint="@color/field_hint" />
 
             <Button
                 android:id="@+id/btnPatientAddNumber"
-                android:layout_width="0dp"
+                android:layout_width="75dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:backgroundTint="@color/blue_green"
+                android:insetTop="2dp"
+                android:insetBottom="2dp"
+                android:minWidth="75dp"
                 android:text="Add" />
 
         </LinearLayout>
@@ -297,6 +319,7 @@
             android:id="@+id/textView14"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_semibold"
             android:text="@string/Address"
             android:textColor="@color/label" />
 
@@ -305,13 +328,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@color/white"
+            android:background="@drawable/shape_field"
             android:ems="10"
+            android:fontFamily="@font/open_sans"
             android:gravity="start|top"
             android:hint="Address"
             android:inputType="textMultiLine"
             android:minHeight="48dp"
             android:padding="10dp"
+            android:textColor="@color/data"
             android:textColorHint="@color/field_hint" />
 
         <View
@@ -323,9 +348,41 @@
             android:background="?android:attr/listDivider" />
 
         <TextView
+            android:id="@+id/tvPatientEmailLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_semibold"
+            android:text="Email"
+            android:textColor="@color/label" />
+
+        <EditText
+            android:id="@+id/etPatientFormEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/shape_field"
+            android:ems="10"
+            android:fontFamily="@font/open_sans"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp"
+            android:padding="10dp"
+            android:textColor="@color/data"
+            android:textColorHint="@color/field_hint" />
+
+        <View
+            android:id="@+id/divider23"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
             android:id="@+id/textView58"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_semibold"
             android:text="Background"
             android:textColor="@color/label" />
 
@@ -334,12 +391,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@color/white"
+            android:background="@drawable/shape_field"
             android:ems="10"
+            android:fontFamily="@font/open_sans"
             android:hint="Occupation"
             android:inputType="textPersonName"
             android:minHeight="48dp"
             android:padding="10dp"
+            android:textColor="@color/data"
             android:textColorHint="@color/field_hint" />
 
         <Spinner
@@ -347,13 +406,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@color/white"
+            android:background="@drawable/shape_field"
             android:entries="@array/civil_status_array"
             android:minHeight="48dp"
             android:spinnerMode="dropdown"
             android:tag="@string/CivilStatus" />
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:minHeight="100dp">
@@ -362,11 +421,28 @@
                 android:id="@+id/btnAddPatient"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center"
                 android:backgroundTint="@color/blue_green"
                 android:text="Confirm"
-                app:cornerRadius="50dp" />
-        </FrameLayout>
+                app:cornerRadius="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/pbLoadingAddPatient"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="16dp"
+                android:indeterminateTint="@color/white"
+                android:translationZ="3dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/btnAddPatient"
+                app:layout_constraintEnd_toEndOf="@+id/btnAddPatient"
+                app:layout_constraintTop_toTopOf="@+id/btnAddPatient"
+                tools:visibility="visible" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

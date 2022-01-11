@@ -2,6 +2,7 @@ package com.bsit_three_c.dentalrecordapp.util;
 
 import android.util.Log;
 import android.widget.DatePicker;
+import android.widget.TextView;
 
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
@@ -23,6 +24,14 @@ public class DateUtil {
 
     public static boolean isDefaultDate(String inputDate) {
         return DEFAULT_DATE.equals(inputDate);
+    }
+
+    public static String getDate(TextView day, TextView month, TextView year) {
+        return getDate(
+                day.getText().toString().trim(),
+                month.getText().toString().trim(),
+                year.getText().toString().trim()
+        );
     }
 
     // Return Date format from date picker
@@ -104,7 +113,6 @@ public class DateUtil {
         return getMonthName(Integer.parseInt(units[1])) + " " + units[0] + ", " + units[2];
     }
 
-
     public static String getAge(int year, int month, int day){
         Calendar dob = Calendar.getInstance();
         Calendar today = Calendar.getInstance();
@@ -149,5 +157,90 @@ public class DateUtil {
         }
 
         return dateOfBirth;
+    }
+
+    public static Date convertToTime(String timeString) {
+        final SimpleDateFormat timeFormat = new SimpleDateFormat("HH/mm", Locale.ENGLISH);
+        Date date = new Date();
+        try {
+            date = timeFormat.parse(timeString);
+        } catch (ParseException e) {
+            Log.e(TAG, "stringToDate: Error parsing", e);
+        }
+
+        Log.d(TAG, "convertToTime: returning date: " + date);
+
+        return date;
+    }
+
+    public static String getTime(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        return calendar.get(Calendar.HOUR_OF_DAY) + "/" + calendar.get(Calendar.MINUTE);
+    }
+
+    public static String getTime(String hour, String minutes, String period) {
+        if (hour.isEmpty() || minutes.isEmpty()) {
+            return Checker.NOT_AVAILABLE;
+        }
+
+        int intHour = UIUtil.convertToInteger(hour);
+        if ("PM".equals(period) && intHour != 12) {
+            intHour += 12;
+        }
+
+        return intHour + "/" + minutes;
+    }
+
+    public static int convertToHour(int hourOfDay, String period) {
+        if ("PM".equals(period) && hourOfDay != 12) {
+            hourOfDay += 12;
+        }
+        return hourOfDay;
+    }
+
+    public static String getReadableTime(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+        boolean isAm = true;
+
+        if (hourOfDay > 12) {
+            Log.d(TAG, "getReadableTime: is pm");
+            hourOfDay -= 12;
+            isAm = false;
+        }
+
+        Log.d(TAG, "getReadableTime: is am: " + isAm);
+
+        return hourOfDay + " : " + calendar.get(Calendar.MINUTE) + " " + (isAm ? "AM" : "PM");
+    }
+
+    public static boolean datePassed(Date date) {
+        Log.d(TAG, "datePassed: appointment date: " + date);
+        Log.d(TAG, "datePassed: current date: " + new Date());
+        return date.before(new Date());
+    }
+
+    public static Date getDateTime(String dateString) {
+        Log.d(TAG, "getSchedule: converting datetime: " + dateString);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy/HH/mm", Locale.getDefault());
+        Date date = new Date();
+
+        try {
+            date = dateFormat.parse(dateString);
+        } catch (ParseException e) {
+            Log.e(TAG, "stringToDate: Error parsing", e);
+        }
+
+        Log.d(TAG, "getDate: returning date: " + date);
+
+        return date;
+    }
+
+    public static String getReadableDateTime(Date dateTime) {
+        return getReadableDate(dateTime) + " | " + getReadableTime(dateTime);
     }
 }

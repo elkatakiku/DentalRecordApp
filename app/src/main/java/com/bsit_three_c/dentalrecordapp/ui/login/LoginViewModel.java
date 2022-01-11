@@ -10,13 +10,14 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.data.login.LoginRepository;
+import com.bsit_three_c.dentalrecordapp.data.repository.LoginRepository;
 import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.Employee;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.data.model.Person;
 import com.bsit_three_c.dentalrecordapp.data.repository.AccountRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.EmployeeRepository;
+import com.bsit_three_c.dentalrecordapp.data.repository.PatientRepository;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -96,11 +97,6 @@ public class LoginViewModel extends ViewModel {
         return password != null && password.trim().length() > 5;
     }
 
-    public boolean isUserLoggedIn() {
-        return loginRepository.isLoggedIn();
-    }
-
-
     private class LoginUser extends AsyncTask<String, Void, Void> {
 
         @Override
@@ -113,7 +109,7 @@ public class LoginViewModel extends ViewModel {
 
                         FirebaseUser user = authResult.getUser();
                         if (user != null) {
-                            accountRepository.getAccountPath(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            accountRepository.getPath(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     Account account = snapshot.getValue(Account.class);
@@ -126,10 +122,10 @@ public class LoginViewModel extends ViewModel {
                                             case Account.TYPE_ADMIN:
                                                 setLoggedInUser(new Person(
                                                         "uid",
-                                                        "firstname",
-                                                        "lastname",
-                                                        "middleInitial",
-                                                        "suffix",
+                                                        "Admin",
+                                                        "Admin",
+                                                        "A",
+                                                        "Ad",
                                                         "dateOfBirth",
                                                         new ArrayList<>(),
                                                         "address",
@@ -146,57 +142,16 @@ public class LoginViewModel extends ViewModel {
 
                                                 EmployeeRepository
                                                         .getInstance()
-                                                        .getEmployeePathThroughAccount(account.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                        Log.d(TAG, "onDataChange: employee uid: " + snapshot.getKey());
-
-                                                        Log.d(TAG, "onDataChange: data result count: " + snapshot.getChildrenCount());
-
-                                                        for (DataSnapshot data : snapshot.getChildren()) {
-                                                            Log.d(TAG, "onDataChange: data uid: " + data.getKey());
-
-                                                            Employee employee = data.getValue(Employee.class);
-
-                                                            if (employee != null) {
-
-                                                                Log.d(TAG, "onDataChange: account uid: " + account.getUid());
-
-                                                                Log.d(TAG, "onDataChange: has employee: " + employee);
-                                                                setLoggedInUser(employee, account);
-                                                            }
-                                                            else {
-                                                                Log.d(TAG, "onDataChange: employee is null");
-                                                            }
-
-                                                        }
-
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                                    }
-                                                });
+                                                        .getEmployeePathThroughAccount(account.getUid())
+                                                        .addListenerForSingleValueEvent(new GetUser(account));
 
                                                 break;
 
                                             case Account.TYPE_PATIENT:
-                                                setLoggedInUser(new Person(
-                                                                "uid",
-                                                                "firstname",
-                                                                "lastname",
-                                                                "middleInitial",
-                                                                "suffix",
-                                                                "dateOfBirth",
-                                                                new ArrayList<>(),
-                                                                "address",
-                                                                1,
-                                                                0,
-                                                                new Date(),
-                                                                email),
-                                                        account
-                                                );
+                                                PatientRepository
+                                                        .getInstance()
+                                                        .getPatientsByAccount(account.getUid())
+                                                        .addListenerForSingleValueEvent(new GetUser(account));
                                                 break;
                                         }
                                     }
@@ -225,6 +180,41 @@ public class LoginViewModel extends ViewModel {
         setLoggedInUser(new LoggedInUser(person, account));
 
 //        loginResult.setValue(new LoginResult(createLoggedInUserView(loggedInUser)));
+    }
+
+    private class GetUser implements ValueEventListener {
+        private final Account account;
+
+        public GetUser(Account account) {
+            this.account = account;
+        }
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            Log.d(TAG, "onDataChange: employee uid: " + snapshot.getKey());
+            Log.d(TAG, "onDataChange: data result count: " + snapshot.getChildrenCount());
+
+            for (DataSnapshot data : snapshot.getChildren()) {
+                Log.d(TAG, "onDataChange: data uid: " + data.getKey());
+
+                Person user = data.getValue(Employee.class);
+
+                if (user != null) {
+                    Log.d(TAG, "onDataChange: account uid: " + account.getUid());
+                    Log.d(TAG, "onDataChange: has employee: " + user);
+                    setLoggedInUser(user, account);
+                }
+                else {
+                    Log.d(TAG, "onDataChange: employee is null");
+                }
+
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
     }
 
 }

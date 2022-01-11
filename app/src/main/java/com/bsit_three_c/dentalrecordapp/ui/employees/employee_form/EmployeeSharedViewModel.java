@@ -7,18 +7,22 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.EmergencyContact;
 import com.bsit_three_c.dentalrecordapp.data.model.Employee;
+import com.bsit_three_c.dentalrecordapp.data.model.FormState;
 import com.bsit_three_c.dentalrecordapp.data.repository.AccountRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.EmployeeRepository;
+import com.bsit_three_c.dentalrecordapp.interfaces.TextChange;
+import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
-public class EmployeeSharedViewModel extends ViewModel {
+public class EmployeeSharedViewModel extends ViewModel implements TextChange {
     private static final String TAG = EmployeeSharedViewModel.class.getSimpleName();
 
     private final EmployeeRepository employeeRepository;
@@ -30,6 +34,20 @@ public class EmployeeSharedViewModel extends ViewModel {
     private final MutableLiveData<Account> mAccount = new MutableLiveData<>();
     private final MutableLiveData<EmergencyContact> mEmergencyContact = new MutableLiveData<>();
     private final MutableLiveData<Boolean> mEdit = new MutableLiveData<>();
+
+    private final MutableLiveData<FormState> mEmail = new MutableLiveData<>();
+    private final MutableLiveData<FormState> mFirstname = new MutableLiveData<>();
+    private final MutableLiveData<FormState> mlastname = new MutableLiveData<>();
+    private final MutableLiveData<FormState> mMiddleInitial = new MutableLiveData<>();
+    private final MutableLiveData<FormState> mSuffix = new MutableLiveData<>();
+    private final MutableLiveData<FormState> mContact = new MutableLiveData<>();
+
+    private static final String FIRSTNAME = "Firstname";
+    private static final String LASTNAME = "Lastname";
+    private static final String MIDDLE_INITIAL = "MI";
+    private static final String SUFFIX = "Suffix";
+    private static final String CONTACT = "Contact Number";
+    private static final String EMAIL = "Email Address";
 
     private final ValueEventListener employeeListener = new ValueEventListener() {
         @Override
@@ -92,7 +110,7 @@ public class EmployeeSharedViewModel extends ViewModel {
 
     public void loadEmployee(String employeeUid) {
         Log.d(TAG, "loadEmployee: load employee");
-        employeeRepository.getEmployeePath(employeeUid).addListenerForSingleValueEvent(employeeListener);
+        employeeRepository.getPath(employeeUid).addListenerForSingleValueEvent(employeeListener);
     }
 
     private void loadContact(Employee employee) {
@@ -100,7 +118,7 @@ public class EmployeeSharedViewModel extends ViewModel {
     }
 
     private void loadAccount(Employee employee) {
-        accountRepository.getAccountPath(employee.getAccountUid()).addListenerForSingleValueEvent(accountListener);
+        accountRepository.getPath(employee.getAccountUid()).addListenerForSingleValueEvent(accountListener);
     }
 
     public Employee createEmployee(
@@ -185,8 +203,132 @@ public class EmployeeSharedViewModel extends ViewModel {
     }
 
     public void removeListeners(Employee employee) {
-        employeeRepository.getEmployeePath(employee.getUid()).removeEventListener(employeeListener);
+        employeeRepository.getPath(employee.getUid()).removeEventListener(employeeListener);
         employeeRepository.getContactPath(employee.getEmergencyContactUid()).removeEventListener(contactListener);
-        accountRepository.getAccountPath(employee.getAccountUid()).removeEventListener(accountListener);
+        accountRepository.getPath(employee.getAccountUid()).removeEventListener(accountListener);
+    }
+
+    @Override
+    public void beforeDataChange(String input, int after, String s) {
+
+    }
+
+    @Override
+    public void dataChanged(String label, String input) {
+
+        Log.d(TAG, "dataChanged: label: " + label);
+        Log.d(TAG, "dataChanged: data changed");
+
+        if (Checker.isDataAvailable(input)) {
+
+            if (SUFFIX.equals(label)) {
+                if (Checker.hasNumber(input)) {
+                    Log.d(TAG, "dataChanged: has number");
+                    setState(label, R.string.invalid_contains_number);
+                }
+                else {
+                    Log.d(TAG, "dataChanged: data is valid");
+                    setState(label, Checker.VALID);
+                }
+            }
+
+            else if (EMAIL.equals(label)) {
+                if (Checker.isEmailValid(input)) {
+                    setState(label, Checker.VALID);
+                } else {
+                    setState(label, R.string.invalid_email);
+                }
+            }
+
+            else if (Checker.containsSpecialCharacter(input)) {
+                setState(label, R.string.invalid_contains_special_character);
+            }
+
+            else if (isLetterField(label)) {
+                if (Checker.hasNumber(input)) {
+                    Log.d(TAG, "dataChanged: has number");
+                    setState(label, R.string.invalid_contains_number);
+                }
+                else if (MIDDLE_INITIAL.equals(label) && (input.length() > 1)) {
+                    Log.d(TAG, "dataChanged: middle error");
+                    setState(label, R.string.invalid_contains_more_than_one_character);
+                }
+                else {
+                    Log.d(TAG, "dataChanged: data is valid");
+                    setState(label, Checker.VALID);
+                }
+            } else if (!isLetterField(label)) {
+                if (Checker.hasLetter(input)) {
+                    setState(label, R.string.invalid_contains_letter);
+                } else {
+                    setState(label, Checker.VALID);
+                }
+            }
+        }
+    }
+
+    private boolean isLetterField(final String s) {
+        boolean result = false;
+        switch (s) {
+            case FIRSTNAME: case LASTNAME: case MIDDLE_INITIAL: case SUFFIX:
+                result = true;
+                break;
+            case CONTACT:
+                result = false;
+                break;
+        }
+
+        return result;
+    }
+
+
+    private void setState(final String label, final Integer msg) {
+        FormState field;
+
+        if (msg == null) field = null;
+        else if (msg == -1) field = new FormState(true);
+        else field = new FormState(msg);
+
+        switch (label) {
+            case FIRSTNAME:
+                mFirstname.setValue(field);
+                break;
+            case LASTNAME:
+                mlastname.setValue(field);
+                break;
+            case MIDDLE_INITIAL:
+                mMiddleInitial.setValue(field);
+                break;
+            case SUFFIX:
+                mSuffix.setValue(field);
+                break;
+            case CONTACT:
+                mContact.setValue(field);
+                break;
+        }
+    }
+
+    public LiveData<FormState> getmEmail() {
+        return mEmail;
+    }
+
+    public LiveData<FormState> getmFirstname() {
+        return mFirstname;
+    }
+
+    public LiveData<FormState> getMlastname() {
+        return mlastname;
+    }
+
+    public LiveData<FormState> getmMiddleInitial() {
+        return mMiddleInitial;
+    }
+
+    public LiveData<FormState> getmSuffix() {
+        return mSuffix;
+    }
+
+    public LiveData<FormState> getmContact() {
+        return mContact;
     }
 }

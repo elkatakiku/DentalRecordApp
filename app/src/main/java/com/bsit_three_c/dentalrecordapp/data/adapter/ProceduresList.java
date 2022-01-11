@@ -13,7 +13,7 @@ import com.bsit_three_c.dentalrecordapp.data.model.DentalServiceOption;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.BottomOperationsDialog;
-import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.PatientInfoFragment;
+import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.ui.patientinfo.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.DateUtil;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
@@ -44,7 +44,7 @@ public class ProceduresList {
         initializeProcedure(procedure);
 
         //  Edit text in dental service
-        viewHolder.txtDentalService.setText(UIUtil.getServiceTitle(procedure.getServiceIds(), dentalServiceOptions));
+        viewHolder.txtDentalService.setText(UIUtil.getServiceOptionsTitle(procedure.getServiceIds(), dentalServiceOptions));
         viewHolder.txtDentalDate.setText(DateUtil.getReadableDate(DateUtil.convertToDate(procedure.getDentalDate())));
         viewHolder.txtDentalAmount.setText(String.valueOf(procedure.getDentalTotalAmount()));
         viewHolder.txtDentalFullyPaid.setText(UIUtil.getPaymentStatus(procedure.getDentalBalance()));

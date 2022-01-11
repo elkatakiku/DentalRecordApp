@@ -81,14 +81,11 @@ public class ListWithRemoveItemAdapter extends ArrayAdapter {
         }
 
         viewHolder.name.setText(list.get(position));
-        viewHolder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                list.remove(position);
-                if (listView != null) UIUtil.setListViewHeightBasedOnItems(listView);
+        viewHolder.delete.setOnClickListener(v -> {
+            list.remove(position);
+            if (listView != null) UIUtil.setListViewHeightBasedOnItems(listView);
 
-                notifyDataSetChanged();
-            }
+            notifyDataSetChanged();
         });
 
         return convertView;

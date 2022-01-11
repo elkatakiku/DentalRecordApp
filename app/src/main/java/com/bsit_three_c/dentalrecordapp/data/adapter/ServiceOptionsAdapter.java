@@ -5,8 +5,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -256,6 +258,25 @@ public class ServiceOptionsAdapter extends ArrayAdapter<DentalServiceOption> {
         public ViewHolder(View view) {
             this.mTextView = view.findViewById(R.id.tvServiceLabel);
             this.mCheckBox = view.findViewById(R.id.cbService);
+        }
+    }
+
+    public static class selectorListener implements AdapterView.OnItemSelectedListener {
+
+        private final LinearLayout layoutError;
+
+        public selectorListener(LinearLayout layoutError) {
+            this.layoutError = layoutError;
+        }
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            layoutError.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
         }
     }
 }

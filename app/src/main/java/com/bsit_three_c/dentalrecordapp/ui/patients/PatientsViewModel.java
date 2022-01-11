@@ -6,59 +6,40 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.bsit_three_c.dentalrecordapp.data.adapter.ItemAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.Person;
 import com.bsit_three_c.dentalrecordapp.data.repository.PatientRepository;
 import com.bsit_three_c.dentalrecordapp.util.Internet;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class PatientsViewModel extends ViewModel {
     private static final String TAG = PatientsViewModel.class.getSimpleName();
 
-    private final MutableLiveData<ArrayList<Person>> mPatientList = new MutableLiveData<>();
+    private final MutableLiveData<List<Person>> mPatientList = new MutableLiveData<>();
     private final PatientRepository repository;
+
+    private final PatientRepository.PatientsListener patientsListener;
 
     public PatientsViewModel(PatientRepository repository) {
         this.repository = repository;
-    }
-
-    public boolean isPatientsLoaded() {
-        return repository.isPatientsLoaded();
+        patientsListener = new PatientRepository.PatientsListener(mPatientList);
     }
 
     public void removeEventListener() {
         Log.d(TAG, "removeEventListener: this is called");
-        repository.removeValueEventListener();
-    }
-
-    public void refresh(ItemAdapter adapter) {
-        adapter.notifyDataSetChanged();
-    }
-
-    public void initializePatients(ItemAdapter adapter) {
-        mPatientList.setValue(repository.getPersonArrayList());
-        adapter.setItems(mPatientList.getValue());
-    }
-
-    public boolean isRecordEmpty() {
-        return repository.getPersonArrayList() == null || repository.getPersonArrayList().isEmpty();
+        repository.getDatabaseReference().removeEventListener(patientsListener);
     }
 
     public void runInternetTest() {
         new Internet().execute();
     }
 
-    public LiveData<Boolean> getIsPatientsGettingDone() {
-        return repository.isGettingPatientsDone();
-    }
-
     public void loadPatients() {
-        repository.getPatients();
+        repository.getPatientsPath().addValueEventListener(patientsListener);
     }
 
-    public void initializeEventListener(ItemAdapter adapter) {
-        repository.setAdapter(adapter);
+    public LiveData<List<Person>> getmPatientList() {
+        return mPatientList;
     }
 
 }

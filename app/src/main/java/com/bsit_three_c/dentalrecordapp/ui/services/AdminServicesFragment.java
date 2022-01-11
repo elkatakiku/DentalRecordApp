@@ -16,17 +16,21 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.bsit_three_c.dentalrecordapp.ui.main.MainActivity;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ServiceDisplaysAdapter;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ServicesViewHolder;
+import com.bsit_three_c.dentalrecordapp.data.model.DentalService;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentListServicesBinding;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.CustomDialog;
+import com.bsit_three_c.dentalrecordapp.ui.main.MainActivity;
 import com.bsit_three_c.dentalrecordapp.ui.services.services_form.ServiceFormActivity;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
+
+import java.util.ArrayList;
 
 public class AdminServicesFragment extends Fragment {
     private static final String TAG = AdminServicesFragment.class.getSimpleName();
@@ -62,16 +66,24 @@ public class AdminServicesFragment extends Fragment {
         adapter.setmItemOnClickListener(itemOnClickListener);
         binding.rvServices.setAdapter(adapter);
 
-        mViewModel.initializeRepository(adapter);
+//        mViewModel.initializeRepository(adapter);
 
-        binding.fabAddService.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent toAddService = new Intent(requireActivity(), ServiceFormActivity.class);
+        binding.fabAddService.setOnClickListener(v -> {
+            Intent toAddService = new Intent(requireActivity(), ServiceFormActivity.class);
 //                toAddPatientResult.launch(toAddPatient);
-                startActivity(toAddService);
+            startActivity(toAddService);
+        });
+
+        mViewModel.getmServices().observe(getViewLifecycleOwner(), new Observer<ArrayList<DentalService>>() {
+            @Override
+            public void onChanged(ArrayList<DentalService> dentalServices) {
+                if (dentalServices != null) {
+                    adapter.addItems(dentalServices);
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
+
     }
 
     @Override

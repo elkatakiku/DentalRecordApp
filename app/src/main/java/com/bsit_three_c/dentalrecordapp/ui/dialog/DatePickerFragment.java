@@ -27,10 +27,16 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     public static final String DATE_PICKER_TITLE = "TITLE";
     public static final String DATE_PICKER_DATE = "DATE";
 
+    public static final String BIRTH_DATE_TITLE =  "Select Date of Birth";
+
     private final TextView tvMonth;
     private final TextView tvDay;
     private final TextView tvYear;
     private final EditText etAge;
+
+    DatePickerDialog datePickerDialog;
+    boolean maxDate;
+    boolean minDateToday;
 
     int mDialogId = 0;
 
@@ -40,6 +46,11 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         this.tvYear = tvYear;
         this.etAge = etAge;
     }
+
+    public DatePickerFragment(TextView tvMonth, TextView tvDay, TextView tvYear) {
+        this(tvMonth, tvDay, tvYear, null);
+    }
+
 
     @NonNull
     @Override
@@ -64,7 +75,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
+        datePickerDialog = new DatePickerDialog(
                 requireContext(),
                 AlertDialog.THEME_HOLO_LIGHT,
                 this,
@@ -72,12 +83,27 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
                 month,
                 day
         );
-        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+
+        if (minDateToday) {
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        }
+
+        if (maxDate) {
+            datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+        }
 
         if (title != null) datePickerDialog.setTitle(title);
 
 
         return datePickerDialog;
+    }
+
+    public void setMaxDateToday() {
+        maxDate = true;
+    }
+
+    public void setMinDateToday() {
+        minDateToday = true;
     }
 
     @Override
@@ -88,12 +114,14 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         tvDay.setText(String.valueOf(dayOfMonth));
         tvYear.setText(String.valueOf(year));
 
-        etAge.setText(DateUtil.getAge(year, month, dayOfMonth));
+        if (etAge != null) {
+            etAge.setText(DateUtil.getAge(year, month, dayOfMonth));
+        }
 
         Log.d(TAG, "onDateSet: Exiting onDateSet");
     }
 
-    public void showDatePickerDialog(DialogFragment dialogFragment, int month, FragmentManager fragmentManager) {
+    public void showDatePickerDialog(DialogFragment dialogFragment, int month, FragmentManager fragmentManager, String title) {
         Log.d(TAG, "showDatePickerDialog: starting");
 
         Bundle arguments = new Bundle();
@@ -105,7 +133,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
             arguments.putSerializable(DatePickerFragment.DATE_PICKER_DATE, date);
         }
 
-        arguments.putString(DatePickerFragment.DATE_PICKER_TITLE, "Select Date of Birth");
+        arguments.putString(DatePickerFragment.DATE_PICKER_TITLE, title);
 
         dialogFragment.setArguments(arguments);
         dialogFragment.show(fragmentManager, "datePicker");

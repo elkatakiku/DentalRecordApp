@@ -88,13 +88,13 @@
                     android:textSize="16sp" />
 
                 <Button
-                    android:id="@+id/btnUserRegister"
+                    android:id="@+id/btnUserAppointment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:backgroundTint="@color/white"
                     android:fontFamily="@font/open_sans_bold"
-                    android:text="Register Now"
+                    android:text="Book Appointment"
                     android:textColor="@color/blue_green"
                     android:textStyle="bold" />
 
@@ -219,6 +219,32 @@
                 app:iconTint="@color/blue_green" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:divider="@drawable/empty_tall_divider"
+            android:orientation="horizontal"
+            android:showDividers="middle">
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/tiffany_blue"
+                android:text="Login" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/tiffany_blue"
+                android:text="Register" />
+        </LinearLayout>
+
         <View
             android:id="@+id/divider20"
             android:layout_width="match_parent"
@@ -226,8 +252,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:background="?android:attr/listDivider"
-            android:backgroundTint="@color/blue_green"
-            tools:visibility="gone" />
+            android:backgroundTint="@color/blue_green" />
 
         <TextView
             android:id="@+id/textView23"
@@ -235,18 +260,16 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:fontFamily="@font/open_sans_bold"
             android:gravity="center"
-            android:text="What's on your mind today?"
+            android:text="Services Offered"
             android:textColor="@color/label"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            tools:visibility="gone" />
+            android:textSize="20sp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="100dp"
-            tools:visibility="gone">
+            android:minHeight="100dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvMenuServices"
@@ -254,6 +277,7 @@
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:orientation="horizontal"
+                android:overScrollMode="never"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:scrollbarDefaultDelayBeforeFade="100"
@@ -265,7 +289,7 @@
             </androidx.recyclerview.widget.RecyclerView>
 
             <ProgressBar
-                android:id="@+id/progressBar2"
+                android:id="@+id/pbMenuLoadingServices"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -274,6 +298,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvMenuServicesDefault"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Services will show here..."
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -284,8 +320,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:background="?android:attr/listDivider"
-            android:backgroundTint="@color/blue_green"
-            tools:visibility="gone" />
+            android:backgroundTint="@color/blue_green" />
 
         <TextView
             android:id="@+id/textView75"
@@ -294,22 +329,22 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/open_sans_bold"
-            android:text="Doctors"
+            android:text="Dentists"
             android:textAlignment="center"
             android:textColor="@color/label"
-            android:textSize="20sp"
-            tools:visibility="gone" />
+            android:textSize="20sp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:minHeight="100dp"
-            tools:visibility="gone">
+            android:minHeight="100dp">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+                android:id="@+id/rvMenuDoctorsDisplay"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -318,11 +353,22 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ProgressBar
-                android:id="@+id/progressBar3"
+                android:id="@+id/pbMenuLoadingDoctors"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:indeterminateTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView97"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Doctors will show here..."
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -362,6 +408,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/baby_blue"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -451,16 +499,18 @@
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:background="@color/white">
 
                 <ImageView
                     android:id="@+id/imageView22"
-                    android:layout_width="175dp"
-                    android:layout_height="175dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:background="@drawable/shapre_border"
+                    android:layout_margin="5dp"
                     android:scaleType="fitCenter"
-                    android:src="@android:drawable/ic_menu_mapmode" />
+                    android:src="@drawable/map" />
             </FrameLayout>
 
         </LinearLayout>

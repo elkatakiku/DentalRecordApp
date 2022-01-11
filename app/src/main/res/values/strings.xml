@@ -13,7 +13,7 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">Welcome!</string>
     <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="invalid_password">Password must be 6 characters and above</string>
     <string name="login_failed">"Login failed"</string>
     <string name="prompt_forgot_password">Forgot password?</string>
     <string name="nav_header_title">User Display Name</string>
@@ -46,6 +46,7 @@
     <string name="IS_EDIT">IS_EDIT</string>
     <string name="IS_ADMIN">-IS_ADMIN</string>
     <string name="BUNDLE_KEY">Bundle</string>
+    <string name="APPOINTMENT_KEY">APPOINTMENT_KEY</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -80,6 +81,7 @@
     <string name="invalid_contains_number">This field cannot contain number/s.</string>
     <string name="invalid_contains_letter">This field cannot contain letter/s.</string>
     <string name="invalid_cel_limit_number">This field cannot exceed or fall short to 10 numbers.</string>
+    <string name="invalid_contact_number">Please input a valid contact number.</string>
     <string name="invalid_tel_limit_number">This field cannot exceed 10 numbers or fall short to 7 numbers.</string>
     <string name="invalid_contains_special_character">This field cannot contain special character/s</string>
     <string name="invalid_contains_more_than_one_character">This field cannot contain more than one character</string>
@@ -89,6 +91,11 @@
     <string name="an_error_occurred">An error occurred</string>
     <string name="weak_password">The given password is invalid. Password should be at least 6 characters.</string>
     <string name="email_taken">The email address is already in use by another account.</string>
+    <string name="invalid_email">Please input a valid email.</string>
+    <string name="password_not_match">Password does not match.</string>
+    <string name="error_creating_patient">An error occurred in creating patient.</string>
+    <string name="error_creating_procedure">An error occurred in creating procedure.</string>
+    <string name="error_creating_progress_note">An error occurred in creating progress note.</string>
 
     <string name="title_activity_patient">PatientActivity</string>
     <!-- Strings used for fragments for navigation -->
@@ -140,4 +147,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_accounts">AccountsActivity</string>
+
+    <!--    Toolbar Title   -->
+    <string name="toolbar_title_form">New %1$s</string>
+
+    <!--    List texts  -->
+    <string name="empty_list">%1$s will show here…</string>
+
 </resources>

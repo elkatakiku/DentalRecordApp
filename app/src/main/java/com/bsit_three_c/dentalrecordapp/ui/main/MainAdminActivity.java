@@ -94,11 +94,7 @@ public class MainAdminActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main, menu);
 
         menu.findItem(R.id.menu_search).setVisible(false);
-//        MenuItem searchItem = menu.findItem(R.id.menu_search);
-//        SearchManager searchManager = (SearchManager) this.getSystemService(Context.SEARCH_SERVICE);
-//        if (searchItem != null) {
-//            searchView = (SearchView) searchItem.getActionView();
-//        }
+
         return super.onCreateOptionsMenu(menu);
     }
 

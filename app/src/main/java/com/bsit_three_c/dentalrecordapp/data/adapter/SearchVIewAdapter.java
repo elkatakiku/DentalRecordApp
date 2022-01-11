@@ -13,7 +13,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.bsit_three_c.dentalrecordapp.R;
 
-public class SearchVIewAdapter implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+public class SearchVIewAdapter implements SearchView.OnQueryTextListener, SearchView.OnCloseListener, MenuItem.OnActionExpandListener {
 
     private final Activity activity;
     private final MenuItem searchItem;
@@ -37,6 +37,14 @@ public class SearchVIewAdapter implements SearchView.OnQueryTextListener, Search
         return searchView;
     }
 
+    public MenuItem getSearchItem() {
+        return searchItem;
+    }
+
+    public ItemAdapter getAdapter() {
+        return adapter;
+    }
+
     private void initializeViewUI() {
         searchView.setQueryHint("Search patients here");
         searchView.setBackground(ResourcesCompat.getDrawable(activity.getResources(), R.drawable.shape_field, activity.getTheme()));
@@ -48,13 +56,14 @@ public class SearchVIewAdapter implements SearchView.OnQueryTextListener, Search
         return this;
     }
 
-    public void setListeners(SearchView.OnQueryTextListener queryTextListener, SearchView.OnCloseListener onCloseListener) {
+    public void setListeners(SearchView.OnQueryTextListener queryTextListener, SearchView.OnCloseListener onCloseListener, MenuItem.OnActionExpandListener onActionExpandListener) {
         searchView.setOnQueryTextListener(queryTextListener);
         searchView.setOnCloseListener(onCloseListener);
+        searchItem.setOnActionExpandListener(onActionExpandListener);
     }
 
     public SearchVIewAdapter setListeners() {
-        setListeners(this, this);
+        setListeners(this, this, this);
         return this;
     }
 
@@ -64,7 +73,6 @@ public class SearchVIewAdapter implements SearchView.OnQueryTextListener, Search
         Log.i("onQueryTextSubmit", query);
         adapter.getFilter().filter(query);
         searchView.clearFocus();
-
         return false;
     }
 
@@ -88,5 +96,16 @@ public class SearchVIewAdapter implements SearchView.OnQueryTextListener, Search
                 InputMethodManager.HIDE_NOT_ALWAYS);
 
         return false;
+    }
+
+    @Override
+    public boolean onMenuItemActionExpand(MenuItem item) {
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem item) {
+        searchView.setQuery("", false);
+        return true;
     }
 }

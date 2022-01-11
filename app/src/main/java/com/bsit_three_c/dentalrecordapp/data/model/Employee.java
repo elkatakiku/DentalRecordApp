@@ -23,8 +23,9 @@ public class Employee extends Person implements Parcelable {
     private String displayImage;
     private int jobTitle;
     private String address2ndPart;
-    private String accountUid;
     private String emergencyContactUid;
+
+    private String especialties;
 
     public Employee() {
     }
@@ -261,20 +262,20 @@ public class Employee extends Person implements Parcelable {
         this.email = email;
     }
 
-    public String getAccountUid() {
-        return accountUid;
-    }
-
-    public void setAccountUid(String accountUid) {
-        this.accountUid = accountUid;
-    }
-
     public String getEmergencyContactUid() {
         return emergencyContactUid;
     }
 
     public void setEmergencyContactUid(String emergencyContactUid) {
         this.emergencyContactUid = emergencyContactUid;
+    }
+
+    public String getEspecialties() {
+        return especialties;
+    }
+
+    public void setEspecialties(String especialties) {
+        this.especialties = especialties;
     }
 
     @Override

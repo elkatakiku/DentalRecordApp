@@ -54,6 +54,15 @@ public class Patient extends Person implements Parcelable {
         this.dentalProcedures = dentalProcedures;
     }
 
+    public Patient(String uid,
+                   String firstname,
+                   String lastname,
+                   String middleInitial,
+                   String suffix,
+                   List<String> phoneNumber) {
+        super(uid, firstname, lastname, middleInitial, suffix, phoneNumber);
+    }
+
     protected Patient(Parcel in) {
         uid = in.readString();
         firstname = in.readString();

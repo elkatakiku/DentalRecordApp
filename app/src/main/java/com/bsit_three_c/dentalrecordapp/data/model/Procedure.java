@@ -1,9 +1,12 @@
 package com.bsit_three_c.dentalrecordapp.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Procedure {
+public class Procedure implements Parcelable {
 
     private String uid;
     private String dentalDesc;
@@ -12,7 +15,6 @@ public class Procedure {
     private boolean isDownpayment;
     private double dentalBalance;
     private List<String> serviceIds;
-
     private List<String> paymentKeys;
 
     public Procedure() { }
@@ -31,6 +33,10 @@ public class Procedure {
         this.paymentKeys = paymentKeys;
     }
 
+    public Procedure(String uid, String dentalDate, List<String> serviceIds) {
+        this(uid, serviceIds, null, dentalDate, -1, false, -1);
+    }
+
     //  This constructor is used in creating new dental operations
     public Procedure(String uid, List<String> serviceIds, String dentalDesc, String dentalDate, double dentalTotalAmount,
                      boolean isDownpayment, double dentalBalance) {
@@ -42,6 +48,29 @@ public class Procedure {
         this.isDownpayment = isDownpayment;
         this.dentalBalance = dentalBalance;
     }
+
+    protected Procedure(Parcel in) {
+        uid = in.readString();
+        dentalDesc = in.readString();
+        dentalDate = in.readString();
+        dentalTotalAmount = in.readDouble();
+        isDownpayment = in.readByte() != 0;
+        dentalBalance = in.readDouble();
+        serviceIds = in.createStringArrayList();
+        paymentKeys = in.createStringArrayList();
+    }
+
+    public static final Creator<Procedure> CREATOR = new Creator<Procedure>() {
+        @Override
+        public Procedure createFromParcel(Parcel in) {
+            return new Procedure(in);
+        }
+
+        @Override
+        public Procedure[] newArray(int size) {
+            return new Procedure[size];
+        }
+    };
 
     public String getDentalDesc() {
         return dentalDesc;
@@ -122,5 +151,22 @@ public class Procedure {
                 "\n, dentalTotalAmount=" + dentalTotalAmount +
                 "\n, dentalBalance=" + dentalBalance +
                 "\n}";
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(uid);
+        dest.writeString(dentalDesc);
+        dest.writeString(dentalDate);
+        dest.writeDouble(dentalTotalAmount);
+        dest.writeByte((byte) (isDownpayment ? 1 : 0));
+        dest.writeDouble(dentalBalance);
+        dest.writeStringList(serviceIds);
+        dest.writeStringList(paymentKeys);
     }
 }

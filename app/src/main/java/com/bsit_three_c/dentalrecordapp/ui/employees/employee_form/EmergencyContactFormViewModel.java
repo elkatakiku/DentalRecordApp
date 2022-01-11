@@ -14,15 +14,15 @@ import com.bsit_three_c.dentalrecordapp.data.model.Employee;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.data.repository.AccountRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.EmployeeRepository;
+import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
+import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class EmergencyContactFormViewModel extends ViewModel {
     private static final String TAG = EmergencyContactFormViewModel.class.getSimpleName();
@@ -32,8 +32,6 @@ public class EmergencyContactFormViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> AddingEmployeeAttempt = new MutableLiveData<>();
     private final MutableLiveData<Integer> mError = new MutableLiveData<>();
-
-    public static int VALID = -1;
 
     public EmergencyContactFormViewModel(EmployeeRepository employeeRepository, AccountRepository accountRepository) {
         this.employeeRepository = employeeRepository;
@@ -145,7 +143,7 @@ public class EmergencyContactFormViewModel extends ViewModel {
                 lastname,
                 middleInitial,
                 suffix,
-                createContact(contactNumber),
+                UIUtil.createList(contactNumber),
                 address1,
                 address2
         );
@@ -167,16 +165,9 @@ public class EmergencyContactFormViewModel extends ViewModel {
         emergencyContact.setSuffix(suffix);
         emergencyContact.setAddress(address1);
         emergencyContact.setAddress2ndPart(address2);
-        emergencyContact.setPhoneNumber(createContact(contactNumber));
+        emergencyContact.setPhoneNumber(UIUtil.createList(contactNumber));
 
         return emergencyContact;
-    }
-
-    private List<String> createContact(String contactNumber) {
-        ArrayList<String> contact = new ArrayList<>(1);
-        contact.add(contactNumber);
-
-        return contact;
     }
 
     private class OnAddEmployeeComplete implements OnCompleteListener<AuthResult> {
@@ -187,7 +178,8 @@ public class EmergencyContactFormViewModel extends ViewModel {
         private final Account newAccount;
         private final byte[] imageByte;
 
-        public OnAddEmployeeComplete(LoggedInUser loggedInAccount, Employee employee, EmergencyContact emergencyContact, Account newAccount, byte[] imageByte) {
+        public OnAddEmployeeComplete(LoggedInUser loggedInAccount, Employee employee,
+                                     EmergencyContact emergencyContact, Account newAccount, byte[] imageByte) {
             this.loggedInAccount = loggedInAccount;
             this.employee = employee;
             this.emergencyContact = emergencyContact;
@@ -206,11 +198,10 @@ public class EmergencyContactFormViewModel extends ViewModel {
                 return;
             }
 
-//            mError.setValue(VALID);
             FirebaseUser user = task.getResult().getUser();
             if (user != null) {
-                newAccount.setUid(user.getUid());
-                accountRepository.addAccount(newAccount);
+                accountRepository.setUserIds(employee, newAccount, user.getUid());
+
                 employee.setAccountUid(user.getUid());
             }
 
@@ -254,7 +245,7 @@ public class EmergencyContactFormViewModel extends ViewModel {
         employeeRepository.addEmergencyContact(emergencyContact);
         accountRepository.reLoginUser(loggedInAccount);
 
-        mError.setValue(VALID);
+        mError.setValue(Checker.VALID);
         AddingEmployeeAttempt.setValue(true);
     }
 }

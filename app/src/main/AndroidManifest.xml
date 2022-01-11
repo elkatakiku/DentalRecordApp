@@ -13,14 +13,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DentalRecordApp">
         <activity
+            android:name=".ui.patients.PatientFormBaseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.patients.procedure_form.ProcedureFormActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DentalRecordApp.NoActionBar" />
+        <activity
             android:name=".ui.accounts.AccountsActivity"
             android:exported="false"
             android:label="@string/title_activity_accounts"
             android:theme="@style/Theme.DentalRecordApp.NoActionBar" />
         <activity
-            android:name=".ui.appointments.appointment_form.AppointmentActivity"
+            android:name=".ui.appointments.appointment_form.AppointmentFormActivity"
             android:exported="false"
-            android:theme="@style/Theme.DentalRecordApp.NoActionBar"/>
+            android:theme="@style/Theme.DentalRecordApp.NoActionBar" />
         <activity
             android:name=".ui.employees.view_employee.ViewEmployeeActivity"
             android:exported="false"
@@ -47,7 +54,7 @@
             android:theme="@style/Theme.DentalRecordApp.NoActionBar"
             android:windowSoftInputMode="stateVisible|adjustPan" />
         <activity
-            android:name=".ui.register.RegisterActivity"
+            android:name=".ui.patients.registration_form.RegisterActivity"
             android:exported="false"
             android:label="@string/title_activity_register"
             android:theme="@style/Theme.DentalRecordApp.NoActionBar" />
@@ -67,7 +74,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.patients.patient_form.AddPatientActivity"
+            android:name=".ui.patients.patient_form.PatientFormActivity"
             android:exported="false"
             android:label="@string/title_activity_add_patient"
             android:screenOrientation="portrait"

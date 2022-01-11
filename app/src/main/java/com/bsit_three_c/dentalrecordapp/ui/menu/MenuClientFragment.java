@@ -16,20 +16,26 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.data.adapter.EmployeeDisplayAdapter;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ServiceDisplaysAdapter;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ServicesViewHolder;
+import com.bsit_three_c.dentalrecordapp.data.model.Employee;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentClientMenuBinding;
+import com.bsit_three_c.dentalrecordapp.ui.appointments.appointment_form.AppointmentFormActivity;
 import com.bsit_three_c.dentalrecordapp.ui.login.LoginActivity;
-import com.bsit_three_c.dentalrecordapp.ui.register.RegisterActivity;
 import com.bsit_three_c.dentalrecordapp.ui.services.view_service.ViewServiceActivity;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
+
+import java.util.List;
 
 public class MenuClientFragment extends Fragment {
     private static final String TAG = MenuClientFragment.class.getSimpleName();
@@ -85,25 +91,49 @@ public class MenuClientFragment extends Fragment {
 
         ServiceDisplaysAdapter adapter = new ServiceDisplaysAdapter(requireActivity(), true);
 
+//        LinearLayoutManager manager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+        GridLayoutManager manager = new GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false);
         binding.rvMenuServices.setHasFixedSize(true);
-        LinearLayoutManager manager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
-
         binding.rvMenuServices.setLayoutManager(manager);
-
-        adapter.setmItemOnClickListener(itemOnClickListener);
+        adapter.setmItemOnClickListener(serviceOnClickListener);
         binding.rvMenuServices.setAdapter(adapter);
 
-        mViewModel.initializeRepository(adapter);
+        EmployeeDisplayAdapter employeeDisplayAdapter = new EmployeeDisplayAdapter(requireContext());
+
+        binding.rvMenuDoctorsDisplay.setHasFixedSize(true);
+        binding.rvMenuDoctorsDisplay.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+        binding.rvMenuDoctorsDisplay.setAdapter(employeeDisplayAdapter);
 
         mViewModel.getmDentalServices().observe(getViewLifecycleOwner(), dentalServices -> {
             if (dentalServices != null) {
+                binding.tvMenuServicesDefault.setVisibility(View.GONE);
+                binding.pbMenuLoadingServices.setVisibility(View.GONE);
                 adapter.addItems(dentalServices);
                 adapter.notifyDataSetChanged();
             }
+            else {
+                binding.tvMenuServicesDefault.setVisibility(View.VISIBLE);
+            }
         });
 
-        binding.btnUserRegister.setOnClickListener(v ->
-                registerActivty.launch(new Intent(requireActivity(), RegisterActivity.class)));
+        mViewModel.getmEmployees().observe(getViewLifecycleOwner(), new Observer<List<Employee>>() {
+            @Override
+            public void onChanged(List<Employee> employees) {
+                Log.d(TAG, "onChanged: employees changed");
+                if (employees != null) {
+                    binding.pbMenuLoadingDoctors.setVisibility(View.GONE);
+                    binding.pbMenuLoadingDoctors.setVisibility(View.GONE);
+                    employeeDisplayAdapter.addItems(employees);
+                    employeeDisplayAdapter.notifyDataSetChanged();
+                }
+                else {
+                    binding.pbMenuLoadingDoctors.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        binding.btnUserAppointment.setOnClickListener(v ->
+                registerActivty.launch(new Intent(requireActivity(), AppointmentFormActivity.class)));
 
         binding.cvViewServices.setOnClickListener(v ->
                 NavHostFragment.findNavController(MenuClientFragment.this)
@@ -117,10 +147,11 @@ public class MenuClientFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        mViewModel.loadServices();
+        binding.pbMenuLoadingServices.setVisibility(View.VISIBLE);
+        mViewModel.loadData();
     }
 
-    private final ServicesViewHolder.ItemOnClickListener itemOnClickListener = service -> {
+    private final ServicesViewHolder.ItemOnClickListener serviceOnClickListener = service -> {
         requireActivity().startActivity(
                 new Intent(requireContext(), ViewServiceActivity.class)
                         .putExtra(LocalStorage.PARCEL_KEY, service)

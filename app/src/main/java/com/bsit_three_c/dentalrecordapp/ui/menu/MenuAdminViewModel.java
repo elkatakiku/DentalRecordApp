@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.lifecycle.ViewModel;
 
-import com.bsit_three_c.dentalrecordapp.data.login.LoginRepository;
+import com.bsit_three_c.dentalrecordapp.data.repository.LoginRepository;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 
 public class MenuAdminViewModel extends ViewModel {

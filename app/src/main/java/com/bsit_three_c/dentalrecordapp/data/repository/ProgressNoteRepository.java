@@ -4,39 +4,35 @@ import android.util.Log;
 
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.model.ProgressNote;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.android.gms.tasks.Task;
 
 import java.util.List;
 
-public class ProgressNoteRepository {
+public class ProgressNoteRepository extends BaseRepository {
     private static final String TAG = ProgressNoteRepository.class.getSimpleName();
-
-    private final FirebaseDatabase database;
-    private final DatabaseReference databaseReference;
 
     private static volatile ProgressNoteRepository instance;
 
     public ProgressNoteRepository() {
-        this.database = FirebaseDatabase.getInstance(FirebaseHelper.FIREBASE_URL);
-        this.databaseReference = database.getReference(FirebaseHelper.PAYMENTS_REFERENCE);
+        super(PAYMENTS_REFERENCE);
     }
 
     public static ProgressNoteRepository getInstance() {
-        if (instance == null) instance = new ProgressNoteRepository();
+        if (instance == null) {
+            instance = new ProgressNoteRepository();
+        }
         return instance;
     }
 
-    public DatabaseReference getProgressNote(String paymentUID) {
-        return databaseReference.child(paymentUID);
+//    public DatabaseReference getProgressNote(String paymentUID) {
+//        return databaseReference.child(paymentUID);
+//    }
+
+    public Task<Void> upload(ProgressNote progressNote) {
+        return databaseReference.child(progressNote.getUid()).setValue(progressNote);
     }
 
-    public void addProgressNote(Procedure procedure, ProgressNote progressNote) {
-        databaseReference.child(progressNote.getUid()).setValue(progressNote);
-        //  Update operation's balance
-    }
-
-    public void addProgressNote(Procedure procedure, String paidAmount, String date, String description) {
+    public void upload(Procedure procedure, String paidAmount, String date, String description) {
         double convertedPaidAmount = Double.parseDouble(paidAmount);
         String progressNoteId = databaseReference.push().getKey();
 
@@ -53,19 +49,22 @@ public class ProgressNoteRepository {
             databaseReference.child(progressNoteId).setValue(progressNote);
 
             procedure.addPaymentKey(progressNote.getUid());
-            ProcedureRepository.getInstance().addPaymentKey(procedure);
-            ProcedureRepository.getInstance().updateBalance(procedure, progressNote);
+            procedure.setDentalBalance(procedure.getDentalBalance() - progressNote.getAmount());
+
+            ProcedureRepository.getInstance().upload(procedure);
+
+//            ProcedureRepository.getInstance().addPaymentKey(procedure);
+//            ProcedureRepository.getInstance().updateBalance(procedure, progressNote);
         }
     }
 
     public void updateProgressNote(ProgressNote progressNote, Procedure procedure) {
-        ProcedureRepository procedureRepository = ProcedureRepository.getInstance();
-
         //  Update progressNote
         databaseReference.child(progressNote.getUid()).setValue(progressNote);
 
         //  Update procedure
-        procedureRepository.updateProcedure(procedure);
+        ProcedureRepository.getInstance().upload(procedure);
+//        procedureRepository.updateProcedure(procedure);
     }
 
 //    public void removePayment(Procedure procedure, String paymentUID) {
@@ -73,14 +72,10 @@ public class ProgressNoteRepository {
 //        ProcedureRepository.getInstance().updatePaymentKeys(procedure, paymentUID);
 //    }
 
-    public void removeProgressNote(String paymentUID) {
-        databaseReference.child(paymentUID).removeValue();
-    }
-
     public void removeProgressNote(List<String> paymentKeys) {
         for (int position = 0; position < paymentKeys.size(); position++) {
             Log.d(TAG, "removePaymets: removing payment");
-            removeProgressNote(paymentKeys.get(position));
+            remove(paymentKeys.get(position));
         }
     }
 }

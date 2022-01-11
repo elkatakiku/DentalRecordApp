@@ -97,8 +97,6 @@ public class EmployeeInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentViewEmployeeInfoBinding.inflate(inflater, container, false);
-//        employee = requireActivity().getIntent().getParcelableExtra(getString(R.string.EMPLOYEE));
-
         return binding.getRoot();
     }
 
@@ -157,6 +155,6 @@ public class EmployeeInfoFragment extends Fragment {
         super.onDestroyView();
 
         binding = null;
-        viewModel.removeListeners(mParam1);
+        viewModel.removeListeners();
     }
 }

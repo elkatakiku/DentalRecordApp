@@ -7,9 +7,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.VectorDrawable;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -21,19 +19,15 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.MutableLiveData;
-
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ServiceOptionsAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.Account;
+import com.bsit_three_c.dentalrecordapp.data.model.DentalService;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalServiceOption;
+import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
 import com.bsit_three_c.dentalrecordapp.ui.main.MainAdminActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -97,10 +91,6 @@ public class UIUtil {
         setMargins(v, m, m, m, m);
     }
 
-    public static String getPaymentStatus(boolean isDownpayment) {
-        return isDownpayment ? "Incomplete" : "Fully Paid";
-    }
-
     public static String getPaymentStatus(double balance) {
         Log.d(TAG, "getPaymentStatus: balance == 0d " + (balance == 0d));
         return balance <= 0d ? "Fully Paid"  : "Incomplete";
@@ -114,7 +104,7 @@ public class UIUtil {
         return balance <= 0d ? ColorStateList.valueOf(0xFF01bb64) : ColorStateList.valueOf(0xFFFF5252);
     }
 
-    public static ArrayList<String> getServices(List<DentalServiceOption> serviceOptions) {
+    public static ArrayList<String> getServiceUids(List<DentalServiceOption> serviceOptions) {
         ArrayList<String> selected = new ArrayList<>();
 
         for (DentalServiceOption service : serviceOptions) {
@@ -135,7 +125,7 @@ public class UIUtil {
         return ServiceOptionsAdapter.DEFAULT_OPTION.equals(dentalServiceOptions.get(0));
     }
 
-    public static String getServiceTitle(List<DentalServiceOption> dentalServiceOptions, String serviceUid) {
+    public static String getServiceOptionsTitle(List<DentalServiceOption> dentalServiceOptions, String serviceUid) {
         String title = null;
 
         for (DentalServiceOption service : dentalServiceOptions) {
@@ -148,8 +138,18 @@ public class UIUtil {
         return title;
     }
 
-    public static String getServiceTitle(List<String> servicesProcedure, List<DentalServiceOption> dentalServiceOptions) {
-        Log.d(TAG, "getServiceTitle: services prrocedure: " + servicesProcedure);
+    public static boolean isServiceSelected(List<String> serviceUds, String serviceUid) {
+        for (String uid : serviceUds) {
+            if (uid.equals(serviceUid)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static String getServiceOptionsTitle(List<String> servicesProcedure, List<DentalServiceOption> dentalServiceOptions) {
+        Log.d(TAG, "getServiceTitle: services procedure: " + servicesProcedure);
 
         if (servicesProcedure == null || servicesProcedure.size() == 0) {
             return "Procedure";
@@ -157,8 +157,8 @@ public class UIUtil {
 
         StringBuilder services = new StringBuilder();
 
-        for (String service : servicesProcedure) {
-            String title = getServiceTitle(dentalServiceOptions, service);
+        for (String serviceUid : servicesProcedure) {
+            String title = getServiceOptionsTitle(dentalServiceOptions, serviceUid);
             if (title != null) {
                 services.append(title).append(" | ");
             }
@@ -171,12 +171,30 @@ public class UIUtil {
         return services.toString();
     }
 
-    private static int getPosition(String[] titles, String selectedTitle) {
-        for (int pos = 0; pos < titles.length; pos++) {
-            if (titles[pos].equals(selectedTitle)) return pos;
+    public static String getServiceTitle(String serviceUid, List<DentalService> dentalServiceOptions) {
+        String title = null;
+
+        for (DentalService service : dentalServiceOptions) {
+            if (service.getServiceUID().equals(serviceUid)){
+                title = service.getTitle();
+                break;
+            }
         }
 
-        return -1;
+        return title;
+    }
+
+    public static List<String> getServicesList(List<DentalService> services, List<String> servicesUid) {
+        ArrayList<String> servicesNames = new ArrayList<>();
+
+        for (String serviceUid : servicesUid) {
+            String serviceName = getServiceTitle(serviceUid, services);
+            if (serviceName != null) {
+                servicesNames.add(serviceName);
+            }
+        }
+
+        return servicesNames;
     }
 
     public static double convertToDouble(String input) {
@@ -270,25 +288,6 @@ public class UIUtil {
         return inputNumber;
     }
 
-    public static ByteArrayOutputStream getOutputStreamImage(ImageView imageView) {
-        Drawable drawable = imageView.getDrawable();
-        Bitmap capture;
-        if (drawable instanceof VectorDrawable) {
-            capture = convertVectorToBitmap(drawable);
-        } else {
-            capture = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-        }
-
-        ByteArrayOutputStream outputStream;
-        if (capture != null) {
-            outputStream = new ByteArrayOutputStream();
-            capture.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
-        }
-        else outputStream = null;
-
-        return outputStream;
-    }
-
     public static Bitmap convertVectorToBitmap(Drawable drawable) {
         try {
             Log.d(TAG, "convertVectorToBitmap: trying to convert drawable");
@@ -306,25 +305,6 @@ public class UIUtil {
             e.printStackTrace();
             return null;
         }
-    }
-
-    public static Bitmap getBitmapFromResource(Context context, int path) {
-        final MutableLiveData<Bitmap> result = new MutableLiveData<>();
-        Glide.with(context)
-                .asBitmap()
-                .load(path)
-                .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        result.setValue(resource);
-                    }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-                    }
-                });
-
-        return result.getValue();
     }
 
     public static byte[] getByteArray(Bitmap resource) {
@@ -397,4 +377,65 @@ public class UIUtil {
         imageView.setBackgroundColor(Color.TRANSPARENT);
     }
 
+    public static List<String> createList(String contactNumber) {
+        ArrayList<String> contact = new ArrayList<>(1);
+        contact.add(contactNumber);
+
+        return contact;
+    }
+
+    public static boolean isValid(String defaultValue, String toBeChecked, View view) {
+        if (defaultValue.equals(toBeChecked)) {
+            view.setVisibility(View.VISIBLE);
+            return false;
+        }
+        return true;
+    }
+
+    public String getContactNumber(List<String> contactNumber) {
+        if (contactNumber != null && contactNumber.size() > 0) {
+            StringBuilder builder = new StringBuilder();
+
+            if (contactNumber.get(0).equals(FirebaseHelper.NEW_PATIENT)) {
+                builder.append(Checker.NOT_AVAILABLE);
+            } else {
+                for (String number : contactNumber) {
+                    builder.append(number).append("\n");
+                }
+                builder.deleteCharAt(builder.length()-1);
+            }
+
+            return builder.toString();
+        }
+        else
+            return Checker.NOT_AVAILABLE;
+    }
+
+    public static void setDateFields(String dateOfBirth, TextView day, TextView month, TextView year) {
+        if (Checker.isDataAvailable(dateOfBirth) && !dateOfBirth.equals(Checker.NOT_AVAILABLE)) {
+            String[] dateUnits = DateUtil.toStringArray(dateOfBirth);
+            day.setText(dateUnits[0]);
+            month.setText(DateUtil.getMonthName(UIUtil.convertToInteger(dateUnits[1])));
+            year.setText(dateUnits[2]);
+        }
+    }
+
+    public static void setTimeFields(String time, TextView hour, TextView minutes, TextView period) {
+        if (Checker.isDataAvailable(time) && !time.equals(Checker.NOT_AVAILABLE)) {
+            String[] timeUnits = DateUtil.toStringArray(time);
+
+            int hourOfDay = convertToInteger(timeUnits[0]);
+            boolean isAm = true;
+
+            if (hourOfDay > 12) {
+                Log.d(TAG, "getReadableTime: is pm");
+                hourOfDay -= 12;
+                isAm = false;
+            }
+
+            hour.setText(String.valueOf(hourOfDay));
+            minutes.setText(timeUnits[1]);
+            period.setText(isAm ? "AM" : "PM");
+        }
+    }
 }
