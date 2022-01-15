@@ -1,6 +1,5 @@
 package com.bsit_three_c.dentalrecordapp.ui.employees.view_employee;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -45,7 +44,9 @@ public class ViewEmployeeActivity extends AppCompatActivity {
         FloatingActionButton fab = binding.employeeFloatingActionButton;
 
         fab.setOnClickListener(view -> {
-            startActivity(new Intent(this, EmployeeFormActivity.class).putExtra(getString(R.string.EMPLOYEE), employee));
+            EmployeeFormActivity.showEmployeeForm(this, employee);
+//            startActivity(new Intent(this, EmployeeFormActivity.class)
+//                    .putExtra(BasicInfoFormFragment.EMPLOYEE_KEY, employee));
         });
 
         final CollapsingToolbarLayout collapsingToolbarLayout = binding.employeeCollapsingToolbar;

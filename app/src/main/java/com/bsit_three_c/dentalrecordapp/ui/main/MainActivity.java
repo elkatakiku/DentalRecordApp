@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -23,12 +24,14 @@ import androidx.navigation.ui.NavigationUI;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
+import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityMainBinding;
+import com.bsit_three_c.dentalrecordapp.ui.base.BaseFormActivity;
+import com.bsit_three_c.dentalrecordapp.ui.dialog.SuccessDialogFragment;
 import com.bsit_three_c.dentalrecordapp.ui.login.LoginActivity;
 import com.bsit_three_c.dentalrecordapp.ui.login_signup.LoginOrRegisterActivity;
-import com.bsit_three_c.dentalrecordapp.ui.patients.registration_form.RegisterActivity;
+import com.bsit_three_c.dentalrecordapp.ui.profile.BaseProfileActivity;
 import com.bsit_three_c.dentalrecordapp.ui.search.SearchActivity;
-import com.bsit_three_c.dentalrecordapp.ui.settings.SettingsActivity;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.navigation.NavigationView;
@@ -55,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
             LoggedInUser resultUser = result.getData().getParcelableExtra(LocalStorage.LOGGED_IN_USER_KEY);
             Log.d(TAG, "got result: " + resultUser);
 
+            Patient patient = result.getData().getParcelableExtra(LocalStorage.UPDATED_PATIENT_KEY);
+            Log.d(TAG, "got patient: " + patient);
+
             if (resultUser != null) {
                 switch (resultUser.getType()) {
                     case Account.TYPE_ADMIN:
@@ -68,6 +74,15 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
             }
+            else if (patient != null) {
+                DialogFragment dialogFragment = new SuccessDialogFragment();
+                Bundle argument = new Bundle();
+                argument.putInt(SuccessDialogFragment.ICON_KEY, R.drawable.ic_baseline_check_24);
+                argument.putString(SuccessDialogFragment.TITLE_KEY, "Success");
+                argument.putString(SuccessDialogFragment.MESSAGE_KEY, "Account successfully created.");
+                dialogFragment.setArguments(argument);
+                dialogFragment.show(getSupportFragmentManager(), null);
+            }
             else {
                 Snackbar
                         .make(binding.getRoot(), "Failed to logged in.", Snackbar.LENGTH_SHORT)
@@ -75,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     });
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,11 +107,17 @@ public class MainActivity extends AppCompatActivity {
         mainViewModel.setmLoggedInUser(LocalStorage.getLoggedInUser(this));
 
         mainViewModel.getmLoggedInUser().observe(this, loggedInUser -> {
-            setUserUi(navigationView, loggedInUser);
+            if (loggedInUser != null) {
+                if (loggedInUser.getType() == Account.TYPE_PATIENT) {
+                    setUserUi(navigationView, loggedInUser);
+                } else {
+                    sendUserToAdminHome();
+                }
+            }
         });
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_user_home, R.id.nav_user_service, R.id.nav_user_dental_history, R.id.nav_user_appointments)
+                R.id.nav_user_home, R.id.nav_user_service, R.id.nav_user_dental_history, R.id.nav_user_appointments, R.id.nav_about)
                 .setOpenableLayout(drawer)
                 .build();
 
@@ -116,33 +138,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        menu.findItem(R.id.menu_search).setVisible(false);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        Log.d(TAG, "onStart: starting main activity");
-
-        LoggedInUser loggedInUser = LocalStorage.getLoggedInUser(this);
-        Log.d(TAG, "onStart: loggedInUser: " + loggedInUser);
-
-        if (loggedInUser != null) {
-            switch (loggedInUser.getType()) {
-                case Account.TYPE_ADMIN:
-                    sendUserToAdminHome();
-                    break;
-                case Account.TYPE_EMPLOYEE:
-                    sendUserToAdminHome();
-                    break;
-                case Account.TYPE_PATIENT:
-                    mainViewModel.setmLoggedInUser(loggedInUser);
-                    break;
-            }
-        }
-
-        Log.d(TAG, "onStart: on start called");
     }
 
     private void setUserUi(NavigationView navigationView, LoggedInUser loggedInUser) {
@@ -186,13 +183,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void onNavMenuItemSelected(Menu menu) {
 
-        menu.findItem(SETTINGS).setOnMenuItemClickListener(item -> {
-            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-            return true;
-        });
+//        menu.findItem(SETTINGS).setOnMenuItemClickListener(item -> {
+//            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+//            return true;
+//        });
 
         menu.findItem(R.id.nav_register).setOnMenuItemClickListener(item -> {
-            startActivity(new Intent(MainActivity.this, RegisterActivity.class));
+            startActivity(new Intent(MainActivity.this, BaseFormActivity.class)
+                    .putExtra(BaseFormActivity.FORM_KEY, BaseFormActivity.FORM_REGISTRATION));
             return true;
         });
 
@@ -223,7 +221,14 @@ public class MainActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.menu_profile:
-                startActivity(new Intent(MainActivity.this, LoginOrRegisterActivity.class));
+                if (mainViewModel.getmLoggedInUser().getValue() != null
+                        && mainViewModel.getmLoggedInUser().getValue().getType() == Account.TYPE_PATIENT) {
+                    startActivity(new Intent(MainActivity.this, BaseProfileActivity.class)
+                            .putExtra(BaseProfileActivity.USER_ID, mainViewModel.getmLoggedInUser().getValue().getPerson().getUid())
+                            .putExtra(BaseProfileActivity.PROFILE_KEY, BaseProfileActivity.PROFILE_PATIENT));
+                } else {
+                    toLoginResult.launch(new Intent(MainActivity.this, LoginOrRegisterActivity.class));
+                }
                 break;
         }
 
@@ -254,8 +259,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (binding.drawerLayout.isOpen()) binding.drawerLayout.close();
-        else super.onBackPressed();
+        if (binding.drawerLayout.isOpen()) {
+            binding.drawerLayout.close();
+        }
+        else {
+            super.onBackPressed();
+        }
     }
 
     private void sendUserToAdminHome() {

@@ -18,6 +18,7 @@ import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.DateUtil;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProceduresList {
@@ -25,7 +26,7 @@ public class ProceduresList {
 
     private final LinearLayout linearLayout;
 
-    private List<Procedure> procedures;
+    private final List<Procedure> procedures;
     private final Patient patient;
     private final List<DentalServiceOption> dentalServiceOptions;
 
@@ -37,9 +38,18 @@ public class ProceduresList {
         this.patient = patient;
         this.lifecycleOwner = lifecycleOwner;
         this.dentalServiceOptions = dentalServiceOptions;
+        this.procedures = new ArrayList<>();
     }
 
-    private void addItem(Procedure procedure, int position) {
+    public int getItemCount() {
+        return procedures.size();
+    }
+
+    public void addItem(Procedure procedure) {
+        if (procedures.size() == 0) {
+            clearItems();
+        }
+        procedures.add(procedure);
         ViewHolder viewHolder = new ViewHolder(lifecycleOwner.getLayoutInflater());
         initializeProcedure(procedure);
 
@@ -50,27 +60,27 @@ public class ProceduresList {
         viewHolder.txtDentalFullyPaid.setText(UIUtil.getPaymentStatus(procedure.getDentalBalance()));
         viewHolder.txtDentalFullyPaid.setTextColor(UIUtil.getCheckBoxColor(procedure.getDentalBalance()));
 
+        viewHolder.cardView.setTag(procedures.size()-1);
         viewHolder.cardView.setOnClickListener(this::onItemClick);
 
-        viewHolder.cardView.setTag(position);
 
         linearLayout.addView(viewHolder.cardView);
     }
 
-    public void addItems(List<Procedure> procedures) {
-
-        clearItems();
-
-        if (procedures != null) {
-            this.procedures = procedures;
-
-            for (int position = 0; position < procedures.size(); position++) {
-                if (procedures.get(position) != null)
-                    addItem(procedures.get(position), position);
-            }
-        }
-
-    }
+//    public void addItems(List<Procedure> procedures) {
+//
+//        clearItems();
+//
+//        if (procedures != null) {
+//            this.procedures = procedures;
+//
+//            for (int position = 0; position < procedures.size(); position++) {
+//                if (procedures.get(position) != null)
+//                    addItem(procedures.get(position), position);
+//            }
+//        }
+//
+//    }
 
     private void initializeProcedure(Procedure procedure) {
         if (!Checker.isDataAvailable(procedure.getDentalDesc())) procedure.setDentalDesc(Checker.NOT_AVAILABLE);
@@ -78,9 +88,9 @@ public class ProceduresList {
     }
 
     public void clearItems() {
-
+        Log.d(TAG, "clearItems: clearing items");
         //  Remove views from index 2 upwards
-        while (linearLayout.getChildCount() > 2) {
+        while (linearLayout.getChildCount() != 0) {
             linearLayout.removeViewAt(linearLayout.getChildCount()-1);
         }
 

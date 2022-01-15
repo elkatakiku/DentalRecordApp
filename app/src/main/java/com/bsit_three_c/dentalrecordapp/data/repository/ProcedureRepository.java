@@ -3,6 +3,7 @@ package com.bsit_three_c.dentalrecordapp.data.repository;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
@@ -50,19 +51,40 @@ public class ProcedureRepository extends BaseRepository {
 
         Procedure procedure = createProcedure(patient, service, dentalDesc, dentalDate,
                 dentalAmount, isDownpayment, dentalPayment, dentalBalance);
-        databaseReference.child(procedure.getUid()).setValue(procedure);
+        upload(procedure);
     }
 
-    public void removeProcedure(Patient patient, String operationUID, List<String> paymentKeys) {
-        databaseReference.child(operationUID).removeValue();
-        PatientRepository.getInstance().removeProcedureKey(patient, operationUID);
-        ProgressNoteRepository.getInstance().removeProgressNote(paymentKeys);
+    public void removeProcedure(Patient patient, String procedureUid, List<String> paymentKeys) {
+        Log.d(TAG, "removeProcedure: deleting procedure");
+        remove(procedureUid)
+                .continueWith(task -> {
+                    Log.d(TAG, "removeProcedure: done remove procedure attempt");
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "removeProcedure: success in deleting procedure");
+                        Task<Void> removeProcedureKey = PatientRepository
+                                .getInstance()
+                                .removeProcedureKey(patient, procedureUid);
+                        Log.d(TAG, "removeProcedure: removing procedure key");
+                        if (removeProcedureKey != null) {
+                            removeProcedureKey.continueWith(task1 -> {
+                                ProgressNoteRepository.getInstance().removeProgressNote(paymentKeys);
+                                return null;
+                            });
+                        }
+                    }
+                    return null;
+                });
+
     }
 
     public static void initialize(Procedure procedure) {
 
         if (procedure.getServiceIds() == null || procedure.getServiceIds().size() == 0) {
             procedure.setServiceIds(new ArrayList<>());
+        }
+
+        if (procedure.getPaymentKeys() == null) {
+            procedure.setPaymentKeys(new ArrayList<>());
         }
     }
 
@@ -77,6 +99,7 @@ public class ProcedureRepository extends BaseRepository {
 
         Procedure procedure = new Procedure(
                 databaseReference.push().getKey(),
+                patient.getUid(),
                 service,
                 dentalDesc,
                 DateUtil.getDate(dentalDate),
@@ -98,10 +121,6 @@ public class ProcedureRepository extends BaseRepository {
 
         return procedure;
     }
-
-//    public void addPaymentKey(Procedure procedure) {
-//        databaseReference.child(procedure.getUid()).child(PAYMENT_KEYS).setValue(procedure.getPaymentKeys());
-//    }
 
     public void updatePaymentKeys(Procedure procedure, String paymentUID) {
         ArrayList<String> keys = (ArrayList<String>) procedure.getPaymentKeys();
@@ -173,5 +192,36 @@ public class ProcedureRepository extends BaseRepository {
 
             }
         });
+    }
+
+    public static class ProcedureListener implements ValueEventListener {
+
+        private final MutableLiveData<List<Procedure>> mProcedures;
+
+        public ProcedureListener(MutableLiveData<List<Procedure>> mProcedures) {
+            this.mProcedures = mProcedures;
+        }
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            final ArrayList<Procedure> procedures = new ArrayList<>();
+            for (DataSnapshot data : snapshot.getChildren()) {
+                Procedure procedure = snapshot.getValue(Procedure.class);
+
+                if (procedure == null) {
+                    continue;
+                }
+
+                initialize(procedure);
+                procedures.add(procedure);
+            }
+
+            mProcedures.setValue(procedures);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
     }
 }

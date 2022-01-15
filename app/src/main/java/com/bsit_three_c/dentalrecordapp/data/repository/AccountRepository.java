@@ -42,23 +42,31 @@ public class AccountRepository extends BaseRepository {
         return instance;
     }
 
-    public void setUserIds(Person person, Account account, String userUid) {
-        account.setUid(userUid);
+    public void setUserIds(Person person, Account account) {
         account.setUserUid(person.getUid());
         person.setAccountUid(account.getUid());
+
+        Log.d(TAG, "setUserIds: account after setting id: " + account);
+        Log.d(TAG, "setUserIds: person after setting account id: " + person);
     }
 
-    public Task<Void> addAccount(Account account) {
+    public Task<Void> uploadAccount(Account account, String userUid) {
+        account.setUid(userUid);
         return databaseReference.child(account.getUid()).setValue(account);
     }
 
-    public Task<AuthResult> createNewAccount(Account newAccount) {
+    public Task<Void> uploadAccount(Account account) {
+        return databaseReference.child(account.getUid()).setValue(account);
+    }
 
-        if (!(Checker.isDataAvailable(newAccount.getEmail()) && Checker.isDataAvailable(newAccount.getPassword()))) {
+    public Task<AuthResult> createNewAccount(String email, String password) {
+
+        if (!(Checker.isDataAvailable(email) && Checker.isDataAvailable(password))) {
+            Log.d(TAG, "createNewAccount: create account null");
             return null;
         }
 
-        return mFirebaseAuth.createUserWithEmailAndPassword(newAccount.getEmail(), newAccount.getPassword());
+        return mFirebaseAuth.createUserWithEmailAndPassword(email, password);
     }
 
     public int getCreateAccountError(Task<AuthResult> task) {
@@ -75,20 +83,45 @@ public class AccountRepository extends BaseRepository {
     }
 
     public void reLoginUser(LoggedInUser loggedInAccount) {
+        Log.d(TAG, "reLoginUser: logged in user: " + loggedInAccount);
         logout();
         mFirebaseAuth
                 .signInWithEmailAndPassword(loggedInAccount.getEmail(), loggedInAccount.getPassword())
                 .addOnSuccessListener(authResult -> Log.d(TAG, "onSuccess: newCurrentUID: " + mFirebaseAuth.getCurrentUser().getUid()))
-                .addOnFailureListener(e -> Log.d(TAG, "onFailure: newCurrentUID: " + mFirebaseAuth.getCurrentUser().getUid()));
+                .addOnFailureListener(Throwable::printStackTrace);
     }
 
     public void removeAccount(LoggedInUser loggedInUser, String accountUid) {
-        databaseReference.child(accountUid).addListenerForSingleValueEvent(new ValueEventListener() {
+        getPath(accountUid)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Account account = snapshot.getValue(Account.class);
                 if (account != null) {
-                    removeAccount(loggedInUser, account);
+                    Log.d(TAG, "onDataChange: to be deleted account: " + account);
+                    final String email = account.getEmail();
+                    final String password = account.getPassword();
+
+                    mFirebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                        if (task.isSuccessful() && task.getResult().getUser() != null) {
+                            task
+                                    .getResult()
+                                    .getUser()
+                                    .delete()
+                                    .continueWith(task12 -> {
+                                        if (task12.isSuccessful()) {
+                                            remove(account.getUid()).continueWith(task1 -> {
+                                                if (task1.isSuccessful()) {
+                                                    mFirebaseAuth.signInWithEmailAndPassword(loggedInUser.getEmail(), loggedInUser.getPassword());
+                                                }
+                                                return null;
+                                            });
+                                        }
+
+                                        return null;
+                                    });
+                        }
+                    });
                 }
             }
 
@@ -99,33 +132,16 @@ public class AccountRepository extends BaseRepository {
         });
     }
 
-    private void removeAccount(LoggedInUser loggedInUser, Account account) {
-        final String email = account.getEmail();
-        final String password = account.getPassword();
-
-        mFirebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult().getUser() != null) {
-                task.getResult().getUser().delete();
-                databaseReference.child(account.getUid()).removeValue();
-                mFirebaseAuth.signInWithEmailAndPassword(loggedInUser.getEmail(), loggedInUser.getPassword());
-            }
-        });
+    public Task<AuthResult> signInWithEmail(Account account) {
+        return mFirebaseAuth.signInWithEmailAndPassword(account.getEmail(), account.getPassword());
     }
 
     public void logout() {
         // TODO: revoke authentication
         // Logout the current user
         mFirebaseAuth.signOut();
-        Log.d(TAG, "logout: Person is still logged in: " + (mFirebaseAuth.getCurrentUser() == null));
+        Log.d(TAG, "logout: Is no one logged in: " + (mFirebaseAuth.getCurrentUser() == null));
     }
-
-//    public DatabaseReference loadAccount(String accountUid) {
-//        return databaseReference.child(accountUid);
-//    }
-
-//    public DatabaseReference getAccountPath(String accountUid) {
-//        return databaseReference.child(accountUid);
-//    }
 
     public void removeListener(String accountUid,
                                AccountListener accountListener) {
@@ -144,6 +160,7 @@ public class AccountRepository extends BaseRepository {
             Log.d(TAG, "onDataChange: changed in account occured");
             Account account = snapshot.getValue(Account.class);
             if (account != null) {
+                Log.d(TAG, "onDataChange: got account: " + account);
                 mAccount.setValue(account);
             }
         }
@@ -198,7 +215,7 @@ public class AccountRepository extends BaseRepository {
                 Log.d(TAG, "onComplete: creating account data");
 //                account.setUserUid(userUID);
 //                accountRepository.setUserIds();   Set user ids
-                accountRepository.addAccount(account);
+                accountRepository.uploadAccount(account, user.getUid());
 
                 if (loggedInUser != null) {
                     Log.d(TAG, "onComplete: no user logged in");

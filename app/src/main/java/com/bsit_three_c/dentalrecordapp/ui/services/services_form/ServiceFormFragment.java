@@ -19,11 +19,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.data.adapter.ListWithRemoveItemAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalService;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentFormServiceBinding;
@@ -36,18 +34,18 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
-
 public class ServiceFormFragment extends Fragment {
     private static final String TAG = ServiceFormFragment.class.getSimpleName();
 
+    private static final String SERVICE_KEY = "ARG_SF_SERVICE_KEY";
+
     private FragmentFormServiceBinding binding;
     private ServiceFormViewModel viewModel;
-    private ListWithRemoveItemAdapter listWithRemoveItemAdapter;
+//    private ListWithRemoveItemAdapter listWithRemoveItemAdapter;
 
-    private boolean isEdit;
+//    private boolean isEdit;
     private boolean isImageChanged;
-    private DentalService service;
+//    private DentalService service;
 
     private final ActivityResultLauncher<Intent> selectImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -83,14 +81,27 @@ public class ServiceFormFragment extends Fragment {
         }
     });
 
+    public static ServiceFormFragment newInstance(DentalService service) {
+        Bundle arguments = new Bundle();
+        arguments.putParcelable(SERVICE_KEY, service);
+        ServiceFormFragment serviceFormFragment = new ServiceFormFragment();
+        serviceFormFragment.setArguments(arguments);
+        return serviceFormFragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentFormServiceBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this, new CustomViewModelFactory()).get(ServiceFormViewModel.class);
-        listWithRemoveItemAdapter = new ListWithRemoveItemAdapter(requireContext(), R.layout.item_list_with_remove);
 
-        binding.lvServiceCategory.setAdapter(listWithRemoveItemAdapter);
+        if (getArguments() != null) {
+            viewModel.setmDentalService(getArguments().getParcelable(SERVICE_KEY));
+        }
+
+//        listWithRemoveItemAdapter = new ListWithRemoveItemAdapter(requireContext(), R.layout.item_list_with_remove);
+
+//        binding.lvServiceCategory.setAdapter(listWithRemoveItemAdapter);
 
         return binding.getRoot();
 
@@ -99,24 +110,29 @@ public class ServiceFormFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        viewModel.getmUploadAttempt().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean uploadStatus) {
+        viewModel.getmDentalService().observe(getViewLifecycleOwner(), service -> {
+            if (service != null) {
+//                isEdit = true;
+                initializeFields(service);
+            }
+//            else isEdit = false;
+        });
 
-                Log.d(TAG, "onChanged: upload attempt status: " + uploadStatus);
+        viewModel.getmUploadAttempt().observe(getViewLifecycleOwner(), uploadStatus -> {
 
-                if (uploadStatus && viewModel.getmError().getValue() != null) {
-                    if (viewModel.getmError().getValue() == ServiceFormViewModel.VALID) {
-                        returnResult();
-                    }
-                    else {
-                        Snackbar
-                                .make(binding.btnAddService, viewModel.getmError().getValue(), Snackbar.LENGTH_SHORT)
-                                .show();
-                    }
+            Log.d(TAG, "onChanged: upload attempt status: " + uploadStatus);
 
-                    setFieldsEnabled(true);
+            if (uploadStatus && viewModel.getmError().getValue() != null) {
+                if (viewModel.getmError().getValue() == ServiceFormViewModel.VALID) {
+                    returnResult();
                 }
+                else {
+                    Snackbar
+                            .make(binding.btnAddService, viewModel.getmError().getValue(), Snackbar.LENGTH_SHORT)
+                            .show();
+                }
+
+                setFieldsEnabled(true);
             }
         });
 
@@ -125,14 +141,14 @@ public class ServiceFormFragment extends Fragment {
         binding.btnAddServiceImage.setOnClickListener(v ->
                 LocalStorage.imageChooser(selectImage));
 
-        binding.btnAddServiceCategory.setOnClickListener(v ->
-                addCategory(binding.etAddServiceCategory.getText().toString().trim()));
+//        binding.btnAddServiceCategory.setOnClickListener(v ->
+//                addCategory(binding.etAddServiceCategory.getText().toString().trim()));
 
         binding.btnAddService.setOnClickListener(view1 -> {
 
             String name = binding.etAddServiceName.getText().toString().trim();
             String desc = binding.etAddServiceDescription.getText().toString().trim();
-            ArrayList<String> categories = (ArrayList<String>) listWithRemoveItemAdapter.getList();
+//            ArrayList<String> categories = (ArrayList<String>) listWithRemoveItemAdapter.getList();
 
             DentalService dentalService;
 
@@ -143,12 +159,17 @@ public class ServiceFormFragment extends Fragment {
 
             setFieldsEnabled(false);
 
-            if (isEdit) {
-                dentalService = viewModel.editService(service, name, desc, categories);
-            }
-            else {
-                dentalService = new DentalService(UIUtil.capitalize(name), desc, categories);
-            }
+//            if (isEdit) {
+                if (viewModel.getmDentalService().getValue() != null) {
+                    dentalService = viewModel.editService(viewModel.getmDentalService().getValue(), name, desc);
+                } else {
+                    dentalService = new DentalService(UIUtil.capitalize(name), desc);
+                }
+//                        , categories);
+//            }
+//            else {
+//                        , categories);
+//            }
 
             viewModel.addService(dentalService);
         });
@@ -157,32 +178,25 @@ public class ServiceFormFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        service = (DentalService) requireActivity().getIntent().getParcelableExtra(LocalStorage.PARCEL_KEY);
-
-        if (service != null) {
-            isEdit = true;
-            initializeFields();
-        }
-        else isEdit = false;
     }
 
-    private void initializeFields() {
+    private void initializeFields(DentalService dentalService) {
 
         Glide
                 .with(this)
-                .load(Uri.parse(service.getDisplayImage()))
+                .load(Uri.parse(dentalService.getDisplayImage()))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(binding.imgDisplayPreview);
 
-        binding.etAddServiceName.setText(service.getTitle());
-        binding.etAddServiceDescription.setText(service.getDescription());
-        binding.lvServiceCategory.setAdapter(listWithRemoveItemAdapter);
+        binding.etAddServiceName.setText(dentalService.getTitle());
+        binding.etAddServiceDescription.setText(dentalService.getDescription());
+//        binding.lvServiceCategory.setAdapter(listWithRemoveItemAdapter);
 
-        listWithRemoveItemAdapter.clear();
+//        listWithRemoveItemAdapter.clear();
 
-        for (String category : service.getCategories()) {
-            addCategory(category);
-        }
+//        for (String category : service.getCategories()) {
+//            addCategory(category);
+//        }
 
     }
 
@@ -192,23 +206,23 @@ public class ServiceFormFragment extends Fragment {
         binding.btnAddServiceImage.setEnabled(enabled);
         binding.etAddServiceName.setEnabled(enabled);
         binding.etAddServiceDescription.setEnabled(enabled);
-        binding.etAddServiceCategory.setEnabled(enabled);
-        binding.btnAddServiceCategory.setEnabled(enabled);
+//        binding.etAddServiceCategory.setEnabled(enabled);
+//        binding.btnAddServiceCategory.setEnabled(enabled);
         binding.btnAddService.setEnabled(enabled);
     }
 
-    private void addCategory(final String categoryInput) {
-
-        if (categoryInput.trim().isEmpty()) {
-            binding.etAddServiceCategory.setError(getString(R.string.invalid_empty_input));
-            return;
-        }
-
-        listWithRemoveItemAdapter.add(UIUtil.capitalize(categoryInput));
-        listWithRemoveItemAdapter.notifyDataSetChanged();
-
-        binding.etAddServiceCategory.setText("");
-    }
+//    private void addCategory(final String categoryInput) {
+//
+//        if (categoryInput.trim().isEmpty()) {
+//            binding.etAddServiceCategory.setError(getString(R.string.invalid_empty_input));
+//            return;
+//        }
+//
+//        listWithRemoveItemAdapter.add(UIUtil.capitalize(categoryInput));
+//        listWithRemoveItemAdapter.notifyDataSetChanged();
+//
+//        binding.etAddServiceCategory.setText("");
+//    }
 
     private void returnResult() {
         requireActivity().setResult(RESULT_OK, new Intent());

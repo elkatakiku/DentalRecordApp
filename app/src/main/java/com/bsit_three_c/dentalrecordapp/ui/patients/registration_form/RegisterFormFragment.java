@@ -10,10 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentFormRegisterBinding;
+import com.bsit_three_c.dentalrecordapp.ui.patients.patient_form.PatientFormFragment;
 import com.bsit_three_c.dentalrecordapp.ui.patients.patient_form.PatientFormViewModel;
 import com.bsit_three_c.dentalrecordapp.util.CustomObserver;
 import com.bsit_three_c.dentalrecordapp.util.CustomTextWatcher;
@@ -56,16 +56,11 @@ public class RegisterFormFragment extends Fragment {
             }
 
             viewModel.createAccount(email, password);
-            NavHostFragment.findNavController(RegisterFormFragment.this)
-                    .navigate(R.id.action_CreatePatientAccount_to_PatientFormFragment);
-
-//                BasicInfoFormFragmentDirections.actionFirstFragmentToSecond2Fragment(employee);
-//                CreateAccountFragmentDirections.ActionCreatePatientAccountToPatientFormFragment action = CreateAccountFragmentDirections.actionCreatePatientAccountToPatientFormFragment(
-//                        mViewModel.createAccount(email, password));
-
-//                Navigation
-//                        .findNavController(v)
-//                        .navigate();
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, PatientFormFragment.newInstance(null, null))
+                    .addToBackStack(null)
+                    .commit();
         });
 
         setListeners();

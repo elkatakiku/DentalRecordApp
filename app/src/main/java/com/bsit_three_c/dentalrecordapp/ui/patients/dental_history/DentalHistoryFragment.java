@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -70,17 +69,14 @@ public class DentalHistoryFragment extends Fragment {
         binding.rvList.setLayoutManager(manager);
         binding.rvList.setAdapter(adapter);
 
-        mViewModel.getmPatientUid().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                Log.d(TAG, "onChanged: patient uid set: " + s);
-                if (Checker.isDataAvailable(s)) {
-                    Log.d(TAG, "onChanged: loading services");
-                    binding.listProgressBar.setVisibility(View.VISIBLE);
-                    mViewModel.loadServices();
-                } else {
-                    showEmptyList();
-                }
+        mViewModel.getmPatientUid().observe(getViewLifecycleOwner(), s -> {
+            Log.d(TAG, "onChanged: patient uid set: " + s);
+            if (Checker.isDataAvailable(s)) {
+                Log.d(TAG, "onChanged: loading services");
+                binding.listProgressBar.setVisibility(View.VISIBLE);
+                mViewModel.loadServices();
+            } else {
+                showEmptyList();
             }
         });
 
@@ -133,6 +129,6 @@ public class DentalHistoryFragment extends Fragment {
     private void showEmptyList() {
         Log.d(TAG, "showEmptyList: called");
         binding.tvItemsWillShowHere.setVisibility(View.VISIBLE);
-        binding.tvItemsWillShowHere.setText(getString(R.string.empty_list, "Procedure"));
+        binding.tvItemsWillShowHere.setText(getString(R.string.empty_list, "Dental history"));
     }
 }

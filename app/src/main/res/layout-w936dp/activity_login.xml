@@ -32,19 +32,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:labelFor="@id/username"
+        android:labelFor="@id/email"
         android:text="@string/login_username"
         android:textColor="@color/label_color"
         android:textSize="16sp"
         android:textStyle="bold"
         android:typeface="sans"
-        app:layout_constraintStart_toStartOf="@+id/username"
+        app:layout_constraintStart_toStartOf="@+id/email"
         app:layout_constraintTop_toTopOf="@+id/guideline2"
         tools:ignore="TextContrastCheck"
         tools:text="Username" />
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -73,7 +73,7 @@
         android:textStyle="bold"
         android:typeface="sans"
         app:layout_constraintStart_toStartOf="@+id/password"
-        app:layout_constraintTop_toBottomOf="@+id/username"
+        app:layout_constraintTop_toBottomOf="@+id/email"
         tools:text="Password" />
 
     <EditText
@@ -89,8 +89,8 @@
         android:selectAllOnFocus="true"
         android:textColor="@color/text_color"
         android:textColorHint="#9A9999"
-        app:layout_constraintEnd_toEndOf="@+id/username"
-        app:layout_constraintStart_toStartOf="@+id/username"
+        app:layout_constraintEnd_toEndOf="@+id/email"
+        app:layout_constraintStart_toStartOf="@+id/email"
         app:layout_constraintTop_toBottomOf="@+id/passwordLabel"
         tools:ignore="SpeakableTextPresentCheck" />
 
@@ -119,7 +119,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <ProgressBar
-        android:id="@+id/loading"
+        android:id="@+id/pbLoadingLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

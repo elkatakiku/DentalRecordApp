@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/nav_service"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.services.AdminServicesFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.services.ServicesFragment"
         android:label="Services"
         tools:layout="@layout/fragment_list_services"/>
 
@@ -52,4 +52,9 @@
         android:name="com.bsit_three_c.dentalrecordapp.ui.accounts.AccountsFragment"
         android:label="Accounts"
         tools:layout="@layout/fragment_accounts_frag" />
+    <fragment
+        android:id="@+id/nav_about"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.about.AboutFragment"
+        android:label="About"
+        tools:layout="@layout/fragment_about" />
 </navigation>

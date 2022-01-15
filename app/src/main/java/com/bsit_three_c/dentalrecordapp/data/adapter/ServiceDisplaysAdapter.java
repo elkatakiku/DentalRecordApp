@@ -1,6 +1,8 @@
 package com.bsit_three_c.dentalrecordapp.data.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalService;
+import com.bsit_three_c.dentalrecordapp.data.repository.ServiceRepository;
+import com.bsit_three_c.dentalrecordapp.ui.base.BaseFormActivity;
+import com.bsit_three_c.dentalrecordapp.ui.dialog.ServiceDialogFragment;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ServiceDisplaysAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = ServiceDisplaysAdapter.class.getSimpleName();
@@ -23,12 +29,19 @@ public class ServiceDisplaysAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     private ServicesViewHolder.ItemOnClickListener mItemOnClickListener;
 
-    private final boolean isMenu;
+    private final boolean isInMenu;
+    private final boolean isAdmin;
+    private AlertDialog deleteDialog;
 
-    public ServiceDisplaysAdapter(Context context, boolean isMenu) {
+    public ServiceDisplaysAdapter(Context context, boolean isInMenu, boolean isAdmin) {
         this.context = context;
-        this.isMenu = isMenu;
+        this.isInMenu = isInMenu;
+        this.isAdmin = isAdmin;
         this.dentalServices = new ArrayList<>();
+    }
+
+    public ServiceDisplaysAdapter(Context context, boolean isInMenu) {
+        this(context, isInMenu, false);
     }
 
     @NonNull
@@ -36,40 +49,78 @@ public class ServiceDisplaysAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.d(TAG, "onCreateViewHolder: creating view holder");
         View view;
+        RecyclerView.ViewHolder viewHolder;
 
-        if (isMenu) {
+        if (isInMenu) {
             view = LayoutInflater.from(context).inflate(R.layout.item_service_display_card, parent, false);
+            viewHolder = new ServicesViewHolder(view, isInMenu);
         }
         else {
-            view = LayoutInflater.from(context).inflate(R.layout.item_admin_services, parent, false);
+//            view = LayoutInflater.from(context).inflate(R.layout.item_admin_services, parent, false);
+            view = LayoutInflater.from(context).inflate(R.layout.dialog_service, parent, false);
+            viewHolder = new ServiceDialogFragment.ServiceViewHolder(view);
         }
 
         Log.d(TAG, "onCreateViewHolder: view: " + view);
 
-        return new ServicesViewHolder(view, isMenu);
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-
-        Log.d(TAG, "onBindViewHolder: binding");
-
-        ServicesViewHolder servicesViewHolder = (ServicesViewHolder) holder;
         DentalService service = dentalServices.get(position);
 
-        Log.d(TAG, "onBindViewHolder: current service: " + service);
+        if (isInMenu) {
+            ServicesViewHolder servicesViewHolder = (ServicesViewHolder) holder;
 
-        UIUtil.loadDisplayImage(
-                context,
-                servicesViewHolder.display,
-                service.getDisplayImage(),
-                R.drawable.ic_baseline_image_24
-        );
+            Log.d(TAG, "onBindViewHolder: current service: " + service);
 
-        servicesViewHolder.name.setText(service.getTitle());
+            UIUtil.loadDisplayImage(
+                    context,
+                    servicesViewHolder.display,
+                    service.getDisplayImage(),
+                    R.drawable.ic_baseline_image_24
+            );
 
-        servicesViewHolder.itemView.setOnClickListener(v ->
-                mItemOnClickListener.onItemClick(dentalServices.get(holder.getAdapterPosition())));
+            servicesViewHolder.name.setText(service.getTitle());
+
+            servicesViewHolder.itemView.setOnClickListener(v ->
+                    mItemOnClickListener.onItemClick(dentalServices.get(holder.getAdapterPosition())));
+        } else {
+            ServiceDialogFragment.ServiceViewHolder serviceViewHolder = (ServiceDialogFragment.ServiceViewHolder) holder;
+
+            if (!isAdmin) {
+                serviceViewHolder.delete.setVisibility(View.GONE);
+                serviceViewHolder.edit.setVisibility(View.GONE);
+            }
+
+            serviceViewHolder.close.setVisibility(View.GONE);
+            UIUtil.loadDisplayImage(context, serviceViewHolder.display, service.getDisplayImage(), R.drawable.ic_baseline_image_24);
+            UIUtil.setText(service.getTitle(), serviceViewHolder.name);
+            UIUtil.setText("\t" + service.getDescription(), serviceViewHolder.desc);
+
+            serviceViewHolder.delete.setOnClickListener(v -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+                builder
+                        .setTitle(context.getString(R.string.delete_title, "Service"))
+                        .setMessage(context.getString(R.string.delete_message) + " this service?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            ServiceRepository.getInstance().removeService(service);
+                        })
+                        .setNegativeButton("No", (dialog, which) -> deleteDialog.dismiss());
+                deleteDialog = builder.create();
+                deleteDialog.show();
+            });
+
+            serviceViewHolder.edit.setOnClickListener(v -> {
+                //  TODO: start activity on result
+                context.startActivity(
+                        new Intent(context, BaseFormActivity.class)
+                                .putExtra(BaseFormActivity.FORM_KEY, BaseFormActivity.FORM_SERVICE)
+                                .putExtra(BaseFormActivity.SERVICE_KEY, service));
+            });
+        }
     }
 
     @Override
@@ -85,7 +136,7 @@ public class ServiceDisplaysAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         dentalServices.add(service);
     }
 
-    public void addItems(ArrayList<DentalService> services) {
+    public void addItems(List<DentalService> services) {
         clearAll();
 
         Log.d(TAG, "setItems: adding list");

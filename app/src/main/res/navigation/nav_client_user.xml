@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/nav_user_service"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.services.AdminServicesFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.services.ServicesFragment"
         android:label="Services"
         tools:layout="@layout/fragment_list_services" />
 
@@ -32,5 +32,10 @@
         android:name="com.bsit_three_c.dentalrecordapp.ui.appointments.AppointmentsFragment"
         android:label="Appointment"
         tools:layout="@layout/fragment_list" />
+    <fragment
+        android:id="@+id/nav_about"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.about.AboutFragment"
+        android:label="About"
+        tools:layout="@layout/fragment_about" />
 
 </navigation>

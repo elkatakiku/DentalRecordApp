@@ -8,7 +8,7 @@ import java.util.Date;
 public class Appointment implements Parcelable {
 
     private String uid;
-    private Person patient;
+    private Patient patient;
     private Procedure procedure;
     private ProgressNote progressNote;
     private Date dateTime;
@@ -20,7 +20,7 @@ public class Appointment implements Parcelable {
     public Appointment() {
     }
 
-    public Appointment(String uid, Person patient, Procedure procedure, Date dateTime, String comments) {
+    public Appointment(String uid, Patient patient, Procedure procedure, Date dateTime, String comments) {
         this.uid = uid;
         this.patient = patient;
         this.procedure = procedure;
@@ -60,11 +60,11 @@ public class Appointment implements Parcelable {
         this.uid = uid;
     }
 
-    public Person getPatient() {
+    public Patient getPatient() {
         return patient;
     }
 
-    public void setPatient(Person patient) {
+    public void setPatient(Patient patient) {
         this.patient = patient;
     }
 

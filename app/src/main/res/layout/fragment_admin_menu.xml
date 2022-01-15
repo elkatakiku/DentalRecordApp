@@ -60,13 +60,15 @@
             android:textStyle="bold" />
 
         <LinearLayout
+            android:id="@+id/llAdminMenu"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="16dp"
             android:layout_weight="4"
             android:divider="@drawable/divider_admin_home"
             android:orientation="vertical"
-            android:showDividers="middle">
+            android:showDividers="middle"
+            tools:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -193,6 +195,131 @@
                     app:iconSize="50dp"
                     app:iconTint="@color/blue_green" />
             </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llEmployeeMenu"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
+            android:layout_weight="4"
+            android:divider="@drawable/empty_tall_divider"
+            android:orientation="vertical"
+            android:showDividers="middle"
+            tools:visibility="visible">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cbMenuEmployeePatients"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                app:cardCornerRadius="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@drawable/empty_tall_divider"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:showDividers="middle">
+
+                    <ImageView
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_baseline_person_24"
+                        app:tint="@color/blue_green" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:text="Patients"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/label"
+                        android:textSize="24sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cbMenuEmployeeServices"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                app:cardCornerRadius="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_services"
+                    android:divider="@drawable/empty_tall_divider"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:showDividers="middle">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:text="Services"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/white"
+                        android:textSize="24sp" />
+
+                    <ImageView
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_baseline_medical_services_24"
+                        app:tint="@color/white" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cbMenuEmployeeAppointments"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                app:cardCornerRadius="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@drawable/empty_tall_divider"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:showDividers="middle">
+
+                    <ImageView
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_baseline_calendar_today_24"
+                        app:tint="@color/blue_green" />
+
+                    <TextView
+                        android:id="@+id/textView40"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:text="Appointments"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/label"
+                        android:textSize="24sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
 
     </LinearLayout>

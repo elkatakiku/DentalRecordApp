@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <FrameLayout
+        android:id="@+id/customDialogHeader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="TouchTargetSizeCheck">
+
+        <TextView
+            android:id="@+id/tvPopUpTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/open_sans_bold"
+            android:gravity="center"
+            android:letterSpacing=".1"
+            android:text="Title"
+            android:textColor="@color/blue_green"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/imgPopUpClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            app:srcCompat="@drawable/ic_baseline_close_24"
+            app:tint="@color/field_hint" />
+
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/btnDialog1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/white"
+        android:insetLeft="6dp"
+        android:insetRight="6dp"
+        android:minHeight="70dp"
+        android:text="1st Option"
+        android:textColor="@color/blue_green"
+        android:textSize="16sp"
+        android:visibility="gone"
+        tools:visibility="gone" />
+
+    <View
+        android:id="@+id/divider34"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="?android:attr/listDivider" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/btnPopUp1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="8"
+        android:backgroundTint="@color/blue_green"
+        android:minHeight="60dp"
+        app:cardCornerRadius="100dp"
+        app:cardElevation="5dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="100dp">
+
+                <ImageView
+                    android:id="@+id/ivPopUpButton1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_baseline_person_add_24" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tvPopUpButton1Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/open_sans_semibold"
+                android:text="Add"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/buttonPopUp2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="8"
+        android:backgroundTint="@color/blue_green"
+        android:minHeight="60dp"
+        app:cardCornerRadius="100dp"
+        app:cardElevation="5dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="100dp">
+
+                <ImageView
+                    android:id="@+id/ivPopUpButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_baseline_view_list_24" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tvPopUpButton2Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/open_sans_semibold"
+                android:text="List"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <Button
+        android:id="@+id/btnDialog2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/white"
+        android:insetLeft="6dp"
+        android:insetRight="6dp"
+        android:minHeight="70dp"
+        android:text="2nd Option"
+        android:textColor="@color/blue_green"
+        android:textSize="16sp"
+        android:visibility="gone"
+        tools:visibility="gone" />
+
+</LinearLayout>

@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:orientation="vertical"
+    tools:context=".ui.clinic.ClinicFormFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_home_color"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_semibold"
+            android:text="Name"
+            android:textColor="@color/label" />
+
+        <EditText
+            android:id="@+id/etClinicName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_field"
+            android:ems="10"
+            android:hint="Name"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:padding="10dp" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/open_sans_semibold"
+            android:text="Location"
+            android:textColor="@color/label" />
+
+        <EditText
+            android:id="@+id/etClinicLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_field"
+            android:ems="10"
+            android:hint="Location"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:padding="10dp" />
+
+        <TextView
+            android:id="@+id/tvClinicContactLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/open_sans_semibold"
+            android:text="Contact"
+            android:textColor="@color/label" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:divider="@drawable/empty_tall_divider"
+            android:orientation="horizontal"
+            android:showDividers="middle">
+
+            <FrameLayout
+                android:layout_width="75dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/shape_field">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="10dp"
+                    app:srcCompat="@drawable/ic_baseline_arrow_drop_down_24" />
+
+                <Spinner
+                    android:id="@+id/spnrClinicNumberMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:entries="@array/mobile_numbers" />
+
+            </FrameLayout>
+
+            <EditText
+                android:id="@+id/etClinicNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:background="@drawable/shape_field"
+                android:ems="10"
+                android:fontFamily="@font/open_sans"
+                android:hint="Contact Number"
+                android:inputType="phone"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:textColor="@color/data"
+                android:textColorHint="@color/field_hint" />
+
+            <Button
+                android:id="@+id/btnClinicAddNumber"
+                android:layout_width="75dp"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/blue_green"
+                android:insetTop="2dp"
+                android:insetBottom="2dp"
+                android:minWidth="75dp"
+                android:text="Add" />
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/lv_clinic_contact_numbers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+        </ListView>
+
+
+        <TextView
+            android:id="@+id/textView50"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/open_sans_semibold"
+            android:text="Clinic Hours"
+            android:textColor="@color/label" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@drawable/empty_tall_divider"
+                android:orientation="horizontal"
+                android:showDividers="middle">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView63"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:text="From"
+                        android:textColor="@color/label" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/shape_field">
+
+                        <Spinner
+                            android:id="@+id/spnrClinicStartDay"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:entries="@array/days_in_week"
+                            android:minHeight="48dp" />
+                    </FrameLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView52"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:text="To"
+                        android:textColor="@color/label" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/shape_field">
+
+                        <Spinner
+                            android:id="@+id/spnrClinicEndDay"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:entries="@array/days_in_week"
+                            android:minHeight="48dp"
+                            tools:ignore="SpeakableTextPresentCheck" />
+                    </FrameLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/open_sans_semibold"
+                android:text="Opening TIme"
+                android:textColor="@color/label" />
+
+            <LinearLayout
+                android:id="@+id/layoutClinicStartTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/shape_field"
+                android:orientation="horizontal"
+                android:paddingStart="0dp"
+                android:paddingEnd="2dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:divider="@drawable/empty_tall_divider"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:showDividers="middle">
+
+                    <TextView
+                        android:id="@+id/tvClinicStartTimeTimeHour"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/open_sans"
+                        android:gravity="center"
+                        android:hint="Hour"
+                        android:textAlignment="center"
+                        android:textColor="@color/data"
+                        android:textColorHint="@color/field_hint"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/open_sans"
+                        android:text=":"
+                        android:textColor="@color/data"
+                        android:textColorHint="@color/field_hint"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tvClinicStartTimeTimeMinutes"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/open_sans"
+                        android:gravity="center"
+                        android:hint="Minutes"
+                        android:textAlignment="center"
+                        android:textColor="@color/data"
+                        android:textColorHint="@color/field_hint"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tvClinicStartTimeTimePeriod"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/open_sans"
+                        android:gravity="center"
+                        android:hint="AM"
+                        android:textAlignment="center"
+                        android:textColor="@color/data"
+                        android:textColorHint="@color/field_hint"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/ibClinicStartTimeTime"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/blue_green"
+                    android:minHeight="50dp"
+                    app:srcCompat="@drawable/ic_baseline_access_time_24"
+                    app:tint="@color/white"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView45"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/open_sans_semibold"
+                android:text="Closing Time"
+                android:textColor="@color/label" />
+
+            <LinearLayout
+                android:id="@+id/layoutClinicEndTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/shape_field"
+                android:orientation="horizontal"
+                android:paddingStart="0dp"
+                android:paddingEnd="2dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:divider="@drawable/empty_tall_divider"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:showDividers="middle">
+
+                    <TextView
+                        android:id="@+id/tvClinicEndTimeTimeHour"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/open_sans"
+                        android:gravity="center"
+                        android:hint="Hour"
+                        android:textAlignment="center"
+                        android:textColor="@color/data"
+                        android:textColorHint="@color/field_hint"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/open_sans"
+                        android:text=":"
+                        android:textColor="@color/data"
+                        android:textColorHint="@color/field_hint"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tvClinicEndTimeMinutes"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/open_sans"
+                        android:gravity="center"
+                        android:hint="Minutes"
+                        android:textAlignment="center"
+                        android:textColor="@color/data"
+                        android:textColorHint="@color/field_hint"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tvClinicEndTimePeriod"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/open_sans"
+                        android:gravity="center"
+                        android:hint="AM"
+                        android:textAlignment="center"
+                        android:textColor="@color/data"
+                        android:textColorHint="@color/field_hint"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/ibClinicEndTime"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/blue_green"
+                    android:minHeight="50dp"
+                    app:srcCompat="@drawable/ic_baseline_access_time_24"
+                    app:tint="@color/white"
+                    tools:ignore="SpeakableTextPresentCheck" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="100dp">
+
+            <Button
+                android:id="@+id/btnClinicConfirm"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/blue_green"
+                android:text="Confirm"
+                app:cornerRadius="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/pbLoadingConfirm"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="16dp"
+                android:indeterminateTint="@color/white"
+                android:translationZ="3dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/btnClinicConfirm"
+                app:layout_constraintEnd_toEndOf="@+id/btnClinicConfirm"
+                app:layout_constraintTop_toTopOf="@+id/btnClinicConfirm"
+                tools:visibility="visible" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

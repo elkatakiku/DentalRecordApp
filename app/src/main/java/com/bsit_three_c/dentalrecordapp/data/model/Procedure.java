@@ -9,6 +9,7 @@ import java.util.List;
 public class Procedure implements Parcelable {
 
     private String uid;
+    private String patientUid;
     private String dentalDesc;
     private String dentalDate;
     private double dentalTotalAmount;
@@ -21,6 +22,7 @@ public class Procedure implements Parcelable {
 
     //  This constructor is used in getting dental operations
     public Procedure(String uid,
+                     String patientUid,
                      List<String> serviceIds,
                      String dentalDesc,
                      String dentalDate,
@@ -29,18 +31,19 @@ public class Procedure implements Parcelable {
                      double dentalBalance,
                      List<String> paymentKeys) {
 
-        this(uid, serviceIds, dentalDesc, dentalDate, dentalTotalAmount, isDownpayment, dentalBalance);
+        this(uid, patientUid, serviceIds, dentalDesc, dentalDate, dentalTotalAmount, isDownpayment, dentalBalance);
         this.paymentKeys = paymentKeys;
     }
 
-    public Procedure(String uid, String dentalDate, List<String> serviceIds) {
-        this(uid, serviceIds, null, dentalDate, -1, false, -1);
+    public Procedure(String uid, String patientUid, String dentalDate, List<String> serviceIds) {
+        this(uid, patientUid, serviceIds, null, dentalDate, -1, false, -1);
     }
 
     //  This constructor is used in creating new dental operations
-    public Procedure(String uid, List<String> serviceIds, String dentalDesc, String dentalDate, double dentalTotalAmount,
+    public Procedure(String uid, String patientUid, List<String> serviceIds, String dentalDesc, String dentalDate, double dentalTotalAmount,
                      boolean isDownpayment, double dentalBalance) {
         this.uid = uid;
+        this.patientUid = patientUid;
         this.serviceIds = serviceIds;
         this.dentalDesc = dentalDesc;
         this.dentalDate = dentalDate;
@@ -49,8 +52,32 @@ public class Procedure implements Parcelable {
         this.dentalBalance = dentalBalance;
     }
 
+//    protected Procedure(Parcel in) {
+//        uid = in.readString();
+//        dentalDesc = in.readString();
+//        dentalDate = in.readString();
+//        dentalTotalAmount = in.readDouble();
+//        isDownpayment = in.readByte() != 0;
+//        dentalBalance = in.readDouble();
+//        serviceIds = in.createStringArrayList();
+//        paymentKeys = in.createStringArrayList();
+//    }
+//
+//    public static final Creator<Procedure> CREATOR = new Creator<Procedure>() {
+//        @Override
+//        public Procedure createFromParcel(Parcel in) {
+//            return new Procedure(in);
+//        }
+//
+//        @Override
+//        public Procedure[] newArray(int size) {
+//            return new Procedure[size];
+//        }
+//    };
+
     protected Procedure(Parcel in) {
         uid = in.readString();
+        patientUid = in.readString();
         dentalDesc = in.readString();
         dentalDate = in.readString();
         dentalTotalAmount = in.readDouble();
@@ -104,6 +131,14 @@ public class Procedure implements Parcelable {
         this.uid = uid;
     }
 
+    public String getPatientUid() {
+        return patientUid;
+    }
+
+    public void setPatientUid(String patientUid) {
+        this.patientUid = patientUid;
+    }
+
     public double getDentalTotalAmount() {
         return dentalTotalAmount;
     }
@@ -143,13 +178,16 @@ public class Procedure implements Parcelable {
 
     @Override
     public String toString() {
-        return "Procedure{\n" +
-                "uid='" + uid +
-                "\n, dentalDesc='" + dentalDesc +
-                "\n, dentalDate='" + dentalDate +
-                "\n, isDownpayment=" + isDownpayment +
-                "\n, dentalTotalAmount=" + dentalTotalAmount +
-                "\n, dentalBalance=" + dentalBalance +
+        return "\nProcedure{" +
+                "\nuid='" + uid + '\'' +
+                "\npatientUid='" + patientUid + '\'' +
+                "\ndentalDesc='" + dentalDesc + '\'' +
+                "\ndentalDate='" + dentalDate + '\'' +
+                "\ndentalTotalAmount=" + dentalTotalAmount +
+                "\nisDownpayment=" + isDownpayment +
+                "\ndentalBalance=" + dentalBalance +
+                "\nserviceIds=" + serviceIds +
+                "\npaymentKeys=" + paymentKeys +
                 "\n}";
     }
 
@@ -161,6 +199,7 @@ public class Procedure implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(uid);
+        dest.writeString(patientUid);
         dest.writeString(dentalDesc);
         dest.writeString(dentalDate);
         dest.writeDouble(dentalTotalAmount);
@@ -169,4 +208,33 @@ public class Procedure implements Parcelable {
         dest.writeStringList(serviceIds);
         dest.writeStringList(paymentKeys);
     }
+
+    //    @Override
+//    public String toString() {
+//        return "Procedure{\n" +
+//                "uid='" + uid +
+//                "\n, dentalDesc='" + dentalDesc +
+//                "\n, dentalDate='" + dentalDate +
+//                "\n, isDownpayment=" + isDownpayment +
+//                "\n, dentalTotalAmount=" + dentalTotalAmount +
+//                "\n, dentalBalance=" + dentalBalance +
+//                "\n}";
+//    }
+//
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel dest, int flags) {
+//        dest.writeString(uid);
+//        dest.writeString(dentalDesc);
+//        dest.writeString(dentalDate);
+//        dest.writeDouble(dentalTotalAmount);
+//        dest.writeByte((byte) (isDownpayment ? 1 : 0));
+//        dest.writeDouble(dentalBalance);
+//        dest.writeStringList(serviceIds);
+//        dest.writeStringList(paymentKeys);
+//    }
 }

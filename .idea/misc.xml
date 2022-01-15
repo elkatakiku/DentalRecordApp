@@ -12,11 +12,16 @@
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/header_bg_bitmap.xml" value="0.22205128205128205" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/ic_android_black_24dp.xml" value="0.22552083333333334" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/ic_baseline_access_time_24.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.22552083333333334" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/ic_baseline_add_a_photo_24.xml" value="0.22552083333333334" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/ic_baseline_add_card_24.xml" value="0.22552083333333334" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/ic_baseline_group_add_24.xml" value="0.1390625" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/ic_baseline_help_outline_24.xml" value="0.1390625" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/ic_baseline_highlight_off_24.xml" value="0.22552083333333334" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/ic_baseline_image_24.xml" value="0.1390625" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/ic_baseline_medical_services_24.xml" value="0.22552083333333334" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/ic_baseline_radio_button_checked_24.xml" value="0.22552083333333334" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/ic_baseline_radio_button_unchecked_24.xml" value="0.22552083333333334" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22205128205128205" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/ic_vector.xml" value="0.22552083333333334" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/icon_header.xml" value="0.75" />
@@ -25,6 +30,7 @@
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/layer_list_border_top.xml" value="0.22552083333333334" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/layer_list_spinner_bg.xml" value="0.22083333333333333" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/layout_bg.xml" value="0.15555555555555556" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/list_splash_bg.xml" value="0.22552083333333334" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/paid_cb_selector.xml" value="0.15555555555555556" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/selector_nav.xml" value="0.22205128205128205" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/selector_nav_icon.xml" value="0.22552083333333334" />
@@ -42,6 +48,9 @@
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/shapre_border.xml" value="0.22552083333333334" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/side_nav_bar.xml" value="0.22552083333333334" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/splash2.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/splash_bg.xml" value="0.22552083333333334" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/splash_bg_2.xml" value="0.22552083333333334" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/splash_next.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/toolbar_bg.xml" value="0.14166666666666666" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/toolbar_bg2.xml" value="0.22205128205128205" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/drawable/trybg.xml" value="0.5" />
@@ -60,9 +69,11 @@
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_add_employee.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_add_patient.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_add_service.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_dental_chart.xml" value="0.1953125" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_form.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_form_appointment.xml" value="0.209375" />
-        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_form_procedure.xml" value="0.209375" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_login_or_register.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_main_admin.xml" value="0.209375" />
@@ -73,6 +84,7 @@
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_sample.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_search.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_settings.xml" value="0.209375" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_splash.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_view_employee.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/activity_view_service.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/app_bar_main.xml" value="0.22" />
@@ -96,6 +108,7 @@
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/content_form.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/content_form_appointment.xml" value="0.15052083333333333" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/content_form_appoitnment.xml" value="0.209375" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/content_fragment.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/content_main.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/content_main_admin.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/content_menu.xml" value="0.209375" />
@@ -106,8 +119,15 @@
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/content_view_service.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/custom_patient_item.xml" value="0.5" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/dialod_success.xml" value="0.209375" />
-        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/dialog_admin_pop_up.xml" value="0.25" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/dialog_admin_pop_up.xml" value="0.5" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/dialog_appointment.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/dialog_dental_chart.xml" value="0.22" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/dialog_email.xml" value="0.22" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/dialog_form_account.xml" value="0.209375" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/dialog_pop_up.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/dialog_service.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/dialog_success.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_about.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_account_list.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_accounts.xml" value="0.1953125" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_accounts_frag.xml" value="0.33" />
@@ -122,16 +142,17 @@
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_admin_employee_form1.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_admin_employee_form2.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_admin_employees.xml" value="0.209375" />
-        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_admin_menu.xml" value="0.22" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_admin_form.xml" value="0.209375" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_admin_menu.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_admin_service_form.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_admin_services.xml" value="0.2" />
-        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_admin_view_service.xml" value="0.22" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_admin_view_service.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_appointments.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_basic_info.xml" value="0.33" />
-        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_client_menu.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_client_menu.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_client_services.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_create_account.xml" value="0.25" />
-        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_dental_chart.xml" value="0.5" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_dental_chart.xml" value="0.2" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_dental_history.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_employee_activities.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_employee_info.xml" value="0.33" />
@@ -140,15 +161,19 @@
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_employees.xml" value="0.1953125" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_first.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_first2.xml" value="0.209375" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_form_admin.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_form_appointment.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_form_clinic.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_form_create_account.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_form_employee1.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_form_employee2.xml" value="0.25" />
-        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_form_patient.xml" value="0.25" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_form_patient.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_form_patient_register3.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_form_procedure.xml" value="0.2953846153846154" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_form_register.xml" value="0.209375" />
-        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_form_service.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_form_service.xml" value="0.22" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_form_update_email.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_form_update_password.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_gallery.xml" value="0.2" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_list.xml" value="0.209375" />
@@ -162,9 +187,11 @@
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_operation_form.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_patient_form.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_patient_info.xml" value="0.22" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_patient_profile.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_patients.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_payment.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_procedure_form.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_profile.xml" value="0.2953929539295393" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_second.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_second2.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_service.xml" value="0.209375" />
@@ -173,12 +200,14 @@
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_service_title.xml" value="0.2" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_services.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_slideshow.xml" value="0.1734375" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_splash.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_staff_menu.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_staff_service.xml" value="0.1953125" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_staff_services.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_teeth.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_verify.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_view_employee.xml" value="0.209375" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_view_employee_info.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/fragment_view_patient.xml" value="0.3033175355450237" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/item__spinner_services.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/item_admin_services.xml" value="0.33" />
@@ -193,7 +222,7 @@
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/item_services.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/item_spinner.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/item_spinner_services.xml" value="0.25" />
-        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/item_view.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/item_view.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/item_view_category.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/main_activity.xml" value="0.209375" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/layout/main_admin_fragment.xml" value="0.209375" />
@@ -204,7 +233,7 @@
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/menu/admin_drawer.xml" value="0.5" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/menu/drawer_admin.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/menu/drawer_employee.xml" value="0.33" />
-        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/menu/drawer_user.xml" value="0.5" />
+        <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/menu/drawer_user.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/menu/home_drawer.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/menu/main.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/DentalRecordApp/app/src/main/res/menu/menu_nav_client.xml" value="0.33" />

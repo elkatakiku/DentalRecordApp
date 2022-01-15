@@ -16,6 +16,7 @@ public class Account implements Parcelable {
     private String email;
     private String password;
     private int userType;
+    private boolean isVerified;
 
     public Account() {}
 
@@ -33,9 +34,11 @@ public class Account implements Parcelable {
 
     protected Account(Parcel in) {
         uid = in.readString();
+        userUid = in.readString();
         email = in.readString();
         password = in.readString();
         userType = in.readInt();
+        isVerified = in.readByte() != 0;
     }
 
     public static final Creator<Account> CREATOR = new Creator<Account>() {
@@ -87,7 +90,7 @@ public class Account implements Parcelable {
             return null;
         }
 
-        return name + 123;
+        return name + 123456;
     }
 
     public String getUid() {
@@ -98,13 +101,23 @@ public class Account implements Parcelable {
         this.uid = uid;
     }
 
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
+    }
+
     @Override
     public String toString() {
         return "\nAccount{" +
                 "\nuid='" + uid + '\'' +
+                "\nuserUid='" + userUid + '\'' +
                 "\nemail='" + email + '\'' +
                 "\npassword='" + password + '\'' +
                 "\nuserType=" + userType +
+                "\nisVerified=" + isVerified +
                 "\n}";
     }
 
@@ -116,8 +129,10 @@ public class Account implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(uid);
+        dest.writeString(userUid);
         dest.writeString(email);
         dest.writeString(password);
         dest.writeInt(userType);
+        dest.writeByte((byte) (isVerified ? 1 : 0));
     }
 }

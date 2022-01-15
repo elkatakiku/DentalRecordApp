@@ -22,11 +22,12 @@ import com.bsit_three_c.dentalrecordapp.data.adapter.ListWithRemoveItemAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.Appointment;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
-import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
+import com.bsit_three_c.dentalrecordapp.data.repository.BaseRepository;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentFormPatientBinding;
+import com.bsit_three_c.dentalrecordapp.ui.base.BaseFormActivity;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.DatePickerFragment;
-import com.bsit_three_c.dentalrecordapp.ui.patients.procedure_form.ProcedureFormActivity;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
+import com.bsit_three_c.dentalrecordapp.util.ContactNumber;
 import com.bsit_three_c.dentalrecordapp.util.CustomItemSelectedListener;
 import com.bsit_three_c.dentalrecordapp.util.CustomObserver;
 import com.bsit_three_c.dentalrecordapp.util.CustomTextWatcher;
@@ -87,8 +88,6 @@ public class PatientFormFragment extends Fragment {
             appointment = getArguments().getParcelable(APPOINTMENT_KEY);
         }
 
-        Log.d(TAG, "onCreateView: account: " + account);
-
         binding.lvPatientMobileNumbers.setAdapter(numbersAdapter);
         numbersAdapter.setListView(binding.lvPatientMobileNumbers);
 
@@ -136,7 +135,7 @@ public class PatientFormFragment extends Fragment {
         binding.ibPatientCalendar.setOnClickListener(v -> showDatePickerDialog());
 
         binding.btnPatientAddNumber.setOnClickListener(v -> {
-            String inputNumber = UIUtil.getFormattedContactNumber(
+            String inputNumber = ContactNumber.getFormattedContactNumber(
                     binding.etPatientNumber,
                     binding.spnrPatientNumberMode,
                     requireContext().getResources()
@@ -147,9 +146,6 @@ public class PatientFormFragment extends Fragment {
         });
 
         binding.btnAddPatient.setOnClickListener(btn -> {
-            setFieldsEnabled(false);
-            binding.pbLoadingAddPatient.setVisibility(View.VISIBLE);
-
             String firstname = binding.eTxtFirstname.getText().toString().trim();
             String lastname = binding.eTxtLastname.getText().toString().trim();
             String middleInitial = binding.eTxtMiddleInitial.getText().toString().trim();
@@ -194,6 +190,9 @@ public class PatientFormFragment extends Fragment {
                 return;
             }
 
+            setFieldsEnabled(false);
+            binding.pbLoadingAddPatient.setVisibility(View.VISIBLE);
+
             if (appointment != null) {
                 appointment.setPatient(viewModel.createPatient(
                         firstname,
@@ -207,8 +206,11 @@ public class PatientFormFragment extends Fragment {
                         age,
                         occupation
                 ));
-                toAddProcedureResult.launch(new Intent(requireContext(), ProcedureFormActivity.class)
-                        .putExtra(LocalStorage.APPOINTMENT_KEY, appointment));
+                toAddProcedureResult.launch(
+                        BaseFormActivity.getProcedureFormIntent(requireContext(), appointment));
+//                        new Intent(requireContext(), BaseFormActivity.class)
+//                        .putExtra(BaseFormActivity.FORM_KEY, BaseFormActivity.FORM_PROCEDURE)
+//                        .putExtra(BaseFormActivity.APPOINTMENT_KEY, appointment));
                 return;
             }
 
@@ -240,44 +242,6 @@ public class PatientFormFragment extends Fragment {
                         occupation
                 );
             }
-//            Intent intentResult = new Intent(requireActivity(), PatientActivity.class);
-//
-//            if (isEdit) {
-//                intentResult.putExtra(LocalStorage.UPDATED_PATIENT_KEY, patientFormViewModel.updatePatient(
-//                        patient,
-//                        firstname,
-//                        lastname,
-//                        middleInitial,
-//                        suffix,
-//                        dateOfBirth,
-//                        address,
-//                        numbersAdapter.getList(),
-//                        civilStatus,
-//                        age,
-//                        occupation
-//                ));
-//            }
-//            else {
-//                if (account != null) {
-//                    patientFormViewModel.
-//                }
-//                intentResult.putExtra(LocalStorage.UPDATED_PATIENT_KEY, patientFormViewModel.addPatient(
-//                        firstname,
-//                        lastname,
-//                        middleInitial,
-//                        suffix,
-//                        dateOfBirth,
-//                        address,
-//                        numbersAdapter.getList(),
-//                        civilStatus,
-//                        age,
-//                        occupation
-//                ));
-//            }
-//
-//            Log.d(TAG, "onViewCreated: intent: " + intentResult);
-//            Log.d(TAG, "onViewCreated: intent patient: " + intentResult.getParcelableExtra(LocalStorage.UPDATED_PATIENT_KEY));
-//            Log.d(TAG, "onViewCreated: intent patient key: " + LocalStorage.UPDATED_PATIENT_KEY);
         });
 
         setListeners();
@@ -298,6 +262,17 @@ public class PatientFormFragment extends Fragment {
         }
         else
             isEdit = false;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        Log.d(TAG, "onPause: patient form pause called");
+
+        viewModel.setmError(null);
+        viewModel.setmCreateAttempt(true);
+        viewModel.setmPatient(null);
     }
 
     private void showDatePickerDialog() {
@@ -379,7 +354,7 @@ public class PatientFormFragment extends Fragment {
         numbersAdapter.clear();
         if (patient.getPhoneNumber() != null) {
             for (String number : patient.getPhoneNumber()) {
-                if (patient.getPhoneNumber().get(0).equals(FirebaseHelper.NEW_PATIENT)) {
+                if (patient.getPhoneNumber().get(0).equals(BaseRepository.NEW_PATIENT)) {
                     break;
                 }
                 addMobileNumber(number);

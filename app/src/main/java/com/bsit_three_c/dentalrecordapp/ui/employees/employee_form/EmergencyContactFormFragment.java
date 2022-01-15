@@ -14,7 +14,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.EmergencyContact;
 import com.bsit_three_c.dentalrecordapp.data.model.Employee;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
@@ -34,7 +33,7 @@ public class EmergencyContactFormFragment extends Fragment {
     private EmployeeSharedViewModel sharedViewModel;
 
     private Employee employee;
-    private Account account;
+//    private Account account;
     private EmergencyContact emergencyContact;
     private byte[] imageByte;
 
@@ -78,11 +77,12 @@ public class EmergencyContactFormFragment extends Fragment {
 
         binding = FragmentFormEmployee2Binding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this, new CustomViewModelFactory()).get(EmergencyContactFormViewModel.class);
-
         sharedViewModel = new ViewModelProvider(requireActivity()).get(EmployeeSharedViewModel.class);
 
-        sharedViewModel.getmEdit().observe(getViewLifecycleOwner(), aBoolean ->
-                isEdit = aBoolean);
+        sharedViewModel.getmEdit().observe(getViewLifecycleOwner(), aBoolean -> {
+            isEdit = aBoolean;
+            binding.layoutEmployeeAccountForm.setVisibility(View.GONE);
+        });
 
         sharedViewModel.getmImageByte().observe(getViewLifecycleOwner(), bytes -> {
             if (bytes != null) {
@@ -90,31 +90,38 @@ public class EmergencyContactFormFragment extends Fragment {
                 imageByte = bytes;
             }
         });
-        
-        sharedViewModel.getmEmployee().observe(getViewLifecycleOwner(), mEmployee -> {
-            Log.d(TAG, "onChanged: employee sent: " + employee);
-            //  Igonere this
-        });
 
-        if (sharedViewModel.getmEmployee() != null) {
-            employee = sharedViewModel.getmEmployee().getValue();
-        }
-        
-        sharedViewModel.getmAccount().observe(getViewLifecycleOwner(), mAccount -> {
-            if (mAccount != null) {
-                Log.d(TAG, "onChanged: account sent: " + account);
-                account = mAccount;
+        //  Listens to employee changed and creates new account if new employee.
+        sharedViewModel.getmUpdatedEmployee().observe(getViewLifecycleOwner(), mEmployee -> {
+            Log.d(TAG, "onChanged: employee sent: " + mEmployee);
+            employee = mEmployee;
+            if (employee.getAccountUid() == null || employee.getAccountUid().isEmpty()) {
+                Log.d(TAG, "onCreateView: creating account for new employee");
+                initializeAccountFields(employee.getEmail(), UIUtil.getDefaultPassword(employee));
+//                sharedViewModel.setmAccount(createAccount(employee));
             }
         });
 
-        if (sharedViewModel.getmEmergencyContact().getValue() != null) {
-            Log.d(TAG, "onCreateView: emergency contact in shared view model: " + sharedViewModel.getmEmergencyContact().getValue());
-            emergencyContact = sharedViewModel.getmEmergencyContact().getValue();
-            Log.d(TAG, "onCreateView: has saved emergency contact: " + emergencyContact);
-        }
+//        sharedViewModel.getmAccount().observe(getViewLifecycleOwner(), mAccount -> {
+//            if (mAccount != null) {
+//                Log.d(TAG, "onChanged: account sent: " + mAccount);
+//                account = mAccount;
+//                initializeAccountFields(mAccount);
+//            }
+//
+//            Log.d(TAG, "onCreateView: got account: " + account);
+//        });
 
-        Log.d(TAG, "onChanged: account sent: " + account);
-        Log.d(TAG, "onChanged: emergency contact sent: " + emergencyContact);
+        sharedViewModel.getmEmergencyContact().observe(getViewLifecycleOwner(), mEmergencyContact -> {
+            Log.d(TAG, "onChanged: contact changed");
+            if (mEmergencyContact != null) {
+                Log.d(TAG, "onCreateView: sent contact: " + mEmergencyContact);
+                emergencyContact = mEmergencyContact;
+                initializeFields(mEmergencyContact);
+            }
+
+            Log.d(TAG, "onChanged: got contact: " + emergencyContact);
+        });
 
         return binding.getRoot();
     }
@@ -123,51 +130,33 @@ public class EmergencyContactFormFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewModel.getmError().observe(getViewLifecycleOwner(), errorObserver);
-        viewModel.getAddingEmployeeAttempt().observe(getViewLifecycleOwner(), addingEmployee);
+        viewModel.getAddEmployeeAttempt().observe(getViewLifecycleOwner(), addingEmployee);
 
         binding.btnEmployeeConfirm.setOnClickListener(view1 -> {
             binding.pbEmployee2Loading.setVisibility(View.VISIBLE);
             setFieldsEnabled(false);
 
-            Log.d(TAG, "onViewCreated: emergency contact: " + createEmergencyContact());
-
             if (isEdit) {
-                emergencyContact = createUpdatedEmergencyContact();
+                emergencyContact = createUpdatedEmergencyContact(emergencyContact);
             } else {
                 emergencyContact = createEmergencyContact();
             }
 
-            viewModel.addEmployee(
+            viewModel.uploadEmployee(
                     LocalStorage.getLoggedInUser(requireContext()),
                     imageByte,
                     employee,
-                    account,
+                    binding.etEmployeeAccountEmail.getText().toString().trim(),
+                    binding.etEmployeeAccountPassword.getText().toString().trim(),
                     emergencyContact,
                     isEdit
             );
         });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        if (account == null && sharedViewModel.getmEmployee().getValue() != null) {
-            account = createAccount(sharedViewModel.getmEmployee().getValue());
-        }
-
-        if (account != null){
-            initializeAccountFields(account);
-        }
-
-        if (emergencyContact != null) {
-            initializeFields(emergencyContact);
-        }
-    }
-
-    private void initializeAccountFields(Account account) {
-        UIUtil.setField(account.getEmail(), binding.etEmployeeAccountEmail);
-        UIUtil.setField(account.getPassword(), binding.etEmployeeAccountPassword);
+    private void initializeAccountFields(String email, String password) {
+        UIUtil.setField(email, binding.etEmployeeAccountEmail);
+        UIUtil.setField(password, binding.etEmployeeAccountPassword);
     }
 
     private void initializeFields(EmergencyContact emergencyContactData) {
@@ -180,17 +169,18 @@ public class EmergencyContactFormFragment extends Fragment {
         UIUtil.setField(emergencyContactData.getContactNumber(), binding.etEmergencyNumber);
     }
 
-    private Account createAccount(Employee employeeData) {
-        return new Account(
-                employeeData.getEmail(),
-                Account.getDefaultPassword(employeeData.getLastname()),
-                Account.TYPE_EMPLOYEE,
-                employeeData.getAccountUid()
-        );
-    }
+//    private Account createAccount(Employee employeeData) {
+//        return new Account(
+//                employeeData.getEmail(),
+//                Account.getDefaultPassword(employeeData.getLastname()),
+//                Account.TYPE_EMPLOYEE,
+//                employeeData.getAccountUid()
+//        );
+//    }
 
     private EmergencyContact createEmergencyContact() {
         return viewModel.createEmergencyContact(
+                employee,
                 binding.etEmergencyFirstname.getText().toString().trim(),
                 binding.etEmergencyLastname.getText().toString().trim(),
                 binding.etEmergencyMI.getText().toString().trim(),
@@ -201,7 +191,7 @@ public class EmergencyContactFormFragment extends Fragment {
         );
     }
 
-    private EmergencyContact createUpdatedEmergencyContact() {
+    private EmergencyContact createUpdatedEmergencyContact(EmergencyContact emergencyContact) {
         return viewModel.updateEmergencyContact(
                 emergencyContact,
                 binding.etEmergencyFirstname.getText().toString().trim(),
@@ -233,10 +223,8 @@ public class EmergencyContactFormFragment extends Fragment {
 
         Log.d(TAG, "onPause: called");
 
-        sharedViewModel.setmAccount(account);
-
         if (isEdit) {
-            sharedViewModel.setmEmergencyContact(createUpdatedEmergencyContact());
+            sharedViewModel.setmEmergencyContact(createUpdatedEmergencyContact(emergencyContact));
         } else {
             sharedViewModel.setmEmergencyContact(createEmergencyContact());
         }

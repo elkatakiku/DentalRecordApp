@@ -50,4 +50,20 @@
         <item name="android:datePickerMode">spinner</item>
     </style>
 
+    <style name="Theme.DentalRecordApp.Fullscreen" parent="Theme.DentalRecordApp">
+        <item name="android:actionBarStyle">
+            @style/Widget.Theme.DentalRecordApp.ActionBar.Fullscreen
+        </item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="colorPrimary">@color/blue_green</item>
+        <item name="colorPrimaryVariant">@color/pallete_dark</item>
+        <item name="colorPrimaryDark">@color/pallete_dark</item>
+    </style>
+
+    <style name="ThemeOverlay.DentalRecordApp.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/white</item>
+        <item name="fullscreenTextColor">@color/blue_green</item>
+    </style>
+
 </resources>

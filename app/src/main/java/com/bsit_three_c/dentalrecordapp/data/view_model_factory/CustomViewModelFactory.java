@@ -17,8 +17,8 @@ import com.bsit_three_c.dentalrecordapp.ui.employees.employee_form.EmergencyCont
 import com.bsit_three_c.dentalrecordapp.ui.employees.view_employee.EmployeeInfoViewModel;
 import com.bsit_three_c.dentalrecordapp.ui.patients.PatientsViewModel;
 import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.ui.patientinfo.PatientInfoViewModel;
-import com.bsit_three_c.dentalrecordapp.ui.patients.procedure_form.ui.procedureform.ProcedureFormViewModel;
-import com.bsit_three_c.dentalrecordapp.ui.services.AdminServicesViewModel;
+import com.bsit_three_c.dentalrecordapp.ui.patients.procedure_form.ProcedureFormViewModel;
+import com.bsit_three_c.dentalrecordapp.ui.services.ServicesViewModel;
 import com.bsit_three_c.dentalrecordapp.ui.services.services_form.ServiceFormViewModel;
 
 public class CustomViewModelFactory implements ViewModelProvider.Factory {
@@ -51,8 +51,8 @@ public class CustomViewModelFactory implements ViewModelProvider.Factory {
         else if (aClass.isAssignableFrom(ServiceFormViewModel.class)) {
             return (T) new ServiceFormViewModel(ServiceRepository.getInstance());
         }
-        else if (aClass.isAssignableFrom(AdminServicesViewModel.class)) {
-            return (T) new AdminServicesViewModel(ServiceRepository.getInstance());
+        else if (aClass.isAssignableFrom(ServicesViewModel.class)) {
+            return (T) new ServicesViewModel(ServiceRepository.getInstance());
         }
         else if (aClass.isAssignableFrom(EmergencyContactFormViewModel.class)) {
             return (T) new EmergencyContactFormViewModel(

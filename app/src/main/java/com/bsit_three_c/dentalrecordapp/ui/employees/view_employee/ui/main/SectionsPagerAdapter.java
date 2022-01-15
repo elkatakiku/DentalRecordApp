@@ -2,6 +2,7 @@ package com.bsit_three_c.dentalrecordapp.ui.employees.view_employee.ui.main;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
@@ -31,6 +32,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         this.employeeUid = employeeUid;
     }
 
+    @NonNull
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
@@ -43,7 +45,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 fragment = EmployeeInfoFragment.newInstance(employeeUid);
                 break;
             case 1:
-                fragment = EmployeeActivitiesFragment.newInstance();
+                fragment = EmployeeActivitiesFragment.newInstance(employeeUid);
                 break;
         }
 

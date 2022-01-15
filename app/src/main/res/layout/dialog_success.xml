@@ -2,45 +2,63 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/baby_blue"
+    android:minHeight="250dp"
     android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/imageView23"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_baseline_check_24" />
+            app:cardCornerRadius="100dp">
+
+            <ImageView
+                android:id="@+id/ivSuccessIcon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_baseline_check_24"
+                app:tint="@color/blue_green" />
+        </androidx.cardview.widget.CardView>
 
         <TextView
+            android:id="@+id/tvSuccessTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_bold"
             android:text="Success"
             android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/label" />
 
         <TextView
-            android:id="@+id/tvAppointmentSuccess"
+            android:id="@+id/tvSuccessMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:fontFamily="@font/open_sans"
             android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu erat tincidunt lacus fermentum rutrum."
             android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/label" />
 
         <Button
-            android:id="@+id/buttonOk"
+            android:id="@+id/btnSuccess"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
             android:backgroundTint="@color/blue_green"
             android:text="Ok"
-            android:textColor="#FFF" />
+            android:textColor="#FFF"
+            app:cornerRadius="50dp" />
     </LinearLayout>
 </LinearLayout>

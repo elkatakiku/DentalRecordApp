@@ -27,10 +27,11 @@ import androidx.navigation.Navigation;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ListWithRemoveItemAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.Employee;
-import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
+import com.bsit_three_c.dentalrecordapp.data.repository.BaseRepository;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentFormEmployee1Binding;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.DatePickerFragment;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
+import com.bsit_three_c.dentalrecordapp.util.ContactNumber;
 import com.bsit_three_c.dentalrecordapp.util.CustomObserver;
 import com.bsit_three_c.dentalrecordapp.util.CustomTextWatcher;
 import com.bsit_three_c.dentalrecordapp.util.DateUtil;
@@ -112,8 +113,17 @@ public class BasicInfoFormFragment extends Fragment {
             Log.d(TAG, "onChanged: employee data changed");
             if (mEmployee != null) {
                 employee = mEmployee;
+                sharedViewModel.setmStringUri(employee.getDisplayImage());
                 initializeFields(employee);
+                if (mEmployee.getAccountUid() != null) {
+                    sharedViewModel.loadAccount(employee);
+                }
+                if (mEmployee.getEmergencyContactUid() != null) {
+                    sharedViewModel.loadContact(employee);
+                }
             }
+
+            Log.d(TAG, "onViewCreated: employee got: " + mEmployee);
         });
 
         sharedViewModel.getmEdit().observe(getViewLifecycleOwner(), aBoolean ->
@@ -138,7 +148,7 @@ public class BasicInfoFormFragment extends Fragment {
                 showDatePickerDialog());
 
         binding.btnEmployeeAddNumber.setOnClickListener(v -> {
-            String inputNumber = UIUtil.getFormattedContactNumber(
+            String inputNumber = ContactNumber.getFormattedContactNumber(
                     binding.etEmployeeNumber,
                     binding.spnrEmployeeNumberMode,
                     requireContext().getResources()
@@ -193,7 +203,7 @@ public class BasicInfoFormFragment extends Fragment {
             binding.btnEmployeeNext.setEnabled(false);
 
             if (isEdit) {
-                employee = sharedViewModel.createEmployee(
+                employee = sharedViewModel.updateEmployee(
                         employee,
                         firstname,
                         lastname,
@@ -210,7 +220,7 @@ public class BasicInfoFormFragment extends Fragment {
                 );
             }
             else {
-                employee = new Employee(
+                employee = sharedViewModel.createNewEmployee(
                         firstname,
                         lastname,
                         middleInitial,
@@ -238,7 +248,7 @@ public class BasicInfoFormFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        Employee tempEmployee = (requireActivity().getIntent().getParcelableExtra(getString(R.string.EMPLOYEE)));
+        Employee tempEmployee = requireActivity().getIntent().getParcelableExtra(EmployeeFormActivity.EMPLOYEE_KEY);
         if (tempEmployee != null && sharedViewModel.getmEmployee().getValue() == null) {
             Log.d(TAG, "onStart:EmployeeUid setting employee uid");
             sharedViewModel.setmEdit(true);
@@ -251,7 +261,7 @@ public class BasicInfoFormFragment extends Fragment {
 
         Log.d(TAG, "navigateToContactForm: saving employee: " + employee);
 
-        sharedViewModel.setmEmployee(employee);
+        sharedViewModel.setmUpdatedEmployee(employee);
         Navigation
                 .findNavController(binding.btnEmployeeNext)
                 .navigate(BasicInfoFormFragmentDirections.actionFirstFragmentToSecond2Fragment(employee));
@@ -272,7 +282,9 @@ public class BasicInfoFormFragment extends Fragment {
         UIUtil.setField(employee.getMiddleInitial(), binding.etEmployeeMI);
         UIUtil.setField(employee.getSuffix(), binding.etEmployeeSuffix);
         UIUtil.setField(employee.getMiddleInitial(), binding.etEmployeeMI);
-
+        if (isEdit) {
+            binding.etEmployeeEmail.setEnabled(false);
+        }
         UIUtil.setField(employee.getEmail(), binding.etEmployeeEmail);
         UIUtil.setField(employee.getAddress(), binding.etEmergencyAddress1);
         UIUtil.setField(employee.getAddress2ndPart(), binding.etEmergencyAddress2);
@@ -295,7 +307,7 @@ public class BasicInfoFormFragment extends Fragment {
         numbersAdapter.clear();
         if (employee.getPhoneNumber() != null) {
             for (String number : employee.getPhoneNumber()) {
-                if (employee.getPhoneNumber().get(0).equals(FirebaseHelper.NEW_PATIENT)) {
+                if (employee.getPhoneNumber().get(0).equals(BaseRepository.NEW_PATIENT)) {
                     break;
                 }
                 addMobileNumber(number);
@@ -353,16 +365,6 @@ public class BasicInfoFormFragment extends Fragment {
         binding.etEmployeeNumber.setText("");
     }
 
-//    private void setListeners() {
-//        binding.etEmployeeFirstname.addTextChangedListener(new CustomTextWatcher(viewModel, binding.etEmployeeFirstname.getHint().toString()));
-//        binding.etEmployeeLastname.addTextChangedListener(new CustomTextWatcher(viewModel, binding.etEmployeeLastname.getHint().toString()));
-//        binding.etEmployeeMI.addTextChangedListener(new CustomTextWatcher(viewModel, binding.etEmployeeMI.getHint().toString()));
-//        binding.etEmployeeSuffix.addTextChangedListener(new CustomTextWatcher(viewModel, binding.etEmployeeSuffix.getHint().toString()));
-//        binding.etEmployeeAge.addTextChangedListener(new CustomTextWatcher(viewModel, binding.etEmployeeAge.getHint().toString()));
-//        binding.etEmergencyAddress1.addTextChangedListener(new CustomTextWatcher(viewModel, binding.etEmergencyAddress1.getHint().toString()));
-//        binding.spnrEmployeeCivilStatus.setOnItemSelectedListener(new CustomItemSelectedListener((String) binding.spnrEmployeeCivilStatus.getTag(), viewModel));
-//    }
-
     private void setListeners() {
         binding.etEmployeeFirstname.addTextChangedListener(
                 new CustomTextWatcher(sharedViewModel, binding.etEmployeeFirstname.getHint().toString().trim()));
@@ -375,7 +377,7 @@ public class BasicInfoFormFragment extends Fragment {
         binding.etEmployeeNumber.addTextChangedListener(
                 new CustomTextWatcher(sharedViewModel, binding.etEmployeeNumber.getHint().toString().trim()));
         binding.etEmployeeEmail.addTextChangedListener(
-                new CustomTextWatcher(sharedViewModel, binding.etEmployeeEmail.getText().toString().trim()));
+                new CustomTextWatcher(sharedViewModel, binding.etEmployeeEmail.getHint().toString().trim()));
     }
 
     private void setObservers() {

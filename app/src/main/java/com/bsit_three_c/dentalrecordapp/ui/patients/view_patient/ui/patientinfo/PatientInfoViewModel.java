@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.bsit_three_c.dentalrecordapp.data.adapter.ProceduresList;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ServiceOptionsAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalService;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalServiceOption;
@@ -39,6 +40,7 @@ public class PatientInfoViewModel extends ViewModel {
 
     private final ArrayList<DentalServiceOption> serviceOptions = new ArrayList<>();
 
+
     private int procedureSize;
     private int totalCount;
     private Procedure[] procedures;
@@ -66,6 +68,40 @@ public class PatientInfoViewModel extends ViewModel {
 
     public List<DentalServiceOption> getServiceOptions() {
         return serviceOptions;
+    }
+
+    private final MutableLiveData<Boolean> mHasProcedures = new MutableLiveData<>();
+
+    public LiveData<Boolean> hasProcedures() {
+        return mHasProcedures;
+    }
+
+    public void loadProcedures(Patient patient, ProceduresList list) {
+        Log.d(TAG, "loadProcedures: getting procedures");
+        mHasProcedures.setValue(patient.getDentalProcedures().size() != 0);
+        for (String key : patient.getDentalProcedures()) {
+            Log.d(TAG, "loadProcedures: getting procedure key: " + key);
+            procedureRepository
+                    .getPath(key)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Procedure procedure = snapshot.getValue(Procedure.class);
+
+                            if (procedure != null) {
+                                Log.d(TAG, "onDataChange: adding procedure: " + procedure.getUid());
+                                ProcedureRepository.initialize(procedure);
+                                list.addItem(procedure);
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+        }
     }
 
     public void loadProcedure(Patient patient) {

@@ -104,124 +104,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:divider="@drawable/divider_admin_home"
-            android:orientation="horizontal"
-            android:padding="20dp"
-            android:showDividers="middle"
-            android:visibility="gone">
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cvViewServices"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:backgroundTint="@color/white"
-                app:cardElevation="5dp"
-                app:cardMaxElevation="5dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:paddingBottom="10dp">
-
-                    <ImageView
-                        android:id="@+id/ivMenuServiceDisplay"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="4"
-                        android:padding="10dp"
-                        android:src="@drawable/ic_baseline_medical_services_24" />
-
-                    <TextView
-                        android:id="@+id/ivMenuServiceName"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/open_sans_bold"
-                        android:gravity="center"
-                        android:text="Services"
-                        android:textColor="@color/blue_green"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <Button
-                android:id="@+id/button4"
-                android:layout_width="0dp"
-                android:layout_height="150dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/white"
-                android:text="Services"
-                android:textAllCaps="false"
-                android:textColor="@color/blue_green"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                app:icon="@drawable/ic_baseline_medical_services_24"
-                app:iconGravity="textTop"
-                app:iconTint="@color/blue_green" />
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:backgroundTint="@color/white"
-                app:cardElevation="5dp"
-                app:cardMaxElevation="5dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:paddingBottom="10dp">
-
-                    <ImageView
-                        android:id="@+id/imageView18"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="4"
-                        android:padding="10dp"
-                        android:src="@drawable/ic_baseline_help_outline_24" />
-
-                    <TextView
-                        android:id="@+id/textView76"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/open_sans_bold"
-                        android:text="Inquiry"
-                        android:textAlignment="center"
-                        android:textColor="@color/blue_green"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <Button
-                android:id="@+id/button5"
-                android:layout_width="0dp"
-                android:layout_height="150dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/white"
-                android:text="Inquiry"
-                android:textAllCaps="false"
-                android:textColor="@color/blue_green"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                app:icon="@drawable/ic_baseline_help_outline_24"
-                app:iconGravity="textTop"
-                app:iconTint="@color/blue_green" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:divider="@drawable/empty_tall_divider"
@@ -229,7 +112,7 @@
             android:showDividers="middle">
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/btnMenuLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -237,7 +120,7 @@
                 android:text="Login" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/btnMenuRegister"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -393,125 +276,127 @@
             android:textColor="@color/label"
             android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/btnUserLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="@font/open_sans_bold"
-            android:text="Login"
-            android:visibility="gone"
-            tools:visibility="gone" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
             android:background="@color/baby_blue"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="end"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="16dp">
 
-                <ImageView
-                    android:id="@+id/imageView16"
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
-                    android:src="@drawable/logo_final" />
-
-                <TextView
-                    android:id="@+id/textView40"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="@font/open_sans_bold"
-                    android:text="ELL Dental Clinic"
-                    android:textColor="@color/label"
-                    android:textSize="18sp" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="end"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/textView81"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:fontFamily="@font/open_sans"
-                        android:gravity="center_vertical"
-                        android:text="@string/ContactNumber"
-                        android:textColor="@color/data" />
+                    android:layout_weight="1"
+                    android:gravity="bottom"
+                    android:orientation="vertical">
 
                     <ImageView
-                        android:id="@+id/imageView19"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:src="@drawable/ic_baseline_call_24"
-                        app:tint="@color/blue_green" />
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="end"
-                    android:orientation="horizontal">
+                        android:id="@+id/imageView16"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:src="@drawable/logo_final" />
 
                     <TextView
-                        android:id="@+id/textView82"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tvMenuClinicName"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:fontFamily="@font/open_sans"
-                        android:gravity="center_vertical"
-                        android:text="Location"
-                        android:textColor="@color/data" />
+                        android:layout_gravity="bottom"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:text="ELL Dental Clinic"
+                        android:textColor="@color/label"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="1">
 
                     <ImageView
-                        android:id="@+id/imageView21"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:src="@drawable/ic_baseline_location_on_24"
-                        app:tint="@color/blue_green" />
-
-                </TableRow>
+                        android:id="@+id/imageView22"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/map" />
+                </FrameLayout>
 
             </LinearLayout>
 
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="1"
-                android:background="@color/white">
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="start"
+                android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/imageView22"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_margin="5dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/map" />
-            </FrameLayout>
+                    android:id="@+id/imageView19"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|end"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_baseline_call_24"
+                    app:tint="@color/blue_green" />
+
+                <TextView
+                    android:id="@+id/tvMenuClinicContact"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_weight="9"
+                    android:fontFamily="@font/open_sans"
+                    android:gravity="start|center_vertical"
+                    android:text="@string/ContactNumber"
+                    android:textColor="@color/data" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="start"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView21"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|end"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_baseline_location_on_24"
+                    app:tint="@color/blue_green" />
+
+                <TextView
+                    android:id="@+id/tvMenuClinicLocation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_weight="9"
+                    android:fontFamily="@font/open_sans"
+                    android:gravity="start|center_vertical"
+                    android:text="2/F Lotus Mall Nueno Avenue Imus, City"
+                    android:textColor="@color/data" />
+
+            </TableRow>
 
         </LinearLayout>
 

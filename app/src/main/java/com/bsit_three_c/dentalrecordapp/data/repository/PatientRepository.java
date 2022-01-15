@@ -5,6 +5,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.bsit_three_c.dentalrecordapp.data.adapter.ItemAdapter;
+import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Person;
@@ -47,36 +49,83 @@ public class PatientRepository extends BaseRepository {
         return databaseReference.child(patient.getUid()).setValue(patient);
     }
 
-    public void remove(Patient patient, LoggedInUser loggedInUser) {
+    public void remove(Patient patient, LoggedInUser loggedInUser, PatientsAdapterListener adapterListener) {
         // TODO: Remove Patients here
         ProcedureRepository repository = ProcedureRepository.getInstance();
         ArrayList<String> procedureKeys = patient.getDentalProcedures();
 
-        for (int pos = 0; pos < procedureKeys.size(); pos++) {
-            repository.removePaymentKeys(procedureKeys.get(pos));
+        for (String procedureKey : procedureKeys) {
+            repository.removePaymentKeys(procedureKey);
         }
 
-        AccountRepository.getInstance().removeAccount(loggedInUser, patient.getAccountUid());
-        databaseReference.child(patient.getUid()).removeValue();
+        AccountRepository accountRepository = AccountRepository.getInstance();
+        accountRepository
+                .getPath(patient.getAccountUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Account account = snapshot.getValue(Account.class);
+                        if (account != null) {
+                            accountRepository
+                                    .signInWithEmail(account)
+                                    .continueWith(task -> {
+                                        if (task.isSuccessful() && task.getResult().getUser() != null) {
+                                            task.getResult().getUser().delete();
+                                            accountRepository
+                                                    .getDatabaseReference()
+                                                    .child(account.getUid())
+                                                    .removeValue();
+                                            accountRepository
+                                                    .signInWithEmail(loggedInUser.getAccount())
+                                                    .continueWith(task1 -> {
+                                                        if (task1.isSuccessful()) {
+                                                            remove(patient.getUid());
+                                                            addListener(adapterListener);
+                                                        }
+                                                        return null;
+                                                    });
+                                        }
+                                        return null;
+                                    });
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+//        databaseReference.child(patient.getUid()).removeValue();
+    }
+
+    private void addListener(ValueEventListener eventListener) {
+        getPatientsPath().addValueEventListener(eventListener);
     }
 
     public void addProcedureKey(Patient patient, String procedureKey) {
         patient.addProcedure(procedureKey);
-        databaseReference.child(patient.getUid()).child(FirebaseHelper.DENTAL_PROCEDURES).setValue(patient.getDentalProcedures());
+        databaseReference.child(patient.getUid()).child(DENTAL_PROCEDURES).setValue(patient.getDentalProcedures());
     }
 
-    public void removeProcedureKey(Patient patient, String procedureKey) {
+    public Task<Void> removeProcedureKey(Patient patient, String procedureKey) {
+        Log.d(TAG, "removeProcedureKey: removing procedure key");
         ArrayList<String> keys = patient.getDentalProcedures();
+        Log.d(TAG, "removeProcedureKey: procedure key sent: " + procedureKey);
 
-            int index = keys.indexOf(procedureKey);
-            if (index == -1) {
-                Log.e(TAG, "removeProcedureKey: no key found");
-                return;
-            }
+        for (String key : keys) {
+            Log.d(TAG, "removeProcedureKey: key: " + key);
+        }
 
-            keys.remove(index);
+        int index = keys.indexOf(procedureKey);
+        if (index == -1) {
+            Log.e(TAG, "removeProcedureKey: no key found");
+            return null;
+        }
 
-        databaseReference.child(patient.getUid()).child(FirebaseHelper.DENTAL_PROCEDURES).setValue(keys);
+        keys.remove(index);
+
+        return databaseReference.child(patient.getUid()).child(DENTAL_PROCEDURES).setValue(keys);
     }
 
     public void checkInFile(MutableLiveData<Boolean> mIsInFile, String patientUid) {
@@ -95,7 +144,7 @@ public class PatientRepository extends BaseRepository {
 
     public static void initialize(Patient patient) {
 
-        Log.d(TAG, "initialize: initializing patient: " + patient);
+        Log.d(TAG, "initialize: initializing patient: " + patient.getLastname());
 
         if (!Checker.isDataAvailable(patient.getFirstname()))
             patient.setFirstname(Checker.NOT_AVAILABLE);
@@ -118,15 +167,16 @@ public class PatientRepository extends BaseRepository {
 
         if (patient.getPhoneNumber() == null) {
             ArrayList<String> contact = new ArrayList<>();
-            contact.add(FirebaseHelper.NEW_PATIENT);
+            contact.add(NEW_PATIENT);
             patient.setPhoneNumber(contact);
         }
 
         if (!Checker.isDataAvailable(patient.getOccupation()))
             patient.setOccupation(Checker.NOT_AVAILABLE);
 
-        if (patient.getDentalProcedures() == null)
+        if (patient.getDentalProcedures() == null) {
             patient.setDentalProcedures(new ArrayList<>());
+        }
 
         if (patient.getLastUpdated() == null)
             patient.setLastUpdated(new Date());
@@ -161,37 +211,47 @@ public class PatientRepository extends BaseRepository {
             }
 
             mPatients.setValue(patients);
+        }
 
-//            getPatients(snapshot);
-//            int counter = 0;
-//
-//            if (itemCount != 0 && itemCount == count){
-//                Log.d(TAG, "getPatients: true");
-//                adapter.clearAll();
-//            }
-//
-//            this.personArrayList = new ArrayList<>();
-//            for (DataSnapshot data : dataSnapshot.getChildren()) {
-//                Patient patient = data.getValue(Patient.class);
-//
-//                if (patient != null && !isDuplicate(patient)) {
-//
-//                    patient.setUid(data.getKey());
-//                    initialize(patient);
-//                    adapter.addItem(patient);
-//
-//                    counter++;
-//
-//                }
-//            }
-//
-//            adapter.initializeOrigList();
-//
-//            count = counter;
-//            isPatientsLoaded = true;
-//
-//            isGettingPatientsDone.setValue(true);
-//            adapter.notifyDataSetChanged();
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    }
+
+    public static class PatientsAdapterListener implements ValueEventListener {
+
+        private final ItemAdapter adapter;
+        private final MutableLiveData<Boolean> hasPatients;
+
+        public PatientsAdapterListener(ItemAdapter adapter, MutableLiveData<Boolean> hasPatients) {
+            this.adapter = adapter;
+            this.hasPatients = hasPatients;
+        }
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            Log.d(TAG, "onDataChange: data changed in all patient list");
+//            final ArrayList<Person> patients = new ArrayList<>();
+
+            adapter.clearAll();
+            adapter.notifyDataSetChanged();
+
+            hasPatients.setValue(snapshot.getChildrenCount() > 0);
+
+            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                Patient patient = dataSnapshot.getValue(Patient.class);
+
+                if (patient == null) {
+                    continue;
+                }
+
+                initialize(patient);
+                Log.d(TAG, "onDataChange: adding patient: " + patient.getLastname());
+                adapter.addItem(patient);
+                adapter.notifyItemInserted(adapter.getItemCount());
+            }
+            adapter.initializeOrigList();
         }
 
         @Override

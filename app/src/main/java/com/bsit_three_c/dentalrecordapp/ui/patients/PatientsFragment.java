@@ -30,7 +30,8 @@ import com.bsit_three_c.dentalrecordapp.data.adapter.SearchVIewAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentListPatientsBinding;
-import com.bsit_three_c.dentalrecordapp.ui.patients.patient_form.PatientFormActivity;
+import com.bsit_three_c.dentalrecordapp.ui.base.BaseFormActivity;
+import com.bsit_three_c.dentalrecordapp.ui.dialog.PopUpOptionDialog;
 import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.PatientActivity;
 import com.bsit_three_c.dentalrecordapp.util.Internet;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
@@ -48,7 +49,7 @@ public class PatientsFragment extends Fragment {
         patientsViewModel = new ViewModelProvider(this, new CustomViewModelFactory()).get(PatientsViewModel.class);
         binding = FragmentListPatientsBinding.inflate(inflater, container, false);
 
-        adapter = new ItemAdapter(getActivity(), ItemAdapter.TYPE_PATIENT);
+        adapter = new ItemAdapter(requireContext(), ItemAdapter.TYPE_PATIENT);
 
         requireActivity().getActionBar();
 
@@ -67,18 +68,30 @@ public class PatientsFragment extends Fragment {
             }
         });
 
-        patientsViewModel.getmPatientList().observe(getViewLifecycleOwner(), people -> {
+        patientsViewModel.setPatientsAdapterListener(adapter);
+
+        patientsViewModel.getHasPatient().observe(getViewLifecycleOwner(), aBoolean -> {
             binding.progressBar.setVisibility(View.GONE);
             binding.swipeRefreshLayout.setRefreshing(false);
-            if (people != null) {
-                binding.tvPatientWillShowHere.setVisibility(View.GONE);
-                adapter.setItems(people);
-                adapter.initializeOrigList();
-                adapter.notifyDataSetChanged();
-            } else {
-                binding.tvPatientWillShowHere.setVisibility(View.VISIBLE);
-            }
+            binding.tvPatientWillShowHere.setVisibility(aBoolean ? View.GONE : View.VISIBLE);
+            adapter.setPatientsAdapterListener(patientsViewModel.getPatientsAdapterListener());
         });
+
+//        patientsViewModel.getmPatientList().observe(getViewLifecycleOwner(), people -> {
+//            Log.d(TAG, "onCreateView: list changed");
+//            binding.progressBar.setVisibility(View.GONE);
+//            binding.swipeRefreshLayout.setRefreshing(false);
+//            if (people != null) {
+//                Log.d(TAG, "onCreateView: updating adapter");
+//                binding.tvPatientWillShowHere.setVisibility(View.GONE);
+//                adapter.setItems(people);
+//                adapter.initializeOrigList();
+//                adapter.notifyDataSetChanged();
+//            } else {
+//                Log.d(TAG, "onCreateView: has not list");
+//                binding.tvPatientWillShowHere.setVisibility(View.VISIBLE);
+//            }
+//        });
 
         setHasOptionsMenu(true);
 
@@ -142,7 +155,8 @@ public class PatientsFragment extends Fragment {
         });
 
         binding.fabAddPatients.setOnClickListener(v -> {
-            toAddPatientResult.launch(new Intent(getActivity(), PatientFormActivity.class));
+            toAddPatientResult.launch(new Intent(requireContext(), BaseFormActivity.class)
+                    .putExtra(BaseFormActivity.FORM_KEY, BaseFormActivity.FORM_PATIENT));
         });
     }
 
@@ -175,11 +189,27 @@ public class PatientsFragment extends Fragment {
 
     private final ItemViewHolder.ItemOnClickListener itemOnClickListener = person -> {
         Patient patient = (Patient) person;
-        Intent toPatient = new Intent(requireActivity(), PatientActivity.class);
 
-        toPatient.putExtra(getString(R.string.PATIENT), patient);
-        Log.d(TAG, "passing patient from list: " + patient);
-        startActivity(toPatient);
+        PopUpOptionDialog dialog = PopUpOptionDialog.newInstance(
+                person.getFullName(),
+                "View Information",
+                "Create Appointment",
+                R.drawable.ic_baseline_info_24,
+                R.drawable.ic_baseline_add_card_24
+        );
+        dialog.setOnButtonsClickListener(new PopUpOptionDialog.OnButtonsClickListener() {
+            @Override
+            public void onButton1Click() {
+                PatientActivity.startPatientActivity(requireContext(), patient);
+            }
+
+            @Override
+            public void onButton2Click() {
+                Log.d(TAG, "onButton2Click: sending patient uid: " + patient.getUid());
+                BaseFormActivity.showAppointmentForm(requireContext(), patient.getUid());
+            }
+        });
+        dialog.show(getChildFragmentManager(), null);
     };
 
     private final ActivityResultLauncher<Intent> toAddPatientResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {

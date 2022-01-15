@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 
 public class LocalStorage {
     public static final String LOGGED_IN_USER_KEY = "LoggedInUser";
+    public static final String IS_NEW_KEY = "IS_NEW_KEY";
     private static final String TAG = "LocalStorage";
     private static final String SP_KEY = "LoggedInUser Object";
 
@@ -26,12 +27,10 @@ public class LocalStorage {
     public static final String IS_EDIT = "IS_EDIT";
     public static final String IS_ADMIN = "IS_ADMIN";
 
-
     public static final String UPDATED_PATIENT_KEY = "UPDATED_PATIENT";
     public static final String IMAGE_BYTE_KEY = "COMPRESS_IMAGE";
 
     public static final String PARCEL_KEY = "parcel";
-
 
     public static void saveLoggedInUser(Context context, LoggedInUser loggedInUser) {
         String jsonLoggedInUser = new Gson().toJson(loggedInUser);
@@ -69,6 +68,18 @@ public class LocalStorage {
         Log.i(TAG, "clearSavedUser: Start clearing user info");
         saveLoggedInUser(context, null);
         Log.i(TAG, "clearSavedUser: Done clearing user info");
+    }
+
+    public static void setInstallState(Context context, boolean isNew) {
+        SharedPreferences spUser = context.getSharedPreferences(SP_KEY, MODE_PRIVATE);
+        SharedPreferences.Editor editor = spUser.edit();
+        editor.putBoolean(IS_NEW_KEY, isNew);
+        editor.apply();
+    }
+
+    public static boolean isNewlyInstalled(Context context) {
+        SharedPreferences spUser = context.getSharedPreferences(SP_KEY, MODE_PRIVATE);
+        return spUser.getBoolean(IS_NEW_KEY, true);
     }
 
 

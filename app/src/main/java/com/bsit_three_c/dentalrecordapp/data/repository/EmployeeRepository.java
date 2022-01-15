@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.EmergencyContact;
 import com.bsit_three_c.dentalrecordapp.data.model.Employee;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
@@ -38,9 +39,9 @@ public class EmployeeRepository extends BaseRepository {
 
     public EmployeeRepository() {
         super(EMPLOYEES_REFERENCE);
-        this.databaseReferenceEmergencyContact = database.getReference(FirebaseHelper.EMERGENCY_CONTACT_REFERENCE);
-        this.firebaseStorage = FirebaseStorage.getInstance(FirebaseHelper.FIREBASE_STORAGE_URL);
-        this.storageReference = firebaseStorage.getReference(FirebaseHelper.EMPLOYEE_DISPLAY_IMAGE_LOCATION);
+        this.databaseReferenceEmergencyContact = database.getReference(EMERGENCY_CONTACT_REFERENCE);
+        this.firebaseStorage = FirebaseStorage.getInstance(FIREBASE_STORAGE_URL);
+        this.storageReference = firebaseStorage.getReference(EMPLOYEE_DISPLAY_IMAGE_LOCATION);
     }
 
     public DatabaseReference getDatabaseReferenceEmergencyContact() {
@@ -63,7 +64,7 @@ public class EmployeeRepository extends BaseRepository {
     }
 
     public Task<Uri> uploadDisplayImage(Employee employee, byte[] imageByte) {
-        String child = employee.getUid() + FirebaseHelper.IMAGE_EXTENSION;
+        String child = employee.getUid() + IMAGE_EXTENSION;
 
         StorageMetadata metadata = new StorageMetadata.Builder()
                 .setCustomMetadata("caption", employee.getLastname() + " display image")
@@ -83,7 +84,7 @@ public class EmployeeRepository extends BaseRepository {
         return databaseReference.orderByChild(AccountRepository.ACCOUNT_UID_PATH).equalTo(accountUid);
     }
 
-    public DatabaseReference getContactPath(String emergencyContactUid) {
+    public DatabaseReference getEmergencyContactPath(String emergencyContactUid) {
         return databaseReferenceEmergencyContact.child(emergencyContactUid);
     }
 
@@ -127,7 +128,7 @@ public class EmployeeRepository extends BaseRepository {
 
         if (employee.getPhoneNumber() == null) {
             ArrayList<String> contact = new ArrayList<>();
-            contact.add(FirebaseHelper.NEW_PATIENT);
+            contact.add(NEW_PATIENT);
             employee.setPhoneNumber(contact);
         }
 
@@ -139,6 +140,166 @@ public class EmployeeRepository extends BaseRepository {
         }
     }
 
+    public static void initializeEmergencyContact(EmergencyContact emergencyContact) {
+        final String notAvailable = Checker.NOT_AVAILABLE;
+
+        if (!Checker.isDataAvailable(emergencyContact.getFirstname())) {
+            emergencyContact.setFirstname(notAvailable);
+        }
+
+        if (!Checker.isDataAvailable(emergencyContact.getLastname()))
+            emergencyContact.setLastname(notAvailable);
+
+        if (!Checker.isDataAvailable(emergencyContact.getMiddleInitial()))
+            emergencyContact.setMiddleInitial(notAvailable);
+
+        if (!Checker.isDataAvailable(emergencyContact.getSuffix()))
+            emergencyContact.setSuffix(notAvailable);
+
+
+        if (!Checker.isDataAvailable(emergencyContact.getAddress())) {
+            emergencyContact.setAddress(notAvailable);
+        }
+
+        if (!Checker.isDataAvailable(emergencyContact.getAddress2ndPart())) {
+            emergencyContact.setAddress2ndPart(notAvailable);
+        }
+
+        if (emergencyContact.getPhoneNumber() == null) {
+            ArrayList<String> contact = new ArrayList<>();
+            contact.add(NEW_PATIENT);
+            emergencyContact.setPhoneNumber(contact);
+        }
+
+        if (emergencyContact.getLastUpdated() == null)
+            emergencyContact.setLastUpdated(new Date());
+    }
+
+    public void remove(LoggedInUser loggedInUser, Employee employee) {
+        Log.d(TAG, "remove: removing employee data: " + employee);
+        AccountRepository accountRepository = AccountRepository.getInstance();
+        accountRepository
+                .getPath(employee.getAccountUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Log.d(TAG, "onDataChange: data changed in account");
+                        Account account = snapshot.getValue(Account.class);
+
+                        if (account != null) {
+                            Log.d(TAG, "onDataChange: got account: " + account);
+                            Log.d(TAG, "onDataChange: signing with the account");
+                            accountRepository
+                                    .signInWithEmail(account)
+                                    .continueWith(task -> {
+                                        Log.d(TAG, "onDataChange: sign in attempt done");
+                                        if (task.isSuccessful() && task.getResult().getUser() != null) {
+                                            Log.d(TAG, "onDataChange: success signing in");
+                                            Log.d(TAG, "onDataChange: deleting account");
+                                            accountRepository.remove(account.getUid());
+                                            Log.d(TAG, "onDataChange: deleting user");
+                                            task.getResult()
+                                                    .getUser()
+                                                    .delete()
+                                                    .continueWith(task1 -> {
+                                                        Log.d(TAG, "onDataChange: done attempt deleting user");
+                                                        if (task1.isSuccessful()) {
+                                                            Log.d(TAG, "onDataChange: success in deleting user");
+                                                            Log.d(TAG, "onDataChange: signing the logged in user");
+                                                            accountRepository
+                                                                    .signInWithEmail(loggedInUser.getAccount())
+                                                                    .continueWith(task11 -> {
+                                                                        Log.d(TAG, "onDataChange: done attempt signing in");
+                                                                        if (task.isSuccessful() && task.getResult().getUser() != null) {
+                                                                            Log.d(TAG, "onDataChange: removing employee");
+                                                                            removeDisplayImage(employee);
+                                                                        }
+                                                                        return null;
+                                                                    });
+                                                        }
+                                                        return null;
+                                                    });
+                                        }
+                                        return null;
+                                    });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+    private void removeDisplayImage(Employee employee) {
+        Log.d(TAG, "remove: removing employee continuation");
+        Log.d(TAG, "remove: to be removed: " + employee);
+        Log.d(TAG, "remove: deleting display image");
+        if (Checker.isDataAvailable(employee.getDisplayImage())) {
+            Log.d(TAG, "removeDisplayImage: has display image");
+            storageReference
+                    .child(employee.getUid() + IMAGE_EXTENSION)
+                    .delete()
+                    .continueWith(task -> {
+                        Log.d(TAG, "remove: done image delete attempt");
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "remove: success in deleting image");
+                            removeEmergencyContact(employee);
+                        }
+                        return null;
+                    });
+        } else {
+            Log.d(TAG, "removeDisplayImage: has no display image");
+            removeEmergencyContact(employee);
+        }
+//        Task<Void> removeEmployee = remove(employee.getUid());
+//
+//        Task<Void> removeDisplayPicture = removeEmployee.continueWithTask(task -> {
+//            if (!task.isSuccessful()) {
+//                //  Handle error
+//                throw Objects.requireNonNull(task.getException());
+//            }
+//            return storageReference.child(employee.getUid() + IMAGE_EXTENSION).delete();
+//        });
+//
+//        removeDisplayPicture
+//                .continueWithTask(task -> {
+//                    if (!task.isSuccessful()) {
+//                        //  Handle error
+//                        throw Objects.requireNonNull(task.getException());
+//                    }
+//
+//                    return databaseReferenceEmergencyContact.child(employee.getEmergencyContactUid()).removeValue();
+//                });
+    }
+
+    private void removeEmergencyContact(Employee employee) {
+        Log.d(TAG, "remove: deleting emergency contact");
+        databaseReferenceEmergencyContact
+                .child(employee.getEmergencyContactUid())
+                .removeValue()
+                .continueWith(task1 -> {
+                    Log.d(TAG, "remove: done removing emergency contact");
+                    if (task1.isSuccessful()) {
+                        Log.d(TAG, "remove: removing contact success");
+                        removeEmployee(employee);
+                    }
+                    return null;
+                });
+    }
+
+    private void removeEmployee(Employee employee) {
+        Log.d(TAG, "remove: deleting employee");
+        remove(employee.getUid())
+                .addOnCompleteListener(task -> {
+                    Log.d(TAG, "onComplete: deleting employee attempt done");
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "onComplete: deleting employee success");
+                    }
+                });
+    }
+
     public void remove(Employee employee, LoggedInUser loggedInUser) {
         Task<Void> removeEmployee = databaseReference.child(employee.getUid()).removeValue();
         Task<Void> removeDisplayPicture = removeEmployee.continueWithTask(task -> {
@@ -146,7 +307,7 @@ public class EmployeeRepository extends BaseRepository {
                 //  Handle error
                 throw Objects.requireNonNull(task.getException());
             }
-            return storageReference.child(employee.getUid() + FirebaseHelper.IMAGE_EXTENSION).delete();
+            return storageReference.child(employee.getUid() + IMAGE_EXTENSION).delete();
         });
 
         removeDisplayPicture
@@ -164,7 +325,9 @@ public class EmployeeRepository extends BaseRepository {
                 throw Objects.requireNonNull(task.getException());
             }
 
-            AccountRepository.getInstance().removeAccount(loggedInUser, employee.getAccountUid());
+            AccountRepository
+                    .getInstance()
+                    .removeAccount(loggedInUser, employee.getAccountUid());
             return null;
         });
     }
@@ -175,19 +338,9 @@ public class EmployeeRepository extends BaseRepository {
     public static class EmployeeListener implements ValueEventListener {
 
         private final MutableLiveData<Employee> mEmployee;
-        private final EmployeeRepository employeeRepository;
-        private final AccountRepository.AccountListener accountListener;
-        private final EmployeeRepository.EmergencyContactListener emergencyContactListener;
 
-        public EmployeeListener(MutableLiveData<Employee> mEmployee,
-                                EmployeeRepository employeeRepository,
-                                AccountRepository.AccountListener accountListener,
-                                EmergencyContactListener emergencyContactListener) {
-
+        public EmployeeListener(MutableLiveData<Employee> mEmployee) {
             this.mEmployee = mEmployee;
-            this.employeeRepository = employeeRepository;
-            this.accountListener = accountListener;
-            this.emergencyContactListener = emergencyContactListener;
         }
 
         @Override
@@ -196,17 +349,8 @@ public class EmployeeRepository extends BaseRepository {
             Employee employee = snapshot.getValue(Employee.class);
 
             if (employee != null) {
+                initialize(employee);
                 mEmployee.setValue(employee);
-
-                AccountRepository
-                        .getInstance()
-                        .getPath(employee.getAccountUid())
-                        .addListenerForSingleValueEvent(accountListener);
-
-                employeeRepository
-                        .getDatabaseReferenceEmergencyContact()
-                        .child(employee.getEmergencyContactUid())
-                        .addValueEventListener(emergencyContactListener);
             }
         }
 
@@ -226,11 +370,15 @@ public class EmployeeRepository extends BaseRepository {
 
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
+            Log.d(TAG, "onDataChange: getting emergency contact");
             EmergencyContact emergencyContact = snapshot.getValue(EmergencyContact.class);
 
             if (emergencyContact != null) {
+                initializeEmergencyContact(emergencyContact);
                 mEmergencyContact.setValue(emergencyContact);
             }
+
+            Log.d(TAG, "onDataChange: contact: " + emergencyContact);
         }
 
         @Override

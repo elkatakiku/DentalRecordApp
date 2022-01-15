@@ -39,8 +39,8 @@ public class ServiceRepository extends BaseRepository {
     public ServiceRepository() {
         super(SERVICES_REFERENCE);
 
-        this.firebaseStorage = FirebaseStorage.getInstance(FirebaseHelper.FIREBASE_STORAGE_URL);
-        this.storageReference = firebaseStorage.getReference(FirebaseHelper.SERVICES_DISPLAY_IMAGE_LOCATION);
+        this.firebaseStorage = FirebaseStorage.getInstance(FIREBASE_STORAGE_URL);
+        this.storageReference = firebaseStorage.getReference(SERVICES_DISPLAY_IMAGE_LOCATION);
     }
 
     public static ServiceRepository getInstance() {
@@ -69,42 +69,12 @@ public class ServiceRepository extends BaseRepository {
         return databaseReference.orderByChild("title");
     }
 
-//    private final ValueEventListener servicesEventListener = new ValueEventListener() {
-//
-//        @Override
-//        public void onDataChange(@NonNull DataSnapshot snapshot) {
-//            final ArrayList<DentalService> dentalServices = new ArrayList<>();
-//
-//            Log.d(TAG, "onDataChange: snapshot count: " + snapshot.getChildrenCount());
-//            Log.d(TAG, "onDataChange: snapshot: " + snapshot);
-//            if (!(snapshot.getChildrenCount() <= 0)) {
-//
-//                for (DataSnapshot data : snapshot.getChildren()) {
-//                    DentalService service = data.getValue(DentalService.class);
-//
-//                    if (service == null) continue;
-//
-//                    initializeService(service);
-//                    dentalServices.add(service);
-//                }
-//            }
-//
-//            adapter.addItems(dentalServices);
-//            adapter.notifyDataSetChanged();
-//        }
-//
-//        @Override
-//        public void onCancelled(@NonNull DatabaseError error) {
-//
-//        }
-//    };
-
     public String getNewUid() {
         return UUID.randomUUID().toString();
     }
 
     public Task<Uri> uploadDisplayImage(DentalService dentalService, byte[] imageByte) {
-        String child = dentalService.getServiceUID() + FirebaseHelper.IMAGE_EXTENSION;
+        String child = dentalService.getServiceUID() + IMAGE_EXTENSION;
 
         StorageMetadata metadata = new StorageMetadata.Builder()
                 .setCustomMetadata(dentalService.getTitle(), dentalService.getTitle() + " display image")
@@ -161,9 +131,9 @@ public class ServiceRepository extends BaseRepository {
 
     public static class ServicesListener implements ValueEventListener {
 
-        private final MutableLiveData<ArrayList<DentalService>> mDentalServices;
+        private final MutableLiveData<List<DentalService>> mDentalServices;
 
-        public ServicesListener(MutableLiveData<ArrayList<DentalService>> mDentalServices) {
+        public ServicesListener(MutableLiveData<List<DentalService>> mDentalServices) {
             this.mDentalServices = mDentalServices;
         }
 

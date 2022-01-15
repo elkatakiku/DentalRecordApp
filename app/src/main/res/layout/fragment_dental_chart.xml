@@ -44,7 +44,7 @@
                 android:id="@+id/ibEditDentalChart"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="#00FFFFFF"
+                android:background="@color/white"
                 android:minHeight="48dp"
                 android:src="@drawable/ic_baseline_edit_24"
                 app:tint="@color/blue_green" />
@@ -62,7 +62,7 @@
                 android:id="@+id/ibUploadDentalChart"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="#00FFFFFF"
+                android:background="@color/white"
                 android:minHeight="48dp"
                 android:src="@drawable/ic_baseline_check_24"
                 app:tint="#00D660" />

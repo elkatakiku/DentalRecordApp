@@ -34,11 +34,15 @@ public class MainAdminViewModel extends ViewModel {
         return mLoggedInUser;
     }
 
-    public void setLoggedInUser(LoggedInUser loggedInUser) {
-        this.loggedInUser = loggedInUser;
-        this.mLoggedInUser.setValue(loggedInUser);
-        this.isLoggedIn = true;
+    public void setmLoggedInUser(LoggedInUser loggedInUser) {
+        mLoggedInUser.setValue(loggedInUser);
     }
+
+//    public void setLoggedInUser(LoggedInUser loggedInUser) {
+//        this.loggedInUser = loggedInUser;
+//        this.mLoggedInUser.setValue(loggedInUser);
+//        this.isLoggedIn = true;
+//    }
 
     public boolean isLoggedIn() {
         return isLoggedIn;

@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_home_color"
+    android:fillViewport="true"
+    android:orientation="vertical"
+    tools:context=".ui.base.BaseFormActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_home_color"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/textView56"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_semibold"
+            android:text="Name"
+            android:textColor="@color/label" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:divider="@drawable/empty_tall_divider"
+            android:showDividers="middle">
+
+            <EditText
+                android:id="@+id/etAdminFirstname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/shape_field"
+                android:ems="10"
+                android:fontFamily="@font/open_sans"
+                android:hint="Firstname"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:textColor="@color/data"
+                android:textColorHint="@color/field_hint" />
+
+            <EditText
+                android:id="@+id/etAdminMiddleInitial"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/shape_field"
+                android:ems="10"
+                android:fontFamily="@font/open_sans"
+                android:hint="MI"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:shadowColor="#32ED7D"
+                android:textColor="@color/data"
+                android:textColorHint="@color/field_hint" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:divider="@drawable/empty_tall_divider"
+            android:showDividers="middle">
+
+            <EditText
+                android:id="@+id/etAdminLastname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/shape_field"
+                android:ems="10"
+                android:fontFamily="@font/open_sans"
+                android:hint="Lastname"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:textColor="@color/data"
+                android:textColorHint="@color/field_hint" />
+
+            <EditText
+                android:id="@+id/etAdminSuffix"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/shape_field"
+                android:ems="10"
+                android:fontFamily="@font/open_sans"
+                android:hint="Suffix"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:textColor="@color/data"
+                android:textColorHint="@color/field_hint" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider7"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/tvAdminBirthdayLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Birthdate"
+            android:textColor="@color/label" />
+
+        <LinearLayout
+            android:id="@+id/layoutAdminDatePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/shape_field"
+            android:orientation="horizontal"
+            android:paddingStart="0dp"
+            android:paddingEnd="2dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tvAdminMonth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/open_sans"
+                    android:gravity="center"
+                    android:hint="Month"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="5dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint"
+                    android:textSize="18sp" />
+
+                <View
+                    android:id="@+id/divider11"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/listDivider" />
+
+                <TextView
+                    android:id="@+id/tvAdminDay"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/open_sans"
+                    android:gravity="center"
+                    android:hint="Day"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint"
+                    android:textSize="18sp" />
+
+                <View
+                    android:id="@+id/divider12"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/listDivider" />
+
+                <TextView
+                    android:id="@+id/tvAdminYear"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/open_sans"
+                    android:gravity="center"
+                    android:hint="Year"
+                    android:paddingStart="5dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/ibAdminCalendar"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/blue_green"
+                android:minHeight="50dp"
+                app:srcCompat="@drawable/ic_baseline_calendar_today_24"
+                app:tint="@color/white"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvAdminAgeLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Age"
+            android:textColor="@color/label" />
+
+        <EditText
+            android:id="@+id/etAdminAge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/shape_field"
+            android:ems="10"
+            android:enabled="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:fontFamily="@font/open_sans"
+            android:hint="Age"
+            android:minHeight="48dp"
+            android:padding="10dp"
+            android:textColor="@color/data"
+            android:textColorHint="@color/field_hint" />
+
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/tvAdminContactLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Contact"
+            android:textColor="@color/label" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:divider="@drawable/empty_tall_divider"
+            android:orientation="horizontal"
+            android:showDividers="middle">
+
+            <FrameLayout
+                android:layout_width="75dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/shape_field">
+
+                <ImageView
+                    android:id="@+id/imageView15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="10dp"
+                    app:srcCompat="@drawable/ic_baseline_arrow_drop_down_24" />
+
+                <Spinner
+                    android:id="@+id/spnrAdminNumberMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:entries="@array/mobile_numbers" />
+
+            </FrameLayout>
+
+            <EditText
+                android:id="@+id/etAdminNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:background="@drawable/shape_field"
+                android:ems="10"
+                android:fontFamily="@font/open_sans"
+                android:hint="Contact Number"
+                android:inputType="phone"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:textColor="@color/data"
+                android:textColorHint="@color/field_hint" />
+
+            <Button
+                android:id="@+id/btnAdminAddNumber"
+                android:layout_width="75dp"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/blue_green"
+                android:insetTop="2dp"
+                android:insetBottom="2dp"
+                android:minWidth="75dp"
+                android:text="Add" />
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/lvAdminMobileNumbers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+        </ListView>
+
+        <View
+            android:id="@+id/divider14"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_semibold"
+            android:text="@string/Address"
+            android:textColor="@color/label" />
+
+        <EditText
+            android:id="@+id/etAdminAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/shape_field"
+            android:ems="10"
+            android:fontFamily="@font/open_sans"
+            android:gravity="start|top"
+            android:hint="Address"
+            android:inputType="textMultiLine"
+            android:minHeight="48dp"
+            android:padding="10dp"
+            android:textColor="@color/data"
+            android:textColorHint="@color/field_hint" />
+
+        <View
+            android:id="@+id/divider6"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/tvAdminEmailLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_semibold"
+            android:text="Email"
+            android:textColor="@color/label" />
+
+        <EditText
+            android:id="@+id/etAdminFormEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/shape_field"
+            android:ems="10"
+            android:fontFamily="@font/open_sans"
+            android:hint="Email Address"
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp"
+            android:padding="10dp"
+            android:textColor="@color/data"
+            android:textColorHint="@color/field_hint" />
+
+        <View
+            android:id="@+id/divider23"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/textView58"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_semibold"
+            android:text="@string/CivilStatus"
+            android:textColor="@color/label" />
+
+        <Spinner
+            android:id="@+id/spnrAdminCivilStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/shape_field"
+            android:entries="@array/civil_status_array"
+            android:minHeight="48dp"
+            android:spinnerMode="dropdown"
+            android:tag="@string/CivilStatus" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="100dp">
+
+            <Button
+                android:id="@+id/btnAddAdmin"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/blue_green"
+                android:text="Confirm"
+                app:cornerRadius="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/pbLoadingAddAdmin"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="16dp"
+                android:indeterminateTint="@color/white"
+                android:translationZ="3dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/btnAddAdmin"
+                app:layout_constraintEnd_toEndOf="@+id/btnAddAdmin"
+                app:layout_constraintTop_toTopOf="@+id/btnAddAdmin"
+                tools:visibility="visible" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

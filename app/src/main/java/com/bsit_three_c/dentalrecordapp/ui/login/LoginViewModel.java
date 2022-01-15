@@ -10,21 +10,20 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.data.repository.LoginRepository;
 import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.Employee;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
+import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Person;
 import com.bsit_three_c.dentalrecordapp.data.repository.AccountRepository;
+import com.bsit_three_c.dentalrecordapp.data.repository.AdminRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.EmployeeRepository;
+import com.bsit_three_c.dentalrecordapp.data.repository.LoginRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.PatientRepository;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 public class LoginViewModel extends ViewModel {
     private static final String TAG = "LoginViewModel";
@@ -70,21 +69,26 @@ public class LoginViewModel extends ViewModel {
         return new LoggedInUserView(loggedInUser.getLastname());
     }
 
-    public void loginDataChanged(String username, String password) {
-        if (!isUserNameValid(username)) {
+    public void loginDataChanged(String email, String password) {
+        Log.d(TAG, "loginDataChanged: email: " + email);
+        Log.d(TAG, "loginDataChanged: password: " + password);
+        Log.d(TAG, "loginDataChanged: password valid: " + isPasswordValid(password));
+
+        if (!isEmailValid(email)) {
             loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
-        } else if (!isPasswordValid(password)) {
+        }
+
+        if (!isPasswordValid(password)) {
             loginFormState.setValue(new LoginFormState(null, R.string.invalid_password));
-        } else {
+        }
+
+        if (isEmailValid(email) && isPasswordValid(password)){
             loginFormState.setValue(new LoginFormState(true));
         }
     }
 
     // A placeholder username validation check
-    private boolean isUserNameValid(String username) {
-        if (username == null) {
-            return false;
-        }
+    private boolean isEmailValid(String username) {
         if (username.contains("@")) {
             return Patterns.EMAIL_ADDRESS.matcher(username).matches();
         } else {
@@ -101,7 +105,23 @@ public class LoginViewModel extends ViewModel {
 
         @Override
         protected Void doInBackground(String... strings) {
-            // Firebase login listener
+//
+//            loginRepository
+//                    .login(strings[0], strings[1])
+//                    .addOnCompleteListener(task -> {
+//                        if (task.isSuccessful()) {
+//                            Account account = new Account(
+//                                    task.getResult().getUser().getUid(),
+//                                    strings[0],
+//                                    strings[0],
+//                                    Account.TYPE_EMPLOYEE,
+//                                    "-MsnLGtoUoWBIVjKaXYt"
+//                            );
+//                            accountRepository
+//                                    .addAccount(account);
+//                        }
+//                    });
+
             loginRepository
                     .login(strings[0], strings[1])
                     .addOnSuccessListener(authResult -> {
@@ -115,27 +135,12 @@ public class LoginViewModel extends ViewModel {
                                     Account account = snapshot.getValue(Account.class);
 
                                     if (account != null) {
-                                        String email = account.getEmail();
-                                        String uid = account.getUid();
-
                                         switch (account.getUserType()) {
                                             case Account.TYPE_ADMIN:
-                                                setLoggedInUser(new Person(
-                                                        "uid",
-                                                        "Admin",
-                                                        "Admin",
-                                                        "A",
-                                                        "Ad",
-                                                        "dateOfBirth",
-                                                        new ArrayList<>(),
-                                                        "address",
-                                                        1,
-                                                        0,
-                                                        new Date(),
-                                                        email),
-                                                        account
-                                                );
-
+                                                AdminRepository
+                                                        .getInstance()
+                                                        .getDatabaseReference()
+                                                        .addListenerForSingleValueEvent(new GetUser(account));
                                                 break;
 
                                             case Account.TYPE_EMPLOYEE:
@@ -163,10 +168,6 @@ public class LoginViewModel extends ViewModel {
                                 }
                             });
                         }
-
-                        // Initialize LoggedInUserView in repository
-                        // LoggedInUserView isn't public
-//                        loggedInUser = loginRepository.loginSuccess(authResult);
                     })
                     .addOnFailureListener(e -> {
                         Log.e(TAG, "loginUser: logged in error");
@@ -178,8 +179,6 @@ public class LoginViewModel extends ViewModel {
 
     private void setLoggedInUser(Person person, Account account) {
         setLoggedInUser(new LoggedInUser(person, account));
-
-//        loginResult.setValue(new LoginResult(createLoggedInUserView(loggedInUser)));
     }
 
     private class GetUser implements ValueEventListener {
@@ -197,17 +196,39 @@ public class LoginViewModel extends ViewModel {
             for (DataSnapshot data : snapshot.getChildren()) {
                 Log.d(TAG, "onDataChange: data uid: " + data.getKey());
 
-                Person user = data.getValue(Employee.class);
+                switch (account.getUserType()) {
+                    case Account.TYPE_ADMIN:
+                        Person admin = snapshot.getValue(Person.class);
 
-                if (user != null) {
-                    Log.d(TAG, "onDataChange: account uid: " + account.getUid());
-                    Log.d(TAG, "onDataChange: has employee: " + user);
-                    setLoggedInUser(user, account);
-                }
-                else {
-                    Log.d(TAG, "onDataChange: employee is null");
-                }
+                        if (admin != null) {
+                            Log.d(TAG, "onDataChange: account uid: " + account.getUid());
+                            Log.d(TAG, "onDataChange: has admin: " + admin);
+                            setLoggedInUser(admin, account);
+                        }
 
+                        break;
+                    case Account.TYPE_EMPLOYEE:
+                        Employee user = data.getValue(Employee.class);
+
+                        if (user != null) {
+                            Log.d(TAG, "onDataChange: account uid: " + account.getUid());
+                            Log.d(TAG, "onDataChange: has employee: " + user);
+                            setLoggedInUser(user, account);
+                        }
+
+                        break;
+                    case Account.TYPE_PATIENT:
+
+                        Patient patient = data.getValue(Patient.class);
+
+                        if (patient != null) {
+                            Log.d(TAG, "onDataChange: account uid: " + account.getUid());
+                            Log.d(TAG, "onDataChange: has patient: " + patient);
+                            setLoggedInUser(patient, account);
+                        }
+
+                        break;
+                }
             }
         }
 

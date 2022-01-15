@@ -1,36 +1,42 @@
 package com.bsit_three_c.dentalrecordapp.ui.patients.view_patient;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
-import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
+import com.bsit_three_c.dentalrecordapp.data.repository.BaseRepository;
 import com.bsit_three_c.dentalrecordapp.databinding.AppBarPatientBinding;
-import com.bsit_three_c.dentalrecordapp.ui.patients.patient_form.PatientFormActivity;
+import com.bsit_three_c.dentalrecordapp.ui.base.BaseFormActivity;
 import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.ui.patientinfo.PatientInfoFragment;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 
 public class PatientActivity extends AppCompatActivity {
     private static final String TAG = PatientActivity.class.getSimpleName();
 
-    private AppBarConfiguration appBarConfiguration;
+    private static final String PATIENT_KEY = "ARG_PA_PATIENT_KEY";
+
     private AppBarPatientBinding binding;
 
     private Patient patient;
     private final FragmentManager fragmentManager = getSupportFragmentManager();
+
+    public static void startPatientActivity(Context context, Patient patient) {
+        context.startActivity(new Intent(context, PatientActivity.class)
+                .putExtra(PATIENT_KEY, patient));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,20 +47,25 @@ public class PatientActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
+        ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
+
         binding.appbar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
             float range = (float) -appBarLayout.getTotalScrollRange();
             binding.appBarImage.setImageAlpha((int) (255 * (1.0f - (float) verticalOffset / range)));
         });
 
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_patient);
-//        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        this.patient = getIntent().getParcelableExtra(getString(R.string.PATIENT));
+        this.patient = getIntent().getParcelableExtra(PATIENT_KEY);
 
         binding.floatingActionButton.setOnClickListener(view -> {
-            Intent toEditPatient = new Intent(PatientActivity.this, PatientFormActivity.class);
-            toEditPatient.putExtra(getString(R.string.PATIENT), patient);
+            Intent toEditPatient = new Intent(PatientActivity.this, BaseFormActivity.class)
+                    .putExtra(BaseFormActivity.FORM_KEY, BaseFormActivity.FORM_PATIENT)
+                    .putExtra(BaseFormActivity.PATIENT_KEY, patient);
             toEditPatientResult.launch(toEditPatient);
         });
 
@@ -76,12 +87,8 @@ public class PatientActivity extends AppCompatActivity {
         }
 
         Log.d(TAG, "onCreate: stack count: " + fragmentManager.getBackStackEntryCount());
-        fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                Log.d(TAG, "onBackStackChanged: back stack: " + fragmentManager.getBackStackEntryCount());
-            }
-        });
+        fragmentManager.addOnBackStackChangedListener(() ->
+                Log.d(TAG, "onBackStackChanged: back stack: " + fragmentManager.getBackStackEntryCount()));
     }
 
     @Override
@@ -91,12 +98,6 @@ public class PatientActivity extends AppCompatActivity {
             finish();
         } else {
             super.onBackPressed();
-//            fragmentManager.popBackStack();
-//            fragmentManager
-//                    .beginTransaction()
-//                    .replace(R.id.nav_host_fragment_content_patient,
-//                            PatientInfoFragment.newInstance(patient))
-//                    .commit();
         }
     }
 
@@ -121,16 +122,27 @@ public class PatientActivity extends AppCompatActivity {
                 Patient returnedPatient = result.getData().getParcelableExtra(LocalStorage.UPDATED_PATIENT_KEY);
                 if (returnedPatient != null) {
                     PatientActivity.this.patient = returnedPatient;
-                    getIntent().putExtra(FirebaseHelper.PATIENT_UID, returnedPatient.getUid());
+                    getIntent().putExtra(BaseRepository.PATIENT_UID, returnedPatient.getUid());
                 }
             }
         }
     });
 
+//    @Override
+//    public boolean onSupportNavigateUp() {
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_patient);
+//        return NavigationUI.navigateUp(navController, appBarConfiguration)
+//                || super.onSupportNavigateUp();
+//    }
+
     @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_patient);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

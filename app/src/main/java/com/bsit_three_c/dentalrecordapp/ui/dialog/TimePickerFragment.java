@@ -31,6 +31,9 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     private final TextView tvMinutes;
     private final TextView tvTime;
 
+    private int minTime;
+    private int maxTime;
+
     public TimePickerFragment(TextView tvHour, TextView tvMinutes, TextView tvTime) {
         this.tvHour = tvHour;
         this.tvMinutes = tvMinutes;

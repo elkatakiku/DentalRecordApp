@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_home_color"
     android:fillViewport="true"
-    tools:context=".ui.appointments.appointment_form.AppointmentFormActivity">
+    tools:context=".ui.base.BaseFormActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,77 +24,105 @@
             android:text="Name"
             android:textColor="@color/label" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tvAppointmentPatientname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:divider="@drawable/empty_tall_divider"
-            android:showDividers="middle">
-
-            <EditText
-                android:id="@+id/etAppointmentFirstname"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:background="@drawable/shape_field"
-                android:ems="10"
-                android:fontFamily="@font/open_sans"
-                android:hint="Firstname"
-                android:inputType="textPersonName"
-                android:minHeight="48dp"
-                android:padding="10dp"
-                android:textColorHint="@color/field_hint" />
-
-            <EditText
-                android:id="@+id/etAppointmentMiddleInitial"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/shape_field"
-                android:ems="10"
-                android:fontFamily="@font/open_sans"
-                android:hint="MI"
-                android:inputType="textPersonName"
-                android:minHeight="48dp"
-                android:padding="10dp"
-                android:shadowColor="#32ED7D"
-                android:textColorHint="@color/field_hint" />
-        </LinearLayout>
+            android:background="@drawable/shape_field"
+            android:ems="10"
+            android:fontFamily="@font/open_sans"
+            android:minHeight="48dp"
+            android:padding="10dp"
+            android:text="TextView"
+            android:textColor="@color/data"
+            android:textSize="18sp"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <LinearLayout
+            android:id="@+id/layoutAppointmentPatientName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:divider="@drawable/empty_tall_divider"
-            android:showDividers="middle">
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/etAppointmentLastname"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:background="@drawable/shape_field"
-                android:ems="10"
-                android:fontFamily="@font/open_sans"
-                android:hint="Lastname"
-                android:inputType="textPersonName"
-                android:minHeight="48dp"
-                android:padding="10dp"
-                android:textColorHint="@color/field_hint" />
+                android:layout_marginTop="8dp"
+                android:divider="@drawable/empty_tall_divider"
+                android:showDividers="middle">
 
-            <EditText
-                android:id="@+id/etAppointmentSuffix"
-                android:layout_width="0dp"
+                <EditText
+                    android:id="@+id/etAppointmentFirstname"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="@drawable/shape_field"
+                    android:ems="10"
+                    android:fontFamily="@font/open_sans"
+                    android:hint="Firstname"
+                    android:inputType="textPersonName"
+                    android:minHeight="48dp"
+                    android:padding="10dp"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+
+                <EditText
+                    android:id="@+id/etAppointmentMiddleInitial"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_field"
+                    android:ems="10"
+                    android:fontFamily="@font/open_sans"
+                    android:hint="MI"
+                    android:inputType="textPersonName"
+                    android:minHeight="48dp"
+                    android:padding="10dp"
+                    android:shadowColor="#32ED7D"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/shape_field"
-                android:ems="10"
-                android:fontFamily="@font/open_sans"
-                android:hint="Suffix"
-                android:inputType="textPersonName"
-                android:minHeight="48dp"
-                android:padding="10dp"
-                android:textColorHint="@color/field_hint" />
+                android:layout_marginTop="8dp"
+                android:divider="@drawable/empty_tall_divider"
+                android:showDividers="middle">
+
+                <EditText
+                    android:id="@+id/etAppointmentLastname"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="@drawable/shape_field"
+                    android:ems="10"
+                    android:fontFamily="@font/open_sans"
+                    android:hint="Lastname"
+                    android:inputType="textPersonName"
+                    android:minHeight="48dp"
+                    android:padding="10dp"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+
+                <EditText
+                    android:id="@+id/etAppointmentSuffix"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_field"
+                    android:ems="10"
+                    android:fontFamily="@font/open_sans"
+                    android:hint="Suffix"
+                    android:inputType="textPersonName"
+                    android:minHeight="48dp"
+                    android:padding="10dp"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <TextView
@@ -118,6 +146,7 @@
             android:inputType="number"
             android:minHeight="48dp"
             android:padding="10dp"
+            android:textColor="@color/data"
             android:textColorHint="@color/field_hint" />
 
         <LinearLayout
@@ -442,7 +471,8 @@
             android:gravity="start|top"
             android:inputType="textMultiLine"
             android:minHeight="48dp"
-            android:padding="10dp" />
+            android:padding="10dp"
+            android:textColor="@color/data" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/frameLayout4"

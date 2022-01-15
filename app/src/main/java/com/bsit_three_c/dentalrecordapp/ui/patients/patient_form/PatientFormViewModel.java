@@ -12,7 +12,7 @@ import com.bsit_three_c.dentalrecordapp.data.model.FormState;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Person;
 import com.bsit_three_c.dentalrecordapp.data.repository.AccountRepository;
-import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
+import com.bsit_three_c.dentalrecordapp.data.repository.BaseRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.PatientRepository;
 import com.bsit_three_c.dentalrecordapp.interfaces.SpinnerState;
 import com.bsit_three_c.dentalrecordapp.interfaces.TextChange;
@@ -314,7 +314,7 @@ public class PatientFormViewModel extends ViewModel implements TextChange, Spinn
 
         if (account != null) {
             Log.d(TAG, "addPatient: adding account: " + account);
-                accountRepository.createNewAccount(account).addOnCompleteListener(createAccountTask -> {
+                accountRepository.createNewAccount(account.getEmail(), account.getPassword()).addOnCompleteListener(createAccountTask -> {
                     Log.d(TAG, "onComplete: create account attempt");
                     if (!createAccountTask.isSuccessful()) {
                         mError.setValue(accountRepository.getCreateAccountError(createAccountTask));
@@ -326,8 +326,10 @@ public class PatientFormViewModel extends ViewModel implements TextChange, Spinn
                     FirebaseUser user = createAccountTask.getResult().getUser();
                     if (user != null) {
                         Log.d(TAG, "onComplete: creating account data");
-                        accountRepository.setUserIds(patient, account, user.getUid());
-                        accountRepository.addAccount(account).addOnCompleteListener(task -> {
+                        accountRepository.setUserIds(patient, account);
+                        accountRepository
+                                .uploadAccount(account, user.getUid())
+                                .addOnCompleteListener(task -> {
                             if (!task.isSuccessful()) {
                                 Log.d(TAG, "addPatient: error in upload account");
                                 if (task.getException() != null) {
@@ -344,6 +346,7 @@ public class PatientFormViewModel extends ViewModel implements TextChange, Spinn
                                 accountRepository.logout();
                                 mError.setValue(Checker.VALID);
                                 mCreateAttempt.setValue(true);
+                                mPatient.setValue(patient);
                             });
                         });
                     } else {
@@ -392,7 +395,7 @@ public class PatientFormViewModel extends ViewModel implements TextChange, Spinn
         patient.setDateOfBirth(DateUtil.getDate(dateOfBirth));
         patient.setAddress(UIUtil.capitalize(address.trim()));
         patient.setPhoneNumber(contact);
-        if (contact.size() <= 0) contact.add(FirebaseHelper.NEW_PATIENT);
+        if (contact.size() <= 0) contact.add(BaseRepository.NEW_PATIENT);
         patient.setCivilStatus(civilStatus);
         patient.setAge(age);
         patient.setOccupation(occupation);
@@ -412,12 +415,24 @@ public class PatientFormViewModel extends ViewModel implements TextChange, Spinn
                 });
     }
 
+    public void setmError(Integer integer) {
+        mError.setValue(integer);
+    }
+
     public LiveData<Integer> getmError() {
         return mError;
     }
 
+    public void setmCreateAttempt(boolean bool) {
+        mCreateAttempt.setValue(bool);
+    }
+
     public LiveData<Boolean> getmCreateAttempt() {
         return mCreateAttempt;
+    }
+
+    public void setmPatient(Patient patient) {
+        mPatient.setValue(patient);
     }
 
     public LiveData<Patient> getmPatient() {

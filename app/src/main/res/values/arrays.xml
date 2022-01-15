@@ -42,6 +42,7 @@
     <!--    Job Titles  -->
     <string-array name="job_titles">
         <item>Choose job title…</item>
+        <item>Dentist</item>
         <item>Dentist Associate</item>
         <item>Secretary</item>
     </string-array>
@@ -50,5 +51,27 @@
     <string-array name="mobile_numbers">
         <item>TEL</item>
         <item>+63</item>
+    </string-array>
+
+    <string-array name="days_in_week">
+        <item>…</item>
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+
+    <string-array name="countries_array">
+        <item>Afghanistan</item>
+        <item>Albania</item>
+        <item>Algeria</item>
+        <item>American Samoa</item>
+        <item>Andorra</item>
+        <item>Angola</item>
+        <item>Anguilla</item>
+        <item>Antarctica</item>
     </string-array>
 </resources>

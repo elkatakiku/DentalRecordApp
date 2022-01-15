@@ -3,6 +3,7 @@ package com.bsit_three_c.dentalrecordapp.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 import java.util.List;
@@ -78,6 +79,9 @@ public class EmergencyContact extends Person implements Parcelable {
     }
 
     public String getFullAddress() {
+        if (!Checker.isDataAvailable(address) && !(Checker.isDataAvailable(address2ndPart))) {
+            return Checker.NOT_AVAILABLE;
+        }
         return address + " " + address2ndPart;
     }
 

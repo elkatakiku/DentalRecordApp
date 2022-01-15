@@ -15,10 +15,10 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -29,9 +29,10 @@ import com.bsit_three_c.dentalrecordapp.data.adapter.ServicesViewHolder;
 import com.bsit_three_c.dentalrecordapp.data.model.Employee;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentClientMenuBinding;
-import com.bsit_three_c.dentalrecordapp.ui.appointments.appointment_form.AppointmentFormActivity;
+import com.bsit_three_c.dentalrecordapp.ui.base.BaseFormActivity;
+import com.bsit_three_c.dentalrecordapp.ui.dialog.ServiceDialogFragment;
+import com.bsit_three_c.dentalrecordapp.ui.dialog.SuccessDialogFragment;
 import com.bsit_three_c.dentalrecordapp.ui.login.LoginActivity;
-import com.bsit_three_c.dentalrecordapp.ui.services.view_service.ViewServiceActivity;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
@@ -70,7 +71,13 @@ public class MenuClientFragment extends Fragment {
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-
+                DialogFragment dialogFragment = new SuccessDialogFragment();
+                Bundle argument = new Bundle();
+                argument.putInt(SuccessDialogFragment.ICON_KEY, R.drawable.ic_baseline_check_24);
+                argument.putString(SuccessDialogFragment.TITLE_KEY, "Success");
+                argument.putString(SuccessDialogFragment.MESSAGE_KEY, "Account successfully created.");
+                dialogFragment.setArguments(argument);
+                dialogFragment.show(getChildFragmentManager(), null);
             }
         }
     });
@@ -116,31 +123,39 @@ public class MenuClientFragment extends Fragment {
             }
         });
 
-        mViewModel.getmEmployees().observe(getViewLifecycleOwner(), new Observer<List<Employee>>() {
-            @Override
-            public void onChanged(List<Employee> employees) {
-                Log.d(TAG, "onChanged: employees changed");
-                if (employees != null) {
-                    binding.pbMenuLoadingDoctors.setVisibility(View.GONE);
-                    binding.pbMenuLoadingDoctors.setVisibility(View.GONE);
-                    employeeDisplayAdapter.addItems(employees);
-                    employeeDisplayAdapter.notifyDataSetChanged();
-                }
-                else {
-                    binding.pbMenuLoadingDoctors.setVisibility(View.VISIBLE);
-                }
+        mViewModel.getmEmployees().observe(getViewLifecycleOwner(), (Observer<List<Employee>>) employees -> {
+            Log.d(TAG, "onChanged: employees changed");
+            if (employees != null) {
+                binding.pbMenuLoadingDoctors.setVisibility(View.GONE);
+                binding.pbMenuLoadingDoctors.setVisibility(View.GONE);
+                employeeDisplayAdapter.addItems(employees);
+                employeeDisplayAdapter.notifyDataSetChanged();
+            }
+            else {
+                binding.pbMenuLoadingDoctors.setVisibility(View.VISIBLE);
+            }
+        });
+
+        mViewModel.getmCLinic().observe(getViewLifecycleOwner(), clinic -> {
+            if (clinic != null) {
+                UIUtil.setText(clinic.getName(), binding.tvMenuClinicName);
+                UIUtil.setText(clinic.getContactNumber(), binding.tvMenuClinicContact);
+                UIUtil.setText(clinic.getLocation(), binding.tvMenuClinicLocation);
             }
         });
 
         binding.btnUserAppointment.setOnClickListener(v ->
-                registerActivty.launch(new Intent(requireActivity(), AppointmentFormActivity.class)));
+                registerActivty.launch(BaseFormActivity.getAppointmentFormIntent(requireContext()))
+//                registerActivty.launch(new Intent(requireContext(), BaseFormActivity.class)
+//                        .putExtra(BaseFormActivity.FORM_KEY, BaseFormActivity.FORM_APPOINTMENT))
+        );
 
-        binding.cvViewServices.setOnClickListener(v ->
-                NavHostFragment.findNavController(MenuClientFragment.this)
-                .navigate(R.id.nav_user_service));
-
-        binding.btnUserLogin.setOnClickListener(v ->
+        binding.btnMenuLogin.setOnClickListener(v ->
                 loginActivity.launch(new Intent(requireActivity(), LoginActivity.class)));
+
+        binding.btnMenuRegister.setOnClickListener(v ->
+                registerActivty.launch(new Intent(requireActivity(), BaseFormActivity.class)
+                        .putExtra(BaseFormActivity.FORM_KEY, BaseFormActivity.FORM_REGISTRATION)));
     }
 
     @Override
@@ -152,10 +167,8 @@ public class MenuClientFragment extends Fragment {
     }
 
     private final ServicesViewHolder.ItemOnClickListener serviceOnClickListener = service -> {
-        requireActivity().startActivity(
-                new Intent(requireContext(), ViewServiceActivity.class)
-                        .putExtra(LocalStorage.PARCEL_KEY, service)
-                        .putExtra(LocalStorage.IS_ADMIN, false));
+        DialogFragment serviceDialog = new ServiceDialogFragment(service);
+        serviceDialog.show(getChildFragmentManager(), null);
     };
 
 }

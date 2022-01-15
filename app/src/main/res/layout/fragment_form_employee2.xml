@@ -16,70 +16,78 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/textView3"
+        <LinearLayout
+            android:id="@+id/layoutEmployeeAccountForm"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Account"
-            android:textAlignment="center"
-            android:textColor="@color/label"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:visibility="visible">
 
-        <TextView
-            android:id="@+id/textView57"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Email"
-            android:textColor="@color/label" />
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Account"
+                android:textAlignment="center"
+                android:textColor="@color/label"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/etEmployeeAccountEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/shape_field"
-            android:ems="10"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:hint="Email"
-            android:minHeight="48dp"
-            android:padding="10dp"
-            android:textColor="@color/data"
-            android:textColorHint="@color/field_hint" />
+            <TextView
+                android:id="@+id/textView57"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Email"
+                android:textColor="@color/label" />
 
-        <TextView
-            android:id="@+id/textView53"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Password"
-            android:textColor="@color/label" />
+            <EditText
+                android:id="@+id/etEmployeeAccountEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/shape_field"
+                android:ems="10"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="Email"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:textColor="@color/data"
+                android:textColorHint="@color/field_hint" />
 
-        <EditText
-            android:id="@+id/etEmployeeAccountPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/shape_field"
-            android:clickable="false"
-            android:ems="10"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:hint="Password"
-            android:minHeight="48dp"
-            android:padding="10dp"
-            android:textColor="@color/data"
-            android:textColorHint="@color/field_hint" />
+            <TextView
+                android:id="@+id/textView53"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Password"
+                android:textColor="@color/label" />
 
-        <View
-            android:id="@+id/divider15"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:background="?android:attr/listDivider" />
+            <EditText
+                android:id="@+id/etEmployeeAccountPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/shape_field"
+                android:clickable="false"
+                android:ems="10"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="Password"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:textColor="@color/data"
+                android:textColorHint="@color/field_hint" />
+
+            <View
+                android:id="@+id/divider15"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="?android:attr/listDivider" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textView64"

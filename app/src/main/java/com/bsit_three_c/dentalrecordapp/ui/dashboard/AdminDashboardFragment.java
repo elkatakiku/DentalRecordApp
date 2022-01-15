@@ -53,6 +53,12 @@ public class AdminDashboardFragment extends Fragment {
         mViewModel.getEmployeesCount().observe(getViewLifecycleOwner(), aLong ->
                 binding.tvEmployeesCount.setText(String.valueOf(aLong)));
 
+        mViewModel.getmTodayCount().observe(getViewLifecycleOwner(), integer ->
+                binding.tvAppointmentToday.setText(String.valueOf(integer)));
+
+        mViewModel.getmUpComingCount().observe(getViewLifecycleOwner(), integer ->
+                binding.tvAppointmentUpComing.setText(String.valueOf(integer)));
+
     }
 
     @Override

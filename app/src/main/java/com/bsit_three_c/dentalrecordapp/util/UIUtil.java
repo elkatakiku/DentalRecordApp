@@ -3,7 +3,6 @@ package com.bsit_three_c.dentalrecordapp.util;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,19 +11,16 @@ import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ServiceOptionsAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalService;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalServiceOption;
-import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
+import com.bsit_three_c.dentalrecordapp.data.model.Person;
 import com.bsit_three_c.dentalrecordapp.ui.main.MainAdminActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -213,6 +209,14 @@ public class UIUtil {
         }
     }
 
+    public static long convertToLong(String input) {
+        try {
+            return Long.parseLong(input);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
     public static String capitalize(String s) {
         StringBuilder capitalize = new StringBuilder(s.length());
         boolean nextTitleCase = true;
@@ -229,63 +233,6 @@ public class UIUtil {
         }
 
         return capitalize.toString();
-    }
-
-    //  Formats string to telephone number format
-    public static String formatTelephoneNumber(final String number) {
-        String firstPart = number.substring(0, 3);
-        String contactNumber = number;
-
-        if (number.length() == 10) {
-            String secondPart = number.substring(3, 6);
-            String lastPart = number.substring(6, 10);
-
-            contactNumber = firstPart + "-" + secondPart + "-" + lastPart;
-        }
-        else if (number.length() == 7) {
-            contactNumber =  firstPart + "-" + number.substring(3, 7);
-        }
-
-        return contactNumber;
-    }
-
-    //  Formats string to philippine mobile number format
-    public static String formatMobileNumber(String code, String number) {
-        String firstPart = number.substring(0, 3);
-        String secondPart = number.substring(3, 6);
-        String lastPart = number.substring(6, 10);
-
-        return "(" + code + ") " + firstPart + "-" + secondPart + "-" + lastPart;
-    }
-
-    //  Get formatted contact number.
-    public static String getFormattedContactNumber(EditText etNumber, Spinner spnrCode, Resources resources) {
-        final int mode = spnrCode.getSelectedItemPosition();
-        String inputNumber = etNumber.getText().toString().trim();
-
-        switch (mode) {
-            case 0:
-                if (inputNumber.length() != 10 && inputNumber.length() != 7) {
-                    etNumber.setError(resources.getString(R.string.invalid_tel_limit_number));
-                    return null;
-                }
-
-                inputNumber = UIUtil.formatTelephoneNumber(inputNumber);
-                break;
-
-            case 1:
-                if (inputNumber.length() != 10) {
-                    etNumber.setError(resources.getString(R.string.invalid_cel_limit_number));
-                    return null;
-                }
-
-                String code = spnrCode.getSelectedItem().toString();
-                inputNumber = UIUtil.formatMobileNumber(code, inputNumber);
-
-                break;
-        }
-
-        return inputNumber;
     }
 
     public static Bitmap convertVectorToBitmap(Drawable drawable) {
@@ -333,7 +280,7 @@ public class UIUtil {
     public static void setText(String data, TextView textView) {
         String notAvailable = "N/A";
 
-        if (Checker.isDataAvailable(data.trim()))
+        if (Checker.isDataAvailable(data))
             textView.setText(data.trim());
         else
             textView.setText(notAvailable);
@@ -377,12 +324,7 @@ public class UIUtil {
         imageView.setBackgroundColor(Color.TRANSPARENT);
     }
 
-    public static List<String> createList(String contactNumber) {
-        ArrayList<String> contact = new ArrayList<>(1);
-        contact.add(contactNumber);
 
-        return contact;
-    }
 
     public static boolean isValid(String defaultValue, String toBeChecked, View view) {
         if (defaultValue.equals(toBeChecked)) {
@@ -390,25 +332,6 @@ public class UIUtil {
             return false;
         }
         return true;
-    }
-
-    public String getContactNumber(List<String> contactNumber) {
-        if (contactNumber != null && contactNumber.size() > 0) {
-            StringBuilder builder = new StringBuilder();
-
-            if (contactNumber.get(0).equals(FirebaseHelper.NEW_PATIENT)) {
-                builder.append(Checker.NOT_AVAILABLE);
-            } else {
-                for (String number : contactNumber) {
-                    builder.append(number).append("\n");
-                }
-                builder.deleteCharAt(builder.length()-1);
-            }
-
-            return builder.toString();
-        }
-        else
-            return Checker.NOT_AVAILABLE;
     }
 
     public static void setDateFields(String dateOfBirth, TextView day, TextView month, TextView year) {
@@ -437,5 +360,9 @@ public class UIUtil {
             minutes.setText(timeUnits[1]);
             period.setText(isAm ? "AM" : "PM");
         }
+    }
+
+    public static String getDefaultPassword(Person person) {
+        return person.getLastname() + 123456;
     }
 }

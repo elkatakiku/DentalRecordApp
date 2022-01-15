@@ -50,4 +50,10 @@ public class LoginRepository {
     public Task<AuthResult> login(String username, String password) {
         return mFirebaseAuth.signInWithEmailAndPassword(username, password);
     }
+
+    public void reAuthenticate(LoggedInUser loggedInUser) {
+//        AuthCredential authCredential = EmailAuthProvider.getCredential(loggedInUser.getAccount().getEmail(), loggedInUser.getAccount().getPassword());
+
+//        mFirebaseAuth.getCurrentUser().reauthenticate();
+    }
 }

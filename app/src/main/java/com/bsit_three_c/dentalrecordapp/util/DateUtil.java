@@ -174,10 +174,11 @@ public class DateUtil {
     }
 
     public static String getTime(Date date) {
+        Log.d(TAG, "getTime: date: " + date.getTime());
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
-        return calendar.get(Calendar.HOUR_OF_DAY) + "/" + calendar.get(Calendar.MINUTE);
+        return String.format(Locale.ENGLISH, "%02d", calendar.get(Calendar.HOUR_OF_DAY)) + "/" + String.format(Locale.ENGLISH, "%02d", calendar.get(Calendar.MINUTE));
     }
 
     public static String getTime(String hour, String minutes, String period) {
@@ -215,7 +216,7 @@ public class DateUtil {
 
         Log.d(TAG, "getReadableTime: is am: " + isAm);
 
-        return hourOfDay + " : " + calendar.get(Calendar.MINUTE) + " " + (isAm ? "AM" : "PM");
+        return String.format(Locale.ENGLISH, "%02d", hourOfDay) + " : " + String.format(Locale.ENGLISH, "%02d", calendar.get(Calendar.MINUTE)) + " " + (isAm ? "AM" : "PM");
     }
 
     public static boolean datePassed(Date date) {
@@ -242,5 +243,33 @@ public class DateUtil {
 
     public static String getReadableDateTime(Date dateTime) {
         return getReadableDate(dateTime) + " | " + getReadableTime(dateTime);
+    }
+
+    public static boolean isToday(Date date) {
+        boolean isToday;
+        try {
+            Date appointmentDate = dateFormat.parse(dateFormat.format(date));
+            Date today = dateFormat.parse(dateFormat.format(new Date()));
+
+            if (appointmentDate != null && today != null) {
+                isToday = today.compareTo(appointmentDate) == 0;
+            } else {
+                isToday = false;
+            }
+        } catch (ParseException e) {
+            Log.e(TAG, "stringToDate: Error parsing", e);
+            isToday = false;
+        }
+
+        return isToday;
+    }
+
+    public static Date getDate(long timeStamp) {
+        Log.d(TAG, "getDate: timeStamp: " + timeStamp);
+        return new Date(timeStamp);
+    }
+
+    public static long getTimeStamp(Date date) {
+        return date.getTime();
     }
 }

@@ -7,7 +7,7 @@
     android:background="@color/bg_home_color"
     android:fillViewport="true"
     android:orientation="vertical"
-    tools:context=".ui.patients.patient_form.PatientFormActivity">
+    tools:context=".ui.base.BaseFormActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -113,6 +113,7 @@
             android:id="@+id/tvPatientBirthdayLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_semibold"
             android:text="Birthdate"
             android:textColor="@color/label" />
 
@@ -208,6 +209,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:fontFamily="@font/open_sans_semibold"
             android:text="Age"
             android:textColor="@color/label" />
 
@@ -239,6 +241,7 @@
             android:id="@+id/tvPatientContactLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_semibold"
             android:text="Contact"
             android:textColor="@color/label" />
 

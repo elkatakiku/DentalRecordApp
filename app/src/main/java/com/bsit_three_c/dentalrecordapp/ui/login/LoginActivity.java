@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.StringRes;
@@ -47,29 +46,35 @@ public class LoginActivity extends AppCompatActivity {
 
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory()).get(LoginViewModel.class);
 
-        final EditText usernameEditText = binding.username;
-        final EditText passwordEditText = binding.password;
-        final Button loginButton = binding.btnLogin;
-        final ProgressBar loadingProgressBar = binding.loading;
+        final EditText etEmail = binding.email;
+        final EditText etPassword = binding.password;
+        final Button btnLogin = binding.btnLogin;
         intent = new Intent();
 
         loginViewModel.getLoginFormState().observe(this, loginFormState -> {
             if (loginFormState == null) {
                 return;
             }
-            loginButton.setEnabled(loginFormState.isDataValid());
+
             if (loginFormState.getUsernameError() != null) {
-                usernameEditText.setError(getString(loginFormState.getUsernameError()));
+                etEmail.setError(getString(loginFormState.getUsernameError()));
             }
+
             if (loginFormState.getPasswordError() != null) {
-                passwordEditText.setError(getString(loginFormState.getPasswordError()));
+                etPassword.setError(getString(loginFormState.getPasswordError()));
+            }
+
+            if (loginFormState.isDataValid()) {
+                etEmail.setError(null);
+                etPassword.setError(null);
             }
         });
 
         loginViewModel.getLoginResult().observe(this, loginResult -> {
             isOnline = Internet.isOnline();
 
-            loadingProgressBar.setVisibility(View.GONE);
+            setEnabled(true);
+
             if (LocalStorage.getLoggedInUser(this) != null) {
                 returnResult();
             } else if (!isOnline) {
@@ -82,7 +87,6 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e(TAG, "onCreate: login result is error");
                 showLoginFailed(loginResult.getError());
             } else if (loginResult.getSuccess() != null) {
-                Log.d(TAG, "onCreate: login result is sucess");
                 updateUiWithUser(loginResult.getSuccess());
                 returnResult();
             }
@@ -103,25 +107,56 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                loginViewModel.loginDataChanged(etEmail.getText().toString(),
+                        etPassword.getText().toString());
             }
         };
-        usernameEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
+
+        etEmail.addTextChangedListener(afterTextChangedListener);
+        etPassword.addTextChangedListener(afterTextChangedListener);
+        etPassword.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                if (!isValid()) {
+                    return false;
+                }
+                setEnabled(false);
+                loginViewModel.login(etEmail.getText().toString(), etPassword.getText().toString());
             }
             return false;
         });
 
-        loginButton.setOnClickListener(v -> {
-            loadingProgressBar.setVisibility(View.VISIBLE);
-            loginViewModel.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+        btnLogin.setOnClickListener(v -> {
+            if (!isValid()) {
+                return;
+            }
+
+            setEnabled(false);
+            loginViewModel.login(etEmail.getText().toString(), etPassword.getText().toString());
         });
+    }
+
+
+    private boolean isValid() {
+        boolean isValid = true;
+
+        if (binding.email.getText().toString().trim().isEmpty()) {
+            binding.email.setError(getString(R.string.invalid_empty_input));
+            isValid = false;
+        }
+
+        if (binding.password.getText().toString().trim().isEmpty()) {
+            binding.password.setError(getString(R.string.invalid_empty_input));
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    private void setEnabled(boolean enabled) {
+        Log.d(TAG, "setEnabled: setting fields");
+        binding.email.setEnabled(enabled);
+        binding.password.setEnabled(enabled);
+        binding.pbLoadingLogin.setVisibility(!enabled ? View.VISIBLE : View.GONE);
     }
 
     @Override

@@ -23,8 +23,8 @@ public class DentalChartRepository extends BaseRepository {
 
     public DentalChartRepository() {
         super(DENTAL_CHART_REFERENCE);
-        this.firebaseStorage = FirebaseStorage.getInstance(FirebaseHelper.FIREBASE_STORAGE_URL);
-        this.storageReference = firebaseStorage.getReference(FirebaseHelper.DENTAL_CHART_IMAGE_LOCATION);
+        this.firebaseStorage = FirebaseStorage.getInstance(FIREBASE_STORAGE_URL);
+        this.storageReference = firebaseStorage.getReference(DENTAL_CHART_IMAGE_LOCATION);
     }
 
     public static DentalChartRepository getInstance() {
@@ -36,7 +36,7 @@ public class DentalChartRepository extends BaseRepository {
 
     public Task<Uri> uploadImage(String dentalChartUid, byte[] imageByte) {
 
-        String child = dentalChartUid + FirebaseHelper.IMAGE_EXTENSION;
+        String child = dentalChartUid + IMAGE_EXTENSION;
 
         StorageMetadata metadata = new StorageMetadata
                 .Builder()

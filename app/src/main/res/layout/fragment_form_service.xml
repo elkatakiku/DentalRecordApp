@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_home_color"
     android:padding="20dp"
-    tools:context=".ui.services.services_form.ServiceFormActivity">
+    tools:context=".ui.base.BaseFormActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout9"
@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -51,11 +52,11 @@
         android:id="@+id/linearLayout11"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout9"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout9">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout9">
 
         <TextView
             android:id="@+id/textView49"
@@ -85,14 +86,15 @@
         android:layout_marginTop="16dp"
         android:text="Description"
         android:textColor="@color/label"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout11"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout11" />
 
     <EditText
         android:id="@+id/etAddServiceDescription"
         android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_height="0dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
         android:background="@color/bg_field"
         android:ems="10"
         android:gravity="start|top"
@@ -101,61 +103,11 @@
         android:padding="10dp"
         android:scrollbars="vertical"
         android:textColor="@color/data"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout11"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout11"
-        app:layout_constraintTop_toBottomOf="@+id/textView51" />
-
-    <TextView
-        android:id="@+id/textView50"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Procedure"
-        android:textColor="@color/label"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/etAddServiceDescription"
-        app:layout_constraintTop_toBottomOf="@+id/etAddServiceDescription" />
-
-    <EditText
-        android:id="@+id/etAddServiceCategory"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:background="@color/bg_field"
-        android:ems="10"
-        android:hint="Procedure"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:padding="10dp"
-        android:textColor="@color/data"
-        app:layout_constraintBaseline_toBaselineOf="@+id/btnAddServiceCategory"
-        app:layout_constraintEnd_toStartOf="@+id/btnAddServiceCategory"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/etAddServiceDescription" />
-
-    <Button
-        android:id="@+id/btnAddServiceCategory"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@color/blue_green"
-        android:text="Add"
-        app:layout_constraintEnd_toEndOf="@+id/etAddServiceDescription"
-        app:layout_constraintTop_toBottomOf="@+id/textView50" />
-
-    <ListView
-        android:id="@+id/lvServiceCategory"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
-        android:isScrollContainer="true"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
         app:layout_constraintBottom_toTopOf="@+id/btnAddService"
-        app:layout_constraintEnd_toEndOf="@+id/btnAddServiceCategory"
-        app:layout_constraintStart_toStartOf="@+id/etAddServiceCategory"
-        app:layout_constraintTop_toBottomOf="@+id/etAddServiceCategory" />
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout11"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView51"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/btnAddService"
@@ -168,8 +120,8 @@
         android:text="Confirm"
         app:cornerRadius="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/btnAddServiceCategory"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout9" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ProgressBar
         android:id="@+id/pbUploadLoading"

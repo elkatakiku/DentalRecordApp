@@ -2,7 +2,6 @@ package com.bsit_three_c.dentalrecordapp.ui.employees.employee_form;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -16,9 +15,6 @@ import com.bsit_three_c.dentalrecordapp.data.repository.AccountRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.EmployeeRepository;
 import com.bsit_three_c.dentalrecordapp.interfaces.TextChange;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -31,6 +27,7 @@ public class EmployeeSharedViewModel extends ViewModel implements TextChange {
     private final MutableLiveData<String> mStringUri = new MutableLiveData<>();
     private final MutableLiveData<byte[]> mImageByte = new MutableLiveData<>();
     private final MutableLiveData<Employee> mEmployee = new MutableLiveData<>();
+    private final MutableLiveData<Employee> mUpdatedEmployee;
     private final MutableLiveData<Account> mAccount = new MutableLiveData<>();
     private final MutableLiveData<EmergencyContact> mEmergencyContact = new MutableLiveData<>();
     private final MutableLiveData<Boolean> mEdit = new MutableLiveData<>();
@@ -49,79 +46,43 @@ public class EmployeeSharedViewModel extends ViewModel implements TextChange {
     private static final String CONTACT = "Contact Number";
     private static final String EMAIL = "Email Address";
 
-    private final ValueEventListener employeeListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot snapshot) {
-            Log.d(TAG, "onDataChange: getting employees");
-            Employee employee = snapshot.getValue(Employee.class);
-
-            if (employee != null) {
-                mEmployee.setValue(employee);
-
-                loadAccount(employee);
-                loadContact(employee);
-            }
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError error) {
-
-        }
-    };
-
-    private final ValueEventListener contactListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot snapshot) {
-            Log.d(TAG, "onDataChange: getting employees");
-            EmergencyContact contact = snapshot.getValue(EmergencyContact.class);
-
-            if (contact != null) {
-                mEmergencyContact.setValue(contact);
-            }
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError error) {
-
-        }
-    };
-
-    private final ValueEventListener accountListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot snapshot) {
-            Account account = snapshot.getValue(Account.class);
-
-            if (account != null) {
-                Log.d(TAG, "onDataChange: account retrieved: " + account);
-                mAccount.setValue(account);
-            }
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError error) {
-
-        }
-    };
+    private final EmployeeRepository.EmployeeListener employeeListener;
+    private final AccountRepository.AccountListener accountListener;
+    private final EmployeeRepository.EmergencyContactListener emergencyContactListener;
 
     public EmployeeSharedViewModel() {
         this.employeeRepository = EmployeeRepository.getInstance();
         this.accountRepository = AccountRepository.getInstance();
+
+        this.mUpdatedEmployee = new MutableLiveData<>();
+
+        this.employeeListener = new EmployeeRepository.EmployeeListener(mEmployee);
+        this.accountListener = new AccountRepository.AccountListener(mAccount);
+        this.emergencyContactListener = new EmployeeRepository.EmergencyContactListener(mEmergencyContact);
     }
 
     public void loadEmployee(String employeeUid) {
         Log.d(TAG, "loadEmployee: load employee");
-        employeeRepository.getPath(employeeUid).addListenerForSingleValueEvent(employeeListener);
+        employeeRepository
+                .getPath(employeeUid)
+                .addListenerForSingleValueEvent(employeeListener);
     }
 
-    private void loadContact(Employee employee) {
-        employeeRepository.getContactPath(employee.getEmergencyContactUid()).addListenerForSingleValueEvent(contactListener);
+    public void loadContact(Employee employee) {
+        Log.d(TAG, "loadContact: loading contact");
+        employeeRepository
+                .getEmergencyContactPath(employee.getEmergencyContactUid())
+                .addListenerForSingleValueEvent(emergencyContactListener);
     }
 
-    private void loadAccount(Employee employee) {
-        accountRepository.getPath(employee.getAccountUid()).addListenerForSingleValueEvent(accountListener);
+    public void loadAccount(Employee employee) {
+        Log.d(TAG, "loadAccount: getting account");
+        accountRepository
+                .getPath(employee.getAccountUid())
+                .addListenerForSingleValueEvent(accountListener);
     }
 
-    public Employee createEmployee(
+    public Employee updateEmployee(
             Employee employee,
             String firstname,
             String lastname,
@@ -154,6 +115,36 @@ public class EmployeeSharedViewModel extends ViewModel implements TextChange {
         return employee;
     }
 
+    public Employee createNewEmployee(String firstname,
+                                      String lastname,
+                                      String middleInitial,
+                                      String suffix,
+                                      int jobTitle,
+                                      String dateOfBirth,
+                                      int age,
+                                      List<String> contactNumbers,
+                                      String email,
+                                      String address1stPart,
+                                      String address2ndPart,
+                                      int civilStatus) {
+
+        return new Employee(
+                employeeRepository.getNewUid(),
+                firstname,
+                lastname,
+                middleInitial,
+                suffix,
+                jobTitle,
+                dateOfBirth,
+                age,
+                contactNumbers,
+                email,
+                address1stPart,
+                address2ndPart,
+                civilStatus
+        );
+    }
+
     public void setmImageByte(byte[] imageByte) {
         mImageByte.setValue(imageByte);
     }
@@ -162,15 +153,20 @@ public class EmployeeSharedViewModel extends ViewModel implements TextChange {
         return mImageByte;
     }
 
-    public void setmEmployee(Employee employee) {
-        mEmployee.setValue(employee);
-    }
-
     public LiveData<Employee> getmEmployee() {
         return mEmployee;
     }
 
+    public void setmUpdatedEmployee(Employee employee) {
+        mUpdatedEmployee.setValue(employee);
+    }
+
+    public LiveData<Employee> getmUpdatedEmployee() {
+        return mUpdatedEmployee;
+    }
+
     public void setmAccount(Account account) {
+        Log.d(TAG, "setmAccount: setting account");
         mAccount.setValue(account);
     }
 
@@ -179,6 +175,7 @@ public class EmployeeSharedViewModel extends ViewModel implements TextChange {
     }
 
     public void setmEmergencyContact(EmergencyContact emergencyContact) {
+        Log.d(TAG, "setmEmergencyContact: setting contact");
         mEmergencyContact.setValue(emergencyContact);
     }
 
@@ -204,7 +201,7 @@ public class EmployeeSharedViewModel extends ViewModel implements TextChange {
 
     public void removeListeners(Employee employee) {
         employeeRepository.getPath(employee.getUid()).removeEventListener(employeeListener);
-        employeeRepository.getContactPath(employee.getEmergencyContactUid()).removeEventListener(contactListener);
+        employeeRepository.getEmergencyContactPath(employee.getEmergencyContactUid()).removeEventListener(emergencyContactListener);
         accountRepository.getPath(employee.getAccountUid()).removeEventListener(accountListener);
     }
 
@@ -215,7 +212,6 @@ public class EmployeeSharedViewModel extends ViewModel implements TextChange {
 
     @Override
     public void dataChanged(String label, String input) {
-
         Log.d(TAG, "dataChanged: label: " + label);
         Log.d(TAG, "dataChanged: data changed");
 
@@ -281,7 +277,6 @@ public class EmployeeSharedViewModel extends ViewModel implements TextChange {
         return result;
     }
 
-
     private void setState(final String label, final Integer msg) {
         FormState field;
 
@@ -304,6 +299,9 @@ public class EmployeeSharedViewModel extends ViewModel implements TextChange {
                 break;
             case CONTACT:
                 mContact.setValue(field);
+                break;
+            case EMAIL:
+                mEmail.setValue(field);
                 break;
         }
     }

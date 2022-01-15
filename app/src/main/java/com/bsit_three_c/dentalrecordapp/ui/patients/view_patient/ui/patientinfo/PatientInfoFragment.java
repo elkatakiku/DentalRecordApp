@@ -15,10 +15,8 @@ import com.bsit_three_c.dentalrecordapp.data.adapter.ProceduresList;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentViewPatientBinding;
-import com.bsit_three_c.dentalrecordapp.ui.patients.procedure_form.ui.procedureform.ProcedureFormFragment;
+import com.bsit_three_c.dentalrecordapp.ui.patients.procedure_form.ProcedureFormFragment;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
-
-import java.util.Arrays;
 
 public class PatientInfoFragment extends Fragment {
     private static final String TAG = PatientInfoFragment.class.getSimpleName();
@@ -51,13 +49,6 @@ public class PatientInfoFragment extends Fragment {
         }
         Log.d(TAG, "onCreateView: patient passed: " + patient);
 
-//        FragmentActivity activity = requireActivity();
-//        if (viewModel.isPatientNull()) {
-//            Log.d(TAG, "onCreateView: has patient");
-//            patient = activity.getIntent().getParcelableExtra(getString(R.string.PATIENT));
-//            viewModel.setPatient(patient);
-//        }
-
         return binding.getRoot();
     }
 
@@ -84,36 +75,40 @@ public class PatientInfoFragment extends Fragment {
             }
         });
 
-        viewModel.getmProceduresCounter().observe(getViewLifecycleOwner(), integer -> {
-
-            Log.d(TAG, "onViewCreated: integer: " + integer);
-            Log.d(TAG, "onViewCreated: list size: " + viewModel.getProcedureSize());
-
-            //  Checks if there are no procedure.
-            if (integer <= 0) {
+        viewModel.hasProcedures().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (!aBoolean) {
                 binding.textViewEmptyProcedures.setVisibility(View.VISIBLE);
-                binding.proceduresLoading.setVisibility(View.INVISIBLE);
-            }
-            else {
-                binding.textViewEmptyProcedures.setVisibility(View.GONE);
-                binding.proceduresLoading.setVisibility(View.GONE);
-            }
-
-            //  Checks if procedures has been loaded from the firebase.
-            if (integer == viewModel.getProcedureSize()) {
-                Log.d(TAG, "onViewCreated: adding procedures: " + Arrays.toString(viewModel.getProcedures()));
-                proceduresList.addItems(Arrays.asList(viewModel.getProcedures()));
             } else {
-                proceduresList.clearItems();
+                binding.textViewEmptyProcedures.setVisibility(View.GONE);
             }
         });
+//
+//        viewModel.getmProceduresCounter().observe(getViewLifecycleOwner(), integer -> {
+//
+//            Log.d(TAG, "onViewCreated: integer: " + integer);
+//            Log.d(TAG, "onViewCreated: list size: " + viewModel.getProcedureSize());
+//
+//            //  Checks if there are no procedure.
+//            if (integer <= 0) {
+//                binding.textViewEmptyProcedures.setVisibility(View.VISIBLE);
+//                binding.proceduresLoading.setVisibility(View.INVISIBLE);
+//            }
+//            else {
+//                binding.textViewEmptyProcedures.setVisibility(View.GONE);
+//                binding.proceduresLoading.setVisibility(View.GONE);
+//            }
+//
+//            //  Checks if procedures has been loaded from the firebase.
+//            if (integer == viewModel.getProcedureSize()) {
+//                Log.d(TAG, "onViewCreated: adding procedures: " + Arrays.toString(viewModel.getProcedures()));
+////                proceduresList.addItems(Arrays.asList(viewModel.getProcedures()));
+//            } else {
+//                proceduresList.clearItems();
+//            }
+//        });
 
         binding.btnNewProcedure.setOnClickListener(view1 -> {
             //  Go to procedure form by navigation
-//            PatientInfoFragmentDirections.ActionFirst2FragmentToSecondFragment action =
-//                    PatientInfoFragmentDirections.actionFirst2FragmentToSecondFragment(patient);
-//            Navigation.findNavController(view1).navigate(action);
-
             getParentFragmentManager()
                     .beginTransaction()
                     .replace(R.id.nav_host_fragment_content_patient, ProcedureFormFragment.newInstance(patient, null))
@@ -140,7 +135,6 @@ public class PatientInfoFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-//        String patientUId = requireActivity().getIntent().getStringExtra(FirebaseHelper.PATIENT_UID);
         Log.d(TAG, "onResume: patient: " + patient);
         if (patient != null) {
             Log.d(TAG, "onResume: patient uid: " + patient.getUid());
@@ -152,7 +146,9 @@ public class PatientInfoFragment extends Fragment {
     public void loadProcedures() {
         Log.d(TAG, "loadProcedures: called");
         proceduresList = new ProceduresList(binding.llProceduresList, patient, this, viewModel.getServiceOptions());
-        viewModel.loadProcedure(patient);
+//        viewModel.loadProcedure(patient);
+//        viewModel.set
+        viewModel.loadProcedures(patient, proceduresList);
     }
 
     private void initializeFields(Patient patient) {

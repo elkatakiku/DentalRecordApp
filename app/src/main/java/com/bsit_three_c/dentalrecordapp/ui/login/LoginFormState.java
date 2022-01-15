@@ -37,4 +37,13 @@ class LoginFormState {
     boolean isDataValid() {
         return isDataValid;
     }
+
+    @Override
+    public String toString() {
+        return "\nLoginFormState{" +
+                "\nusernameError=" + usernameError +
+                "\npasswordError=" + passwordError +
+                "\nisDataValid=" + isDataValid +
+                "\n}";
+    }
 }

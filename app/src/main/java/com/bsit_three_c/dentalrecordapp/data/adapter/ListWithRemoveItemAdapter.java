@@ -18,7 +18,7 @@ import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListWithRemoveItemAdapter extends ArrayAdapter {
+public class ListWithRemoveItemAdapter extends ArrayAdapter<String> {
 
     private final int layoutResource;
     private final LayoutInflater layoutInflater;

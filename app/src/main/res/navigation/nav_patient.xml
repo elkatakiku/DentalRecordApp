@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/OperationFragment"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.patients.procedure_form.ui.procedureform.ProcedureFormFragment"
+        android:name="com.bsit_three_c.dentalrecordapp.ui.patients.procedure_form.ProcedureFormFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_form_procedure"/>
 

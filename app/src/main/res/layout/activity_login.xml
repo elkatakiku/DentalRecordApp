@@ -45,17 +45,17 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/open_sans_semibold"
-        android:labelFor="@id/username"
+        android:labelFor="@id/email"
         android:text="Email"
         android:textColor="@color/label"
         android:textSize="16sp"
         android:typeface="sans"
-        app:layout_constraintStart_toStartOf="@+id/username"
+        app:layout_constraintStart_toStartOf="@+id/email"
         app:layout_constraintTop_toTopOf="@+id/guideline2"
         tools:ignore="TextContrastCheck" />
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -84,7 +84,7 @@
         android:textSize="16sp"
         android:typeface="sans"
         app:layout_constraintStart_toStartOf="@+id/password"
-        app:layout_constraintTop_toBottomOf="@+id/username"
+        app:layout_constraintTop_toBottomOf="@+id/email"
         tools:text="Password" />
 
     <EditText
@@ -100,8 +100,8 @@
         android:selectAllOnFocus="true"
         android:textColor="@color/text_color"
         android:textColorHint="#9A9999"
-        app:layout_constraintEnd_toEndOf="@+id/username"
-        app:layout_constraintStart_toStartOf="@+id/username"
+        app:layout_constraintEnd_toEndOf="@+id/email"
+        app:layout_constraintStart_toStartOf="@+id/email"
         app:layout_constraintTop_toBottomOf="@+id/passwordLabel"
 
         tools:ignore="SpeakableTextPresentCheck" />
@@ -113,7 +113,7 @@
         android:layout_gravity="start"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/login_button_tint"
-        android:enabled="false"
+        android:enabled="true"
         android:fontFamily="@font/open_sans_bold"
         android:letterSpacing="0.05"
         android:paddingLeft="50dp"
@@ -177,14 +177,16 @@
         app:layout_constraintGuide_percent="0.4" />
 
     <ProgressBar
-        android:id="@+id/loading"
-        android:layout_width="20sp"
-        android:layout_height="20sp"
+        android:id="@+id/pbLoadingLogin"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_gravity="center"
         android:layout_marginEnd="10dp"
         android:backgroundTint="#FFFFFF"
+        android:indeterminateTint="@color/white"
         android:progressBackgroundTint="@color/white"
         android:progressTint="@color/white"
+        android:translationZ="3dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/btnLogin"
         app:layout_constraintEnd_toEndOf="@+id/btnLogin"

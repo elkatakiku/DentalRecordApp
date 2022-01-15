@@ -8,6 +8,7 @@
             <solid android:color="@color/bg_home_color" />
         </shape>
     </item>
+
     <item
         android:bottom="2dp"
         android:top="2dp">

@@ -1,5 +1,7 @@
 package com.bsit_three_c.dentalrecordapp.ui.employees.view_employee;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -29,12 +31,7 @@ public class EmployeeInfoViewModel extends ViewModel {
 
         this.accountListener = new AccountRepository.AccountListener(mAccount);
         this.emergencyContactListener = new EmployeeRepository.EmergencyContactListener(mEmergencyContact);
-        this.employeeListener = new EmployeeRepository.EmployeeListener(
-                mEMployee,
-                employeeRepository,
-                accountListener,
-                emergencyContactListener
-        );
+        this.employeeListener = new EmployeeRepository.EmployeeListener(mEMployee);
     }
 
     public void loadEmployeeData(String employeeUid) {
@@ -47,8 +44,22 @@ public class EmployeeInfoViewModel extends ViewModel {
         return mEMployee;
     }
 
+    public void loadAccount(String uid) {
+        Log.d("LOAD ACCOUNT", "loadAccount: getting account");
+        accountRepository
+                .getPath(uid)
+                .addValueEventListener(accountListener);
+    }
+
     public LiveData<Account> getmAccount() {
         return mAccount;
+    }
+
+    public void loadEmergencyContact(String contactUid) {
+        Log.d("LOAD CONTACT", "loadEmergencyContact: get contact");
+        employeeRepository
+                .getEmergencyContactPath(contactUid)
+                .addValueEventListener(emergencyContactListener);
     }
 
     public LiveData<EmergencyContact> getmEmergencyContact() {

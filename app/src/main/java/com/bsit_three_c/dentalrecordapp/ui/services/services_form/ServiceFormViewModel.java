@@ -15,14 +15,13 @@ import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
 
-import java.util.ArrayList;
-
 public class ServiceFormViewModel extends ViewModel {
 
     private static final String TAG = ServiceFormViewModel.class.getSimpleName();
 
     private ServiceRepository serviceRepository;
 
+    private final MutableLiveData<DentalService> mDentalService;
     private final MutableLiveData<Boolean> mUploadAttempt = new MutableLiveData<>();
     private final MutableLiveData<Integer> mError = new MutableLiveData<>();
     private final MutableLiveData<byte[]> mImageByte = new MutableLiveData<>();
@@ -31,6 +30,7 @@ public class ServiceFormViewModel extends ViewModel {
 
     public ServiceFormViewModel(ServiceRepository serviceRepository) {
         this.serviceRepository = serviceRepository;
+        this.mDentalService = new MutableLiveData<>();
     }
 
     public void addService(DentalService dentalService) {
@@ -69,12 +69,13 @@ public class ServiceFormViewModel extends ViewModel {
     public DentalService editService(
             DentalService service,
             String title,
-            String description,
-            ArrayList<String> categories) {
+            String description
+//            ,ArrayList<String> categories
+    ) {
 
         service.setTitle(UIUtil.capitalize(title));
         service.setDescription(description);
-        service.setCategories(categories);
+//        service.setCategories(categories);
 
         return service;
 
@@ -95,5 +96,13 @@ public class ServiceFormViewModel extends ViewModel {
 
     public LiveData<Integer> getmError() {
         return mError;
+    }
+
+    public void setmDentalService(DentalService dentalService) {
+        mDentalService.setValue(dentalService);
+    }
+
+    public LiveData<DentalService> getmDentalService() {
+        return mDentalService;
     }
 }

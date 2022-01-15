@@ -13,7 +13,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalService;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityViewServiceBinding;
-import com.bsit_three_c.dentalrecordapp.ui.services.services_form.ServiceFormActivity;
+import com.bsit_three_c.dentalrecordapp.ui.base.BaseFormActivity;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
@@ -53,9 +53,10 @@ public class ViewServiceActivity extends AppCompatActivity {
 
         binding.serviceFloatingActionButton.setOnClickListener(view -> {
             //  Start activity for result
-            startActivity(
-                    new Intent(ViewServiceActivity.this, ServiceFormActivity.class)
-                    .putExtra(LocalStorage.PARCEL_KEY, service));
+            startActivity(new Intent(this, BaseFormActivity.class)
+                            .putExtra(BaseFormActivity.FORM_KEY, BaseFormActivity.FORM_SERVICE)
+                            .putExtra(BaseFormActivity.SERVICE_KEY, service)
+            );
         });
     }
 

@@ -1,5 +1,7 @@
 package com.bsit_three_c.dentalrecordapp.ui.employees.employee_form;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,12 +11,29 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.data.model.Employee;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityAddEmployeeBinding;
 
 public class EmployeeFormActivity extends AppCompatActivity {
 
+    public static final String EMPLOYEE_KEY = "ARG_EF_EMPLOYEE_KEY";
+
     private AppBarConfiguration appBarConfiguration;
     private ActivityAddEmployeeBinding binding;
+
+    public static void showEmployeeForm(Context context, Employee employee) {
+        context.startActivity(new Intent(context, EmployeeFormActivity.class)
+                .putExtra(EMPLOYEE_KEY, employee));
+    }
+
+    public static void showEmployeeForm(Context context) {
+        showEmployeeForm(context, null);
+    }
+
+    public static Intent getEmployeeForm(Context context, Employee employee) {
+        return  new Intent(context, EmployeeFormActivity.class)
+                .putExtra(EMPLOYEE_KEY, employee);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

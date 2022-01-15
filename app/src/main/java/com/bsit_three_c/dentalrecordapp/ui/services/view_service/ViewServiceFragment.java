@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalService;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentAdminViewServiceBinding;
-import com.bsit_three_c.dentalrecordapp.ui.services.AdminServicesViewModel;
+import com.bsit_three_c.dentalrecordapp.ui.services.ServicesViewModel;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 
 public class ViewServiceFragment extends Fragment {
@@ -20,7 +20,7 @@ public class ViewServiceFragment extends Fragment {
     private static final String TAG = ViewServiceFragment.class.getSimpleName();
 
     private FragmentAdminViewServiceBinding binding;
-    private AdminServicesViewModel viewModel;
+    private ServicesViewModel viewModel;
 
     private DentalService service;
 
@@ -30,7 +30,7 @@ public class ViewServiceFragment extends Fragment {
         service = (DentalService) requireActivity().getIntent().getParcelableExtra(LocalStorage.PARCEL_KEY);
 
         binding = FragmentAdminViewServiceBinding.inflate(inflater, container, false);
-        viewModel = new ViewModelProvider(this, new CustomViewModelFactory()).get(AdminServicesViewModel.class);
+        viewModel = new ViewModelProvider(this, new CustomViewModelFactory()).get(ServicesViewModel.class);
 
         return binding.getRoot();
     }

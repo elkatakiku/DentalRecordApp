@@ -1,0 +1,813 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:divider="@drawable/empty_tall_divider"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:showDividers="middle">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_gravity="top"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="0dp">
+
+                <ImageView
+                    android:id="@+id/ivProfileDisplayImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/logo_final" />
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvProfileName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:text="Lastname, Firstname MI Suffix."
+                    android:textColor="@color/label"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tvProfileType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/open_sans"
+                    android:text="User Type"
+                    android:textColor="@color/field_hint" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider25"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/blue_green" />
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="10dp"
+            tools:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView37"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:text="Details"
+                        android:textColor="@color/label"
+                        android:textSize="18sp" />
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/tvEditInfo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:fontFamily="@font/open_sans"
+                            android:paddingStart="5dp"
+                            android:paddingEnd="5dp"
+                            android:text="Edit"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/label"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView101"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <View
+                    android:id="@+id/divider29"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="?android:attr/listDivider"
+                    android:backgroundTint="@color/blue_green" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvProfileFirstnameLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:text="@string/Firstname"
+                        android:textColor="@color/label"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvProfileMiddleInitialLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:text="@string/MiddleInitial"
+                        android:textColor="@color/label"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvProfileFirstname"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_weight="3"
+                        android:fontFamily="@font/open_sans"
+                        android:hint="@string/Firstname"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="5dp"
+                        android:textColor="@color/data"
+                        android:textColorHint="@color/field_hint" />
+
+                    <TextView
+                        android:id="@+id/tvProfileMiddleInitial"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/open_sans"
+                        android:hint="@string/MiddleInitial"
+                        android:textColor="@color/data"
+                        android:textColorHint="@color/field_hint" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvProfileLastnameLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:text="@string/Lastname"
+                        android:textColor="@color/label"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvProfileSuffixLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:text="Suffix"
+                        android:textColor="@color/label"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvProfileLastname"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_weight="3"
+                        android:fontFamily="@font/open_sans"
+                        android:hint="@string/Lastname"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="5dp"
+                        android:textColor="@color/data"
+                        android:textColorHint="@color/field_hint" />
+
+                    <TextView
+                        android:id="@+id/tvProfileSuffix"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/open_sans"
+                        android:hint="Suffix"
+                        android:textColor="@color/data"
+                        android:textColorHint="@color/field_hint" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView47"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:text="Birthdate"
+                        android:textColor="@color/label"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvProfileAgeLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:text="@string/Age"
+                        android:textColor="@color/label"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvProfileBirthdate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_weight="3"
+                        android:fontFamily="@font/open_sans"
+                        android:hint="Birthdate"
+                        android:textColor="@color/data"
+                        android:textColorHint="@color/field_hint" />
+
+                    <TextView
+                        android:id="@+id/tvProfileAge"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/open_sans"
+                        android:hint="Age"
+                        android:textColor="@color/data"
+                        android:textColorHint="@color/field_hint" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvProfileJobTitleLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:text="Job Title"
+                    android:textColor="@color/label"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvProfileJobTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/open_sans"
+                    android:hint="Job Title"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+
+                <TextView
+                    android:id="@+id/tvProfileContactNumberLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:text="@string/ContactNumber"
+                    android:textColor="@color/label"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvProfileContactNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/open_sans"
+                    android:hint="@string/ContactNumber"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+
+                <TextView
+                    android:id="@+id/tvProfileEmailLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:text="Email"
+                    android:textColor="@color/label"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvProfileEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/open_sans"
+                    android:hint="Email"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+
+                <TextView
+                    android:id="@+id/tvProfileAddressLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:text="@string/Address"
+                    android:textColor="@color/label"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvProfileAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/open_sans"
+                    android:hint="@string/Address"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+
+                <TextView
+                    android:id="@+id/tvProfileOccupationLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:text="@string/Occupation"
+                    android:textColor="@color/label"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvProfileOccupation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/open_sans"
+                    android:hint="@string/Occupation"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+
+                <TextView
+                    android:id="@+id/tvProfileCivilStatusLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:text="@string/CivilStatus"
+                    android:textColor="@color/label"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvProfileCivilStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/open_sans"
+                    android:hint="@string/CivilStatus"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <View
+            android:id="@+id/divider24"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/blue_green" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:text="Account"
+                    android:textColor="@color/label"
+                    android:textSize="16sp" />
+
+
+                <TextView
+                    android:id="@+id/textView76"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Details you inputted will reflect in the application."
+                    android:textColor="@color/field_hint"
+                    android:textColorHint="@color/field_hint" />
+
+                <View
+                    android:id="@+id/divider30"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_weight="1"
+                    android:background="?android:attr/listDivider"
+                    android:backgroundTint="@color/blue_green" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView69"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:text="Email"
+                        android:textColor="@color/label"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/tvEditAccountEmail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:fontFamily="@font/open_sans"
+                            android:paddingStart="5dp"
+                            android:paddingEnd="5dp"
+                            android:text="Edit"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/label"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvProfileAccountEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Email"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:text="Password"
+                        android:textColor="@color/label"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/tvEditAccountPassword"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:fontFamily="@font/open_sans"
+                            android:paddingStart="5dp"
+                            android:paddingEnd="5dp"
+                            android:text="Edit"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/label"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvProfilePassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Password"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <View
+            android:id="@+id/divider28"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/blue_green" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp">
+
+            <LinearLayout
+                android:id="@+id/llClinicInfo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:text="Clinic Details"
+                        android:textColor="@color/label"
+                        android:textSize="16sp" />
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/tvEditClinic"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:fontFamily="@font/open_sans"
+                            android:paddingStart="5dp"
+                            android:paddingEnd="5dp"
+                            android:text="Edit"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/label"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Details you inputted will reflect in the application."
+                    android:textColor="@color/field_hint"
+                    android:textColorHint="@color/field_hint" />
+
+                <View
+                    android:id="@+id/divider31"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="?android:attr/listDivider"
+                    android:backgroundTint="@color/blue_green" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:text="Name"
+                    android:textColor="@color/label"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvProfileClinicName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Name"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:text="Location"
+                    android:textColor="@color/label"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvProfileClinicLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Location"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+
+                <TextView
+                    android:id="@+id/tvClinicContactLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/ContactNumber"
+                    android:textColor="@color/label"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvClinicContactNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:hint="@string/ContactNumber"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+
+                <TextView
+                    android:id="@+id/tvProfileClinicClinicHoursLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:text="Clinic Hours"
+                    android:textColor="@color/label"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvProfileClinicClinicHours"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Clinic Hours"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+
+                <TextView
+                    android:id="@+id/tvProfileClinicOperatingTimeLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:text="Operating Time"
+                    android:textColor="@color/label"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvProfileClinicOperatingTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Operating Time"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/layoutButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnProfileDentalHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/blue_green"
+                android:text="Dental History"
+                app:icon="@drawable/ic_baseline_arrow_forward_ios_24"
+                app:iconGravity="end"
+                app:iconTint="@color/white" />
+
+            <Button
+                android:id="@+id/btnProfileAppointments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/blue_green"
+                android:text="Appointments"
+                app:icon="@drawable/ic_baseline_arrow_forward_ios_24"
+                app:iconGravity="end"
+                app:iconTint="@color/white" />
+
+            <Button
+                android:id="@+id/btnProfileAccountHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/blue_green"
+                android:text="Activity History"
+                app:icon="@drawable/ic_baseline_arrow_forward_ios_24"
+                app:iconGravity="end"
+                app:iconTint="@color/white" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

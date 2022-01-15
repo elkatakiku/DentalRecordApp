@@ -51,7 +51,6 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         this(tvMonth, tvDay, tvYear, null);
     }
 
-
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

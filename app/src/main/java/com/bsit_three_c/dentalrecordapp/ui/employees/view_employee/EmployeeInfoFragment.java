@@ -105,8 +105,15 @@ public class EmployeeInfoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewModel.getmEmployee().observe(getViewLifecycleOwner(), employee -> {
+            Log.d(TAG, "onViewCreated: employee data changed");
             if (employee != null) {
+                Log.d(TAG, "onViewCreated: got employee: " + employee);
                 initializePersonalInfoFields(employee);
+                viewModel.loadAccount(employee.getAccountUid());
+                viewModel.loadEmergencyContact(employee.getEmergencyContactUid());
+            }
+            else {
+                requireActivity().finish();
             }
         });
 
@@ -118,6 +125,7 @@ public class EmployeeInfoFragment extends Fragment {
 
         viewModel.getmEmergencyContact().observe(getViewLifecycleOwner(), emergencyContact -> {
             if (emergencyContact != null) {
+                Log.d(TAG, "onViewCreated: got emergency contact: " + emergencyContact);
                 initializeEmergencyContactFields(emergencyContact);
             }
         });

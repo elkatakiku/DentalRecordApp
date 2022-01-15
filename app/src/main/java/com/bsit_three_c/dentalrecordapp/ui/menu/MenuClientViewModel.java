@@ -6,9 +6,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.bsit_three_c.dentalrecordapp.data.model.Clinic;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalService;
 import com.bsit_three_c.dentalrecordapp.data.model.Employee;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
+import com.bsit_three_c.dentalrecordapp.data.repository.ClinicRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.EmployeeRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.ServiceRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.listeners.EmployeesEventListener;
@@ -22,20 +24,33 @@ public class MenuClientViewModel extends ViewModel {
 
     private final ServiceRepository serviceRepository;
     private final EmployeeRepository employeeRepository;
+    private final ClinicRepository clinicRepository;
 
-    private final MutableLiveData<ArrayList<DentalService>> mDentalServices = new MutableLiveData<>();
-    private final MutableLiveData<ArrayList<Employee>> mEmployees = new MutableLiveData<>();
-    private final MutableLiveData<Patient> mPatient = new MutableLiveData<>();
+    private final MutableLiveData<ArrayList<DentalService>> mDentalServices;
+    private final MutableLiveData<ArrayList<Employee>> mEmployees;
+    private final MutableLiveData<Patient> mPatient;
+    private final MutableLiveData<Clinic> mCLinic;
+
+    private final ClinicRepository.ClinicListener clinicListener;
 
     public MenuClientViewModel() {
         this.serviceRepository = ServiceRepository.getInstance();
         this.employeeRepository = EmployeeRepository.getInstance();
+        this.clinicRepository = (ClinicRepository) ClinicRepository.getInstance();
+
+        this.mDentalServices = new MutableLiveData<>();
+        this.mEmployees = new MutableLiveData<>();
+        this.mPatient = new MutableLiveData<>();
+        this.mCLinic = new MutableLiveData<>();
+
+        this.clinicListener = new ClinicRepository.ClinicListener(mCLinic);
     }
 
     public void loadData() {
         Log.d(TAG, "loadServices: called");
         serviceRepository.getServicesPath().addValueEventListener(new ServicesEventListener(mDentalServices));
         employeeRepository.getEmployeesPath().addValueEventListener(new EmployeesEventListener(mEmployees));
+        clinicRepository.getDatabaseReference().addValueEventListener(clinicListener);
     }
 
     public LiveData<ArrayList<DentalService>> getmDentalServices() {
@@ -44,5 +59,9 @@ public class MenuClientViewModel extends ViewModel {
 
     public LiveData<ArrayList<Employee>> getmEmployees() {
         return mEmployees;
+    }
+
+    public LiveData<Clinic> getmCLinic() {
+        return mCLinic;
     }
 }

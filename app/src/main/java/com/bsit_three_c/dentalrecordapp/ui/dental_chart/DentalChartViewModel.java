@@ -29,6 +29,7 @@ public class DentalChartViewModel extends ViewModel {
 
     private final MutableLiveData<byte[]> mImageByte = new MutableLiveData<>();
     private final MutableLiveData<Boolean> mHasError = new MutableLiveData<>();
+    private final MutableLiveData<DentalChart> mDentaChart = new MutableLiveData<>();
 
     public DentalChartViewModel(DentalChartRepository dentalChartRepository) {
         this.dentalChartRepository = dentalChartRepository;
@@ -67,8 +68,6 @@ public class DentalChartViewModel extends ViewModel {
     public LiveData<Boolean> getmHasError() {
         return mHasError;
     }
-
-    private final MutableLiveData<DentalChart> mDentaChart = new MutableLiveData<>();
 
     public void getChart() {
         dentalChartRepository.getDatabaseReference().addValueEventListener(new ValueEventListener() {

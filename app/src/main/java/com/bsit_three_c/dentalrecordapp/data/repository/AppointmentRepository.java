@@ -1,5 +1,7 @@
 package com.bsit_three_c.dentalrecordapp.data.repository;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
@@ -15,6 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 public class AppointmentRepository extends BaseRepository {
 
@@ -65,9 +68,9 @@ public class AppointmentRepository extends BaseRepository {
 
     public static class AppointmentListener implements ValueEventListener {
 
-        private final MutableLiveData<ArrayList<Appointment>> mAppointment;
+        private final MutableLiveData<List<Appointment>> mAppointment;
 
-        public AppointmentListener(MutableLiveData<ArrayList<Appointment>> mAppointment) {
+        public AppointmentListener(MutableLiveData<List<Appointment>> mAppointment) {
             this.mAppointment = mAppointment;
         }
 
@@ -82,12 +85,53 @@ public class AppointmentRepository extends BaseRepository {
                     return;
                 }
 
-                AppointmentRepository.initialize(appointment);
+                Log.d("APPOINTMENT", "onDataChange: initializing appointment");
+
+                initialize(appointment);
+                PatientRepository.initialize(appointment.getPatient());
+                ProcedureRepository.initialize(appointment.getProcedure());
                 appointments.add(appointment);
             }
 
             Collections.reverse(appointments);
             mAppointment.setValue(appointments);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    }
+
+    public static class CountAppointment implements ValueEventListener {
+
+        private final MutableLiveData<Integer> mTodayCount;
+        private final MutableLiveData<Integer> mUpComingCount;
+
+        public CountAppointment(MutableLiveData<Integer> mTodayCount, MutableLiveData<Integer> mUpComingCount) {
+            this.mTodayCount = mTodayCount;
+            this.mUpComingCount = mUpComingCount;
+        }
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            int todayCount = 0;
+
+            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                Appointment appointment = dataSnapshot.getValue(Appointment.class);
+
+                if (appointment == null) {
+                    return;
+                }
+
+                AppointmentRepository.initialize(appointment);
+                if (DateUtil.isToday(appointment.getDateTime()) && appointment.isDone()) {
+                    todayCount++;
+                    mTodayCount.setValue(todayCount);
+                }
+            }
+
+            mUpComingCount.setValue((int) snapshot.getChildrenCount() - todayCount);
         }
 
         @Override

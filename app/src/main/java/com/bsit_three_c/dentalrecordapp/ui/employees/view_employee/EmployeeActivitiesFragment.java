@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.databinding.FragmentListBinding;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,8 +20,11 @@ public class EmployeeActivitiesFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String UID_KEY = "AR_EA_UID_KEY";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private FragmentListBinding binding;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -47,9 +52,12 @@ public class EmployeeActivitiesFragment extends Fragment {
         return fragment;
     }
 
-    public static EmployeeActivitiesFragment newInstance() {
-        return new EmployeeActivitiesFragment();
-
+    public static EmployeeActivitiesFragment newInstance(String uid) {
+        Bundle arguments = new Bundle();
+        arguments.putString(UID_KEY, uid);
+        EmployeeActivitiesFragment employeeActivitiesFragment = new EmployeeActivitiesFragment();
+        employeeActivitiesFragment.setArguments(arguments);
+        return employeeActivitiesFragment;
     }
 
     @Override
@@ -65,6 +73,15 @@ public class EmployeeActivitiesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list_employee_activities, container, false);
+        binding = FragmentListBinding.inflate(inflater, container, false);
+
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
     }
 }

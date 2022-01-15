@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.appointments.appointment_form.AppointmentFormActivity">
+    tools:context=".ui.base.BaseFormActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -20,6 +20,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_form" />
+    <include layout="@layout/content_fragment" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

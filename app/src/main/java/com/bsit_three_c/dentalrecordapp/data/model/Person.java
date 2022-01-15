@@ -5,7 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.bsit_three_c.dentalrecordapp.R;
-import com.bsit_three_c.dentalrecordapp.data.repository.FirebaseHelper;
+import com.bsit_three_c.dentalrecordapp.data.repository.BaseRepository;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.bsit_three_c.dentalrecordapp.util.DateUtil;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
@@ -176,7 +176,7 @@ public class Person implements Parcelable {
         if (phoneNumber != null && phoneNumber.size() > 0) {
             StringBuilder builder = new StringBuilder();
 
-            if (phoneNumber.get(0).equals(FirebaseHelper.NEW_PATIENT)) {
+            if (phoneNumber.get(0).equals(BaseRepository.NEW_PATIENT)) {
                 builder.append(Checker.NOT_AVAILABLE);
             } else {
                 for (String number : phoneNumber) {
@@ -342,5 +342,9 @@ public class Person implements Parcelable {
         dest.writeInt(age);
         dest.writeString(email);
         dest.writeString(accountUid);
+    }
+
+    public static interface OnPersonClickedListener {
+        void onClick(Person person);
     }
 }

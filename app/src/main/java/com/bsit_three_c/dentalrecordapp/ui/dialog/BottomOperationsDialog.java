@@ -136,7 +136,7 @@ public class BottomOperationsDialog {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
                 builder
-                        .setTitle(R.string.delete_title)
+                        .setTitle(context.getString(R.string.delete_title, "Procedure"))
                         .setMessage(context.getString(R.string.delete_message) + " procedure: " + UIUtil.getServiceOptionsTitle(procedure.getServiceIds(), dentalServiceOptions))
                         .setPositiveButton("Yes", (dialog, which) -> {
                             removeProcedure();

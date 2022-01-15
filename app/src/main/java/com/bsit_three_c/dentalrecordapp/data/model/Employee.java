@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.bsit_three_c.dentalrecordapp.R;
@@ -18,7 +19,6 @@ import java.util.Date;
 import java.util.List;
 
 public class Employee extends Person implements Parcelable {
-    public static final String EMPLOYEE_KEY = "EMPLOYEE_KEY";
 
     private String displayImage;
     private int jobTitle;
@@ -107,7 +107,7 @@ public class Employee extends Person implements Parcelable {
         );
     }
 
-    public Employee(String displayImage,
+    public Employee(String uid,
                     String firstname,
                     String lastname,
                     String middleInitial,
@@ -122,8 +122,8 @@ public class Employee extends Person implements Parcelable {
                     int civilStatus) {
 
         this(
+                uid,
                 null,
-                displayImage,
                 firstname,
                 lastname,
                 middleInitial,
@@ -138,39 +138,6 @@ public class Employee extends Person implements Parcelable {
                 civilStatus,
                 "",
                 "",
-                new Date()
-        );
-    }
-
-    public Employee(
-                    String firstname,
-                    String lastname,
-                    String middleInitial,
-                    String suffix,
-                    int jobTitle,
-                    String dateOfBirth,
-                    int age,
-                    List<String> phoneNumber,
-                    String email,
-                    String address1stPart,
-                    String address2ndPart,
-                    int civilStatus) {
-
-        this(
-                "",
-                "",
-                firstname,
-                lastname,
-                middleInitial,
-                suffix,
-                jobTitle,
-                dateOfBirth,
-                age,
-                phoneNumber,
-                email,
-                address1stPart,
-                address2ndPart,
-                civilStatus,
                 new Date()
         );
     }
@@ -231,7 +198,10 @@ public class Employee extends Person implements Parcelable {
     }
 
     public String getJobTitle(Resources resources){
-        if (Checker.isNotDefault(civilStatus)) {
+        String TAG = "JOB TITLE";
+        Log.d(TAG, "getJobTitle: getting job title");
+        if (Checker.isNotDefault(jobTitle)) {
+            Log.d(TAG, "getJobTitle: job title: " + jobTitle);
             return resources.getStringArray(R.array.job_titles)[jobTitle];
         }
 
@@ -251,6 +221,9 @@ public class Employee extends Person implements Parcelable {
     }
 
     public String getFullAddress() {
+        if (!Checker.isDataAvailable(address) && !(Checker.isDataAvailable(address2ndPart))) {
+            return Checker.NOT_AVAILABLE;
+        }
         return address + ' ' + address2ndPart;
     }
 
