@@ -1,5 +1,7 @@
 package com.bsit_three_c.dentalrecordapp.ui.profile;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -46,9 +48,11 @@ public class BaseProfileActivity extends AppCompatActivity {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragmentContainer,
-                            ProfileFragment
-                                    .newInstance(getIntent().getStringExtra(USER_ID),
-                                            getIntent().getIntExtra(PROFILE_KEY, -1)))
+                            ProfileFragment.newInstance(
+                                    getIntent().getStringExtra(USER_ID),
+                                    getIntent().getIntExtra(PROFILE_KEY, -1)
+//                                    getIntent().getStringExtra(ACCOUNT_ID)
+                            ))
                     .commitNow();
         }
     }
@@ -65,5 +69,12 @@ public class BaseProfileActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static Intent getProfileIntent(Context context, int profile, String userId) {
+        return new Intent(context, BaseProfileActivity.class)
+                .putExtra(PROFILE_KEY, profile)
+                .putExtra(USER_ID, userId);
+//                .putExtra(ACCOUNT_ID, accountId);
     }
 }

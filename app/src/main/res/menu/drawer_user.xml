@@ -15,16 +15,16 @@
             android:id="@+id/nav_user_service"
             android:icon="@drawable/ic_baseline_medical_services_24"
             android:title="Services" />
-        <item
-            android:id="@+id/nav_user_dental_history"
-            android:icon="@drawable/ic_baseline_history_24"
-            android:title="Dental History"
-            android:visible="false" />
-        <item
-            android:id="@+id/nav_user_appointments"
-            android:icon="@drawable/ic_baseline_calendar_today_24"
-            android:title="Appointments"
-            android:visible="false" />
+<!--        <item-->
+<!--            android:id="@+id/nav_user_dental_history"-->
+<!--            android:icon="@drawable/ic_baseline_history_24"-->
+<!--            android:title="Dental History"-->
+<!--            android:visible="false" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_user_appointments"-->
+<!--            android:icon="@drawable/ic_baseline_calendar_today_24"-->
+<!--            android:title="Appointments"-->
+<!--            android:visible="false" />-->
 
     </group>
 

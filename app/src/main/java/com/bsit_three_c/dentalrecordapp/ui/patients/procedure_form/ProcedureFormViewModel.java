@@ -1,7 +1,6 @@
 package com.bsit_three_c.dentalrecordapp.ui.patients.procedure_form;
 
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -34,24 +33,23 @@ import java.util.Date;
 import java.util.List;
 
 public class ProcedureFormViewModel extends ViewModel implements TextChange, SpinnerState {
-    private static final String TAG = ProcedureFormViewModel.class.getSimpleName();
-
     private final ProcedureRepository procedureRepository;
     private final ServiceRepository serviceRepository;
 
-    private final MutableLiveData<FormState> mAmount = new MutableLiveData<>();
-    private final MutableLiveData<FormState> mPayment = new MutableLiveData<>();
-    private final MutableLiveData<FormState> mBalance = new MutableLiveData<>();
-    private final MutableLiveData<FormState> mServices = new MutableLiveData<>();
-    private final MutableLiveData<List<DentalService>> mDentalServices = new MutableLiveData<>();
+    private final MutableLiveData<FormState> mAmount;
+    private final MutableLiveData<FormState> mPayment;
+    private final MutableLiveData<FormState> mBalance;
+    private final MutableLiveData<FormState> mServices;
+    private final MutableLiveData<List<DentalService>> mDentalServices;
 
-    private final ArrayList<DentalServiceOption> serviceOptions = new ArrayList<>();
+    private final ArrayList<DentalServiceOption> serviceOptions;
+
+    private final ValueEventListener servicesEventListener;
 
     private double amount;
     private double payment;
     private Double balance;
 
-    private static final String DESCRIPTION = "Description";
     private static final String AMOUNT = "Amount";
     private static final String PAYMENT = "Payment";
     private static final String BALANCE = "Balance";
@@ -62,13 +60,19 @@ public class ProcedureFormViewModel extends ViewModel implements TextChange, Spi
         this.procedureRepository = procedureRepository;
         this.serviceRepository = serviceRepository;
 
-        serviceOptions.add(new DentalServiceOption(ServiceOptionsAdapter.DEFAULT_OPTION, ServiceOptionsAdapter.DEFAULT_OPTION, false));
+        this.mAmount = new MutableLiveData<>();
+        this.mPayment = new MutableLiveData<>();
+        this.mBalance = new MutableLiveData<>();
+        this.mServices = new MutableLiveData<>();
+        this.mDentalServices = new MutableLiveData<>();
+
+        this.serviceOptions = new ArrayList<>();
+
+        this.serviceOptions.add(new DentalServiceOption(ServiceOptionsAdapter.DEFAULT_OPTION, ServiceOptionsAdapter.DEFAULT_OPTION, false));
+        this.servicesEventListener = new ServiceRepository.ServicesListener(mDentalServices);
     }
 
-    private final ValueEventListener servicesEventListener = new ServiceRepository.ServicesListener(mDentalServices);
-
     public void loadServices() {
-        Log.d(TAG, "loadServices: called");
         serviceRepository.getServicesPath().addValueEventListener(servicesEventListener);
     }
 
@@ -162,21 +166,11 @@ public class ProcedureFormViewModel extends ViewModel implements TextChange, Spi
             String dentalPayment,
             String dentalBalance) {
 
-
-        //  Create new Dental Operation
-//        Procedure procedure = createProcedure(appointment.getPatient(), service, dentalDesc,
-//                dentalDate, dentalAmount, isDownpayment, dentalBalance);
-        ProgressNote progressNote = createProgressNote(dentalDesc, appointment.getDateTime(), dentalPayment);
-//        Procedure procedure = new Procedure(
-//                procedureRepository.getNewUid(),
-//                appointment.getPatient().getUid(),
-//                service,
-//                dentalDesc,
-//                DateUtil.getDate(dentalDate),
-//                UIUtil.convertToDouble(dentalAmount),
-//                isDownpayment,
-//                UIUtil.convertToDouble(dentalBalance)
-//        );
+        ProgressNote progressNote = createProgressNote(
+                dentalDesc,
+                appointment.getDateTime(),
+                dentalPayment
+        );
 
         Procedure procedure = appointment.getProcedure();
 
@@ -184,15 +178,6 @@ public class ProcedureFormViewModel extends ViewModel implements TextChange, Spi
         procedure.setDentalTotalAmount(UIUtil.convertToDouble(dentalAmount));
         procedure.setDownpayment(isDownpayment);
         procedure.setDentalBalance(UIUtil.convertToDouble(dentalBalance));
-
-//        ProgressNote progressNote = new ProgressNote(
-//                procedureRepository.getNewUid(),
-//                DateUtil.getDate(dentalDate),
-//                dentalDesc,
-//                UIUtil.convertToDouble(dentalPayment)
-//        );
-
-        Log.d(TAG, "createResultIntent: saving procedure: " + procedure);
 
         appointment.setProcedure(procedure);
         procedure.addPaymentKey(progressNote.getUid());
@@ -211,8 +196,6 @@ public class ProcedureFormViewModel extends ViewModel implements TextChange, Spi
                                 String dentalPayment,
                                 String dentalBalance) {
 
-        Log.d(TAG, "uploadProcedure: adding procedure model");
-
         ProgressNote progressNote = createProgressNote(dentalDesc, appointment.getDateTime(), dentalPayment);
 
         Procedure procedure = appointment.getProcedure();
@@ -228,8 +211,28 @@ public class ProcedureFormViewModel extends ViewModel implements TextChange, Spi
         uploadProcedure(appointment.getPatient(), procedure, progressNote);
     }
 
+    public void uploadProcedure(
+            Appointment appointment,
+            String dentalDesc,
+            String dentalAmount,
+            boolean isDownpayment) {
+
+        ProgressNote progressNote = createProgressNote(dentalDesc, appointment.getDateTime(), dentalAmount);
+
+        Procedure procedure = appointment.getProcedure();
+
+        procedure.setDentalDesc(dentalDesc);
+        procedure.setDentalTotalAmount(UIUtil.convertToDouble(dentalAmount));
+        procedure.setDownpayment(isDownpayment);
+        procedure.setDentalBalance(0);
+
+        appointment.setProcedure(procedure);
+        procedure.addPaymentKey(progressNote.getUid());
+
+        uploadProcedure(appointment.getPatient(), procedure, progressNote);
+    }
+
     private void uploadProcedure(Patient patient, Procedure procedure, ProgressNote progressNote) {
-        Log.d(TAG, "uploadProcedure: uploadprocedure");
         procedure.addPaymentKey(progressNote.getUid());
         ProgressNoteRepository
                 .getInstance()
@@ -302,6 +305,7 @@ public class ProcedureFormViewModel extends ViewModel implements TextChange, Spi
     private ProgressNote createProgressNote(String dentalDesc,
                                             Date dentalDate,
                                             String dentalPayment) {
+
         return new ProgressNote(
                 procedureRepository.getNewUid(),
                 DateUtil.getDate(dentalDate),
@@ -314,8 +318,8 @@ public class ProcedureFormViewModel extends ViewModel implements TextChange, Spi
         return mError;
     }
 
-    public void addProcedure(Patient patient, List<String> service, String dentalDesc, Date dentalDate,
-                             String dentalAmount, boolean isFullyPaid) {
+    public void uploadProcedure(Patient patient, List<String> service, String dentalDesc, Date dentalDate,
+                                String dentalAmount, boolean isFullyPaid) {
         uploadProcedure(
                 patient,
                 service,
@@ -364,8 +368,6 @@ public class ProcedureFormViewModel extends ViewModel implements TextChange, Spi
     }
 
     private void setState(String label, int msg) {
-
-        Log.d(TAG, "setState: setting label: " + label);
 
         FormState field;
 

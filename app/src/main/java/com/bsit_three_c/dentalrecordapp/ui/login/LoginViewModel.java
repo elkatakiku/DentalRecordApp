@@ -20,6 +20,7 @@ import com.bsit_three_c.dentalrecordapp.data.repository.AdminRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.EmployeeRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.LoginRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.PatientRepository;
+import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -72,17 +73,17 @@ public class LoginViewModel extends ViewModel {
     public void loginDataChanged(String email, String password) {
         Log.d(TAG, "loginDataChanged: email: " + email);
         Log.d(TAG, "loginDataChanged: password: " + password);
-        Log.d(TAG, "loginDataChanged: password valid: " + isPasswordValid(password));
+        Log.d(TAG, "loginDataChanged: password valid: " + Checker.isPasswordValid(password));
 
         if (!isEmailValid(email)) {
             loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
         }
 
-        if (!isPasswordValid(password)) {
+        if (!Checker.isPasswordValid(password)) {
             loginFormState.setValue(new LoginFormState(null, R.string.invalid_password));
         }
 
-        if (isEmailValid(email) && isPasswordValid(password)){
+        if (isEmailValid(email) && Checker.isPasswordValid(password)){
             loginFormState.setValue(new LoginFormState(true));
         }
     }
@@ -94,11 +95,6 @@ public class LoginViewModel extends ViewModel {
         } else {
             return !username.trim().isEmpty();
         }
-    }
-
-    // A placeholder password validation check
-    private boolean isPasswordValid(String password) {
-        return password != null && password.trim().length() > 5;
     }
 
     private class LoginUser extends AsyncTask<String, Void, Void> {
@@ -129,7 +125,9 @@ public class LoginViewModel extends ViewModel {
 
                         FirebaseUser user = authResult.getUser();
                         if (user != null) {
-                            accountRepository.getPath(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            accountRepository
+                                    .getPath(user.getUid())
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     Account account = snapshot.getValue(Account.class);
@@ -190,46 +188,81 @@ public class LoginViewModel extends ViewModel {
 
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
-            Log.d(TAG, "onDataChange: employee uid: " + snapshot.getKey());
+            Log.d(TAG, "onDataChange: node key: " + snapshot.getKey());
+            Log.d(TAG, "onDataChange: snapshot value: " + snapshot.getChildren());
             Log.d(TAG, "onDataChange: data result count: " + snapshot.getChildrenCount());
 
             for (DataSnapshot data : snapshot.getChildren()) {
-                Log.d(TAG, "onDataChange: data uid: " + data.getKey());
-
-                switch (account.getUserType()) {
-                    case Account.TYPE_ADMIN:
-                        Person admin = snapshot.getValue(Person.class);
-
-                        if (admin != null) {
-                            Log.d(TAG, "onDataChange: account uid: " + account.getUid());
-                            Log.d(TAG, "onDataChange: has admin: " + admin);
-                            setLoggedInUser(admin, account);
-                        }
-
-                        break;
-                    case Account.TYPE_EMPLOYEE:
-                        Employee user = data.getValue(Employee.class);
-
-                        if (user != null) {
-                            Log.d(TAG, "onDataChange: account uid: " + account.getUid());
-                            Log.d(TAG, "onDataChange: has employee: " + user);
-                            setLoggedInUser(user, account);
-                        }
-
-                        break;
-                    case Account.TYPE_PATIENT:
-
-                        Patient patient = data.getValue(Patient.class);
-
-                        if (patient != null) {
-                            Log.d(TAG, "onDataChange: account uid: " + account.getUid());
-                            Log.d(TAG, "onDataChange: has patient: " + patient);
-                            setLoggedInUser(patient, account);
-                        }
-
-                        break;
-                }
+                Log.d(TAG, "onDataChange: data key: " + data.getKey());
             }
+
+            switch (account.getUserType()) {
+                case Account.TYPE_ADMIN:
+                    Person admin = snapshot.getValue(Person.class);
+
+                    if (admin != null) {
+                        Log.d(TAG, "onDataChange: account uid: " + account.getUid());
+                        Log.d(TAG, "onDataChange: has admin: " + admin);
+                        setLoggedInUser(admin, account);
+                    }
+                    break;
+                case Account.TYPE_EMPLOYEE:
+
+                    for (DataSnapshot data : snapshot.getChildren()) {
+                        EmployeeRepository
+                                .getInstance()
+                                .getPath(data.getKey())
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        Employee employee = snapshot.getValue(Employee.class);
+
+                                        if (employee != null) {
+                                            Log.d(TAG, "onDataChange: account uid: " + account.getUid());
+                                            Log.d(TAG, "onDataChange: has employee: " + employee);
+                                            EmployeeRepository.initialize(employee);
+                                            setLoggedInUser(employee, account);
+                                            return;
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+                        Log.d(TAG, "onDataChange: data key: " + data.getKey());
+                    }
+
+                    break;
+                case Account.TYPE_PATIENT:
+                    for (DataSnapshot data : snapshot.getChildren()) {
+                        PatientRepository
+                                .getInstance()
+                                .getPath(data.getKey())
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        Patient patient = snapshot.getValue(Patient.class);
+
+                                        if (patient != null) {
+                                            Log.d(TAG, "onDataChange: account uid: " + account.getUid());
+                                            Log.d(TAG, "onDataChange: has employee: " + patient);
+                                            PatientRepository.initialize(patient);
+                                            setLoggedInUser(patient, account);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+                    }
+
+                    break;
+                }
         }
 
         @Override

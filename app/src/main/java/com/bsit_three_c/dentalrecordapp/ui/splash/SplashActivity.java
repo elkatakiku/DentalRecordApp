@@ -14,6 +14,7 @@ import com.bsit_three_c.dentalrecordapp.databinding.ActivitySplashBinding;
 import com.bsit_three_c.dentalrecordapp.ui.main.MainActivity;
 import com.bsit_three_c.dentalrecordapp.ui.splash.ui.main.SectionsPagerAdapter;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
+import com.google.android.material.snackbar.Snackbar;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -99,12 +100,11 @@ public class SplashActivity extends AppCompatActivity {
 
             }
         });
-
-//        TabLayout tabs = binding.tabs;
-//        tabs.setupWithViewPager(viewPager);
     }
 
     private void goToHome() {
+        Snackbar.make(binding.getRoot(), "Sending user to home.", Snackbar.LENGTH_SHORT)
+                .show();
         startActivity(new Intent(SplashActivity.this, MainActivity.class));
         finish();
     }

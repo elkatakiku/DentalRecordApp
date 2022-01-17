@@ -61,10 +61,6 @@ public class ServiceRepository extends BaseRepository {
         storageReference.child(service.getServiceUID() + ".png").delete();
     }
 
-//    public void getServices() {
-//        databaseReference.orderByChild("title").addValueEventListener(servicesEventListener);
-//    }
-
     public Query getServicesPath() {
         return databaseReference.orderByChild("title");
     }
@@ -99,7 +95,7 @@ public class ServiceRepository extends BaseRepository {
             service.setCategories(new ArrayList<>());
     }
 
-    public void setServicesOptions(ArrayList<DentalService> dentalServices, ArrayList<DentalServiceOption> serviceOptions) {
+    public void setServicesOptions(List<DentalService> dentalServices, ArrayList<DentalServiceOption> serviceOptions) {
         serviceOptions.clear();
         serviceOptions.add(new DentalServiceOption(ServiceOptionsAdapter.DEFAULT_OPTION, ServiceOptionsAdapter.DEFAULT_OPTION, false));
         for (DentalService dentalService : dentalServices) {
@@ -143,6 +139,38 @@ public class ServiceRepository extends BaseRepository {
 
             Log.d(TAG, "onDataChange: snapshot count: " + snapshot.getChildrenCount());
             Log.d(TAG, "onDataChange: snapshot: " + snapshot);
+            if (!(snapshot.getChildrenCount() <= 0)) {
+
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    DentalService service = data.getValue(DentalService.class);
+
+                    if (service == null) continue;
+
+                    ServiceRepository.initializeService(service);
+                    dentalServices.add(service);
+                }
+            }
+
+            mDentalServices.setValue(dentalServices);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    }
+
+    public static class ServicesEventListener implements ValueEventListener {
+
+        private final MutableLiveData<ArrayList<DentalService>> mDentalServices;
+
+        public ServicesEventListener(MutableLiveData<ArrayList<DentalService>> mDentalServices) {
+            this.mDentalServices = mDentalServices;
+        }
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            final ArrayList<DentalService> dentalServices = new ArrayList<>();
             if (!(snapshot.getChildrenCount() <= 0)) {
 
                 for (DataSnapshot data : snapshot.getChildren()) {

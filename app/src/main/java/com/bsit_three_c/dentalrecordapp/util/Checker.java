@@ -100,4 +100,8 @@ public class Checker {
             return !username.trim().isEmpty();
         }
     }
+
+    public static boolean isPasswordValid(String password) {
+        return password != null && password.trim().length() > 5;
+    }
 }

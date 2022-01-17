@@ -134,6 +134,19 @@ public class UIUtil {
         return title;
     }
 
+    public static String getServiceOptionsTitle(String serviceUid, List<DentalService> dentalServiceOptions) {
+        String title = null;
+
+        for (DentalService service : dentalServiceOptions) {
+            if (service.getServiceUID().equals(serviceUid)){
+                title = service.getTitle();
+                break;
+            }
+        }
+
+        return title;
+    }
+
     public static boolean isServiceSelected(List<String> serviceUds, String serviceUid) {
         for (String uid : serviceUds) {
             if (uid.equals(serviceUid)) {
@@ -162,7 +175,10 @@ public class UIUtil {
 
         Log.d(TAG, "getServiceTitle: capacity: " + services.capacity());
         Log.d(TAG, "getServiceTitle: last index: " + services.lastIndexOf(" | "));
-        services.delete(services.lastIndexOf(" | "), services.capacity());
+        int indexLast = services.lastIndexOf(" | ");
+        if (indexLast != -1) {
+            services.delete(indexLast, services.capacity());
+        }
 
         return services.toString();
     }
@@ -265,8 +281,6 @@ public class UIUtil {
         Intent redirectUser = null;
         switch (type) {
             case Account.TYPE_ADMIN:
-                redirectUser = new Intent(context, MainAdminActivity.class);
-                break;
             case Account.TYPE_EMPLOYEE:
                 redirectUser = new Intent(context, MainAdminActivity.class);
                 break;
@@ -287,6 +301,15 @@ public class UIUtil {
     }
 
     public static void setText(int data, TextView textView) {
+        String notAvailable = "N/A";
+
+        if (data >= 0)
+            textView.setText(String.valueOf(data));
+        else
+            textView.setText(notAvailable);
+    }
+
+    public static void setText(double data, TextView textView) {
         String notAvailable = "N/A";
 
         if (data >= 0)

@@ -8,13 +8,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.data.model.Clinic;
+import com.bsit_three_c.dentalrecordapp.databinding.FragmentAboutBinding;
+import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 public class AboutFragment extends Fragment {
 
     private AboutViewModel mViewModel;
+    private FragmentAboutBinding binding;
 
     public static AboutFragment newInstance() {
         return new AboutFragment();
@@ -23,14 +27,26 @@ public class AboutFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_about, container, false);
+        mViewModel = new ViewModelProvider(this).get(AboutViewModel.class);
+        binding = FragmentAboutBinding.inflate(inflater, container, false);
+
+        mViewModel.getClinic();
+
+        return binding.getRoot();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(AboutViewModel.class);
-        // TODO: Use the ViewModel
-    }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
+        mViewModel.getmClinic().observe(getViewLifecycleOwner(), new Observer<Clinic>() {
+            @Override
+            public void onChanged(Clinic clinic) {
+                if (clinic != null) {
+                    UIUtil.setText(clinic.getContactNumber(), binding.tvAboutContact);
+                    UIUtil.setText(clinic.getLocation(), binding.tvAboutLocation);
+                }
+            }
+        });
+    }
 }

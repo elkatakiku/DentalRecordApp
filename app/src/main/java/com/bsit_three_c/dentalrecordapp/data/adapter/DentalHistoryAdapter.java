@@ -1,6 +1,7 @@
 package com.bsit_three_c.dentalrecordapp.data.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ public class DentalHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
     private DentalHistoryClickListener mDentalHistoryClickListener;
 
     public interface DentalHistoryClickListener {
-        void onAppointmentClick(DentalServiceOption dentalServiceOption);
+        void onAppointmentClick(Procedure procedure);
     }
 
     public DentalHistoryAdapter(Context context) {
@@ -48,6 +49,7 @@ public class DentalHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     public void addItem(Procedure procedure) {
+        Log.d("ADD", "addItem: adding procedure: " + procedure);
         this.procedures.add(procedure);
     }
 
@@ -69,9 +71,13 @@ public class DentalHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        Log.d("DENTAL HISTORY VIEW", "onBindViewHolder: setting dental history view");
 
         DentalHistoryViewHolder itemViewHolder = (DentalHistoryViewHolder) holder;
         Procedure procedure = procedures.get(position);
+
+        Log.d("SERVICES", "onBindViewHolder: dental services ids: " + procedure.getServiceIds());
+        Log.d("SERVICES", "onBindViewHolder: dental services: " + dentalServiceOptions);
 
         itemViewHolder.service.setText(UIUtil.getServiceOptionsTitle(procedure.getServiceIds(), dentalServiceOptions));
         itemViewHolder.date.setText(DateUtil.getReadableDate(DateUtil.convertToDate(procedure.getDentalDate())));
@@ -80,12 +86,12 @@ public class DentalHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
         itemViewHolder.isPaid.setTextColor(UIUtil.getCheckBoxColor(procedure.getDentalBalance()));
 
         itemViewHolder.itemView.setOnClickListener(v -> mDentalHistoryClickListener.onAppointmentClick(
-                dentalServiceOptions.get(holder.getAdapterPosition())));
+                procedures.get(holder.getAdapterPosition())));
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return procedures.size();
     }
 
     public void setmAppointmentOnClickListener(DentalHistoryClickListener dentalHistoryClickListener) {

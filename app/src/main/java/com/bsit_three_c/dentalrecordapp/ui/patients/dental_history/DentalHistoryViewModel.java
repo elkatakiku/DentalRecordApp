@@ -1,7 +1,5 @@
 package com.bsit_three_c.dentalrecordapp.ui.patients.dental_history;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -15,7 +13,6 @@ import com.bsit_three_c.dentalrecordapp.data.model.Procedure;
 import com.bsit_three_c.dentalrecordapp.data.repository.PatientRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.ProcedureRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.ServiceRepository;
-import com.bsit_three_c.dentalrecordapp.data.repository.listeners.ServicesEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -24,30 +21,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DentalHistoryViewModel extends ViewModel {
-    private static final String TAG = DentalHistoryViewModel.class.getSimpleName();
-    // TODO: Implement the ViewModel
 
     private final ServiceRepository serviceRepository;
     private final ProcedureRepository procedureRepository;
     private final PatientRepository patientRepository;
 
-    private final MutableLiveData<String> mPatientUid = new MutableLiveData<>();
-    private final MutableLiveData<Patient> mPatient = new MutableLiveData<>();
-    private final MutableLiveData<ArrayList<DentalService>> mDentalServices = new MutableLiveData<>();
+    private final MutableLiveData<String> mPatientUid;
+    private final MutableLiveData<Patient> mPatient;
+    private final MutableLiveData<ArrayList<DentalService>> mDentalServices;
 
-    private final ArrayList<DentalServiceOption> serviceOptions = new ArrayList<>();
+    private final ArrayList<DentalServiceOption> serviceOptions;
 
-    private final PatientRepository.PatientListener patientsListener = new PatientRepository.PatientListener(mPatient);
+    private final ValueEventListener patientsListener;
+    private final ValueEventListener servicesEventListener;
 
     public DentalHistoryViewModel() {
         this.serviceRepository = ServiceRepository.getInstance();
         this.procedureRepository = ProcedureRepository.getInstance();
         this.patientRepository = PatientRepository.getInstance();
+
+        this.mPatientUid = new MutableLiveData<>();
+        this.mPatient = new MutableLiveData<>();
+        this.mDentalServices = new MutableLiveData<>();
+
+        this.serviceOptions = new ArrayList<>();
+
+        this.patientsListener = new PatientRepository.PatientListener(mPatient);
+        this.servicesEventListener = new ServiceRepository.ServicesEventListener(mDentalServices);
     }
 
     public void loadServices() {
-        Log.d(TAG, "loadServices: called");
-        serviceRepository.getServicesPath().addListenerForSingleValueEvent(new ServicesEventListener(mDentalServices));
+        serviceRepository.getServicesPath().addListenerForSingleValueEvent(servicesEventListener);
     }
 
     public LiveData<ArrayList<DentalService>> getmDentalServices() {
@@ -62,8 +66,10 @@ public class DentalHistoryViewModel extends ViewModel {
         return serviceOptions;
     }
 
-    public void loadProcedures(String patientUid) {
-        patientRepository.getPath(patientUid).addValueEventListener(patientsListener);
+    public void getPatient(String patientUid) {
+        patientRepository
+                .getPath(patientUid)
+                .addValueEventListener(patientsListener);
     }
 
     public LiveData<Patient> getmPatient() {
@@ -84,7 +90,7 @@ public class DentalHistoryViewModel extends ViewModel {
                             if (procedure != null) {
                                 ProcedureRepository.initialize(procedure);
                                 adapter.addItem(procedure);
-                                adapter.notifyItemChanged(adapter.getItemCount());
+                                adapter.notifyItemInserted(adapter.getItemCount());
                             }
                         }
 
@@ -103,5 +109,12 @@ public class DentalHistoryViewModel extends ViewModel {
 
     public LiveData<String> getmPatientUid() {
         return mPatientUid;
+    }
+
+    public void removeListeners() {
+        Patient patient = mPatient.getValue();
+        if (patient != null) {
+            patientRepository.getPath(patient.getUid()).removeEventListener(patientsListener);
+        }
     }
 }

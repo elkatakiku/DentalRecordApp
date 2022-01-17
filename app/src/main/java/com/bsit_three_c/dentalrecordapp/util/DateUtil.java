@@ -246,9 +246,13 @@ public class DateUtil {
     }
 
     public static boolean isToday(Date date) {
+        return isToday(dateFormat.format(date));
+    }
+
+    public static boolean isToday(String date) {
         boolean isToday;
         try {
-            Date appointmentDate = dateFormat.parse(dateFormat.format(date));
+            Date appointmentDate = dateFormat.parse(date);
             Date today = dateFormat.parse(dateFormat.format(new Date()));
 
             if (appointmentDate != null && today != null) {

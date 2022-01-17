@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.bsit_three_c.dentalrecordapp.R;
@@ -25,7 +24,7 @@ public class Employee extends Person implements Parcelable {
     private String address2ndPart;
     private String emergencyContactUid;
 
-    private String especialties;
+    private List<String> specialties;
 
     public Employee() {
     }
@@ -198,10 +197,7 @@ public class Employee extends Person implements Parcelable {
     }
 
     public String getJobTitle(Resources resources){
-        String TAG = "JOB TITLE";
-        Log.d(TAG, "getJobTitle: getting job title");
         if (Checker.isNotDefault(jobTitle)) {
-            Log.d(TAG, "getJobTitle: job title: " + jobTitle);
             return resources.getStringArray(R.array.job_titles)[jobTitle];
         }
 
@@ -243,12 +239,28 @@ public class Employee extends Person implements Parcelable {
         this.emergencyContactUid = emergencyContactUid;
     }
 
-    public String getEspecialties() {
-        return especialties;
+    public List<String> getSpecialties() {
+        return specialties;
     }
 
-    public void setEspecialties(String especialties) {
-        this.especialties = especialties;
+    public void setSpecialties(List<String> specialties) {
+        this.specialties = specialties;
+    }
+
+    public String getSpecialty() {
+        if (specialties != null && specialties.size() > 0) {
+            StringBuilder builder = new StringBuilder();
+
+            for (String number : specialties) {
+                builder.append(number).append("\n");
+            }
+
+            builder.deleteCharAt(builder.length()-1);
+
+            return builder.toString();
+        }
+        else
+            return Checker.NOT_AVAILABLE;
     }
 
     @Override

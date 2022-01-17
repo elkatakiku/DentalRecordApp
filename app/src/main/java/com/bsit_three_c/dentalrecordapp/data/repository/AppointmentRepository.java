@@ -34,7 +34,7 @@ public class AppointmentRepository extends BaseRepository {
         return instance;
     }
 
-    public Query getAppointmentsByLastname() {
+    public Query getAppointmentsByTimeStamp() {
         return databaseReference.orderByChild("timeStamp");
     }
 
@@ -116,6 +116,7 @@ public class AppointmentRepository extends BaseRepository {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             int todayCount = 0;
+            int upComingCount = 0;
 
             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                 Appointment appointment = dataSnapshot.getValue(Appointment.class);
@@ -129,9 +130,11 @@ public class AppointmentRepository extends BaseRepository {
                     todayCount++;
                     mTodayCount.setValue(todayCount);
                 }
+                else if (!DateUtil.datePassed(appointment.getDateTime()) && !appointment.isDone()) {
+                    upComingCount++;
+                    mUpComingCount.setValue(upComingCount);
+                }
             }
-
-            mUpComingCount.setValue((int) snapshot.getChildrenCount() - todayCount);
         }
 
         @Override

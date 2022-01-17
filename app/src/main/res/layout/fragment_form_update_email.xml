@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
@@ -16,13 +17,21 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/textView43"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans_bold"
             android:text="Update Email Address"
             android:textColor="@color/label"
             android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvEditEmailEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans"
+            android:text="Email address"
+            android:textColor="@color/field_hint" />
 
         <View
             android:id="@+id/divider27"
@@ -91,14 +100,32 @@
             android:minHeight="100dp"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnUpdateEmail"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:backgroundTint="@color/blue_green"
-                android:fontFamily="@font/open_sans_semibold"
-                android:text="Update Email Address" />
+                android:layout_height="wrap_content">
+
+                <ProgressBar
+                    android:id="@+id/updateEmailLoading"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="16dp"
+                    android:elevation="5dp"
+                    android:indeterminateTint="@color/white"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <Button
+                    android:id="@+id/btnEAUpdateEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:backgroundTint="@color/blue_green"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:text="Update Email Address" />
+
+            </FrameLayout>
 
             <Button
                 android:id="@+id/btnUpdateEmailCancel"

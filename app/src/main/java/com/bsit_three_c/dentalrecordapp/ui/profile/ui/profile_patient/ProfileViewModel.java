@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.Clinic;
+import com.bsit_three_c.dentalrecordapp.data.model.EmergencyContact;
 import com.bsit_three_c.dentalrecordapp.data.model.Employee;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Person;
@@ -14,6 +15,7 @@ import com.bsit_three_c.dentalrecordapp.data.repository.AdminRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.ClinicRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.EmployeeRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.PatientRepository;
+import com.google.firebase.database.ValueEventListener;
 
 public class ProfileViewModel extends ViewModel {
     // TODO: Implement the ViewModel
@@ -30,12 +32,14 @@ public class ProfileViewModel extends ViewModel {
     private final MutableLiveData<Clinic> mClinic;
     private final MutableLiveData<Employee> mEmployee;
     private final MutableLiveData<Patient> mPatient;
+    private final MutableLiveData<EmergencyContact> mEmergencyContact;
 
     private final AccountRepository.AccountListener accountListener;
     private final AdminRepository.AdminListener adminListener;
     private final ClinicRepository.ClinicListener clinicListener;
     private final EmployeeRepository.EmployeeListener employeeListener;
     private final PatientRepository.PatientListener patientListener;
+    private final ValueEventListener contactListener;
 
     public ProfileViewModel() {
         this.accountRepository = AccountRepository.getInstance();
@@ -50,12 +54,14 @@ public class ProfileViewModel extends ViewModel {
         this.mClinic = new MutableLiveData<>();
         this.mEmployee = new MutableLiveData<>();
         this.mPatient = new MutableLiveData<>();
+        this.mEmergencyContact = new MutableLiveData<>();
 
         this.accountListener = new AccountRepository.AccountListener(mAccount);
         this.adminListener = new AdminRepository.AdminListener(mAdmin);
         this.clinicListener = new ClinicRepository.ClinicListener(mClinic);
         this.employeeListener = new EmployeeRepository.EmployeeListener(mEmployee);
         this.patientListener = new PatientRepository.PatientListener(mPatient);
+        this.contactListener = new EmployeeRepository.EmergencyContactListener(mEmergencyContact);
     }
 
     public void getPatient(String uid) {
@@ -88,6 +94,16 @@ public class ProfileViewModel extends ViewModel {
 
     public LiveData<Employee> getmEmployee() {
         return mEmployee;
+    }
+
+    public void getContact(String uid) {
+        employeeRepository
+                .getEmergencyContactPath(uid)
+                .addValueEventListener(contactListener);
+    }
+
+    public LiveData<EmergencyContact> getmEmergencyContact() {
+        return mEmergencyContact;
     }
 
     public void getAccount(String uid) {

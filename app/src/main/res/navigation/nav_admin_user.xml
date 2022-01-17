@@ -21,25 +21,25 @@
         android:id="@+id/nav_patients"
         android:name="com.bsit_three_c.dentalrecordapp.ui.patients.PatientsFragment"
         android:label="Patients"
-        tools:layout="@layout/fragment_list_patients" />
+        tools:layout="@layout/fragment_list" />
 
     <fragment
         android:id="@+id/nav_service"
         android:name="com.bsit_three_c.dentalrecordapp.ui.services.ServicesFragment"
         android:label="Services"
-        tools:layout="@layout/fragment_list_services"/>
+        tools:layout="@layout/fragment_list"/>
 
     <fragment
         android:id="@+id/nav_employees"
         android:name="com.bsit_three_c.dentalrecordapp.ui.employees.EmployeesFragment"
         android:label="Employees"
-        tools:layout="@layout/fragment_list_employees"/>
+        tools:layout="@layout/fragment_list"/>
 
     <fragment
         android:id="@+id/nav_appointments"
         android:name="com.bsit_three_c.dentalrecordapp.ui.appointments.AppointmentsFragment"
         android:label="Appointments"
-        tools:layout="@layout/fragment_list_appointments"/>
+        tools:layout="@layout/fragment_list"/>
 
     <fragment
         android:id="@+id/nav_dental_chart"
@@ -47,11 +47,11 @@
         android:label="Dental Chart"
         tools:layout="@layout/fragment_dental_chart" />
 
-    <fragment
-        android:id="@+id/nav_accounts"
-        android:name="com.bsit_three_c.dentalrecordapp.ui.accounts.AccountsFragment"
-        android:label="Accounts"
-        tools:layout="@layout/fragment_accounts_frag" />
+<!--    <fragment-->
+<!--        android:id="@+id/nav_accounts"-->
+<!--        android:name="com.bsit_three_c.dentalrecordapp.ui.accounts.AccountsFragment"-->
+<!--        android:label="Accounts"-->
+<!--        tools:layout="@layout/fragment_accounts_frag" />-->
     <fragment
         android:id="@+id/nav_about"
         android:name="com.bsit_three_c.dentalrecordapp.ui.about.AboutFragment"

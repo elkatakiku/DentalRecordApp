@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -19,24 +21,36 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.Account;
+import com.bsit_three_c.dentalrecordapp.data.model.Employee;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
+import com.bsit_three_c.dentalrecordapp.data.model.Person;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityMainAdminBinding;
+import com.bsit_three_c.dentalrecordapp.ui.accounts.edit_account.EditAccountFragment;
 import com.bsit_three_c.dentalrecordapp.ui.dental_chart.DentalChartActivity;
 import com.bsit_three_c.dentalrecordapp.ui.login.LoginViewModelFactory;
 import com.bsit_three_c.dentalrecordapp.ui.profile.BaseProfileActivity;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 public class MainAdminActivity extends AppCompatActivity {
 
     private static final String TAG = MainAdminActivity.class.getSimpleName();
 
     private static final int NAV_LOGOUT = R.id.nav_logout;
-//    private static final int SETTINGS = R.id.nav_settings;
     private AppBarConfiguration mAppBarConfiguration;
     private MainAdminViewModel viewModel;
     private ActivityMainAdminBinding binding;
+
+    final ActivityResultLauncher<Intent> profileResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    if (result.getData().getBooleanExtra(EditAccountFragment.DELETE_KEY, false)) {
+                        logout();
+                    }
+                }
+            });
 
 
     @Override
@@ -57,7 +71,8 @@ public class MainAdminActivity extends AppCompatActivity {
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_menu, R.id.nav_dashboard, R.id.nav_patients, R.id.nav_employees,
-                R.id.nav_service, R.id.nav_appointments, R.id.nav_dental_chart, R.id.nav_accounts,
+                R.id.nav_service, R.id.nav_appointments, R.id.nav_dental_chart,
+//                R.id.nav_accounts,
                 R.id.nav_about)
                 .setOpenableLayout(drawer)
                 .build();
@@ -74,8 +89,10 @@ public class MainAdminActivity extends AppCompatActivity {
             if (loggedInUser != null) {
                 if (loggedInUser.getType() == Account.TYPE_PATIENT) {
                     logout();
-                } else {
-                    setUserUi(navigationView, loggedInUser, menu);
+                } else if (loggedInUser.getType() == Account.TYPE_EMPLOYEE){
+                    viewModel.getEmployee(loggedInUser.getAccount().getUserUid());
+                } else if (loggedInUser.getType() == Account.TYPE_ADMIN) {
+                    viewModel.getAdmin();
                 }
             }
             else {
@@ -83,9 +100,18 @@ public class MainAdminActivity extends AppCompatActivity {
             }
         });
 
-        Log.d(TAG, "onCreate: stack count: " + getFragmentManager().getBackStackEntryCount());
+        viewModel.getmEmployee().observe(this, employee -> {
+            if (employee != null) {
+                setUserUi(navigationView, employee, menu);
+            }
+        });
 
-        Log.d(TAG, "onCreate: current fragment: " + getFragmentManager().findFragmentById(R.layout.fragment_list_patients));
+        viewModel.getmAdmin().observe(this, person -> {
+            if (person != null) {
+                setUserUi(navigationView, person, menu);
+            }
+        });
+
     }
 
     @Override
@@ -114,16 +140,12 @@ public class MainAdminActivity extends AppCompatActivity {
                 break;
             case PROFILE_ID:
                 if (viewModel.getmLoggedInUser().getValue() != null) {
-                    if (viewModel.getmLoggedInUser().getValue().getType() == Account.TYPE_ADMIN) {
-                        startActivity(new Intent(MainAdminActivity.this, BaseProfileActivity.class)
-                                .putExtra(BaseProfileActivity.USER_ID, viewModel.getmLoggedInUser().getValue().getPerson().getUid())
-                                .putExtra(BaseProfileActivity.PROFILE_KEY, BaseProfileActivity.PROFILE_ADMIN));
-                    }
-                    else if (viewModel.getmLoggedInUser().getValue().getType() == Account.TYPE_EMPLOYEE) {
-                        startActivity(new Intent(MainAdminActivity.this, BaseProfileActivity.class)
-                                .putExtra(BaseProfileActivity.USER_ID, viewModel.getmLoggedInUser().getValue().getPerson().getUid())
-                                .putExtra(BaseProfileActivity.PROFILE_KEY, BaseProfileActivity.PROFILE_EMPLOYEE));
-                    }
+                    LoggedInUser loggedInUser = viewModel.getmLoggedInUser().getValue();
+                    profileResult.launch(BaseProfileActivity.getProfileIntent(
+                            this,
+                            loggedInUser.getType() == Account.TYPE_ADMIN ? BaseProfileActivity.PROFILE_ADMIN : BaseProfileActivity.PROFILE_EMPLOYEE,
+                            viewModel.getmLoggedInUser().getValue().getPerson().getUid()
+                    ));
                 }
                 break;
         }
@@ -161,17 +183,21 @@ public class MainAdminActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    private void setUserUi(NavigationView navigationView, LoggedInUser loggedInUser, Menu menu) {
-        if (loggedInUser.getType() == Account.TYPE_EMPLOYEE) {
+    private void setUserUi(NavigationView navigationView, Person person, Menu menu) {
+        if (person instanceof Employee) {
             Log.d(TAG, "onCreate: has logged in user");
-            setVisibility(menu, false, R.id.nav_dashboard, R.id.nav_employees, R.id.nav_accounts);
-        } else if (loggedInUser.getType() == Account.TYPE_ADMIN){
+            setVisibility(menu, false, R.id.nav_dashboard, R.id.nav_employees
+//                    , R.id.nav_accounts
+            );
+        } else {
             Log.d(TAG, "onCreate: has no logged in user");
-            setVisibility(menu, true, R.id.nav_dashboard, R.id.nav_employees, R.id.nav_accounts);
+            setVisibility(menu, true, R.id.nav_dashboard, R.id.nav_employees
+//                    , R.id.nav_accounts
+            );
         }
 
         menu.findItem(R.id.nav_menu).setChecked(true);
-        updateHeader(navigationView, loggedInUser);
+        updateHeader(navigationView, person);
     }
 
     private void setVisibility(Menu menu, boolean visible, int... menuIds) {
@@ -186,23 +212,6 @@ public class MainAdminActivity extends AppCompatActivity {
                 loggedInUser.getType() == Account.TYPE_EMPLOYEE) {
             menu.findItem(R.id.nav_dental_chart).setOnMenuItemClickListener(item -> {
                 startActivity(new Intent(MainAdminActivity.this, DentalChartActivity.class));
-//                Snackbar
-//                        .make(binding.getRoot(), "Show dental chart.", Snackbar.LENGTH_SHORT)
-//                        .show();
-//                final View view = getLayoutInflater().inflate(R.layout.dialog_dental_chart, null);
-//
-//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//                builder.setView(view);
-//
-//                AlertDialog alertDialog = builder
-//                        .setTitle("Dental Chart")
-//                        .create();
-//                view.findViewById(R.id.ibDentalChartClose).setOnClickListener(v -> alertDialog.dismiss());
-//
-//                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-//
-//                alertDialog.show();
-
                 return true;
             });
         }
@@ -211,11 +220,6 @@ public class MainAdminActivity extends AppCompatActivity {
             logout();
             return true;
         });
-
-//        menu.findItem(SETTINGS).setOnMenuItemClickListener(item -> {
-//            startActivity(new Intent(MainAdminActivity.this, SettingsActivity.class));
-//            return true;
-//        });
     }
 
     @Override
@@ -224,7 +228,7 @@ public class MainAdminActivity extends AppCompatActivity {
         else super.onBackPressed();
     }
 
-    private void updateHeader(NavigationView navigationView, LoggedInUser loggedInUser) {
+    private void updateHeader(NavigationView navigationView, Person person) {
         View view = navigationView.getHeaderView(0);
         TextView displayName = view.findViewById(R.id.navTxtViewUsername);
         TextView email = view.findViewById(R.id.navTxtViewEmail);
@@ -232,17 +236,13 @@ public class MainAdminActivity extends AppCompatActivity {
         view.findViewById(R.id.tvHeaderSystemName).setVisibility(View.GONE);
         view.findViewById(R.id.headerUserDisplay).setVisibility(View.VISIBLE);
 
-        UIUtil.setText(loggedInUser.getDisplayName(), displayName);
-        UIUtil.setText(loggedInUser.getEmail(), email);
-    }
-
-    private void sendUserToGuestHome() {
-        Intent homeIntent = new Intent(MainAdminActivity.this, MainActivity.class);
-        startActivity(homeIntent);
-        finish();
+        UIUtil.setText(person.getFullName(), displayName);
+        UIUtil.setText(person.getEmail(), email);
     }
 
     private void logout() {
+        Snackbar.make(binding.getRoot(), "Logging out user.", Snackbar.LENGTH_SHORT)
+                .show();
         Log.d(TAG, "onNavigationItemSelected: Clearing saved user info");
         LocalStorage.clearSavedUser(this);
 
@@ -254,5 +254,12 @@ public class MainAdminActivity extends AppCompatActivity {
 
         Log.d(TAG, "onNavigationItemSelected: killing activity");
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
+        viewModel.removeListeners();
     }
 }

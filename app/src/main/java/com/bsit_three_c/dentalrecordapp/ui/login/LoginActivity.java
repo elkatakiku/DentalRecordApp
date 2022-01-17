@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityLoginBinding;
+import com.bsit_three_c.dentalrecordapp.ui.base.BaseFormActivity;
 import com.bsit_three_c.dentalrecordapp.util.Internet;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 
@@ -77,10 +78,12 @@ public class LoginActivity extends AppCompatActivity {
 
             if (LocalStorage.getLoggedInUser(this) != null) {
                 returnResult();
-            } else if (!isOnline) {
+            }
+            else if (!isOnline) {
                 Internet.showSnackBarInternetError(binding.getRoot());
                 return;
-            } else if (loginResult == null) {
+            }
+            else if (loginResult == null) {
                 Log.e(TAG, "onCreate: login result is null");
                 return;
             } else if (loginResult.getError() != null) {
@@ -91,6 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                 returnResult();
             }
 
+//            Toast.makeText(this, "Done checking result", Toast.LENGTH_SHORT).show();
             setResult(Activity.RESULT_CANCELED);
         });
 
@@ -133,6 +137,9 @@ public class LoginActivity extends AppCompatActivity {
             setEnabled(false);
             loginViewModel.login(etEmail.getText().toString(), etPassword.getText().toString());
         });
+
+        binding.tvForgotPassword.setOnClickListener(v ->
+                startActivity(BaseFormActivity.getForgotPasswordIntent(LoginActivity.this)));
     }
 
 

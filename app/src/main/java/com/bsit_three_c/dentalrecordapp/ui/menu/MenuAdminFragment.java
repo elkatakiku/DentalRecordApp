@@ -10,13 +10,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.model.Account;
-import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentAdminMenuBinding;
 import com.bsit_three_c.dentalrecordapp.ui.base.BaseFormActivity;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.PopUpOptionDialog;
@@ -49,27 +47,37 @@ public class MenuAdminFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mViewModel.getmLoggedInUser().observe(getViewLifecycleOwner(), new Observer<LoggedInUser>() {
-            @Override
-            public void onChanged(LoggedInUser loggedInUser) {
-                if (loggedInUser == null || loggedInUser.getType() == Account.TYPE_PATIENT) {
-                    logout();
-                    return;
-                } else if (loggedInUser.getType() == Account.TYPE_ADMIN){
-                    binding.llAdminMenu.setVisibility(View.VISIBLE);
-                    binding.llEmployeeMenu.setVisibility(View.GONE);
-                    initializeAdminMenu();
-                } else if (loggedInUser.getType() == Account.TYPE_EMPLOYEE) {
-                    binding.llAdminMenu.setVisibility(View.GONE);
-                    binding.llEmployeeMenu.setVisibility(View.VISIBLE);
-                    initializeEmployeeMenu();
-                }
-
-                binding.tvAdminGreet.setText(getString(
-                        R.string.greet_admin,
-                        loggedInUser.getLastname()
-                ));
+        mViewModel.getmLoggedInUser().observe(getViewLifecycleOwner(), loggedInUser -> {
+            if (loggedInUser == null || loggedInUser.getType() == Account.TYPE_PATIENT) {
+                logout();
+                return;
+            } else if (loggedInUser.getType() == Account.TYPE_ADMIN){
+                binding.llAdminMenu.setVisibility(View.VISIBLE);
+                binding.llEmployeeMenu.setVisibility(View.GONE);
+                initializeAdminMenu();
+                mViewModel.getAdmin();
+            } else if (loggedInUser.getType() == Account.TYPE_EMPLOYEE) {
+                binding.llAdminMenu.setVisibility(View.GONE);
+                binding.llEmployeeMenu.setVisibility(View.VISIBLE);
+                mViewModel.getEmployee(loggedInUser.getAccount().getUserUid());
+                initializeEmployeeMenu();
             }
+
+            mViewModel.getmEmployee().observe(getViewLifecycleOwner(), employee -> {
+                if (employee != null) {
+                    binding.tvAdminGreet.setText(getString(
+                            R.string.greet_admin, employee.getLastname()
+                    ));
+                }
+            });
+
+            mViewModel.getmAdmin().observe(getViewLifecycleOwner(), person -> {
+                if (person != null) {
+                    binding.tvAdminGreet.setText(getString(
+                            R.string.greet_admin, person.getLastname()
+                    ));
+                }
+            });
         });
 
     }

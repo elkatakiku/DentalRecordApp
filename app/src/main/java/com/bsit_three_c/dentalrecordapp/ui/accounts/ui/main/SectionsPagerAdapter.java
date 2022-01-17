@@ -17,7 +17,7 @@ import com.bsit_three_c.dentalrecordapp.R;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.PATIENT, R.string.EMPLOYEE, R.string.ADMIN};
+    private static final int[] TAB_TITLES = new int[]{R.string.PATIENT, R.string.EMPLOYEE};
     private final Context mContext;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
@@ -41,6 +41,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // Show 2 total pages.
-        return 3;
+        return TAB_TITLES.length;
     }
 }

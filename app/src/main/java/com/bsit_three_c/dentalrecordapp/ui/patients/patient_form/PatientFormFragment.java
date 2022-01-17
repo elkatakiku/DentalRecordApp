@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,10 +36,6 @@ import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 import com.google.android.material.snackbar.Snackbar;
 
 public class PatientFormFragment extends Fragment {
-    private static final String TAG = PatientFormFragment.class.getSimpleName();
-
-//    public static final String APPOINTMENT_RESULT = "APPOINTMENT_RESULT_PATIENT";
-
     private static final String PATIENT_KEY = "ARG_PF_PATIENT_KEY";
     private static final String APPOINTMENT_KEY = "ARG_PF_APPOINTMENT_KEY";
 
@@ -55,13 +50,7 @@ public class PatientFormFragment extends Fragment {
 
     private final ActivityResultLauncher<Intent> toAddProcedureResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
     result -> {
-
-        Log.d(TAG, "onActivityResult: success code: " + RESULT_OK);
-        Log.d(TAG, "onActivityResult: result code: " + result.getResultCode());
-        Log.d(TAG, "onActivityResult: data: " + result.getData());
-
         if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-            //  TODO: get is adding patient success
             requireActivity().setResult(RESULT_OK, result.getData());
             requireActivity().finish();
         }
@@ -98,19 +87,16 @@ public class PatientFormFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewModel.getmAccount().observe(getViewLifecycleOwner(), mAccount -> {
-            Log.d(TAG, "onCreateView: account changed");
             if (mAccount != null){
                 account = mAccount;
                 binding.etPatientAge.setEnabled(false);
                 binding.etPatientFormEmail.setText(account.getEmail());
                 binding.etPatientFormEmail.setEnabled(false);
             }
-            Log.d(TAG, "onCreateView: account updated: " + account);
         });
 
         viewModel.getmError().observe(getViewLifecycleOwner(), integer -> {
             if (integer != null && integer != Checker.VALID) {
-                Log.d(TAG, "onChanged: has an error");
                 Snackbar
                         .make(binding.btnAddPatient, integer, Snackbar.LENGTH_SHORT)
                         .show();
@@ -162,18 +148,6 @@ public class PatientFormFragment extends Fragment {
             int civilStatus = binding.spnrCivilStatus.getSelectedItemPosition();
             String occupation = binding.eTxtOccupation.getText().toString().trim();
 
-//            Log.d(TAG, "onViewCreated: info: " +
-//                    "\nfirstname: " + firstname +
-//                    "\nlastname: " + lastname +
-//                    "\nMI: " + middleInitial +
-//                    "\nsuffix: " + suffix +
-//                    "\nbday: " + dateOfBirth +
-//                    "\naddress: " + address +
-//                    "\nmobile number: " + numbersAdapter.getList() +
-//                    "\nage: " + age +
-//                    "\ncivil status: " + civilStatus +
-//                    "\noccupation: " + occupation);
-
             boolean isInputValid = true;
 
             if (!Checker.isDataAvailable(firstname)) {
@@ -208,9 +182,6 @@ public class PatientFormFragment extends Fragment {
                 ));
                 toAddProcedureResult.launch(
                         BaseFormActivity.getProcedureFormIntent(requireContext(), appointment));
-//                        new Intent(requireContext(), BaseFormActivity.class)
-//                        .putExtra(BaseFormActivity.FORM_KEY, BaseFormActivity.FORM_PROCEDURE)
-//                        .putExtra(BaseFormActivity.APPOINTMENT_KEY, appointment));
                 return;
             }
 
@@ -267,9 +238,6 @@ public class PatientFormFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-
-        Log.d(TAG, "onPause: patient form pause called");
-
         viewModel.setmError(null);
         viewModel.setmCreateAttempt(true);
         viewModel.setmPatient(null);
@@ -347,6 +315,15 @@ public class PatientFormFragment extends Fragment {
                 binding.tvPatientYear
         );
         UIUtil.setField(patient.getAddress(), binding.eTxtAddress);
+
+        if (Checker.isDataAvailable(patient.getDateOfBirth())) {
+            binding.etPatientAge.setEnabled(false);
+        }
+
+        if (Checker.isDataAvailable(patient.getEmail())) {
+            binding.etPatientFormEmail.setText(patient.getEmail());
+            binding.etPatientFormEmail.setEnabled(false);
+        }
 
         if (patient.getAge() >= 0)
             binding.etPatientAge.setText(String.valueOf(patient.getAge()));

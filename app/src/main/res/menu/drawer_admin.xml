@@ -34,10 +34,10 @@
             android:icon="@drawable/ic_baseline_calendar_today_24"
             android:title="Appointments" />
 
-        <item
-            android:id="@+id/nav_accounts"
-            android:icon="@drawable/ic_baseline_supervisor_account_24"
-            android:title="Accounts" />
+<!--        <item-->
+<!--            android:id="@+id/nav_accounts"-->
+<!--            android:icon="@drawable/ic_baseline_supervisor_account_24"-->
+<!--            android:title="Accounts" />-->
 
         <item
             android:id="@+id/nav_dental_chart"

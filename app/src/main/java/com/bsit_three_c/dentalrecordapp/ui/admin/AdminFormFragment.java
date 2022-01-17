@@ -87,15 +87,12 @@ public class AdminFormFragment extends Fragment {
             }
         });
 
-        mViewModel.getmAdmin().observe(getViewLifecycleOwner(), new Observer<Person>() {
-            @Override
-            public void onChanged(Person person) {
-                if (person != null) {
-                    initializeFields(person);
-                }
-                else {
-                    returnResult(Activity.RESULT_CANCELED, new Intent());
-                }
+        mViewModel.getmAdmin().observe(getViewLifecycleOwner(), person -> {
+            if (person != null) {
+                initializeFields(person);
+            }
+            else {
+                returnResult(Activity.RESULT_CANCELED, new Intent());
             }
         });
 
@@ -160,7 +157,6 @@ public class AdminFormFragment extends Fragment {
             }
 
             if (!isInputValid) {
-//                    || !mViewModel.isStateValid()) {
                 return;
             }
 

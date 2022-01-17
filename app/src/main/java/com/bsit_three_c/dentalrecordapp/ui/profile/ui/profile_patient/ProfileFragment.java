@@ -5,11 +5,11 @@ import static android.app.Activity.RESULT_OK;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -25,6 +25,7 @@ import com.bsit_three_c.dentalrecordapp.data.model.Employee;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.model.Person;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentProfileBinding;
+import com.bsit_three_c.dentalrecordapp.ui.accounts.edit_account.EditAccountFragment;
 import com.bsit_three_c.dentalrecordapp.ui.base.BaseFormActivity;
 import com.bsit_three_c.dentalrecordapp.ui.base.BaseListActivity;
 import com.bsit_three_c.dentalrecordapp.ui.employees.employee_form.EmployeeFormActivity;
@@ -54,7 +55,7 @@ public class ProfileFragment extends Fragment {
             Log.d(TAG, "has result: " + result.getData());
             String resultUid = result.getData().getStringExtra(EDIT_INFO_KEY);
             if (resultUid != null) {
-                Log.d(TAG, "setting uid: ");
+                Log.d(TAG, "setting uid: result uid: " + resultUid);
                 mViewModel.setUid(resultUid);
             }
         }
@@ -64,17 +65,6 @@ public class ProfileFragment extends Fragment {
         if (result.getResultCode() == RESULT_OK && result.getData() != null) {
 
         }
-
-
-
-//                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-//                    Log.d(TAG, "has result: " + result.getData());
-//                    String resultUid = result.getData().getStringExtra(EDIT_INFO_KEY);
-//                    if (resultUid != null) {
-//                        Log.d(TAG, "setting uid: ");
-//                        mViewModel.setUid(resultUid);
-//                    }
-//                }
     });
 
     public static ProfileFragment newInstance(String uid, int profile) {
@@ -95,6 +85,8 @@ public class ProfileFragment extends Fragment {
         if (getArguments() != null) {
             mViewModel.setUid(getArguments().getString(UID_KEY));
             this.profile = getArguments().getInt(PROFILE_KEY, -1);
+        } else {
+            requireActivity().finish();
         }
 
         return binding.getRoot();
@@ -168,14 +160,22 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        binding.tvEditAccountEmail.setOnClickListener(v -> {
-            editResult.launch(new Intent(requireContext(), BaseFormActivity.class)
-                    .putExtra(BaseFormActivity.FORM_KEY, BaseFormActivity.FORM_UPDATE_EMAIL));
-        });
+        final ActivityResultLauncher<Intent> accountResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        if (result.getData().getBooleanExtra(EditAccountFragment.DELETE_KEY, false)) {
+                            requireActivity().setResult(RESULT_OK, result.getData());
+                            requireActivity().finish();
+                        }
+                    }
+                });
 
-        binding.tvEditAccountPassword.setOnClickListener(v ->
-                editResult.launch(new Intent(requireContext(), BaseFormActivity.class)
-                .putExtra(BaseFormActivity.FORM_KEY, BaseFormActivity.FORM_UPDATE_PASSWORD)));
+        binding.tvEditAccount.setOnClickListener(v ->
+                accountResult.launch(
+                        BaseFormActivity.getEditAccountForm(
+                                requireContext(),
+                                mViewModel.getmAccount().getValue().getUid()
+                        )));
     }
 
     private void initializeInfoFields(Person person) {
@@ -210,26 +210,27 @@ public class ProfileFragment extends Fragment {
         binding.btnProfileAppointments.setVisibility(View.VISIBLE);
         binding.btnProfileAccountHistory.setVisibility(View.GONE);
         binding.llClinicInfo.setVisibility(View.GONE);
+        binding.cvSpecialties.setVisibility(View.GONE);
+        binding.llEmergencyContactInfo.setVisibility(View.GONE);
 
         UIUtil.setText(patient.getAddress(), binding.tvProfileAddress);
         UIUtil.setText(patient.getOccupation(), binding.tvProfileOccupation);
 
-        binding.tvEditInfo.setOnClickListener(v -> {
-            editResult.launch(new Intent(requireContext(), BaseFormActivity.class)
-            .putExtra(BaseFormActivity.FORM_KEY, BaseFormActivity.FORM_PATIENT)
-            .putExtra(BaseFormActivity.PATIENT_KEY, patient)
-            .putExtra(BaseFormActivity.APPOINTMENT_KEY, (Parcelable) null));
-        });
+        binding.tvEditInfo.setOnClickListener(v ->
+                editResult.launch(BaseFormActivity.getPatientFormIntent(requireContext(), patient)));
 
         binding.btnProfileDentalHistory.setOnClickListener(v ->
                 requireActivity().startActivity(new Intent(requireActivity(), BaseListActivity.class)
                 .putExtra(BaseListActivity.LIST_KEY, BaseListActivity.DENTAL_HISTORY_LIST)
                 .putExtra(getString(R.string.USER_UID_KEY), mViewModel.getmUid().getValue())));
 
-        binding.btnProfileAppointments.setOnClickListener(v ->
-                requireActivity().startActivity(new Intent(requireActivity(), BaseListActivity.class)
-                .putExtra(BaseListActivity.LIST_KEY, BaseListActivity.APPOINTMENT_LIST)
-                .putExtra(getString(R.string.USER_UID_KEY), mViewModel.getmUid().getValue())));
+        binding.btnProfileAppointments.setOnClickListener(v -> {
+            Log.d(TAG, "initializePatientsFields: going to appointments");
+            Log.d(TAG, "initializePatientsFields: uid: " + mViewModel.getmUid().getValue());
+            requireActivity().startActivity(new Intent(requireActivity(), BaseListActivity.class)
+                    .putExtra(BaseListActivity.LIST_KEY, BaseListActivity.APPOINTMENT_LIST)
+                    .putExtra(getString(R.string.USER_UID_KEY), mViewModel.getmUid().getValue()));
+        });
     }
 
     private void initializeEmployeeFields(Employee employee) {
@@ -242,6 +243,8 @@ public class ProfileFragment extends Fragment {
         binding.btnProfileAppointments.setVisibility(View.GONE);
         binding.btnProfileAccountHistory.setVisibility(View.VISIBLE);
         binding.llClinicInfo.setVisibility(View.GONE);
+        binding.cvSpecialties.setVisibility(View.VISIBLE);
+        binding.llEmergencyContactInfo.setVisibility(View.VISIBLE);
 
         Glide
                 .with(requireContext())
@@ -252,22 +255,56 @@ public class ProfileFragment extends Fragment {
 
         UIUtil.setText(employee.getJobTitle(getResources()), binding.tvProfileJobTitle);
         UIUtil.setText(employee.getFullAddress(), binding.tvProfileAddress);
+        binding.tryList.removeAllViews();
+        if (employee.getSpecialties().size() > 0) {
+            for (String specialty : employee.getSpecialties()) {
+                View view = getLayoutInflater().inflate(R.layout.item_bulleted_text, null);
+                ((TextView) view.findViewById(R.id.tvBulletText)).setText(specialty);
+                binding.tryList.addView(view);
+            }
+
+            binding.tvProfileNoSpecialties.setVisibility(View.GONE);
+        } else {
+            binding.tvProfileNoSpecialties.setVisibility(View.VISIBLE);
+        }
+
+        mViewModel.getContact(employee.getEmergencyContactUid());
+
+        mViewModel.getmEmergencyContact().observe(getViewLifecycleOwner(), emergencyContact -> {
+            if (emergencyContact != null) {
+                UIUtil.setText(emergencyContact.getFullName(), binding.tvProfileContactName);
+                UIUtil.setText(emergencyContact.getFullAddress(), binding.tvProfileContactAddress);
+                UIUtil.setText(emergencyContact.getContactNumber(), binding.tvContactContactNumber);
+            }
+        });
+
+        binding.btnEditSpecialties.setOnClickListener(v -> {
+            startActivity(BaseFormActivity.getSpecialtiesFormIntent(
+                    requireContext(),
+                    mViewModel.getmUid().getValue())
+            );
+        });
 
         binding.tvEditInfo.setOnClickListener(v ->
                 editResult.launch(EmployeeFormActivity.getEmployeeForm(requireContext(), employee))
         );
-//                editResult.launch(new Intent(requireContext(), EmployeeFormActivity.class)
-//                        .putExtra(BasicInfoFormFragment.EMPLOYEE_KEY, employee)));
 
-        binding.btnProfileAccountHistory.setOnClickListener(new View.OnClickListener() {
+        binding.tvEditEmergencyContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requireActivity().startActivity(new Intent(requireActivity(), BaseListActivity.class)
-                        .putExtra(BaseListActivity.LIST_KEY, BaseListActivity.ACCOUNT_HISTORY_LIST)
-                        .putExtra(getString(R.string.USER_UID_KEY), mViewModel.getmUid().getValue())
-                );
+                requireActivity()
+                        .startActivity(BaseFormActivity.getEmergencyContactFormIntent(
+                                requireContext(),
+                                employee.getEmergencyContactUid()
+                        ));
             }
         });
+
+        binding.btnProfileAccountHistory.setOnClickListener(v ->
+                requireActivity().startActivity(new Intent(requireActivity(), BaseListActivity.class)
+                .putExtra(BaseListActivity.LIST_KEY, BaseListActivity.ACCOUNT_HISTORY_LIST)
+                .putExtra(getString(R.string.USER_UID_KEY), mViewModel.getmUid().getValue())
+        ));
 
     }
 
@@ -283,6 +320,8 @@ public class ProfileFragment extends Fragment {
         binding.btnProfileAccountHistory.setVisibility(View.GONE);
         binding.llClinicInfo.setVisibility(View.VISIBLE);
         binding.layoutButtons.setVisibility(View.GONE);
+        binding.cvSpecialties.setVisibility(View.GONE);
+        binding.llEmergencyContactInfo.setVisibility(View.GONE);
 
         UIUtil.setText(person.getAddress(), binding.tvProfileAddress);
 
@@ -294,15 +333,10 @@ public class ProfileFragment extends Fragment {
             );
         });
 
-        binding.tvEditClinic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editResult.launch(
-                        new Intent(requireContext(), BaseFormActivity.class)
-                        .putExtra(BaseFormActivity.FORM_KEY, BaseFormActivity.FORM_CLINIC)
-                );
-            }
-        });
+        binding.tvEditClinic.setOnClickListener(v -> editResult.launch(
+                new Intent(requireContext(), BaseFormActivity.class)
+                .putExtra(BaseFormActivity.FORM_KEY, BaseFormActivity.FORM_CLINIC)
+        ));
     }
 
     private void initializeClinic(Clinic clinic) {

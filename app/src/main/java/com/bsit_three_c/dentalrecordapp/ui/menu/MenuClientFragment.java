@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.data.adapter.EmployeeDisplayAdapter;
 import com.bsit_three_c.dentalrecordapp.data.adapter.ServiceDisplaysAdapter;
-import com.bsit_three_c.dentalrecordapp.data.adapter.ServicesViewHolder;
+import com.bsit_three_c.dentalrecordapp.data.model.Account;
 import com.bsit_three_c.dentalrecordapp.data.model.Employee;
 import com.bsit_three_c.dentalrecordapp.data.model.LoggedInUser;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentClientMenuBinding;
@@ -33,6 +33,7 @@ import com.bsit_three_c.dentalrecordapp.ui.base.BaseFormActivity;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.ServiceDialogFragment;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.SuccessDialogFragment;
 import com.bsit_three_c.dentalrecordapp.ui.login.LoginActivity;
+import com.bsit_three_c.dentalrecordapp.ui.main.MainAdminActivity;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
@@ -59,15 +60,21 @@ public class MenuClientFragment extends Fragment {
                 Log.d(TAG, "onActivityResult: is logged in user null: " + (loggedInUser == null));
 
                 if (loggedInUser != null) {
+                    LocalStorage.saveLoggedInUser(requireContext(), loggedInUser);
                     Log.d(TAG, "onActivityResult: user logged in: " + loggedInUser.getDisplayName());
-                    requireActivity().startActivity(UIUtil.redirectUser(requireContext(), loggedInUser.getType()));
-                    requireActivity().finish();
+                    if (loggedInUser.getType() != Account.TYPE_PATIENT) {
+                        requireActivity().startActivity(new Intent(requireContext(), MainAdminActivity.class));
+                        requireActivity().finish();
+                    } else {
+                        String greet = loggedInUser.getPerson().getLastname() + "!";
+                        binding.tvPatientHomeLastname.setText(greet);
+                    }
                 }
             }
         }
     });
 
-    private final ActivityResultLauncher<Intent> registerActivty = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+    private final ActivityResultLauncher<Intent> registerActivity = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == RESULT_OK && result.getData() != null) {
@@ -102,11 +109,13 @@ public class MenuClientFragment extends Fragment {
         GridLayoutManager manager = new GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false);
         binding.rvMenuServices.setHasFixedSize(true);
         binding.rvMenuServices.setLayoutManager(manager);
-        adapter.setmItemOnClickListener(serviceOnClickListener);
+        adapter.setmItemOnClickListener(service -> {
+            DialogFragment serviceDialog = new ServiceDialogFragment(service);
+            serviceDialog.show(getChildFragmentManager(), null);
+        });
         binding.rvMenuServices.setAdapter(adapter);
 
         EmployeeDisplayAdapter employeeDisplayAdapter = new EmployeeDisplayAdapter(requireContext());
-
         binding.rvMenuDoctorsDisplay.setHasFixedSize(true);
         binding.rvMenuDoctorsDisplay.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         binding.rvMenuDoctorsDisplay.setAdapter(employeeDisplayAdapter);
@@ -144,17 +153,33 @@ public class MenuClientFragment extends Fragment {
             }
         });
 
-        binding.btnUserAppointment.setOnClickListener(v ->
-                registerActivty.launch(BaseFormActivity.getAppointmentFormIntent(requireContext()))
-//                registerActivty.launch(new Intent(requireContext(), BaseFormActivity.class)
-//                        .putExtra(BaseFormActivity.FORM_KEY, BaseFormActivity.FORM_APPOINTMENT))
+        mViewModel.getmPatient().observe(getViewLifecycleOwner(), patient -> {
+            if (patient != null) {
+                binding.tvPatientHomeLastname.setText(patient.getLastname() + "!");
+                binding.btnMenuLogin.setVisibility(View.GONE);
+                binding.btnMenuRegister.setVisibility(View.GONE);
+            }
+        });
+
+        binding.btnUserAppointment.setOnClickListener(v -> {
+            if (mViewModel.getmPatient().getValue() != null) {
+                Log.d(TAG, "onViewCreated: has patient");
+                registerActivity
+                        .launch(BaseFormActivity.getAppointmentFormIntent(
+                                requireContext(),
+                                mViewModel.getmPatient().getValue().getUid()));
+            } else {
+                registerActivity
+                        .launch(BaseFormActivity.getAppointmentFormIntent(requireContext()));
+            }
+        }
         );
 
         binding.btnMenuLogin.setOnClickListener(v ->
                 loginActivity.launch(new Intent(requireActivity(), LoginActivity.class)));
 
         binding.btnMenuRegister.setOnClickListener(v ->
-                registerActivty.launch(new Intent(requireActivity(), BaseFormActivity.class)
+                registerActivity.launch(new Intent(requireActivity(), BaseFormActivity.class)
                         .putExtra(BaseFormActivity.FORM_KEY, BaseFormActivity.FORM_REGISTRATION)));
     }
 
@@ -163,12 +188,17 @@ public class MenuClientFragment extends Fragment {
         super.onResume();
 
         binding.pbMenuLoadingServices.setVisibility(View.VISIBLE);
+        LoggedInUser loggedInUser = LocalStorage.getLoggedInUser(requireContext());
+        if (loggedInUser != null) {
+            mViewModel.getPatient(loggedInUser.getAccount().getUserUid());
+        }
         mViewModel.loadData();
     }
 
-    private final ServicesViewHolder.ItemOnClickListener serviceOnClickListener = service -> {
-        DialogFragment serviceDialog = new ServiceDialogFragment(service);
-        serviceDialog.show(getChildFragmentManager(), null);
-    };
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+        mViewModel.removeListeners();
+    }
 }

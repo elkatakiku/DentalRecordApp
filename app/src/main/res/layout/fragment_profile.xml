@@ -10,18 +10,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/baby_blue"
         android:clipToPadding="false"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:background="@color/white"
             android:divider="@drawable/empty_tall_divider"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:showDividers="middle">
+            android:padding="16dp"
+            android:showDividers="middle"
+            tools:visibility="gone">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="75dp"
@@ -34,6 +36,7 @@
                     android:id="@+id/ivProfileDisplayImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginEnd="16dp"
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/logo_final" />
@@ -69,13 +72,117 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider"
-            android:backgroundTint="@color/blue_green" />
+            android:backgroundTint="@color/blue_green"
+            tools:visibility="gone" />
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvSpecialties"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="10dp"
+            tools:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:text="Specialties"
+                        android:textColor="@color/label"
+                        android:textSize="16sp" />
+
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/btnEditSpecialties"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:fontFamily="@font/open_sans"
+                            android:paddingStart="5dp"
+                            android:paddingEnd="5dp"
+                            android:text="Edit"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/label"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Details inputted here will be shown in the home page."
+                    android:textColor="@color/field_hint"
+                    android:textColorHint="@color/field_hint" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="1"
+                    android:background="?android:attr/listDivider"
+                    android:backgroundTint="@color/blue_green" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:minHeight="100dp">
+
+                    <LinearLayout
+                        android:id="@+id/tryList"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:orientation="vertical"></LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvProfileNoSpecialties"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/open_sans"
+                        android:text="Your specialties will show here..."
+                        android:textColor="@color/field_hint" />
+
+                </FrameLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/blue_green"
+            tools:visibility="gone" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="16dp"
+            android:layout_margin="16dp"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="10dp"
             tools:visibility="gone">
@@ -126,7 +233,9 @@
                     android:id="@+id/textView101"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:fontFamily="@font/open_sans"
+                    android:text="Details you inputted here will be recorded and used by the dentists."
+                    android:textColor="@color/field_hint" />
 
                 <View
                     android:id="@+id/divider29"
@@ -461,15 +570,19 @@
             android:id="@+id/divider24"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:background="?android:attr/listDivider"
-            android:backgroundTint="@color/blue_green" />
+            android:backgroundTint="@color/blue_green"
+            tools:visibility="gone" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="16dp"
+            android:layout_margin="16dp"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="10dp">
+            app:cardCornerRadius="10dp"
+            tools:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -477,21 +590,48 @@
                 android:layout_margin="16dp"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/open_sans_bold"
-                    android:text="Account"
-                    android:textColor="@color/label"
-                    android:textSize="16sp" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:text="Account"
+                        android:textColor="@color/label"
+                        android:textSize="16sp" />
+
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/tvEditAccount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:fontFamily="@font/open_sans"
+                            android:paddingStart="5dp"
+                            android:paddingEnd="5dp"
+                            android:text="Edit"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/label"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                </LinearLayout>
 
 
                 <TextView
                     android:id="@+id/textView76"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Details you inputted will reflect in the application."
+                    android:text="Update your account info to keep your account secure."
                     android:textColor="@color/field_hint"
                     android:textColorHint="@color/field_hint" />
 
@@ -522,25 +662,6 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvEditAccountEmail"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:fontFamily="@font/open_sans"
-                            android:paddingStart="5dp"
-                            android:paddingEnd="5dp"
-                            android:text="Edit"
-                            android:textAlignment="textEnd"
-                            android:textColor="@color/label"
-                            android:textSize="16sp" />
-                    </FrameLayout>
-
                 </LinearLayout>
 
                 <TextView
@@ -568,25 +689,6 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvEditAccountPassword"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:fontFamily="@font/open_sans"
-                            android:paddingStart="5dp"
-                            android:paddingEnd="5dp"
-                            android:text="Edit"
-                            android:textAlignment="textEnd"
-                            android:textColor="@color/label"
-                            android:textSize="16sp" />
-                    </FrameLayout>
-
                 </LinearLayout>
 
                 <TextView
@@ -604,18 +706,151 @@
             android:id="@+id/divider28"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:background="?android:attr/listDivider"
             android:backgroundTint="@color/blue_green" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="16dp">
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="10dp">
+
+            <LinearLayout
+                android:id="@+id/llEmergencyContactInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:text="Emergency Contact"
+                        android:textColor="@color/label"
+                        android:textSize="16sp" />
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/tvEditEmergencyContact"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:fontFamily="@font/open_sans"
+                            android:paddingStart="5dp"
+                            android:paddingEnd="5dp"
+                            android:text="Edit"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/label"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="The contact information you inputted here will only be used for emergencies."
+                    android:textColor="@color/field_hint"
+                    android:textColorHint="@color/field_hint" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="?android:attr/listDivider"
+                    android:backgroundTint="@color/blue_green" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:text="Name"
+                    android:textColor="@color/label"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvProfileContactName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Name"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:text="Address"
+                    android:textColor="@color/label"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvProfileContactAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Address"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+
+                <TextView
+                    android:id="@+id/tvContactContactNumberLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/ContactNumber"
+                    android:textColor="@color/label"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvContactContactNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:hint="@string/ContactNumber"
+                    android:textColor="@color/data"
+                    android:textColorHint="@color/field_hint" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/blue_green" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="10dp">
 
             <LinearLayout
                 android:id="@+id/llClinicInfo"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:orientation="vertical">
 
@@ -775,6 +1010,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:orientation="vertical">
 
             <Button

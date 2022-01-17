@@ -129,22 +129,19 @@ public class BottomOperationsDialog {
             viewHolder.balance.setText(balance);
         });
 
-        viewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        viewHolder.btnDelete.setOnClickListener(v -> {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-                builder
-                        .setTitle(context.getString(R.string.delete_title, "Procedure"))
-                        .setMessage(context.getString(R.string.delete_message) + " procedure: " + UIUtil.getServiceOptionsTitle(procedure.getServiceIds(), dentalServiceOptions))
-                        .setPositiveButton("Yes", (dialog, which) -> {
-                            removeProcedure();
-                        })
-                        .setNegativeButton("No", (dialog, which) -> alertDialog.dismiss());
-                alertDialog = builder.create();
-                alertDialog.show();
-            }
+            builder
+                    .setTitle(context.getString(R.string.delete_title, "Procedure"))
+                    .setMessage(context.getString(R.string.delete_message) + " procedure: " + UIUtil.getServiceOptionsTitle(procedure.getServiceIds(), dentalServiceOptions))
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        removeProcedure();
+                    })
+                    .setNegativeButton("No", (dialog, which) -> alertDialog.dismiss());
+            alertDialog = builder.create();
+            alertDialog.show();
         });
 
         viewHolder.btnEdit.setOnClickListener(v -> {
@@ -184,7 +181,9 @@ public class BottomOperationsDialog {
 
         for (int position = 0; position < paymentKeys.size(); position++) {
             int finalPosition = position;
-            progressNoteRepository.getPath(paymentKeys.get(position)).addListenerForSingleValueEvent(new ValueEventListener() {
+            progressNoteRepository
+                    .getPath(paymentKeys.get(position))
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -203,7 +202,6 @@ public class BottomOperationsDialog {
                         if (mBalance.getValue() != null){
                             procedure.setDentalBalance(mBalance.getValue());
                             procedureRepository.upload(procedure);
-//                            procedureRepository.updateBalance(procedure, mBalance.getValue());
                         }
                     }
                 }
@@ -225,7 +223,6 @@ public class BottomOperationsDialog {
                 for (ProgressNote item : progressNoteArrayList) {
                     progressNoteList.addItem(item);
                 }
-//                progressNoteList.addItems(progressNoteArrayList);
             }
             isDoneLoading.setValue(true);
 

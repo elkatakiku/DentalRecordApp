@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bsit_three_c.dentalrecordapp.R;
 import com.bsit_three_c.dentalrecordapp.databinding.FragmentListBinding;
 
 /**
@@ -82,6 +83,9 @@ public class EmployeeActivitiesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.fabListAdd.setVisibility(View.GONE);
 
+        binding.tvItemsWillShowHere.setText(getString(R.string.empty_list, "Account activities"));
+        binding.tvItemsWillShowHere.setVisibility(View.VISIBLE);
     }
 }

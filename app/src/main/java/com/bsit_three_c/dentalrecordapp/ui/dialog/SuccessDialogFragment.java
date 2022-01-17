@@ -2,7 +2,9 @@ package com.bsit_three_c.dentalrecordapp.ui.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.bsit_three_c.dentalrecordapp.R;
+import com.bsit_three_c.dentalrecordapp.interfaces.OnStuffClickListener;
 
 public class SuccessDialogFragment extends DialogFragment {
 
@@ -24,6 +27,19 @@ public class SuccessDialogFragment extends DialogFragment {
     private int icon;
     private String title;
     private String message;
+    private OnStuffClickListener onStuffClickListener;
+
+    public static SuccessDialogFragment newInstance(int icon,
+                                             String title,
+                                             String message) {
+        SuccessDialogFragment dialogFragment = new SuccessDialogFragment();
+        Bundle arguments = new Bundle();
+        arguments.putInt(ICON_KEY, icon);
+        arguments.putString(TITLE_KEY, title);
+        arguments.putString(MESSAGE_KEY, message);
+        dialogFragment.setArguments(arguments);
+        return dialogFragment;
+    }
 
     @NonNull
     @Override
@@ -50,11 +66,33 @@ public class SuccessDialogFragment extends DialogFragment {
 
         final AlertDialog alertDialog = builder.create();
 
-//        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+//        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);'
+
+        alertDialog.setOnDismissListener(dialog -> {
+            Log.d("DISMISS", "onCreateDialog: dialog dismissed");
+            if (onStuffClickListener != null) {
+                Log.d("DISMISS", "onCreateDialog: calling onclick");
+                onStuffClickListener.onCLick();
+            }
+        });
 
         viewHolder.btn.setOnClickListener(v -> alertDialog.dismiss());
 
         return alertDialog;
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+
+        if (onStuffClickListener != null) {
+            onStuffClickListener.onCLick();
+        }
+    }
+
+    public SuccessDialogFragment setOnStuffClickListener(OnStuffClickListener onStuffClickListener) {
+        this.onStuffClickListener = onStuffClickListener;
+        return this;
     }
 
     private static class ViewHolder {

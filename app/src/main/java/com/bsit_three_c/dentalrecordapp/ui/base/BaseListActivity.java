@@ -1,6 +1,7 @@
 package com.bsit_three_c.dentalrecordapp.ui.base;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -81,6 +82,7 @@ public class BaseListActivity extends AppCompatActivity {
                         getIntent().getStringExtra(getString(R.string.USER_UID_KEY)));
                 break;
             case APPOINTMENT_LIST:
+                Log.d("ASD", "getFragment: getting appointment fragment");
                 fragment = AppointmentsFragment.newInstance(
                         getIntent().getStringExtra(getString(R.string.USER_UID_KEY)));
                 break;

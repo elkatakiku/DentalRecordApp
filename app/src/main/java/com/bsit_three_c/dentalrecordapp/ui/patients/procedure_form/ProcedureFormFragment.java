@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +37,6 @@ import java.util.Date;
 import java.util.List;
 
 public class ProcedureFormFragment extends Fragment {
-    private static final String TAG = ProcedureFormFragment.class.getSimpleName();
-
     public static final String PROCEDURE_RESULT = "ARG_PF_PROCEDURE_RESULT";
     public static final int  RESULT_CANCELED = 0x001ED945;
     public static final int  RESULT_OK = 0x001ED946;
@@ -134,18 +131,13 @@ public class ProcedureFormFragment extends Fragment {
         List<DentalServiceOption> dentalServiceOptions = viewModel.getDentalServiceOptions();
 
         if (dentalServiceOptions.size() == 1) {
-            Log.d(TAG, "initializeServices: dentalServiceOptions has only default");
             viewModel.loadServices();
         } else {
-            Log.d(TAG, "initializeServices: dentalServiceOptions is not null");
             setServicesAdapter();
         }
 
         viewModel.getmDentalServices().observe(getViewLifecycleOwner(), services -> {
-            Log.d(TAG, "initializeServices: services changed");
             if (services != null) {
-                Log.d(TAG, "initializeServices: services: " + services);
-                Log.d(TAG, "initializeServices: setting dental services options");
                 viewModel.setServicesOptions((ArrayList<DentalService>) services, appointment);
                 setServicesAdapter();
             }
@@ -153,7 +145,6 @@ public class ProcedureFormFragment extends Fragment {
     }
 
     private void setServicesAdapter() {
-        Log.d(TAG, "setServicesAdapter: setting adapter");
         ServiceOptionsAdapter serviceOptionsAdapter = new ServiceOptionsAdapter(requireContext(), 0,
                 viewModel.getDentalServiceOptions(), binding.spnrProcedureServices);
         serviceOptionsAdapter.initializeSpinner();
@@ -176,17 +167,6 @@ public class ProcedureFormFragment extends Fragment {
         String dentalPayment = binding.editTxtAPPayment.getText().toString().trim();
         String dentalBalance = binding.txtViewBalance.getText().toString().trim();
 
-        Log.d(TAG, "onViewCreated: data: " + date +
-                "\nservice: " + service +
-                "\ndesc: " + dentalDesc +
-                "\namount: " + dentalAmount +
-                "\nis down: " + isDownpayment);
-
-        Log.d(TAG, "onViewCreated: get service: " + service);
-        Log.d(TAG, "onViewCreated: services state: " + viewModel.getDentalServiceOptions());
-        Log.d(TAG, "onViewCreated: services selected: " + UIUtil.getServiceUids(viewModel.getDentalServiceOptions()));
-
-
         //  Error handling of user data input.
         if (ServiceOptionsAdapter.DEFAULT_OPTION.equals(service.get(0))) {
             binding.procedureServiceError.setVisibility(View.VISIBLE);
@@ -198,15 +178,10 @@ public class ProcedureFormFragment extends Fragment {
 
         setFieldsEnabled(false);;
 
-        Log.d(TAG, "onViewCreated: Adding procedure");
-
         if (appointment != null && patient == null) {
-            Log.d(TAG, "addProcedure: is appointment");
             returnResult(viewModel.createResultIntent(
                     appointment,
-//                    service,
                     dentalDesc,
-//                    date,
                     dentalAmount,
                     isDownpayment,
                     dentalPayment,
@@ -215,18 +190,24 @@ public class ProcedureFormFragment extends Fragment {
             .putExtra(AppointmentDialog.APPOINTMENT_KEY, appointment));
             return;
         } else if (appointment != null){
-            Log.d(TAG, "addProcedure: adding procedure to patient");
-            viewModel.uploadProcedure(
-                    appointment,
-                    dentalDesc,
-                    dentalAmount,
-                    isDownpayment,
-                    dentalPayment,
-                    dentalBalance);
-            return;
+            if (isDownpayment) {
+                viewModel.uploadProcedure(
+                        appointment,
+                        dentalDesc,
+                        dentalAmount,
+                        isDownpayment,
+                        dentalPayment,
+                        dentalBalance);
+                return;
+            } else {
+                viewModel.uploadProcedure(
+                        appointment,
+                        dentalDesc,
+                        dentalAmount,
+                        isDownpayment);
+                return;
+            }
         }
-
-        Log.d(TAG, "addProcedure: adding procedure");
 
         if (isDownpayment) {
             viewModel.uploadProcedure(
@@ -240,12 +221,8 @@ public class ProcedureFormFragment extends Fragment {
                     dentalBalance);
         }
         else {
-            viewModel.addProcedure(patient, service, dentalDesc, date, dentalAmount, isDownpayment);
+            viewModel.uploadProcedure(patient, service, dentalDesc, date, dentalAmount, isDownpayment);
         }
-
-        Log.d(TAG, "onViewCreated: Done adding Procedure");
-
-//        requireActivity().onBackPressed();
     }
 
     private void setFieldsEnabled(boolean enabled) {
@@ -277,10 +254,7 @@ public class ProcedureFormFragment extends Fragment {
         viewModel.getmPayment().observe(getViewLifecycleOwner(), new CustomObserver(binding.editTxtAPPayment, resources));
 
         viewModel.getmBalance().observe(getViewLifecycleOwner(), formState -> {
-            Log.d(TAG, "setObservers: balance changed");
             if (formState == null) return;
-
-            Log.d(TAG, "setObservers: editing balance");
 
             if (formState.getMsgError() != null) {
                 binding.txtViewBalance.setText(getString(formState.getMsgError()));

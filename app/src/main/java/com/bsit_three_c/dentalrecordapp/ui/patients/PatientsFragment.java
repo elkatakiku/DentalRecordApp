@@ -29,7 +29,7 @@ import com.bsit_three_c.dentalrecordapp.data.adapter.ItemViewHolder;
 import com.bsit_three_c.dentalrecordapp.data.adapter.SearchVIewAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
-import com.bsit_three_c.dentalrecordapp.databinding.FragmentListPatientsBinding;
+import com.bsit_three_c.dentalrecordapp.databinding.FragmentListBinding;
 import com.bsit_three_c.dentalrecordapp.ui.base.BaseFormActivity;
 import com.bsit_three_c.dentalrecordapp.ui.dialog.PopUpOptionDialog;
 import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.PatientActivity;
@@ -37,17 +37,29 @@ import com.bsit_three_c.dentalrecordapp.util.Internet;
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 
 public class PatientsFragment extends Fragment {
-    private static final String TAG = "PatientsFragment";
+    private static final String TAG = PatientsFragment.class.getSimpleName();
+
+    private static final String PATIENT_FILTER = "ARG_PF_PATIENT_FILTER_KEY";
+
+    public static final int PATIENT_TODAY = 0x001ED9A9;
 
     private PatientsViewModel patientsViewModel;
-    private FragmentListPatientsBinding binding;
+    private FragmentListBinding binding;
     private ItemAdapter adapter;
 
     private SearchView searchView = null;
 
+    public static PatientsFragment newInstance(int filter) {
+        Bundle arguments = new Bundle();
+        arguments.putInt(PATIENT_FILTER, filter);
+        PatientsFragment patientsFragment = new PatientsFragment();
+        patientsFragment.setArguments(arguments);
+        return patientsFragment;
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         patientsViewModel = new ViewModelProvider(this, new CustomViewModelFactory()).get(PatientsViewModel.class);
-        binding = FragmentListPatientsBinding.inflate(inflater, container, false);
+        binding = FragmentListBinding.inflate(inflater, container, false);
 
         adapter = new ItemAdapter(requireContext(), ItemAdapter.TYPE_PATIENT);
 
@@ -61,37 +73,20 @@ public class PatientsFragment extends Fragment {
             if (aBoolean) {
                 showRecyclerView();
                 adapter.notifyDataSetChanged();
-//                patientsViewModel.refresh(adapter);
             } else {
-//                if (patientsViewModel.isRecordEmpty()) showError();
                 Internet.showSnackBarInternetError(binding.getRoot());
+                showError();
             }
         });
 
         patientsViewModel.setPatientsAdapterListener(adapter);
 
         patientsViewModel.getHasPatient().observe(getViewLifecycleOwner(), aBoolean -> {
-            binding.progressBar.setVisibility(View.GONE);
-            binding.swipeRefreshLayout.setRefreshing(false);
-            binding.tvPatientWillShowHere.setVisibility(aBoolean ? View.GONE : View.VISIBLE);
+            binding.listProgressBar.setVisibility(View.GONE);
+            binding.listSwipeRefreshLayout.setRefreshing(false);
+            binding.tvItemsWillShowHere.setVisibility(aBoolean ? View.GONE : View.VISIBLE);
             adapter.setPatientsAdapterListener(patientsViewModel.getPatientsAdapterListener());
         });
-
-//        patientsViewModel.getmPatientList().observe(getViewLifecycleOwner(), people -> {
-//            Log.d(TAG, "onCreateView: list changed");
-//            binding.progressBar.setVisibility(View.GONE);
-//            binding.swipeRefreshLayout.setRefreshing(false);
-//            if (people != null) {
-//                Log.d(TAG, "onCreateView: updating adapter");
-//                binding.tvPatientWillShowHere.setVisibility(View.GONE);
-//                adapter.setItems(people);
-//                adapter.initializeOrigList();
-//                adapter.notifyDataSetChanged();
-//            } else {
-//                Log.d(TAG, "onCreateView: has not list");
-//                binding.tvPatientWillShowHere.setVisibility(View.VISIBLE);
-//            }
-//        });
 
         setHasOptionsMenu(true);
 
@@ -132,29 +127,29 @@ public class PatientsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.progressBar.setVisibility(View.VISIBLE);
+        binding.listProgressBar.setVisibility(View.VISIBLE);
 
         Log.d(TAG, "onViewCreated: is called");
 
-        binding.recyclerViewPatients.setHasFixedSize(true);
+        binding.rvList.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
 
-        binding.recyclerViewPatients.setLayoutManager(manager);
+        binding.rvList.setLayoutManager(manager);
 
         adapter.setmItemOnClickListener(itemOnClickListener);
-        binding.recyclerViewPatients.setAdapter(adapter);
+        binding.rvList.setAdapter(adapter);
 
-        binding.swipeRefreshLayout.setOnRefreshListener(() -> {
+        binding.listSwipeRefreshLayout.setOnRefreshListener(() -> {
 //            Log.d(TAG, "onViewCreated: is search view iconified: " + searchView.isIconified());
             if (searchView != null && searchView.isIconified()) {
                 patientsViewModel.runInternetTest();
                 patientsViewModel.loadPatients();
             } else {
-                binding.swipeRefreshLayout.setRefreshing(false);
+                binding.listSwipeRefreshLayout.setRefreshing(false);
             }
         });
 
-        binding.fabAddPatients.setOnClickListener(v -> {
+        binding.fabListAdd.setOnClickListener(v -> {
             toAddPatientResult.launch(new Intent(requireContext(), BaseFormActivity.class)
                     .putExtra(BaseFormActivity.FORM_KEY, BaseFormActivity.FORM_PATIENT));
         });
@@ -170,21 +165,26 @@ public class PatientsFragment extends Fragment {
             return;
         }
 
+        if (getArguments() != null) {
+            patientsViewModel.loadPatients();
+        }
+
+
         patientsViewModel.loadPatients();
     }
 
     public void showRecyclerView() {
         Log.d(TAG, "showRecyclerView: showing recyclerview");
-        binding.errorMsg.setVisibility(View.GONE);
-        binding.iconWarning.setVisibility(View.GONE);
-        binding.recyclerViewPatients.setVisibility(View.VISIBLE);
+        binding.listErrorMsg.setVisibility(View.GONE);
+        binding.listIconWarning.setVisibility(View.GONE);
+        binding.rvList.setVisibility(View.VISIBLE);
     }
 
     private void showError() {
         Log.d(TAG, "showError: showing error");
-        binding.recyclerViewPatients.setVisibility(View.GONE);
-        binding.iconWarning.setVisibility(View.VISIBLE);
-        binding.errorMsg.setVisibility(View.VISIBLE);
+        binding.rvList.setVisibility(View.GONE);
+        binding.listIconWarning.setVisibility(View.VISIBLE);
+        binding.listErrorMsg.setVisibility(View.VISIBLE);
     }
 
     private final ItemViewHolder.ItemOnClickListener itemOnClickListener = person -> {

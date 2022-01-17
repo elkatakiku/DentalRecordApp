@@ -42,11 +42,6 @@
             android:exported="false"
             android:theme="@style/Theme.DentalRecordApp.NoActionBar" />
         <activity
-            android:name=".ui.accounts.AccountsActivity"
-            android:exported="false"
-            android:label="@string/title_activity_accounts"
-            android:theme="@style/Theme.DentalRecordApp.NoActionBar" />
-        <activity
             android:name=".ui.employees.view_employee.ViewEmployeeActivity"
             android:exported="false"
             android:label="@string/title_activity_view_employee"

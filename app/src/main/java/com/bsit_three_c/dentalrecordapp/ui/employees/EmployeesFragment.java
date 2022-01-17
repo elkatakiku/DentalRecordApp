@@ -28,7 +28,7 @@ import com.bsit_three_c.dentalrecordapp.data.adapter.ItemAdapter;
 import com.bsit_three_c.dentalrecordapp.data.adapter.SearchVIewAdapter;
 import com.bsit_three_c.dentalrecordapp.data.model.Employee;
 import com.bsit_three_c.dentalrecordapp.data.view_model_factory.CustomViewModelFactory;
-import com.bsit_three_c.dentalrecordapp.databinding.FragmentListEmployeesBinding;
+import com.bsit_three_c.dentalrecordapp.databinding.FragmentListBinding;
 import com.bsit_three_c.dentalrecordapp.ui.employees.employee_form.EmployeeFormActivity;
 import com.bsit_three_c.dentalrecordapp.ui.employees.view_employee.ViewEmployeeActivity;
 
@@ -36,7 +36,7 @@ public class EmployeesFragment extends Fragment {
     private static final String TAG = EmployeesFragment.class.getSimpleName();
 
     private EmployeesViewModel mViewModel;
-    private FragmentListEmployeesBinding binding;
+    private FragmentListBinding binding;
     private ItemAdapter adapter;
 
     private SearchView searchView = null;
@@ -68,7 +68,7 @@ public class EmployeesFragment extends Fragment {
 
         Log.d(TAG, "onCreateView: called");
 
-        binding = FragmentListEmployeesBinding.inflate(inflater, container, false);
+        binding = FragmentListBinding.inflate(inflater, container, false);
         mViewModel = new ViewModelProvider(this, new CustomViewModelFactory()).get(EmployeesViewModel.class);
 
         adapter = new ItemAdapter(getActivity(), ItemAdapter.TYPE_EMPLOYEE);
@@ -115,29 +115,31 @@ public class EmployeesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.fabListAdd.setImageResource(R.drawable.ic_baseline_group_add_24);
+
         Log.d(TAG, "onViewCreated: called");
 
         mViewModel.getmGotEmployee().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 Log.d(TAG, "onChanged: turning off loading");
-                binding.swipeRefreshLayoutEmployee.setRefreshing(false);
-                binding.progressBarEmployee.setVisibility(View.GONE);
+                binding.listSwipeRefreshLayout.setRefreshing(false);
+                binding.listProgressBar.setVisibility(View.GONE);
             }
         });
 
-        binding.swipeRefreshLayoutEmployee.setOnRefreshListener(() -> {
+        binding.listSwipeRefreshLayout.setOnRefreshListener(() -> {
             if (searchView != null && searchView.isIconified()) {
-                binding.swipeRefreshLayoutEmployee.setRefreshing(true);
+                binding.listSwipeRefreshLayout.setRefreshing(true);
                 mViewModel.loadPatients();
             } else {
-                binding.swipeRefreshLayoutEmployee.setRefreshing(false);
+                binding.listSwipeRefreshLayout.setRefreshing(false);
             }
         });
 
-        binding.recyclerViewEmployees.setHasFixedSize(true);
+        binding.rvList.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
 
-        binding.recyclerViewEmployees.setLayoutManager(manager);
+        binding.rvList.setLayoutManager(manager);
 
         adapter.setmItemOnClickListener(person -> {
             //  TODO: Go to display employee info
@@ -149,14 +151,10 @@ public class EmployeesFragment extends Fragment {
             startActivity(toViewEmployee);
         });
 
-        binding.recyclerViewEmployees.setAdapter(adapter);
+        binding.rvList.setAdapter(adapter);
 
-        binding.fabAdminAddEmployee.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toAddEmployeeResult.launch(new Intent(requireActivity(), EmployeeFormActivity.class));
-            }
-        });
+        binding.fabListAdd.setOnClickListener(v ->
+                toAddEmployeeResult.launch(new Intent(requireActivity(), EmployeeFormActivity.class)));
 
     }
 

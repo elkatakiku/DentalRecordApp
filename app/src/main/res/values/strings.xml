@@ -3,7 +3,7 @@
     <!-- Strings related to btnLogin -->
 
     <string name="system">ELL DENTAL RECORD SYSTEM</string>
-    <string name="systemName">Dental Record\nSystem</string>
+    <string name="systemName">Dental Management\nSystem</string>
 
     <!-- Login Strings -->
     <string name="logo_content_desc">ELL Logo</string>
@@ -97,7 +97,10 @@
     <string name="error_creating_patient">An error occurred in creating patient.</string>
     <string name="error_creating_procedure">An error occurred in creating procedure.</string>
     <string name="error_creating_progress_note">An error occurred in creating progress note.</string>
-    <string name="unsuccessfull_update_data">Unsuccessfull in updating the %1$s information.</string>
+    <string name="unsuccessfull_update_data">Unsuccessful in updating the %1$s information.</string>
+    <string name="unseuccessful_update_email">Unsuccessful in updating email.</string>
+    <string name="unseuccessful_update_password">Unsuccessful in changing password.</string>
+    <string name="unsuccessful_deleting_user">Unsuccessful in deleting account.</string>
 
     <string name="title_activity_patient">PatientActivity</string>
     <!-- Strings used for fragments for navigation -->

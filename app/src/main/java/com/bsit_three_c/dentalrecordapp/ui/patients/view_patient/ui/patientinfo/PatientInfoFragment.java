@@ -1,7 +1,6 @@
 package com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.ui.patientinfo;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +18,6 @@ import com.bsit_three_c.dentalrecordapp.ui.patients.procedure_form.ProcedureForm
 import com.bsit_three_c.dentalrecordapp.util.UIUtil;
 
 public class PatientInfoFragment extends Fragment {
-    private static final String TAG = PatientInfoFragment.class.getSimpleName();
-
     private static final String PATIENT_KEY = "ARG_PI_PATIENT_KEY";
 
     private FragmentViewPatientBinding binding;
@@ -47,7 +44,6 @@ public class PatientInfoFragment extends Fragment {
             patient = getArguments().getParcelable(PATIENT_KEY);
             viewModel.setPatient(patient);
         }
-        Log.d(TAG, "onCreateView: patient passed: " + patient);
 
         return binding.getRoot();
     }
@@ -55,20 +51,14 @@ public class PatientInfoFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Log.d(TAG, "onViewCreated: patient info created");
-
         viewModel.getmPatient().observe(getViewLifecycleOwner(), patient -> {
-            Log.d(TAG, "onStart: live data changed in patient info");
             if (patient != null) {
                 PatientInfoFragment.this.patient = patient;
-                Log.d(TAG, "onStart: updated patient not null");
                 initializeFields(patient);
-                Log.d(TAG, "onStart: updated patient: " + patient);
             }
         });
 
         viewModel.getmDentalServices().observe(getViewLifecycleOwner(), dentalServices -> {
-            Log.d(TAG, "onViewCreated: dental services changed");
             if (dentalServices != null) {
                 viewModel.setServicesOptions(dentalServices);
                 loadProcedures();
@@ -82,30 +72,6 @@ public class PatientInfoFragment extends Fragment {
                 binding.textViewEmptyProcedures.setVisibility(View.GONE);
             }
         });
-//
-//        viewModel.getmProceduresCounter().observe(getViewLifecycleOwner(), integer -> {
-//
-//            Log.d(TAG, "onViewCreated: integer: " + integer);
-//            Log.d(TAG, "onViewCreated: list size: " + viewModel.getProcedureSize());
-//
-//            //  Checks if there are no procedure.
-//            if (integer <= 0) {
-//                binding.textViewEmptyProcedures.setVisibility(View.VISIBLE);
-//                binding.proceduresLoading.setVisibility(View.INVISIBLE);
-//            }
-//            else {
-//                binding.textViewEmptyProcedures.setVisibility(View.GONE);
-//                binding.proceduresLoading.setVisibility(View.GONE);
-//            }
-//
-//            //  Checks if procedures has been loaded from the firebase.
-//            if (integer == viewModel.getProcedureSize()) {
-//                Log.d(TAG, "onViewCreated: adding procedures: " + Arrays.toString(viewModel.getProcedures()));
-////                proceduresList.addItems(Arrays.asList(viewModel.getProcedures()));
-//            } else {
-//                proceduresList.clearItems();
-//            }
-//        });
 
         binding.btnNewProcedure.setOnClickListener(view1 -> {
             //  Go to procedure form by navigation
@@ -135,26 +101,18 @@ public class PatientInfoFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        Log.d(TAG, "onResume: patient: " + patient);
         if (patient != null) {
-            Log.d(TAG, "onResume: patient uid: " + patient.getUid());
             viewModel.loadPatient(patient.getUid());
         }
 
     }
 
     public void loadProcedures() {
-        Log.d(TAG, "loadProcedures: called");
         proceduresList = new ProceduresList(binding.llProceduresList, patient, this, viewModel.getServiceOptions());
-//        viewModel.loadProcedure(patient);
-//        viewModel.set
         viewModel.loadProcedures(patient, proceduresList);
     }
 
     private void initializeFields(Patient patient) {
-        Log.d(TAG, "displayInfo: displaying info: " + patient);
-        String notAvailable = "N/A";
-
         UIUtil.setText(patient.getFirstname(), binding.txtViewPIFirstname);
         UIUtil.setText(patient.getLastname(), binding.txtViewPILastname);
         UIUtil.setText(patient.getMiddleInitial(), binding.txtViewPIMiddleInitial);
@@ -172,7 +130,6 @@ public class PatientInfoFragment extends Fragment {
         super.onDestroyView();
         binding = null;
 
-        Log.d(TAG, "onDestroyView: patient info destroyed called");
     }
 
 }

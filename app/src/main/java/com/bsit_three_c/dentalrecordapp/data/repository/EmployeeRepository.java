@@ -55,12 +55,12 @@ public class EmployeeRepository extends BaseRepository {
         return instance;
     }
 
-    public void addEmployee(Employee employee) {
-        databaseReference.child(employee.getUid()).setValue(employee);
+    public Task<Void> upload(Employee employee) {
+        return databaseReference.child(employee.getUid()).setValue(employee);
     }
 
-    public void addEmergencyContact(EmergencyContact emergencyContact) {
-        databaseReferenceEmergencyContact.child(emergencyContact.getUid()).setValue(emergencyContact);
+    public Task<Void> uploadEmergencyContact(EmergencyContact emergencyContact) {
+        return databaseReferenceEmergencyContact.child(emergencyContact.getUid()).setValue(emergencyContact);
     }
 
     public Task<Uri> uploadDisplayImage(Employee employee, byte[] imageByte) {
@@ -135,8 +135,8 @@ public class EmployeeRepository extends BaseRepository {
         if (employee.getLastUpdated() == null)
             employee.setLastUpdated(new Date());
 
-        if (!Checker.isDataAvailable(employee.getEspecialties())) {
-            employee.setEspecialties(notAvailable);
+        if (employee.getSpecialties() == null) {
+            employee.setSpecialties(new ArrayList<>());
         }
     }
 
@@ -394,5 +394,42 @@ public class EmployeeRepository extends BaseRepository {
 
         databaseReference.child(employeeUid).removeEventListener(employeeListener);
         databaseReferenceEmergencyContact.child(emergencyContactUid).removeEventListener(emergencyContactListener);
+    }
+
+
+    public static class EmployeesEventListener implements ValueEventListener {
+
+        private final MutableLiveData<ArrayList<Employee>> mEmployees;
+
+        public EmployeesEventListener(MutableLiveData<ArrayList<Employee>> mEmployees) {
+            this.mEmployees = mEmployees;
+        }
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            final ArrayList<Employee> employees = new ArrayList<>();
+
+            Log.d(TAG, "onDataChange: employee snapshot count: " + snapshot.getChildrenCount());
+            Log.d(TAG, "onDataChange: employee snapshot: " + snapshot);
+            if (!(snapshot.getChildrenCount() <= 0)) {
+
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    Employee employee = data.getValue(Employee.class);
+
+                    if (employee == null) continue;
+
+                    EmployeeRepository.initialize(employee);
+                    Log.d(TAG, "onDataChange: employee: " + employee);
+                    employees.add(employee);
+                }
+            }
+
+            mEmployees.setValue(employees);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
     }
 }

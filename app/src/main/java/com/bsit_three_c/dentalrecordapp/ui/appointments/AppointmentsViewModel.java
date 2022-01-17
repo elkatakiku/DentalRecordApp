@@ -25,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AppointmentsViewModel extends ViewModel {
@@ -37,7 +38,6 @@ public class AppointmentsViewModel extends ViewModel {
     private final MutableLiveData<List<Appointment>> mAppointments;
     private final MutableLiveData<List<DentalService>> mServices;
     private final MutableLiveData<Integer> mError;
-    private final MutableLiveData<Intent> mPatient;
 
     private final AppointmentRepository.AppointmentListener appointmentListener;
     private final ServiceRepository.ServicesListener servicesListener;
@@ -49,14 +49,60 @@ public class AppointmentsViewModel extends ViewModel {
         this.mAppointments = new MutableLiveData<>();
         this.mServices = new MutableLiveData<>();
         this.mError = new MutableLiveData<>();
-        this.mPatient = new MutableLiveData<>();
 
         this.appointmentListener =  new AppointmentRepository.AppointmentListener(mAppointments);
         this.servicesListener = new ServiceRepository.ServicesListener(mServices);
     }
 
     public void loadAppointments() {
-        appointmentRepository.getAppointmentsByLastname().addValueEventListener(appointmentListener);
+        appointmentRepository
+                .getAppointmentsByTimeStamp()
+                .addValueEventListener(appointmentListener);
+    }
+
+    private final MutableLiveData<List<Appointment>> mPatientAppointments = new MutableLiveData<>();
+
+    public void loadAppointments(String patientUid) {
+        appointmentRepository
+                .getAppointmentsByTimeStamp()
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        final ArrayList<Appointment> appointments = new ArrayList<>();
+                        Log.d(TAG, "onDataChange: snapshot key: " + snapshot.getKey());
+                        Log.d(TAG, "onDataChange: snapshot count: " + snapshot.getChildrenCount());
+
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            Log.d(TAG, "onDataChange: key: " + dataSnapshot.getKey());
+                            Log.d(TAG, "onDataChange: data children: " + dataSnapshot.getChildrenCount());
+
+                            Appointment appointment = dataSnapshot.getValue(Appointment.class);
+
+                            if (appointment != null) {
+                                Log.d(TAG, "onDataChange: got patient: " + appointment);
+
+                                AppointmentRepository.initialize(appointment);
+                                PatientRepository.initialize(appointment.getPatient());
+                                ProcedureRepository.initialize(appointment.getProcedure());
+
+                                if (appointment.getPatient().getUid().equals(patientUid)) {
+                                    Log.d(TAG, "onDataChange: appointment match: " + appointment);
+                                    appointments.add(appointment);
+                                }
+                            }
+                        }
+                        mPatientAppointments.setValue(appointments);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+    public LiveData<List<Appointment>> getmPatientAppointments() {
+        return mPatientAppointments;
     }
 
     public void loadServices() {
@@ -130,14 +176,6 @@ public class AppointmentsViewModel extends ViewModel {
         AppointmentRepository
                 .getInstance()
                 .upload(appointment);
-    }
-
-    public void setmPatient(Intent intent) {
-        mPatient.setValue(intent);
-    }
-
-    public LiveData<Intent> getmPatient() {
-        return mPatient;
     }
 
     public void addProcedure(Patient patient, Procedure procedure, ProgressNote progressNote) {

@@ -1,7 +1,5 @@
 package com.bsit_three_c.dentalrecordapp.ui.patients.patient_form;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -26,8 +24,6 @@ import java.util.Date;
 import java.util.List;
 
 public class PatientFormViewModel extends ViewModel implements TextChange, SpinnerState {
-    private static final String TAG = PatientFormViewModel.class.getSimpleName();
-
     private final PatientRepository patientRepository;
     private final AccountRepository accountRepository;
 
@@ -99,6 +95,30 @@ public class PatientFormViewModel extends ViewModel implements TextChange, Spinn
         return mEmail;
     }
 
+    public void setmError(Integer integer) {
+        mError.setValue(integer);
+    }
+
+    public LiveData<Integer> getmError() {
+        return mError;
+    }
+
+    public void setmCreateAttempt(boolean bool) {
+        mCreateAttempt.setValue(bool);
+    }
+
+    public LiveData<Boolean> getmCreateAttempt() {
+        return mCreateAttempt;
+    }
+
+    public void setmPatient(Patient patient) {
+        mPatient.setValue(patient);
+    }
+
+    public LiveData<Patient> getmPatient() {
+        return mPatient;
+    }
+
     private boolean isLetterField(final String s) {
         boolean result = false;
         switch (s) {
@@ -125,8 +145,6 @@ public class PatientFormViewModel extends ViewModel implements TextChange, Spinn
 
     @Override
     public void dataChanged(String label, String input) {
-        Log.d(TAG, "dataChanged: data changed");
-
         if (Checker.isDataAvailable(input)){
             if (ADDRESS.equals(label)) {
                 setState(label, Checker.VALID);
@@ -134,11 +152,9 @@ public class PatientFormViewModel extends ViewModel implements TextChange, Spinn
 
             else if (SUFFIX.equals(label)) {
                 if (Checker.hasNumber(input)) {
-                    Log.d(TAG, "dataChanged: has number");
                     setState(label, R.string.invalid_contains_number);
                 }
                 else {
-                    Log.d(TAG, "dataChanged: data is valid");
                     setState(label, Checker.VALID);
                 }
             }
@@ -157,15 +173,12 @@ public class PatientFormViewModel extends ViewModel implements TextChange, Spinn
 
             else if (isLetterField(label)) {
                 if (Checker.hasNumber(input)) {
-                    Log.d(TAG, "dataChanged: has number");
                     setState(label, R.string.invalid_contains_number);
                 }
                 else if (MIDDLE_INITIAL.equals(label) && (input.length() > 1)) {
-                    Log.d(TAG, "dataChanged: middle error");
                     setState(label, R.string.invalid_contains_more_than_one_character);
                 }
                 else {
-                    Log.d(TAG, "dataChanged: data is valid");
                     setState(label, Checker.VALID);
                 }
             }
@@ -187,7 +200,6 @@ public class PatientFormViewModel extends ViewModel implements TextChange, Spinn
 
     @Override
     public void setSpinnerState(String label, int pos) {
-        Log.d(TAG, "setSpinnerState: spinner state change");
         if (pos == 0) setState(label, pos);
         else setState(label, Checker.VALID);
     }
@@ -234,8 +246,12 @@ public class PatientFormViewModel extends ViewModel implements TextChange, Spinn
     }
 
     public void createAccount(String email, String password) {
-        Log.d(TAG, "createAccount: creating account");
-        mAccount.setValue(new Account(email, password, Account.TYPE_PATIENT, patientRepository.getNewUid()));
+        mAccount.setValue(new Account(
+                email,
+                password,
+                Account.TYPE_PATIENT,
+                patientRepository.getNewUid()
+        ));
     }
 
     public LiveData<Account> getmAccount() {
@@ -313,25 +329,21 @@ public class PatientFormViewModel extends ViewModel implements TextChange, Spinn
         Account account = mAccount.getValue();
 
         if (account != null) {
-            Log.d(TAG, "addPatient: adding account: " + account);
                 accountRepository.createNewAccount(account.getEmail(), account.getPassword()).addOnCompleteListener(createAccountTask -> {
-                    Log.d(TAG, "onComplete: create account attempt");
                     if (!createAccountTask.isSuccessful()) {
                         mError.setValue(accountRepository.getCreateAccountError(createAccountTask));
                         mCreateAttempt.setValue(true);
-                        Log.d(TAG, "onComplete: task is unsuccessful");
                         return;
                     }
 
                     FirebaseUser user = createAccountTask.getResult().getUser();
                     if (user != null) {
-                        Log.d(TAG, "onComplete: creating account data");
+                        account.setUid(user.getUid());
                         accountRepository.setUserIds(patient, account);
                         accountRepository
                                 .uploadAccount(account, user.getUid())
                                 .addOnCompleteListener(task -> {
                             if (!task.isSuccessful()) {
-                                Log.d(TAG, "addPatient: error in upload account");
                                 if (task.getException() != null) {
                                     task.getException().printStackTrace();
                                 }
@@ -341,25 +353,22 @@ public class PatientFormViewModel extends ViewModel implements TextChange, Spinn
                             }
 
                             patient.setEmail(account.getEmail());
+                            patient.setAccountUid(account.getUid());
                             patientRepository.upload(patient)
                                     .addOnCompleteListener(uploadPatient -> {
-                                accountRepository.logout();
-                                mError.setValue(Checker.VALID);
-                                mCreateAttempt.setValue(true);
-                                mPatient.setValue(patient);
+                                        accountRepository.logout();
+                                        mError.setValue(Checker.VALID);
+                                        mCreateAttempt.setValue(true);
+                                        mPatient.setValue(patient);
                             });
                         });
                     } else {
                         mError.setValue(R.string.an_error_occurred);
                         mCreateAttempt.setValue(true);
                     }
-
-                    Log.d(TAG, "onComplete: finishing attempt");
                 });
         }
         else {
-            Log.d(TAG, "addPatient: adding or updating patient without account");
-
             patientRepository
                     .upload(patient)
                     .addOnCompleteListener(task -> {
@@ -389,7 +398,6 @@ public class PatientFormViewModel extends ViewModel implements TextChange, Spinn
 
         patient.setFirstname(UIUtil.capitalize(firstname.trim()));
         patient.setLastname(UIUtil.capitalize(lastname.trim()));
-        Log.d(TAG, "updatePatient: new MI: " + middleInitial);
         patient.setMiddleInitial(UIUtil.capitalize(middleInitial.trim()));
         patient.setSuffix(UIUtil.capitalize(suffix.trim()));
         patient.setDateOfBirth(DateUtil.getDate(dateOfBirth));
@@ -413,29 +421,5 @@ public class PatientFormViewModel extends ViewModel implements TextChange, Spinn
                     mCreateAttempt.setValue(true);
                     mPatient.setValue(patient);
                 });
-    }
-
-    public void setmError(Integer integer) {
-        mError.setValue(integer);
-    }
-
-    public LiveData<Integer> getmError() {
-        return mError;
-    }
-
-    public void setmCreateAttempt(boolean bool) {
-        mCreateAttempt.setValue(bool);
-    }
-
-    public LiveData<Boolean> getmCreateAttempt() {
-        return mCreateAttempt;
-    }
-
-    public void setmPatient(Patient patient) {
-        mPatient.setValue(patient);
-    }
-
-    public LiveData<Patient> getmPatient() {
-        return mPatient;
     }
 }

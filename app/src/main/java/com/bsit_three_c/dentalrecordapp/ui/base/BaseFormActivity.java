@@ -15,12 +15,17 @@ import com.bsit_three_c.dentalrecordapp.data.model.Appointment;
 import com.bsit_three_c.dentalrecordapp.data.model.DentalService;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.databinding.ActivityFormBinding;
-import com.bsit_three_c.dentalrecordapp.ui.accounts.email.UpdateEmailFormFragment;
-import com.bsit_three_c.dentalrecordapp.ui.accounts.password.UpdatePasswordFormFragment;
+import com.bsit_three_c.dentalrecordapp.ui.accounts.edit_account.EditAccountFragment;
+import com.bsit_three_c.dentalrecordapp.ui.accounts.edit_account.delete_account.DeleteAccountFragment;
+import com.bsit_three_c.dentalrecordapp.ui.accounts.edit_account.email.UpdateEmailFormFragment;
+import com.bsit_three_c.dentalrecordapp.ui.accounts.edit_account.forgotten_password.ForgotPasswordFragment;
+import com.bsit_three_c.dentalrecordapp.ui.accounts.edit_account.password.UpdatePasswordFormFragment;
 import com.bsit_three_c.dentalrecordapp.ui.admin.AdminFormFragment;
 import com.bsit_three_c.dentalrecordapp.ui.appointments.ui.appointment_form.AppointmentFormFragment;
 import com.bsit_three_c.dentalrecordapp.ui.clinic.ClinicFormFragment;
 import com.bsit_three_c.dentalrecordapp.ui.employees.EmployeesFragment;
+import com.bsit_three_c.dentalrecordapp.ui.employees.employee_form.EmergencyContactFormFragment;
+import com.bsit_three_c.dentalrecordapp.ui.employees.specialties_form.SpecialtiesFormFragment;
 import com.bsit_three_c.dentalrecordapp.ui.patients.patient_form.PatientFormFragment;
 import com.bsit_three_c.dentalrecordapp.ui.patients.procedure_form.ProcedureFormFragment;
 import com.bsit_three_c.dentalrecordapp.ui.patients.registration_form.RegisterFormFragment;
@@ -39,10 +44,17 @@ public class BaseFormActivity extends AppCompatActivity {
     public static final int FORM_UPDATE_EMAIL = 0x001ED820;
     public static final int FORM_UPDATE_PASSWORD = 0x001ED821;
     private static final int FORM_APPOINTMENT = 0x001ED822;
+    private static final int FORM_ACCOUNT = 0x001ED823;
+    private static final int FORM_DELETE_ACCOUNT = 0x001ED824;
+    private static final int FORM_FORGOT_PASSWORD = 0x001ED825;
+    private static final int FORM_SPECIALTIES = 0x001ED826;
+    private static final int FORM_EMERGENCY_CONTACT = 0x001ED827;
 
     public static final String USER_ID_KEY = "ARG_BF_USER_ID_KEY";
     public static final String PATIENT_ID_KEY = "ARG_BF_PATIENT_ID_KEY";
     public static final String PATIENT_KEY = "ARG_BF_PATIENT_KEY";
+    public static final String EMPLOYEE_ID_KEY = "ARG_BF_EMPLOYEE_ID_KEY";
+    public static final String EMERGENCY_ID_KEY = "ARG_BF_EMERGENCY_ID_KEY";
     public static final String APPOINTMENT_KEY = "ARG_BF_APPOINTMENT_KEY";
     public static final String SERVICE_KEY = "ARG_BF_SERVICE_KEY";
     public static final String ACCOUNT_KEY = "ARG_BF_ACCOUNT_KEY";
@@ -80,7 +92,7 @@ public class BaseFormActivity extends AppCompatActivity {
 
         switch (form) {
             case FORM_PATIENT:
-                title = "New Patient";
+                title = "Patient Form";
                 break;
             case FORM_PROCEDURE:
                 title = "Procedure Form";
@@ -89,11 +101,7 @@ public class BaseFormActivity extends AppCompatActivity {
                 title = "Create Account";
                 break;
             case FORM_SERVICE:
-                if (getIntent().getParcelableExtra(SERVICE_KEY) != null) {
-                    title = "Edit Service";
-                } else {
-                    title = "New Service";
-                }
+                title = "Service Form";
                 break;
             case FORM_ADMIN:
                 title = "Admin Form";
@@ -112,6 +120,21 @@ public class BaseFormActivity extends AppCompatActivity {
                 break;
             case FORM_APPOINTMENT:
                 title = "Appointment Form";
+                break;
+            case FORM_ACCOUNT:
+                title = "Edit Account";
+                break;
+            case FORM_DELETE_ACCOUNT:
+                title = "Account Deletion";
+                break;
+            case FORM_FORGOT_PASSWORD:
+                title = "Forgot Password";
+                break;
+            case FORM_SPECIALTIES:
+                title = "Update Specialties";
+                break;
+            case FORM_EMERGENCY_CONTACT:
+                title = "Emergency Contact Form";
                 break;
             default:
                 title = "Form";
@@ -157,15 +180,42 @@ public class BaseFormActivity extends AppCompatActivity {
                 fragment = EmployeesFragment.newInstance();
                 break;
             case FORM_UPDATE_EMAIL:
-                fragment = UpdateEmailFormFragment.newInstance();
+                fragment = UpdateEmailFormFragment.newInstance(
+                        getIntent().getStringExtra(ACCOUNT_KEY)
+                );
                 break;
             case FORM_UPDATE_PASSWORD:
-                fragment = new UpdatePasswordFormFragment();
+                fragment = UpdatePasswordFormFragment.newInstance(
+                        getIntent().getStringExtra(ACCOUNT_KEY)
+                );
                 break;
             case FORM_APPOINTMENT:
                 fragment = AppointmentFormFragment.newInstance(
                         getIntent().getStringExtra(PATIENT_ID_KEY),
                         getIntent().getParcelableExtra(APPOINTMENT_KEY)
+                );
+                break;
+            case FORM_ACCOUNT:
+                fragment = EditAccountFragment.newInstance(
+                        getIntent().getStringExtra(ACCOUNT_KEY)
+                );
+                break;
+            case FORM_DELETE_ACCOUNT:
+                fragment = DeleteAccountFragment.newInstance(
+                        getIntent().getStringExtra(ACCOUNT_KEY)
+                );
+                break;
+            case FORM_FORGOT_PASSWORD:
+                fragment = ForgotPasswordFragment.newInstance();
+                break;
+            case FORM_SPECIALTIES:
+                fragment = SpecialtiesFormFragment.newInstance(
+                        getIntent().getStringExtra(EMPLOYEE_ID_KEY)
+                );
+                break;
+            case FORM_EMERGENCY_CONTACT:
+                fragment = EmergencyContactFormFragment.newInstance(
+                        getIntent().getStringExtra(EMERGENCY_ID_KEY)
                 );
                 break;
             default:
@@ -200,9 +250,15 @@ public class BaseFormActivity extends AppCompatActivity {
                 .putExtra(FORM_KEY, FORM_APPOINTMENT);
     }
 
-    public static Intent getPatientFormIntent(Context context, Patient patient, Appointment appointment) {
+    public static Intent getAppointmentFormIntent(Context context, String patientUid) {
         return new Intent(context, BaseFormActivity.class)
                 .putExtra(FORM_KEY, FORM_APPOINTMENT)
+                .putExtra(PATIENT_ID_KEY, patientUid);
+    }
+
+    public static Intent getPatientFormIntent(Context context, Patient patient, Appointment appointment) {
+        return new Intent(context, BaseFormActivity.class)
+                .putExtra(FORM_KEY, FORM_PATIENT)
                 .putExtra(PATIENT_KEY, patient)
                 .putExtra(APPOINTMENT_KEY, appointment);
     }
@@ -231,8 +287,49 @@ public class BaseFormActivity extends AppCompatActivity {
 
     public static Intent getProcedureFormIntent(Context context, Appointment appointment) {
         return new Intent(context, BaseFormActivity.class)
-                .putExtra(BaseFormActivity.FORM_KEY, BaseFormActivity.FORM_PROCEDURE)
-                .putExtra(BaseFormActivity.APPOINTMENT_KEY, appointment);
+                .putExtra(FORM_KEY, FORM_PROCEDURE)
+                .putExtra(APPOINTMENT_KEY, appointment);
+    }
+
+    public static Intent getEditAccountForm(Context context, String accountUid) {
+        return new Intent(context, BaseFormActivity.class)
+                .putExtra(FORM_KEY, FORM_ACCOUNT)
+                .putExtra(ACCOUNT_KEY, accountUid);
+    }
+
+    public static Intent getDeleteAccountForm(Context context, String accountUid) {
+        return new Intent(context, BaseFormActivity.class)
+                .putExtra(FORM_KEY, FORM_DELETE_ACCOUNT)
+                .putExtra(ACCOUNT_KEY, accountUid);
+    }
+
+    public static Intent getUpdateEmailIntent(Context context, String accountUid) {
+        return new Intent(context, BaseFormActivity.class)
+                .putExtra(FORM_KEY, FORM_UPDATE_EMAIL)
+                .putExtra(ACCOUNT_KEY, accountUid);
+    }
+
+    public static Intent getUpdatePasswordIntent(Context context, String accountUid) {
+        return new Intent(context, BaseFormActivity.class)
+                .putExtra(FORM_KEY, FORM_UPDATE_PASSWORD)
+                .putExtra(ACCOUNT_KEY, accountUid);
+    }
+
+    public static Intent getForgotPasswordIntent(Context context) {
+        return new Intent(context, BaseFormActivity.class)
+                .putExtra(FORM_KEY, FORM_FORGOT_PASSWORD);
+    }
+
+    public static Intent getSpecialtiesFormIntent(Context context, String employeeUid) {
+        return new Intent(context, BaseFormActivity.class)
+                .putExtra(FORM_KEY, FORM_SPECIALTIES)
+                .putExtra(EMPLOYEE_ID_KEY, employeeUid);
+    }
+
+    public static Intent getEmergencyContactFormIntent(Context context, String emergencyUid) {
+        return new Intent(context, BaseFormActivity.class)
+                .putExtra(FORM_KEY, FORM_EMERGENCY_CONTACT)
+                .putExtra(EMERGENCY_ID_KEY, emergencyUid);
     }
 
     @Override

@@ -12,9 +12,8 @@ import com.bsit_three_c.dentalrecordapp.data.model.Employee;
 import com.bsit_three_c.dentalrecordapp.data.model.Patient;
 import com.bsit_three_c.dentalrecordapp.data.repository.ClinicRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.EmployeeRepository;
+import com.bsit_three_c.dentalrecordapp.data.repository.PatientRepository;
 import com.bsit_three_c.dentalrecordapp.data.repository.ServiceRepository;
-import com.bsit_three_c.dentalrecordapp.data.repository.listeners.EmployeesEventListener;
-import com.bsit_three_c.dentalrecordapp.data.repository.listeners.ServicesEventListener;
 
 import java.util.ArrayList;
 
@@ -22,6 +21,7 @@ public class MenuClientViewModel extends ViewModel {
     private static final String TAG = MenuClientViewModel.class.getSimpleName();
     // TODO: Implement the ViewModel
 
+    private final PatientRepository patientRepository;
     private final ServiceRepository serviceRepository;
     private final EmployeeRepository employeeRepository;
     private final ClinicRepository clinicRepository;
@@ -31,9 +31,13 @@ public class MenuClientViewModel extends ViewModel {
     private final MutableLiveData<Patient> mPatient;
     private final MutableLiveData<Clinic> mCLinic;
 
+    private final PatientRepository.PatientListener patientListener;
     private final ClinicRepository.ClinicListener clinicListener;
+    private final ServiceRepository.ServicesEventListener servicesEventListener;
+    private final EmployeeRepository.EmployeesEventListener employeesEventListener;
 
     public MenuClientViewModel() {
+        this.patientRepository = PatientRepository.getInstance();
         this.serviceRepository = ServiceRepository.getInstance();
         this.employeeRepository = EmployeeRepository.getInstance();
         this.clinicRepository = (ClinicRepository) ClinicRepository.getInstance();
@@ -43,14 +47,21 @@ public class MenuClientViewModel extends ViewModel {
         this.mPatient = new MutableLiveData<>();
         this.mCLinic = new MutableLiveData<>();
 
+        this.patientListener = new PatientRepository.PatientListener(mPatient);
         this.clinicListener = new ClinicRepository.ClinicListener(mCLinic);
+        this.servicesEventListener = new ServiceRepository.ServicesEventListener(mDentalServices);
+        this.employeesEventListener = new EmployeeRepository.EmployeesEventListener(mEmployees);
     }
 
     public void loadData() {
         Log.d(TAG, "loadServices: called");
-        serviceRepository.getServicesPath().addValueEventListener(new ServicesEventListener(mDentalServices));
-        employeeRepository.getEmployeesPath().addValueEventListener(new EmployeesEventListener(mEmployees));
+        serviceRepository.getServicesPath().addValueEventListener(servicesEventListener);
+        employeeRepository.getEmployeesPath().addValueEventListener(employeesEventListener);
         clinicRepository.getDatabaseReference().addValueEventListener(clinicListener);
+    }
+
+    public void getPatient(String patietUid) {
+        patientRepository.getPath(patietUid).addValueEventListener(patientListener);
     }
 
     public LiveData<ArrayList<DentalService>> getmDentalServices() {
@@ -63,5 +74,18 @@ public class MenuClientViewModel extends ViewModel {
 
     public LiveData<Clinic> getmCLinic() {
         return mCLinic;
+    }
+
+    public LiveData<Patient> getmPatient() {
+        return mPatient;
+    }
+
+    public void removeListeners() {
+        if (mPatient.getValue() != null) {
+            patientRepository.getPath(mPatient.getValue().getUid()).removeEventListener(patientListener);
+        }
+        serviceRepository.getDatabaseReference().removeEventListener(servicesEventListener);
+        employeeRepository.getDatabaseReference().removeEventListener(employeesEventListener);
+        clinicRepository.getDatabaseReference().removeEventListener(clinicListener);
     }
 }

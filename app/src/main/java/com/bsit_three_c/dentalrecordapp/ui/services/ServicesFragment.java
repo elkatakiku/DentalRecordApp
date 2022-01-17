@@ -62,15 +62,12 @@ public class ServicesFragment extends Fragment {
 
         Log.d(TAG, "onViewCreated: called");
 
-
-
         binding.rvList.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(requireActivity());
-
         binding.rvList.setLayoutManager(manager);
-
-//        adapter.setmItemOnClickListener(itemOnClickListener);
         binding.rvList.setAdapter(adapter);
+
+        binding.fabListAdd.setImageResource(R.drawable.ic_baseline_medical_services_24);
 
         binding.fabListAdd.setOnClickListener(v -> {
             Intent toAddService = new Intent(requireContext(), BaseFormActivity.class)

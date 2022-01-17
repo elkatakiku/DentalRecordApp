@@ -3,7 +3,6 @@ package com.bsit_three_c.dentalrecordapp.ui.patients.view_patient;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.activity.result.ActivityResult;
@@ -24,8 +23,6 @@ import com.bsit_three_c.dentalrecordapp.ui.patients.view_patient.ui.patientinfo.
 import com.bsit_three_c.dentalrecordapp.util.LocalStorage;
 
 public class PatientActivity extends AppCompatActivity {
-    private static final String TAG = PatientActivity.class.getSimpleName();
-
     private static final String PATIENT_KEY = "ARG_PA_PATIENT_KEY";
 
     private AppBarPatientBinding binding;
@@ -69,8 +66,6 @@ public class PatientActivity extends AppCompatActivity {
             toEditPatientResult.launch(toEditPatient);
         });
 
-        Log.d(TAG, "onCreate: passing patient: " + patient);
-
         if (patient == null) {
             finish();
         }
@@ -85,15 +80,10 @@ public class PatientActivity extends AppCompatActivity {
                         .commit();
             }
         }
-
-        Log.d(TAG, "onCreate: stack count: " + fragmentManager.getBackStackEntryCount());
-        fragmentManager.addOnBackStackChangedListener(() ->
-                Log.d(TAG, "onBackStackChanged: back stack: " + fragmentManager.getBackStackEntryCount()));
     }
 
     @Override
     public void onBackPressed() {
-        Log.d(TAG, "onBackPressed: stack count: " + fragmentManager.getBackStackEntryCount());
         if (fragmentManager.getBackStackEntryCount() == 1) {
             finish();
         } else {
@@ -105,8 +95,6 @@ public class PatientActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Log.d(TAG, "onResume: called");
-        Log.d(TAG, "onResume: patient: " + patient);
         initializeTitle();
     }
 
@@ -128,16 +116,8 @@ public class PatientActivity extends AppCompatActivity {
         }
     });
 
-//    @Override
-//    public boolean onSupportNavigateUp() {
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_patient);
-//        return NavigationUI.navigateUp(navController, appBarConfiguration)
-//                || super.onSupportNavigateUp();
-//    }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;

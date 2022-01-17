@@ -49,17 +49,10 @@
                     android:textColor="#509E9F"
                     android:textSize="20sp" />
 
-                <ImageView
-                    android:id="@+id/imgDBArrowPatients"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_baseline_navigate_next_24"
-                    app:tint="@color/blue_green" />
-
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cvPatientsCount"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
@@ -73,6 +66,7 @@
                     android:padding="10dp">
 
                     <LinearLayout
+                        android:id="@+id/layoutTotalPatients"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -101,13 +95,9 @@
 
                         <ImageView
                             android:id="@+id/imageView7"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_weight="1"
-                            android:scaleType="fitEnd"
-                            android:src="@android:drawable/ic_input_add"
-                            android:visibility="gone" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_baseline_view_list_24" />
                     </LinearLayout>
 
                     <View
@@ -118,6 +108,7 @@
                         android:background="?android:attr/listDivider" />
 
                     <LinearLayout
+                        android:id="@+id/layoutPatientsToday"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -146,13 +137,9 @@
 
                         <ImageView
                             android:id="@+id/imageView6"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_weight="1"
-                            android:scaleType="fitEnd"
-                            android:src="@android:drawable/ic_input_add"
-                            android:visibility="gone" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_baseline_person_24" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -201,16 +188,10 @@
                     android:textColor="#509E9F"
                     android:textSize="20sp" />
 
-                <ImageView
-                    android:id="@+id/imgDBArrowAppointments"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_baseline_navigate_next_24"
-                    app:tint="@color/blue_green" />
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cvAppointmentsCount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -224,6 +205,7 @@
                     android:padding="10dp">
 
                     <LinearLayout
+                        android:id="@+id/layoutAppointmentsToday"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
@@ -251,13 +233,10 @@
 
                         <ImageView
                             android:id="@+id/imageView12"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_gravity="end"
-                            android:layout_weight="1"
-                            android:scaleType="fitEnd"
-                            android:src="@android:drawable/ic_input_add"
-                            android:visibility="gone" />
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ic_baseline_today_24" />
 
                     </LinearLayout>
 
@@ -268,6 +247,7 @@
                         android:background="?android:attr/listDivider" />
 
                     <LinearLayout
+                        android:id="@+id/layoutUpcommingAppointments"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -296,13 +276,10 @@
 
                         <ImageView
                             android:id="@+id/imageView13"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_weight="1"
-                            android:scaleType="fitEnd"
-                            android:src="@android:drawable/ic_input_add"
-                            android:visibility="gone" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/ic_baseline_history_toggle_off_24" />
                     </LinearLayout>
 
                     <Button
@@ -310,7 +287,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/blue_green"
-                        android:text="View in Calendar" />
+                        android:text="View in Calendar"
+                        android:visibility="gone" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

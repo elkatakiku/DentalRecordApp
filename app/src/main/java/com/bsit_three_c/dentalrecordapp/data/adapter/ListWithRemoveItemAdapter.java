@@ -24,6 +24,7 @@ public class ListWithRemoveItemAdapter extends ArrayAdapter<String> {
     private final LayoutInflater layoutInflater;
     private final List<String> list;
     private ListView listView;
+    private ListListener listListener;
 
     public ListWithRemoveItemAdapter(@NonNull Context context, int resource, List<String> list) {
         super(context, resource);
@@ -45,6 +46,9 @@ public class ListWithRemoveItemAdapter extends ArrayAdapter<String> {
         list.add(object);
 
         if (listView != null) UIUtil.setListViewHeightBasedOnItems(listView);
+        if (listListener != null) {
+            listListener.onListChangeListener(list.size());
+        }
     }
 
     public void addAll(List<String> items) {
@@ -58,6 +62,9 @@ public class ListWithRemoveItemAdapter extends ArrayAdapter<String> {
 
     public void remove(String category) {
         list.remove(category);
+        if (listListener != null) {
+            listListener.onListChangeListener(list.size());
+        }
     }
 
     public List<String> getList() {
@@ -84,6 +91,9 @@ public class ListWithRemoveItemAdapter extends ArrayAdapter<String> {
         viewHolder.delete.setOnClickListener(v -> {
             list.remove(position);
             if (listView != null) UIUtil.setListViewHeightBasedOnItems(listView);
+            if (listListener != null) {
+                listListener.onListChangeListener(list.size());
+            }
 
             notifyDataSetChanged();
         });
@@ -96,6 +106,10 @@ public class ListWithRemoveItemAdapter extends ArrayAdapter<String> {
         return list.size();
     }
 
+    public void setListListener(ListListener listListener) {
+        this.listListener = listListener;
+    }
+
     private static class ViewHolder {
         
         final TextView name;
@@ -105,5 +119,9 @@ public class ListWithRemoveItemAdapter extends ArrayAdapter<String> {
             this.name = view.findViewById(R.id.tvItemCategoryName);
             this.delete = view.findViewById(R.id.btnItemCategoryDelete);
         }
+    }
+
+    public interface ListListener {
+        void onListChangeListener(int count);
     }
 }

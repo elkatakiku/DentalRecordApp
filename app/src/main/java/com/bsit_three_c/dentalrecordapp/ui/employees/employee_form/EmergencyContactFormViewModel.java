@@ -3,6 +3,7 @@ package com.bsit_three_c.dentalrecordapp.ui.employees.employee_form;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -19,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 
@@ -28,12 +30,70 @@ public class EmergencyContactFormViewModel extends ViewModel {
     private final EmployeeRepository employeeRepository;
     private final AccountRepository accountRepository;
 
+    private final MutableLiveData<String> mEmergencyUid;
+    private final MutableLiveData<EmergencyContact> mEmergencyContact;
     private final MutableLiveData<Boolean> addEmployeeAttempt = new MutableLiveData<>();
     private final MutableLiveData<Integer> mError = new MutableLiveData<>();
+
+    private final ValueEventListener emergencyListener;
+
 
     public EmergencyContactFormViewModel(EmployeeRepository employeeRepository, AccountRepository accountRepository) {
         this.employeeRepository = employeeRepository;
         this.accountRepository = accountRepository;
+
+        this.mEmergencyUid = new MutableLiveData<>();
+        this.mEmergencyContact = new MutableLiveData<>();
+
+        this.emergencyListener = new EmployeeRepository.EmergencyContactListener(mEmergencyContact);
+    }
+
+    public void setmEmergencyUid(String uid) {
+        mEmergencyUid.setValue(uid);
+    }
+
+    public LiveData<String> getmEmergencyUid() {
+        return mEmergencyUid;
+    }
+
+    public void getEmergency(String uid) {
+        employeeRepository
+                .getEmergencyContactPath(uid)
+                .addListenerForSingleValueEvent(emergencyListener);
+    }
+
+    public LiveData<EmergencyContact> getmEmergencyContact() {
+        return mEmergencyContact;
+    }
+
+    public boolean isUpdate() {
+        return mEmergencyContact.getValue() != null;
+    }
+
+    public void uploadEmergency(EmergencyContact emergencyContact) {
+        employeeRepository
+                .uploadEmergencyContact(emergencyContact)
+        .addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    mError.setValue(Checker.VALID);
+                } else {
+                    mError.setValue(R.string.an_error_occurred);
+                }
+
+                addEmployeeAttempt.setValue(true);
+            }
+        });
+    }
+
+    public void removeListeners() {
+        EmergencyContact emergencyContact = mEmergencyContact.getValue();
+        if (emergencyContact != null) {
+            employeeRepository
+                    .getPath(emergencyContact.getUid())
+                    .removeEventListener(emergencyListener);
+        }
     }
 
     public void uploadEmployee(LoggedInUser loggedInUser, byte[] imageByte,
@@ -204,9 +264,9 @@ public class EmergencyContactFormViewModel extends ViewModel {
     }
 
     private void addEmployeeData(Employee employee, EmergencyContact emergencyContact, LoggedInUser loggedInAccount) {
-        employeeRepository.addEmployee(employee);
+        employeeRepository.upload(employee);
 
-        employeeRepository.addEmergencyContact(emergencyContact);
+        employeeRepository.uploadEmergencyContact(emergencyContact);
         accountRepository.reLoginUser(loggedInAccount);
 
         mError.setValue(Checker.VALID);

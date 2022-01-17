@@ -12,13 +12,16 @@ import com.bsit_three_c.dentalrecordapp.data.model.Person;
 import com.bsit_three_c.dentalrecordapp.util.Checker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class AccountRepository extends BaseRepository {
@@ -136,6 +139,55 @@ public class AccountRepository extends BaseRepository {
         return mFirebaseAuth.signInWithEmailAndPassword(account.getEmail(), account.getPassword());
     }
 
+    public Task<Void> reAuthenticate(Account account) {
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+        AuthCredential credential = EmailAuthProvider
+                .getCredential(account.getEmail(), account.getPassword());
+        if (user != null) {
+            return user.reauthenticate(credential);
+        }
+
+        return null;
+    }
+
+    public Task<Void> updateEmail(String email) {
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+
+        if (user != null) {
+            return user.updateEmail(email);
+        }
+
+        return null;
+    }
+
+    public Task<Void> updatePassword(String password) {
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+
+        if (user != null) {
+            return user.updatePassword(password);
+        }
+
+        return null;
+    }
+
+    public Task<Void> deleteUser() {
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+
+        if (user != null) {
+            return user.delete();
+        }
+
+        return null;
+    }
+
+    public Query getAccountByEmail(String email) {
+        return databaseReference.orderByChild("email").equalTo(email);
+    }
+
+    public Task<Void> resetPassword(String email) {
+        return mFirebaseAuth.sendPasswordResetEmail(email);
+    }
+
     public void logout() {
         // TODO: revoke authentication
         // Logout the current user
@@ -157,12 +209,8 @@ public class AccountRepository extends BaseRepository {
 
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
-            Log.d(TAG, "onDataChange: changed in account occured");
-            Account account = snapshot.getValue(Account.class);
-            if (account != null) {
-                Log.d(TAG, "onDataChange: got account: " + account);
-                mAccount.setValue(account);
-            }
+            Log.d(TAG, "onDataChange: changed in account occurred");
+            mAccount.setValue(snapshot.getValue(Account.class));
         }
 
         @Override

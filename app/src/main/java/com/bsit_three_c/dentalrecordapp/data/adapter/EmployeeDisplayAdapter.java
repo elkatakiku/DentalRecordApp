@@ -2,6 +2,7 @@ package com.bsit_three_c.dentalrecordapp.data.adapter;
 
 import android.content.Context;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,11 @@ public class EmployeeDisplayAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         UIUtil.setText(employee.getFullName(), viewHolder.name);
         UIUtil.setText(employee.getJobTitle(context.getResources()), viewHolder.job);
-        UIUtil.setText(employee.getEspecialties(), viewHolder.description);
+        if (employee.getSpecialties().isEmpty()) {
+            viewHolder.description.setText("");
+        } else {
+            UIUtil.setText("Specializes in:\n" + TextUtils.join(", ", employee.getSpecialties()), viewHolder.description);
+        }
 
     }
 

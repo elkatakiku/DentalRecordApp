@@ -10,7 +10,6 @@ public class Appointment implements Parcelable {
     private String uid;
     private Patient patient;
     private Procedure procedure;
-    private ProgressNote progressNote;
     private Date dateTime;
     private String comments;
     private long timeStamp;

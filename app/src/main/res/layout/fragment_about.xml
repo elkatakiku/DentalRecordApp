@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="24dp"
         android:background="@drawable/list_splash_bg"
+        android:backgroundTint="@color/baby_blue"
         android:fillViewport="true"
         android:translationZ="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,7 +24,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
             android:orientation="vertical"
             android:padding="16dp">
 
@@ -70,6 +70,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans_semibold"
                         android:text="About"
+                        android:textAlignment="center"
                         android:textColor="@color/label"
                         android:textSize="16sp" />
 
@@ -117,6 +118,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans_semibold"
                         android:text="Contact Us"
+                        android:textAlignment="center"
                         android:textColor="@color/label"
                         android:textSize="16sp" />
 
@@ -142,14 +144,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans"
-                        android:text="TextView"
-                        android:textColor="@color/data" />
+                        android:hint="Contact Number"
+                        android:textColor="@color/data"
+                        android:textColorHint="@color/field_hint" />
 
                     <TextView
                         android:id="@+id/textView112"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="16dp"
                         android:layout_marginBottom="5dp"
                         android:fontFamily="@font/open_sans_semibold"
                         android:text="Location"
@@ -160,8 +163,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans"
-                        android:text="TextView"
-                        android:textColor="@color/data" />
+                        android:hint="Location"
+                        android:textColor="@color/data"
+                        android:textColorHint="@color/field_hint" />
 
                 </LinearLayout>
 

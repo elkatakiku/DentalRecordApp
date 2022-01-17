@@ -70,7 +70,6 @@ public class AppointmentFormFragment extends Fragment {
             mViewModel.setmUid(getArguments().getString(PATIENT_UID_KEY));
             Log.d(TAG, "onCreateView: appointment sent: " + appointment);
         }
-//        mViewModel.loadPatients();
 
         return binding.getRoot();
     }

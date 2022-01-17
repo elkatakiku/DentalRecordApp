@@ -39,8 +39,8 @@ public class AdminDashboardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.adminDashboardPatientsHeader.setOnClickListener(sendUserToPatients);
-        binding.adminDashboardAppointmentHeader.setOnClickListener(sendUserToAppointments);
+        binding.layoutTotalPatients.setOnClickListener(sendUserToPatients);
+        binding.cvAppointmentsCount.setOnClickListener(sendUserToAppointments);
         binding.adminDashboardServicesCard.setOnClickListener(sendUserToServices);
         binding.adminDashboardEmployeesCard.setOnClickListener(sendUserToEmployees);
 
@@ -69,37 +69,21 @@ public class AdminDashboardFragment extends Fragment {
         mViewModel.startCount();
     }
 
-    private final View.OnClickListener sendUserToPatients = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
+    private final View.OnClickListener sendUserToPatients = v ->
             NavHostFragment.findNavController(AdminDashboardFragment.this)
-                    .navigate(R.id.nav_patients);
-        }
-    };
+            .navigate(R.id.nav_patients);
 
-    private final View.OnClickListener sendUserToServices = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
+    private final View.OnClickListener sendUserToServices = v ->
             NavHostFragment.findNavController(AdminDashboardFragment.this)
-                    .navigate(R.id.nav_service);
-        }
-    };
+            .navigate(R.id.nav_service);
 
-    private final View.OnClickListener sendUserToEmployees = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
+    private final View.OnClickListener sendUserToEmployees = v ->
             NavHostFragment.findNavController(AdminDashboardFragment.this)
-                    .navigate(R.id.nav_employees);
-        }
-    };
+            .navigate(R.id.nav_employees);
 
-    private final View.OnClickListener sendUserToAppointments = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
+    private final View.OnClickListener sendUserToAppointments = v ->
             NavHostFragment.findNavController(AdminDashboardFragment.this)
-                    .navigate(R.id.nav_appointments);
-        }
-    };
+            .navigate(R.id.nav_appointments);
 
     @Override
     public void onDestroyView() {

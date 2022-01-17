@@ -54,8 +54,10 @@ public class ProceduresList {
         initializeProcedure(procedure);
 
         //  Edit text in dental service
-        viewHolder.txtDentalService.setText(UIUtil.getServiceOptionsTitle(procedure.getServiceIds(), dentalServiceOptions));
-        viewHolder.txtDentalDate.setText(DateUtil.getReadableDate(DateUtil.convertToDate(procedure.getDentalDate())));
+        viewHolder.txtDentalService.setText(
+                UIUtil.getServiceOptionsTitle(procedure.getServiceIds(), dentalServiceOptions));
+        viewHolder.txtDentalDate.setText(
+                DateUtil.getReadableDate(DateUtil.convertToDate(procedure.getDentalDate())));
         viewHolder.txtDentalAmount.setText(String.valueOf(procedure.getDentalTotalAmount()));
         viewHolder.txtDentalFullyPaid.setText(UIUtil.getPaymentStatus(procedure.getDentalBalance()));
         viewHolder.txtDentalFullyPaid.setTextColor(UIUtil.getCheckBoxColor(procedure.getDentalBalance()));

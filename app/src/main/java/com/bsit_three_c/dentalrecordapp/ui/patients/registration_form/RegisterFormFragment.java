@@ -1,7 +1,6 @@
 package com.bsit_three_c.dentalrecordapp.ui.patients.registration_form;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +18,6 @@ import com.bsit_three_c.dentalrecordapp.util.CustomObserver;
 import com.bsit_three_c.dentalrecordapp.util.CustomTextWatcher;
 
 public class RegisterFormFragment extends Fragment {
-    private static final String TAG = RegisterFormFragment.class.getSimpleName();
-
     private PatientFormViewModel viewModel;
     private FragmentFormRegisterBinding binding;
 
@@ -41,15 +38,9 @@ public class RegisterFormFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         binding.btnRegisterNext.setOnClickListener(v -> {
-
             String email = binding.etPatientEmail.getText().toString().trim();
             String password = binding.etPatientPassword.getText().toString().trim();
             String repeatPassword = binding.etPatientRepeatPassword.getText().toString().trim();
-
-            Log.d(TAG, "onClick: data inputted: " +
-                    "\nemail: " + email +
-                    "\npassword: " + password +
-                    "\nrepea password: " + repeatPassword);
 
             if (!isInputValid(email, password, repeatPassword)) {
                 return;

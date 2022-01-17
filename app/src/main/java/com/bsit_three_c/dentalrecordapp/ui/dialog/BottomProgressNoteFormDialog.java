@@ -84,7 +84,7 @@ public class BottomProgressNoteFormDialog {
             } else {
                 Log.d(TAG, "onChanged: setting balance text");
                 Log.d(TAG, "onChanged: balance: " + balance);
-                Log.d(TAG, "onChanged: string of balance: " + String.valueOf(balance));
+                Log.d(TAG, "onChanged: string of balance: " + balance);
                 viewHolder.balance.setText(String.valueOf(balance));
             }
         }
